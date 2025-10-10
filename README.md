@@ -4,8 +4,8 @@ Official website for Server 1586 alliance management, council voting, and server
 
 **Live Website**: [https://www.example.com](https://www.example.com)
 
-**Version**: 1.4.0
-**Last Updated**: October 8, 2025
+**Version**: 1.4.2
+**Last Updated**: October 9, 2025
 
 > **Note**: The website automatically redirects HTTP to HTTPS and adds www. prefix for security and consistency.
 
