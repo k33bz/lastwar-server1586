@@ -84,10 +84,10 @@ Server1586/
 
 ## Current Status
 
-- **Latest Commit**: v1.4.2 - Mobile fix, rotation improvements, and FTP deployment
-- **Commits**: 2 total
+- **Latest Commit**: chore: Update Claude Code tool permissions
+- **Commits**: 4 total
 - **Branch**: mainline
-- **Files**: 80 files committed
+- **Files**: 80+ files committed
 - **No Remote**: Needs to be added (follow steps above)
 
 ## After Pushing
