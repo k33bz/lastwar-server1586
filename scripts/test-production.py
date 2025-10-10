@@ -141,6 +141,36 @@ class ProductionTester:
 
         return all_loaded
 
+    def test_power_history_csv(self):
+        """Test 3b: Power history CSV file is accessible"""
+        print("\n[Test 3b] Power History CSV")
+        self.tests_run += 1
+
+        try:
+            url = f"{PRODUCTION_URL}/data/power-history.csv"
+            response = requests.get(url, timeout=TIMEOUT)
+
+            if response.status_code == 200:
+                csv_content = response.text
+                lines = csv_content.strip().split('\n')
+
+                # Check header
+                if lines[0].startswith('date,'):
+                    print(f"    ✓ CSV header present")
+                    print(f"    ✓ Data rows: {len(lines) - 1}")
+                    self.log_pass(f"power-history.csv loaded ({len(csv_content)} bytes)")
+                    return True
+                else:
+                    self.log_fail("CSV structure", "Missing header or incorrect format")
+                    return False
+            else:
+                self.log_fail("power-history.csv loading", f"HTTP {response.status_code}")
+                return False
+
+        except Exception as e:
+            self.log_fail("power-history.csv loading", str(e))
+            return False
+
     def test_signature_history_data(self):
         """Test 4: R5 signature history data structure"""
         print("\n[Test 4] R5 Signature History Data")
@@ -387,6 +417,7 @@ class ProductionTester:
         self.test_website_accessible()
         self.test_html_structure()
         self.test_json_data_loading()
+        self.test_power_history_csv()
         self.test_signature_history_data()
         self.test_alliance_data()
         self.test_javascript_loading()

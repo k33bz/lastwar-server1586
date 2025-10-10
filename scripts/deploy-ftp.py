@@ -69,7 +69,7 @@ def get_files_to_upload(ignore_patterns):
     files_to_upload = []
 
     # File extensions to include
-    include_extensions = {'.html', '.css', '.js', '.json', '.txt', '.xml', '.ico', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.htaccess'}
+    include_extensions = {'.html', '.css', '.js', '.json', '.csv', '.txt', '.xml', '.ico', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.htaccess'}
 
     # Directories to scan
     scan_dirs = ['css', 'js', 'data']
