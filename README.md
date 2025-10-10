@@ -3,6 +3,7 @@
 Official website for Server 1586 alliance management, council voting, and server rules.
 
 **Live Website**: [https://www.example.com](https://www.example.com)
+**GitHub Repository**: [https://github.com/username/your-repo](https://github.com/username/your-repo)
 
 **Version**: 1.4.2
 **Last Updated**: October 9, 2025
@@ -289,6 +290,7 @@ This project is private and intended for Server 1586 alliance management only.
 ## 🔗 Links
 
 - **Live Website**: [https://www.example.com](https://www.example.com)
+- **GitHub Repository**: [https://github.com/username/your-repo](https://github.com/username/your-repo)
 - **Server**: Last War - Server 1586
 
 ---
