@@ -1,6 +1,14 @@
 [
     {
         "rank": 1,
+        "tag": "UvvU",
+        "name": "veni vidi vici",
+        "r5": "R5 Name",
+        "signed": true,
+        "power": 6752848288
+    },
+    {
+        "rank": 2,
         "tag": "ORCE",
         "name": "Omega Force",
         "r5": {
@@ -9,7 +17,7 @@
             "discordId": null
         },
         "signed": true,
-        "power": 6480480937,
+        "power": 6710688392,
         "discord": {
             "serverName": "Omega Force Official",
             "inviteUrl": null,
@@ -41,112 +49,118 @@
         },
         "achievements": {
             "rankHistory": [],
-            "peakPower": 6480480937,
+            "peakPower": 6710688392,
             "peakRank": 1,
             "specialties": ["Territory Control", "Event Participation"]
         },
         "metadata": {
-            "lastUpdated": "2025-10-10T12:00:00Z",
+            "lastUpdated": "2025-10-10T12:26:44Z",
             "verified": false,
             "featured": true
         }
-    },
-    {
-        "rank": 2,
-        "tag": "UvvU",
-        "name": "veni vidi vici",
-        "r5": "R5 Name",
-        "signed": true
     },
     {
         "rank": 3,
         "tag": "nkot",
         "name": "korea one team",
         "r5": "R5 Name",
-        "signed": true
+        "signed": true,
+        "power": 6395285401
     },
     {
         "rank": 4,
         "tag": "404a",
         "name": "Not Found",
         "r5": "R5 Name",
-        "signed": true
+        "signed": true,
+        "power": 5109356801
     },
     {
         "rank": 5,
-        "tag": "FLM",
-        "name": "LA FAMILIA",
-        "r5": "R5 Name",
-        "signed": true
-    },
-    {
-        "rank": 6,
         "tag": "STR8",
         "name": "STR8 SAVAGE",
         "r5": "R5 Name",
-        "signed": false
+        "signed": false,
+        "power": 5109356801
+    },
+    {
+        "rank": 6,
+        "tag": "FLM",
+        "name": "LA FAMILIA",
+        "r5": "R5 Name",
+        "signed": true,
+        "power": 5089247162
     },
     {
         "rank": 7,
         "tag": "EPIC",
         "name": "KarmaKings",
         "r5": "R5 Name",
-        "signed": true
+        "signed": true,
+        "power": 5072711352
     },
     {
         "rank": 8,
         "tag": "NYPR",
         "name": "NY Bats",
         "r5": "R5 Name",
-        "signed": true
+        "signed": true,
+        "power": 4537533393
     },
     {
         "rank": 9,
-        "tag": "86KO",
-        "name": "??????",
-        "r5": "R5 Name",
-        "signed": true
-    },
-    {
-        "rank": 10,
         "tag": "SWBA",
         "name": "SinnersWillBeAshed",
         "r5": "R5 Name",
-        "signed": true
+        "signed": true,
+        "power": 3798962862
+    },
+    {
+        "rank": 10,
+        "tag": "86KO",
+        "name": "??????",
+        "r5": "R5 Name",
+        "signed": true,
+        "power": 3534868874
     },
     {
         "rank": 11,
-        "tag": "MTOP",
-        "name": "MonteOlimpo",
+        "tag": "FNXS",
+        "name": "F é n i x",
         "r5": "R5 Name",
-        "signed": true
+        "signed": true,
+        "power": 2729722437
     },
     {
         "rank": 12,
         "tag": "UUSN",
         "name": "Kantinny",
         "r5": "R5 Name",
-        "signed": false
+        "signed": false,
+        "power": 1805983286
     },
     {
         "rank": 13,
-        "tag": "FNXS",
-        "name": "F é n i x",
+        "tag": "NiKi",
+        "name": "NIKII",
         "r5": "R5 Name",
-        "signed": true
+        "signed": true,
+        "power": 1803383398
     },
     {
         "rank": 14,
         "tag": "L4TM",
         "name": "La Última Orden",
         "r5": "R5 Name",
-        "signed": true
+        "signed": true,
+        "power": 1568161001
     },
     {
         "rank": 15,
-        "tag": "NiKi",
-        "name": "NIKII",
+        "tag": "MTOP",
+        "name": "MonteOlimpo",
         "r5": "R5 Name",
-        "signed": true
+        "signed": true,
+        "power": 1455345480
     }
 ]
