@@ -1,15 +1,60 @@
 [
     {
         "rank": 1,
-        "tag": "UvvU",
-        "name": "veni vidi vici",
-        "r5": "R5 Name",
-        "signed": true
+        "tag": "ORCE",
+        "name": "Omega Force",
+        "r5": {
+            "name": "R5 Name",
+            "gameId": null,
+            "discordId": null
+        },
+        "signed": true,
+        "power": 6480480937,
+        "discord": {
+            "serverName": "Omega Force Official",
+            "inviteUrl": null,
+            "logoUrl": "images/discord-logos/ORCE.png",
+            "memberCount": null
+        },
+        "crossServer": {
+            "hasPartner": false,
+            "servers": [],
+            "partnerTags": [],
+            "network": null
+        },
+        "info": {
+            "description": "Elite alliance focused on teamwork and strategy",
+            "founded": null,
+            "languages": ["English"],
+            "timezone": "Global",
+            "recruiting": false,
+            "requirements": {
+                "minPower": 50000000,
+                "minLevel": 25,
+                "activity": "High",
+                "notes": "Must participate in all alliance events"
+            }
+        },
+        "contact": {
+            "recruitmentContact": null,
+            "discordRecruitment": null
+        },
+        "achievements": {
+            "rankHistory": [],
+            "peakPower": 6480480937,
+            "peakRank": 1,
+            "specialties": ["Territory Control", "Event Participation"]
+        },
+        "metadata": {
+            "lastUpdated": "2025-10-10T12:00:00Z",
+            "verified": false,
+            "featured": true
+        }
     },
     {
         "rank": 2,
-        "tag": "ORCE",
-        "name": "Omega Force",
+        "tag": "UvvU",
+        "name": "veni vidi vici",
         "r5": "R5 Name",
         "signed": true
     },

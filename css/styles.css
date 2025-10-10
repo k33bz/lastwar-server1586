@@ -3,6 +3,13 @@
  * Last War Alliance Rankings
  *
  * CHANGELOG:
+ * v1.4.2 - 2025-10-10
+ * - Added R5 Leadership History styles for alliance modal
+ * - Signature item display with check marks and version indicators
+ * - Current R5 badge highlighting
+ * - Tenure date display with calendar icon
+ * - No signatures warning display
+ *
  * v1.4.1 - 2025-10-08
  * - Fixed rules section getting cut off on mobile
  * - Changed max-height from 5000px to none when expanded
@@ -82,6 +89,118 @@ h1 {
     font-size: 1.2em;
     color: #c0c0c0;
     letter-spacing: 2px;
+}
+
+/* ============================================
+   SERVER DISCORD SECTION
+   ============================================ */
+.server-discord-section {
+    background: linear-gradient(135deg, rgba(88, 101, 242, 0.15), rgba(88, 101, 242, 0.05));
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 40px;
+    border: 2px solid rgba(88, 101, 242, 0.3);
+    box-shadow: 0 10px 40px rgba(88, 101, 242, 0.2);
+}
+
+.server-discord-banner {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.discord-logo-container {
+    flex-shrink: 0;
+}
+
+.server-discord-logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid rgba(88, 101, 242, 0.5);
+    object-fit: cover;
+    box-shadow: 0 5px 20px rgba(88, 101, 242, 0.4);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.discord-info {
+    flex: 1;
+    min-width: 250px;
+}
+
+.discord-server-name {
+    font-size: 1.8em;
+    color: #5865f2;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.discord-description {
+    color: #aaa;
+    font-size: 1em;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.discord-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.discord-feature-tag {
+    background: rgba(88, 101, 242, 0.2);
+    color: #5865f2;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.85em;
+    font-weight: 500;
+    border: 1px solid rgba(88, 101, 242, 0.3);
+}
+
+.discord-join {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.discord-join-button {
+    background: #5865f2;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 5px 20px rgba(88, 101, 242, 0.4);
+}
+
+.discord-join-button:hover {
+    background: #4752c4;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(88, 101, 242, 0.6);
+}
+
+.discord-join-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+.member-count {
+    color: #888;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.member-count span {
+    color: #5865f2;
+    font-weight: bold;
 }
 
 /* ============================================
@@ -829,6 +948,73 @@ h1 {
 }
 
 /* ============================================
+   POWER TRENDS SECTION
+   ============================================ */
+.power-trends-section {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 40px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.power-trends-header {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1));
+    padding: 25px 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s ease;
+    border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.power-trends-header:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.15));
+}
+
+.power-trends-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.power-trends-content.active {
+    max-height: 4000px;
+}
+
+.chart-container {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chart-info {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    flex-wrap: wrap;
+    text-align: center;
+    color: #aaa;
+    font-size: 0.9em;
+}
+
+.chart-info p {
+    margin: 0;
+}
+
+.chart-info strong {
+    color: #ffd700;
+}
+
+.chart-info span {
+    color: #fff;
+    font-weight: 500;
+}
+
+/* ============================================
    SIGNATORIES SECTION
    ============================================ */
 .signatories-section {
@@ -864,6 +1050,15 @@ h1 {
 
 .signatory-card.pending {
     border-color: rgba(251, 191, 36, 0.5);
+}
+
+.signatory-card.overdue {
+    border-color: rgba(239, 68, 68, 0.5);
+}
+
+.signatory-card.no-r5 {
+    border-color: rgba(128, 128, 128, 0.5);
+    opacity: 0.7;
 }
 
 .signatory-card:hover {
@@ -915,6 +1110,18 @@ h1 {
     border: 1px solid rgba(251, 191, 36, 0.4);
 }
 
+.overdue .signatory-status {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.no-r5 .signatory-status {
+    background: rgba(128, 128, 128, 0.2);
+    color: #888;
+    border: 1px solid rgba(128, 128, 128, 0.4);
+}
+
 .signature-note {
     background: rgba(255, 215, 0, 0.1);
     border: 2px solid rgba(255, 215, 0, 0.3);
@@ -931,6 +1138,453 @@ h1 {
 
 .signature-note p:last-child {
     margin-bottom: 0;
+}
+
+/* ============================================
+   ALLIANCE DETAIL MODAL
+   ============================================ */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    overflow-y: auto;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 20px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.4s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1));
+    padding: 25px 30px;
+    border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.modal-alliance-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.modal-alliance-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #ffd700;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    flex-shrink: 0;
+}
+
+.modal-alliance-name {
+    font-size: 1.8em;
+    color: #ffd700;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.modal-alliance-tag {
+    font-size: 1.2em;
+    color: #aaa;
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2.5em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffd700;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 30px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-section {
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #ffd700;
+}
+
+.modal-section:last-child {
+    margin-bottom: 0;
+}
+
+.modal-section-title {
+    color: #ffd700;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-section-title::before {
+    content: '▸';
+    color: #ffd700;
+}
+
+.modal-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.modal-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.modal-info-label {
+    color: #888;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+.modal-info-value {
+    color: #fff;
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.modal-info-value.highlight {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.modal-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.modal-tag {
+    background: rgba(255, 215, 0, 0.2);
+    color: #ffd700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.modal-tag.language {
+    background: rgba(88, 101, 242, 0.2);
+    color: #5865f2;
+    border-color: rgba(88, 101, 242, 0.3);
+}
+
+.modal-tag.specialty {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.modal-description {
+    color: #ccc;
+    line-height: 1.6;
+    font-size: 1em;
+}
+
+.modal-discord-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #5865f2;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(88, 101, 242, 0.4);
+}
+
+.modal-discord-button:hover {
+    background: #4752c4;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(88, 101, 242, 0.6);
+}
+
+.modal-discord-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+.modal-status-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.modal-status-badge.recruiting {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.modal-status-badge.not-recruiting {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.modal-requirements {
+    background: rgba(255, 215, 0, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.modal-requirements p {
+    margin: 8px 0;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-requirements strong {
+    color: #ffd700;
+    min-width: 120px;
+}
+
+.modal-cross-server {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-server-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.modal-server-tag {
+    background: rgba(147, 51, 234, 0.2);
+    color: #a78bfa;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+    border: 1px solid rgba(147, 51, 234, 0.3);
+}
+
+.modal-no-data {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+/* R5 Leadership History Styles */
+.r5-history-entry {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-left: 3px solid rgba(255, 215, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.r5-history-entry:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-left-color: rgba(255, 215, 0, 0.6);
+}
+
+.r5-history-entry.current-r5 {
+    background: rgba(255, 215, 0, 0.08);
+    border-left: 4px solid #ffd700;
+    box-shadow: 0 3px 15px rgba(255, 215, 0, 0.2);
+}
+
+.r5-history-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.r5-history-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.current-badge {
+    background: rgba(255, 215, 0, 0.3);
+    color: #ffd700;
+    font-size: 0.7em;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.r5-history-tenure {
+    font-size: 0.9em;
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.r5-history-tenure::before {
+    content: '📅';
+    font-size: 1em;
+}
+
+.r5-signatures {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.r5-signatures-label {
+    font-size: 0.9em;
+    color: #aaa;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.signature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.signature-check {
+    color: #22c55e;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.signature-version {
+    color: #22c55e;
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+.signature-date {
+    color: #aaa;
+    font-size: 0.85em;
+    margin-left: auto;
+}
+
+.signature-notes {
+    color: #888;
+    font-size: 0.85em;
+    font-style: italic;
+    margin-left: 10px;
+}
+
+.r5-no-signatures {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 6px;
+    padding: 12px;
+    color: #ef4444;
+    font-size: 0.9em;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Make alliance cards clickable */
+.alliance-card,
+.podium-place,
+.signatory-card {
+    cursor: pointer;
 }
 
 /* ============================================
@@ -1006,5 +1660,68 @@ h1 {
         right: 20px;
         transform: none;
         min-width: auto;
+    }
+
+    .chart-container {
+        padding: 15px 10px;
+    }
+
+    .chart-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .server-discord-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .discord-info {
+        text-align: center;
+    }
+
+    .discord-features {
+        justify-content: center;
+    }
+
+    .server-discord-logo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .discord-server-name {
+        font-size: 1.5em;
+    }
+
+    .modal-container {
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .modal-header {
+        padding: 20px;
+    }
+
+    .modal-alliance-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .modal-alliance-logo {
+        width: 60px;
+        height: 60px;
+        font-size: 1.2em;
+    }
+
+    .modal-alliance-name {
+        font-size: 1.4em;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .modal-info-grid {
+        grid-template-columns: 1fr;
     }
 }
