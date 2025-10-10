@@ -1,5 +1,120 @@
 # Deployment History
 
+## v1.5.0 - 2025-10-10
+
+### Changes
+- **R5 Signature History System**: Complete tracking of R5 leaders and rule signatures
+  - Implemented signature-history.json with complete audit trail
+  - Grace period system (7 days for new R5s to sign)
+  - Dynamic status display: signed (green), pending (yellow), overdue (red), no R5 (gray)
+  - Status calculation with days remaining/overdue
+  - Complete R5 history per alliance with start/end dates
+
+- **Alliance Detail Modal System**: Interactive modal for comprehensive alliance information
+  - Click-to-open on any alliance card, podium position, or signatory
+  - R5 Leadership History timeline section
+  - Current R5 highlighted with gold "CURRENT" badge
+  - Tenure tracking with day counts
+  - All signatures per R5 with versions and timestamps
+  - Support for Discord info, recruiting status, requirements, cross-server alliances
+  - Smooth animations and responsive mobile design
+
+- **Server Discord Banner**: Server-wide Discord information section
+  - Join button with Discord branding (#5865f2)
+  - Feature tags display (NAP15 Coordination, Event Planning, etc.)
+  - Fully responsive layout
+  - Added server-info.json configuration
+
+- **Alliance Data Schema v2.0**: Comprehensive alliance information structure
+  - R5 object with name, gameId, discordId
+  - Discord server details (name, invite URL)
+  - Recruiting status and requirements (power, level, activity)
+  - Languages and specialties tags
+  - Cross-server alliance tracking
+  - Achievements (peak rank, peak power)
+  - Backward compatible with v1.0 format
+
+### Files Updated
+- `css/styles.css` → v1.4.2
+  - Added R5 Leadership History styles (lines 1455-1574)
+  - Added Alliance Detail Modal styles (lines 1136-1453)
+  - Added Server Discord Banner styles (lines 87-197)
+  - Added signature status colors (overdue, no-r5)
+  - Added responsive mobile styles for modal
+
+- `js/app.js` → Updated with signature and modal systems
+  - Added `signatureHistory` global variable
+  - Added `getSignatureStatus()` function (lines 112-197)
+  - Added `getCurrentR5()` helper function (lines 98-110)
+  - Updated `renderSignatories()` with status system (lines 402-419)
+  - Added `openAllianceModal()` and `closeAllianceModal()` (lines 666-901)
+  - Added R5 history display in modal (lines 959-1021)
+  - Updated `loadData()` to fetch signature-history.json
+  - Added `renderServerDiscord()` function (lines 220-267)
+
+- `index.html` → Updated with new sections
+  - Added Server Discord banner section (lines 78-101)
+  - Added Alliance Detail Modal HTML structure (lines 208-225)
+
+- `data/alliances.json` → Updated with v2.0 example
+  - ORCE alliance updated with full v2.0 structure
+  - Other 14 alliances remain in v1.0 format (backward compatible)
+
+### Files Created
+- `data/signature-history.json` → R5 history and signatures for all 15 alliances
+- `data/server-info.json` → Server Discord configuration
+- `data/R5-SIGNATURE-SCHEMA.md` → Complete schema specification
+- `data/ALLIANCE-DATA-SCHEMA.md` → v2.0 alliance data format documentation
+- `R5-SIGNATURE-HISTORY-IMPLEMENTATION.md` → Implementation guide
+- `ALLIANCE-MODAL-IMPLEMENTATION.md` → Modal system documentation
+- `ALLIANCE-INFO-UPDATE-SUMMARY.md` → System overview
+- `images/HOW-TO-ADD-DISCORD-LOGO.md` → Logo setup instructions
+
+### Deployment Details
+- **Deployed:** 2025-10-10 16:39 UTC
+- **Method:** FTP via `scripts/deploy-ftp.py`
+- **Files Deployed:** 12 files (0 failures)
+  - .htaccess
+  - css/styles.css
+  - data/alliances.json
+  - data/amendments.json
+  - data/council.js
+  - data/rotation-schedule.js
+  - data/rotation-schedule.json
+  - data/rules.json
+  - data/server-info.json
+  - data/signature-history.json
+  - index.html
+  - js/app.js
+
+### Verification
+- ✅ Website accessible at https://www.example.com
+- ✅ R5 signature status displaying correctly
+- ✅ Grace period logic working (7-day window)
+- ✅ Alliance modal opens on click
+- ✅ R5 history timeline displays with signatures
+- ✅ Server Discord banner visible
+- ✅ Mobile responsive design working
+- ✅ All 12 files deployed successfully
+
+### Technical Highlights
+- Complete audit trail for R5 changes and signatures
+- Automatic grace period calculation with visual indicators
+- Dynamic status based on current R5, current version, and tenure
+- Backward compatible with v1.0 alliance data
+- Click-to-open modal system with comprehensive alliance details
+- R5 leadership timeline with tenure tracking
+- Signature version tracking per R5
+- Warning display for unsigned R5s (STR8, UUSN examples)
+
+### Git Commit
+- **Commit:** ddecc53
+- **Message:** feat: R5 signature history system with alliance modal enhancements
+- **Branch:** mainline
+- **Pushed:** origin/mainline
+
+---
+
 ## v1.4.2 - 2025-10-09
 
 ### Changes
