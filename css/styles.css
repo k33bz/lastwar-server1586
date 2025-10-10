@@ -1,0 +1,1010 @@
+/*
+ * Server 1586 - Main Stylesheet
+ * Last War Alliance Rankings
+ *
+ * CHANGELOG:
+ * v1.4.1 - 2025-10-08
+ * - Fixed rules section getting cut off on mobile
+ * - Changed max-height from 5000px to none when expanded
+ * - Changed overflow from hidden to visible when expanded
+ *
+ * v1.3.2 - 2025-10-06
+ * - Changed council grid from 3-column to 5-column layout (5-2 pattern)
+ * - Added styles for previous week in rotation schedule (greyed out with opacity)
+ * - Removed standalone previous week section styles
+ * - Updated responsive design to use 2-column grid on mobile
+ *
+ * v1.3.1 - 2025-10-06
+ * - Increased council member logo from 50px to 70px to display full 4-letter tags
+ * - Improved grid centering for 3-2-2 layout (centered 2 gold and 2 bronze cards)
+ * - Added proper margin adjustments for centered rows
+ * - Further improved layout with max-width and justify-self for better appearance
+ *
+ * v1.3.0 - 2025-10-06
+ * - Added complete Council Section styles (previously missing)
+ * - Implemented 3-2-2 grid layout for council voting members
+ * - Added timezone tooltip styles with hover effects
+ * - Added rotation schedule styling
+ * - Added responsive design for council section
+ * - Fixed text overflow issues with word-wrap properties
+ */
+
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ============================================
+   CONTAINER & LAYOUT
+   ============================================ */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   HEADER SECTION
+   ============================================ */
+header {
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 40px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(192, 192, 192, 0.1));
+    border-radius: 20px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2);
+}
+
+h1 {
+    font-size: 3.5em;
+    background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: #c0c0c0;
+    letter-spacing: 2px;
+}
+
+/* ============================================
+   SECTION TITLES
+   ============================================ */
+.section-title {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 40px;
+    color: #ffd700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* ============================================
+   PODIUM SECTION (Top 3 Alliances)
+   ============================================ */
+.podium-section {
+    margin-bottom: 60px;
+}
+
+.podium {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+}
+
+.podium-place {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border-radius: 15px;
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 2px solid;
+}
+
+.podium-place:hover {
+    transform: translateY(-10px);
+}
+
+.first-place {
+    width: 300px;
+    height: 380px;
+    border-color: #ffd700;
+    box-shadow: 0 15px 50px rgba(255, 215, 0, 0.4);
+    order: 2;
+}
+
+.second-place {
+    width: 280px;
+    height: 340px;
+    border-color: #c0c0c0;
+    box-shadow: 0 15px 50px rgba(192, 192, 192, 0.3);
+    order: 1;
+}
+
+.third-place {
+    width: 280px;
+    height: 300px;
+    border-color: #cd7f32;
+    box-shadow: 0 15px 50px rgba(205, 127, 50, 0.3);
+    order: 3;
+}
+
+.trophy {
+    font-size: 4em;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 5px 15px currentColor);
+}
+
+.first-place .trophy { color: #ffd700; }
+.second-place .trophy { color: #c0c0c0; }
+.third-place .trophy { color: #cd7f32; }
+
+.rank-number {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    opacity: 0.7;
+}
+
+.alliance-tag {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+}
+
+.first-place .alliance-tag { color: #ffd700; }
+.second-place .alliance-tag { color: #c0c0c0; }
+.third-place .alliance-tag { color: #cd7f32; }
+
+.alliance-name {
+    font-size: 1.1em;
+    color: #aaa;
+    line-height: 1.4;
+}
+
+/* ============================================
+   ALLIANCE GRID (Ranks 4-15)
+   ============================================ */
+.remaining-alliances {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 40px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.alliance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.alliance-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.alliance-card:hover {
+    transform: translateX(5px);
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.2);
+}
+
+.alliance-rank {
+    font-size: 2em;
+    font-weight: bold;
+    color: #ffd700;
+    min-width: 50px;
+}
+
+.alliance-info {
+    flex: 1;
+}
+
+.alliance-card .alliance-tag {
+    font-size: 1.3em;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.alliance-card .alliance-name {
+    font-size: 0.9em;
+    color: #888;
+}
+
+/* ============================================
+   COUNCIL SECTION
+   ============================================ */
+.council-section {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 40px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.council-week-info {
+    background: rgba(255, 215, 0, 0.1);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95em;
+}
+
+.week-label,
+.next-rotation-label {
+    color: #aaa;
+    font-weight: 500;
+}
+
+.week-number,
+.next-rotation-time {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.council-members-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.council-members-grid > div {
+    display: contents;
+}
+
+.council-member-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    border: 2px solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 180px;
+    width: 100%;
+}
+
+.council-member-card.permanent {
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.2);
+}
+
+.council-member-card.rotating {
+    border-color: rgba(205, 127, 50, 0.5);
+    box-shadow: 0 5px 20px rgba(205, 127, 50, 0.2);
+}
+
+.council-member-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+}
+
+.council-member-card.permanent:hover {
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+}
+
+.council-member-card.rotating:hover {
+    box-shadow: 0 10px 30px rgba(205, 127, 50, 0.4);
+}
+
+.council-member-logo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.council-member-card.permanent .council-member-logo {
+    color: #ffd700;
+    border-color: rgba(255, 215, 0, 0.5);
+}
+
+.council-member-card.rotating .council-member-logo {
+    color: #cd7f32;
+    border-color: rgba(205, 127, 50, 0.5);
+}
+
+.council-member-rank-badge {
+    font-size: 0.85em;
+    color: #aaa;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.council-member-alliance {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+.council-member-name {
+    font-size: 0.85em;
+    color: #888;
+    margin-bottom: 12px;
+    line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+}
+
+.council-member-status {
+    margin-top: auto;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.council-member-card.permanent .council-member-status {
+    background: rgba(255, 215, 0, 0.2);
+    color: #ffd700;
+    border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+.council-member-card.rotating .council-member-status {
+    background: rgba(205, 127, 50, 0.2);
+    color: #cd7f32;
+    border: 1px solid rgba(205, 127, 50, 0.4);
+}
+
+.rotation-schedule {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 25px;
+    border-left: 4px solid #ffd700;
+}
+
+.rotation-schedule h3 {
+    color: #ffd700;
+    font-size: 1.4em;
+    margin-bottom: 12px;
+}
+
+.schedule-note {
+    color: #888;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.schedule-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.schedule-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 15px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.schedule-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 215, 0, 0.3);
+}
+
+.schedule-item.current-week {
+    background: rgba(255, 215, 0, 0.1);
+    border-color: rgba(255, 215, 0, 0.5);
+    border-width: 2px;
+}
+
+.schedule-item.previous-week {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.05);
+    opacity: 0.5;
+}
+
+.schedule-item.previous-week .schedule-week,
+.schedule-item.previous-week .schedule-date,
+.schedule-item.previous-week .schedule-members,
+.schedule-item.previous-week .schedule-members span {
+    color: #666;
+}
+
+.schedule-week {
+    font-weight: bold;
+    color: #ffd700;
+    margin-bottom: 6px;
+    font-size: 1.05em;
+}
+
+.schedule-date {
+    color: #aaa;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+}
+
+.schedule-members {
+    color: #ccc;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.schedule-members span {
+    color: #ffd700;
+    font-weight: 500;
+}
+
+.timezone-tooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 8px;
+    padding: 12px 16px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    min-width: 200px;
+    pointer-events: none;
+}
+
+.schedule-item:hover .timezone-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.tooltip-title {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+    padding-bottom: 6px;
+}
+
+.tooltip-time {
+    color: #ccc;
+    font-size: 0.85em;
+    padding: 3px 0;
+    white-space: nowrap;
+}
+
+/* Grid layout adjustments for 5-2 pattern */
+/* First row: 5 permanent gold cards fill all columns */
+.council-member-card:nth-child(1),
+.council-member-card:nth-child(2),
+.council-member-card:nth-child(3),
+.council-member-card:nth-child(4),
+.council-member-card:nth-child(5) {
+    /* These will naturally fill the 5-column grid */
+}
+
+/* Second row: 2 rotating bronze cards - centered */
+.council-member-card:nth-child(6) {
+    grid-column: 2 / 3;
+}
+
+.council-member-card:nth-child(7) {
+    grid-column: 4 / 5;
+}
+
+/* ============================================
+   RULES SECTION
+   ============================================ */
+.rules-section {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 40px;
+}
+
+.rules-header {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1));
+    padding: 25px 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s ease;
+    border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.rules-header:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.15));
+}
+
+.rules-header-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.rules-header h2 {
+    font-size: 1.8em;
+    color: #ffd700;
+}
+
+.version-info {
+    background: rgba(255, 215, 0, 0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    color: #ffd700;
+    border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+.toggle-controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.toggle-switch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-size: 0.85em;
+}
+
+.toggle-switch:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.toggle-switch input[type="checkbox"] {
+    width: 40px;
+    height: 20px;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.toggle-switch input[type="checkbox"]:checked {
+    background: #ffd700;
+}
+
+.toggle-switch input[type="checkbox"]::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s ease;
+}
+
+.toggle-switch input[type="checkbox"]:checked::before {
+    transform: translateX(20px);
+}
+
+.toggle-icon {
+    font-size: 1.5em;
+    transition: transform 0.3s ease;
+    color: #ffd700;
+}
+
+.toggle-icon.active {
+    transform: rotate(180deg);
+}
+
+.rules-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.rules-content.active {
+    max-height: none;
+    overflow: visible;
+}
+
+.rules-inner {
+    padding: 30px;
+    line-height: 1.8;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.rule-category {
+    margin-bottom: 35px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 25px;
+    border-radius: 10px;
+    border-left: 4px solid #ffd700;
+}
+
+.rule-category h3 {
+    color: #ffd700;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+.rule-category p,
+.rule-category ul,
+.rule-category ol {
+    color: #ccc;
+    margin-bottom: 12px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.rule-category ul,
+.rule-category ol {
+    margin-left: 25px;
+}
+
+.rule-category li {
+    margin-bottom: 8px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* ============================================
+   AMENDMENT STYLES
+   ============================================ */
+.amendment-added {
+    color: #22c55e;
+    background: rgba(34, 197, 94, 0.1);
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.amendment-removed {
+    color: #ef4444;
+    text-decoration: line-through;
+    background: rgba(239, 68, 68, 0.1);
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.amendment-indicator {
+    display: inline-block;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.amendment-indicator.added {
+    color: #22c55e;
+}
+
+.amendment-indicator.removed {
+    color: #ef4444;
+}
+
+/* ============================================
+   AMENDMENTS SECTION
+   ============================================ */
+.amendments-section {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 40px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.amendments-header {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1));
+    padding: 25px 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s ease;
+    border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.amendments-header:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.15));
+}
+
+.amendments-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.amendments-content.active {
+    max-height: 3000px;
+}
+
+.amendment-entry {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border-left: 4px solid #ffd700;
+}
+
+.amendment-entry-header {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    transition: opacity 0.3s ease;
+}
+
+.amendment-entry-header:hover {
+    opacity: 0.8;
+}
+
+.amendment-date {
+    color: #ffd700;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+}
+
+.amendment-title {
+    color: #fff;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+.amendment-changes {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-top: 0;
+}
+
+.amendment-changes.active {
+    max-height: 2000px;
+    padding-top: 15px;
+}
+
+.amendment-toggle {
+    font-size: 1.2em;
+    color: #ffd700;
+    transition: transform 0.3s ease;
+}
+
+.amendment-toggle.active {
+    transform: rotate(180deg);
+}
+
+/* ============================================
+   SIGNATORIES SECTION
+   ============================================ */
+.signatories-section {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 40px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.signatories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.signatory-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+    border-radius: 10px;
+    padding: 20px;
+    border: 2px solid;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+.signatory-card.signed {
+    border-color: rgba(34, 197, 94, 0.5);
+}
+
+.signatory-card.pending {
+    border-color: rgba(251, 191, 36, 0.5);
+}
+
+.signatory-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+}
+
+.signatory-rank {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #ffd700;
+    min-width: 50px;
+}
+
+.signatory-info {
+    flex: 1;
+}
+
+.signatory-alliance {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.signatory-r5 {
+    font-size: 0.95em;
+    color: #aaa;
+    margin-bottom: 8px;
+}
+
+.signatory-status {
+    font-size: 0.9em;
+    font-weight: bold;
+    padding: 5px 12px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.signed .signatory-status {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.pending .signatory-status {
+    background: rgba(251, 191, 36, 0.2);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.4);
+}
+
+.signature-note {
+    background: rgba(255, 215, 0, 0.1);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+
+.signature-note p {
+    color: #ddd;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.signature-note p:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5em;
+    }
+
+    .podium {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .first-place,
+    .second-place,
+    .third-place {
+        width: 100%;
+        max-width: 350px;
+        order: unset;
+    }
+
+    .alliance-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .signatories-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rules-header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .toggle-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .rules-inner {
+        padding: 20px;
+    }
+
+    .rule-category {
+        padding: 15px;
+        margin-bottom: 25px;
+    }
+
+    .council-members-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .council-member-card:nth-child(6),
+    .council-member-card:nth-child(7) {
+        grid-column: auto;
+    }
+
+    .council-week-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+
+    .schedule-members {
+        font-size: 0.9em;
+    }
+
+    .timezone-tooltip {
+        left: 20px;
+        right: 20px;
+        transform: none;
+        min-width: auto;
+    }
+}

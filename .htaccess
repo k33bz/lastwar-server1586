@@ -1,0 +1,80 @@
+# Apache .htaccess Configuration
+# Server 1586 - Last War Alliance Website
+
+# LiteSpeed Cache Control
+<IfModule LiteSpeed>
+    # Disable cache for HTML files to ensure updates are served immediately
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    </FilesMatch>
+</IfModule>
+
+# Add JSON MIME type handler
+AddType application/json .json
+
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Force www (except localhost)
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteCond %{HTTP_HOST} !^localhost [NC]
+RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Security Headers
+<IfModule mod_headers.c>
+    # Prevent clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Enable XSS protection
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Referrer Policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Cache Control for Static Assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Images
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+
+    # CSS and JavaScript (short cache due to version query parameters)
+    ExpiresByType text/css "access plus 1 hour"
+    ExpiresByType text/javascript "access plus 1 hour"
+    ExpiresByType application/javascript "access plus 1 hour"
+
+    # HTML (no cache - always fetch fresh)
+    ExpiresByType text/html "access plus 0 seconds"
+
+    # JSON data (short cache)
+    ExpiresByType application/json "access plus 5 minutes"
+</IfModule>
+
+# Gzip Compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Custom Error Pages (optional)
+# ErrorDocument 404 /404.html
+# ErrorDocument 500 /500.html
+
+# Default Document
+DirectoryIndex index.html
+
+# Allow access to JSON files
+<FilesMatch "\.(json)$">
+    Require all granted
+</FilesMatch>

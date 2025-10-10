@@ -1,0 +1,94 @@
+# Git Ignore File
+# Files and directories listed here will NOT be committed to GitHub
+
+# Sensitive Information - NEVER COMMIT
+.env
+*.env
+config.json
+credentials.json
+secrets.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE and Editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Node.js (if ever added)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Logs
+*.log
+logs/
+
+# Backup and Temporary Files
+*.bak
+*.tmp
+*.old
+.backup/
+
+# Operating System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# FTP Ignore (keep in repo for reference)
+# .ftpignore
+
+# Images - Development Only
+images/*.psd
+images/*.ai
+images/src/
+
+# Test Files
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Coverage Reports
+coverage/
+*.coverage
+.nyc_output/
+
+# Build Outputs (if build process added)
+dist/
+build/

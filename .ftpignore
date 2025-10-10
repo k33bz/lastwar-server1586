@@ -1,0 +1,62 @@
+# FTP Deployment Ignore File
+# Files and directories listed here will NOT be uploaded to the FTP server
+
+# Development and Documentation
+README.md
+CLAUDE.md
+LICENSE
+*.md
+!index.html
+
+# Scripts and Tools
+scripts/
+.vscode/
+.idea/
+
+# Version Control
+.git/
+.gitignore
+.gitattributes
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+*.egg-info/
+
+# Node.js (if ever added)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Images (development only)
+images/
+*.psd
+*.ai
+
+# Backup and Temporary Files
+*.bak
+*.tmp
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# IDE and Editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Log Files
+*.log
+
+# Configuration (exclude .ftpignore but INCLUDE .htaccess)
+.ftpignore
+!.htaccess
