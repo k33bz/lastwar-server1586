@@ -1,18 +1,20 @@
 # Deployment Status - 2025-10-10
 
-## Current Production Version: v1.5.0
+## Current Production Version: v1.5.0 (hotfix)
 
 ### Deployment Details
-- **Deployed**: 2025-10-10 15:16 UTC
+- **Deployed**: 2025-10-10 19:23 UTC (hotfix for power-history.csv)
+- **Previous**: 2025-10-10 15:16 UTC (initial v1.5.0)
 - **Method**: FTP (`scripts/deploy-ftp.py`)
-- **Files Deployed**: 12 files (0 failures)
+- **Files Deployed**: 13 files (0 failures)
 - **Website**: https://www.example.com
 
 ### Deployment Verification
-✅ **All Unit Tests Passed** (16/16)
+✅ **All Unit Tests Passed** (17/17)
 - Website accessibility: ✓
 - HTML structure: ✓
 - JSON data loading: ✓ (6 files)
+- Power history CSV: ✓ (NEW)
 - R5 signature history: ✓
 - Alliance data integrity: ✓
 - JavaScript loading: ✓
@@ -121,6 +123,14 @@ Created but kept local-only for data extraction:
 - **Branch**: mainline
 - **Status**: ✓ All changes pushed
 - **Last Push**: 2025-10-10 15:17 UTC
+
+### Recent Issues Resolved
+- ✅ **Power Trends Graph** (2025-10-10 19:23 UTC)
+  - **Issue**: Graph not loading due to missing power-history.csv
+  - **Cause**: CSV extension not in deployment script
+  - **Fix**: Added .csv to deployment script, deployed CSV file
+  - **Prevention**: Added CSV file check to unit tests
+  - **Status**: Resolved - graph now loads correctly
 
 ### Known Issues
 None currently affecting production.
