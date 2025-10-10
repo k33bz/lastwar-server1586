@@ -78,6 +78,17 @@ images/*.psd
 images/*.ai
 images/src/
 
+# Screenshot Processing - DO NOT COMMIT IMAGES
+images/alliance_cards/*.png
+images/alliance_cards/processed/
+images/server_rankings/*.png
+images/server_rankings/processed/
+
+# Tesseract Training Data - Large Binary Files
+tesseract_training/data/*.tif
+tesseract_training/data/*.box
+tesseract_training/data/*.tr
+
 # Test Files
 test/
 tests/
