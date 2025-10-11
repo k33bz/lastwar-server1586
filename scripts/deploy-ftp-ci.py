@@ -139,9 +139,15 @@ def main():
     if not FTP_USER or not FTP_PASS:
         print("[ERROR] Missing FTP credentials!")
         print("        FTP_USER and FTP_PASS environment variables are required")
+        print(f"        FTP_HOST: {FTP_HOST}")
+        print(f"        FTP_USER: {'<set>' if FTP_USER else '<not set>'}")
+        print(f"        FTP_PASS: {'<set>' if FTP_PASS else '<not set>'}")
         sys.exit(1)
 
     print(f"[INFO] Deploying to {FTP_USER}@{FTP_HOST}")
+    print(f"[DEBUG] FTP_HOST: {FTP_HOST}")
+    print(f"[DEBUG] FTP_PORT: {FTP_PORT}")
+    print(f"[DEBUG] FTP_USER: {FTP_USER}")
 
     # Load ignore patterns
     patterns = load_ftpignore()
@@ -158,9 +164,11 @@ def main():
 
     try:
         ftp = ftplib.FTP()
-        ftp.connect(FTP_HOST, FTP_PORT)
+        print(f"      Attempting connection to {FTP_HOST}:{FTP_PORT}...")
+        ftp.connect(FTP_HOST, FTP_PORT, timeout=30)
+        print(f"      Connection established, attempting login...")
         ftp.login(FTP_USER, FTP_PASS)
-        print(f"      [OK] Connected as {FTP_USER}")
+        print(f"      [OK] Connected and logged in as {FTP_USER}")
 
         # Change to remote directory
         ftp.cwd(FTP_REMOTE_DIR)
