@@ -4,6 +4,11 @@
  * Handles all dynamic rendering and user interactions for the homepage.
  *
  * CHANGELOG:
+ * v1.9.1 - 2025-10-10
+ * - Fixed power trends chart rendering issue (lazy loading on first section open)
+ * - Chart now renders only when user expands the Power Trends section
+ * - Prevents Chart.js rendering errors when container is hidden
+ *
  * v1.9.0 - 2025-10-10
  * - Added time-based spacing for power trends chart
  * - Chart now uses proper time scale for X-axis
@@ -756,13 +761,23 @@
 
    /**
     * Toggle power trends section open/closed
+    * Renders chart on first open (lazy loading)
     */
    function togglePowerTrends() {
        var content = document.getElementById('powerTrendsContent');
        var icon = document.getElementById('powerTrendsToggleIcon');
 
+       var wasActive = content.classList.contains('active');
        content.classList.toggle('active');
        icon.classList.toggle('active');
+
+       // Render chart on first open (when transitioning from closed to open)
+       if (!wasActive && !powerChart) {
+           // Small delay to ensure the container is visible before rendering
+           setTimeout(function() {
+               renderPowerChart();
+           }, 100);
+       }
    }
 
    /* ============================================
@@ -1396,7 +1411,7 @@
        renderRules();
        renderCouncil();
        renderAmendments();
-       renderPowerChart();
+       // renderPowerChart(); // Now lazy-loaded when user opens the section
        updateVersionInfo();
 
        console.log('Server 1586 Homepage initialized');
