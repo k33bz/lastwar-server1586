@@ -17,6 +17,18 @@ scripts/
 .git/
 .gitignore
 .gitattributes
+.github/
+
+# CI/CD and Training Files
+tesseract_training/
+debug_ocr/
+admin/
+.claude/
+CICD-SETUP.md
+
+# Backup and deleted files
+*.del
+*.js.del
 
 # Python
 __pycache__/
