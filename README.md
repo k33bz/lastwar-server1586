@@ -47,7 +47,7 @@ Server1586/
 ├── css/
 │   └── styles.css          # Main stylesheet (v1.3.2)
 ├── js/
-│   └── app.js              # Main application logic (v1.9.0)
+│   └── app.js              # Main application logic (v1.9.3)
 ├── data/
 │   ├── alliances.json      # Top 15 alliance data (expandable to 50)
 │   ├── rules.json          # Server rules
@@ -59,14 +59,21 @@ Server1586/
 │   ├── signature-history.json  # R5 leadership and signature tracking
 │   └── ALLIANCE_SCHEMA.md  # Alliance data structure documentation
 ├── scripts/
-│   ├── deploy-ftp.py       # FTP deployment script
+│   ├── deploy-ftp.py       # FTP deployment script (local)
+│   ├── deploy-ftp-ci.py    # FTP deployment script (CI/CD)
+│   ├── validate-csv.py     # CSV format validator
 │   ├── update-rotation-schedule.py  # Schedule generator (v2.2.0)
 │   ├── merge-signature-history.py  # R5 history merger
+│   ├── run-tests.py        # Unit test runner
 │   ├── DEPLOY-README.md    # Deployment guide
 │   └── README.md           # Scripts documentation
+├── .github/
+│   └── workflows/
+│       └── deploy.yml      # GitHub Actions CI/CD workflow
 ├── images/                 # Screenshots and assets
 ├── .ftpignore             # FTP deployment exclusions
 ├── .gitignore             # Git exclusions
+├── CICD-SETUP.md          # CI/CD setup guide
 ├── CLAUDE.md              # Developer documentation
 └── README.md              # This file
 ```
@@ -110,26 +117,38 @@ pip install pywin32
 
 ## 🌐 Deployment
 
-### Production Deployment
+### Automated CI/CD Deployment (Recommended)
 
-The website uses automated deployment with credentials stored securely in Windows Credential Manager.
+The website uses **GitHub Actions** for automated deployment. Every push to `mainline` triggers:
+1. ✅ Unit tests validation
+2. ✅ JSON/CSV format validation
+3. 🚀 Automatic FTP deployment to production
 
-#### First-Time Setup
+**No manual deployment needed!** Just push to GitHub:
 
-1. **Store deployment credentials** (contact administrator for credentials)
+```bash
+git add .
+git commit -m "Your changes"
+git push origin mainline
+```
 
-2. **Deploy to production**:
-   ```bash
-   python scripts/deploy-ftp.py
-   ```
+See [CICD-SETUP.md](CICD-SETUP.md) for complete CI/CD setup instructions.
+
+### Manual Deployment (Local)
+
+For emergency deployments or local testing:
+
+```bash
+python scripts/deploy-ftp.py
+```
 
 The deployment script automatically:
-- ✅ Retrieves credentials from Windows Credential Manager
+- ✅ Retrieves credentials from Windows Credential Manager (local) or environment variables (CI)
 - ✅ Uploads only production files (respects `.ftpignore`)
 - ✅ Creates remote directories as needed
 - ✅ Shows deployment summary
 
-See [scripts/DEPLOY-README.md](scripts/DEPLOY-README.md) for detailed deployment instructions.
+See [scripts/DEPLOY-README.md](scripts/DEPLOY-README.md) for detailed manual deployment instructions.
 
 ---
 
@@ -283,9 +302,10 @@ Current versions:
 
 ## 📖 Additional Documentation
 
+- **[CICD-SETUP.md](CICD-SETUP.md)** - GitHub Actions CI/CD setup guide
 - **[CLAUDE.md](CLAUDE.md)** - Comprehensive developer documentation
 - **[scripts/README.md](scripts/README.md)** - Schedule generation documentation
-- **[scripts/DEPLOY-README.md](scripts/DEPLOY-README.md)** - Deployment guide
+- **[scripts/DEPLOY-README.md](scripts/DEPLOY-README.md)** - Manual deployment guide
 
 ---
 

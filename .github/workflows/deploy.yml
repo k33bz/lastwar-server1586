@@ -1,0 +1,102 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [mainline]
+  workflow_dispatch:  # Allow manual trigger from GitHub UI
+
+jobs:
+  test:
+    name: Run Tests & Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run unit tests
+        run: python scripts/run-tests.py
+        continue-on-error: false
+
+      - name: Validate JSON files
+        run: |
+          echo "Validating alliances.json..."
+          python -m json.tool data/alliances.json > /dev/null
+          echo "✓ alliances.json is valid"
+
+          echo "Validating rules.json..."
+          python -m json.tool data/rules.json > /dev/null
+          echo "✓ rules.json is valid"
+
+          echo "Validating amendments.json..."
+          python -m json.tool data/amendments.json > /dev/null
+          echo "✓ amendments.json is valid"
+
+          echo "Validating rotation-schedule.json..."
+          python -m json.tool data/rotation-schedule.json > /dev/null
+          echo "✓ rotation-schedule.json is valid"
+
+          echo "Validating server-info.json..."
+          python -m json.tool data/server-info.json > /dev/null
+          echo "✓ server-info.json is valid"
+
+          echo "Validating signature-history.json..."
+          python -m json.tool data/signature-history.json > /dev/null
+          echo "✓ signature-history.json is valid"
+
+      - name: Validate CSV files
+        run: python scripts/validate-csv.py
+
+      - name: Test summary
+        if: success()
+        run: |
+          echo "✅ All tests passed!"
+          echo "✅ All JSON files validated"
+          echo "✅ CSV files validated"
+          echo "Ready for deployment"
+
+  deploy:
+    name: Deploy to Production
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/mainline'
+
+    environment:
+      name: production
+      url: https://www.example.com
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Deploy via FTP
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+        run: python scripts/deploy-ftp-ci.py
+
+      - name: Deployment summary
+        if: success()
+        run: |
+          echo "✅ Deployment successful!"
+          echo "🌐 Website: https://www.example.com"
+          echo "📦 Deployed from commit: ${{ github.sha }}"
+          echo "👤 Deployed by: ${{ github.actor }}"
+
+      - name: Deployment failed
+        if: failure()
+        run: |
+          echo "❌ Deployment failed!"
+          echo "Check logs above for details"
+          exit 1
