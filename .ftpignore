@@ -21,8 +21,7 @@ scripts/
 
 # CI/CD and Training Files
 tesseract_training/
-debug_ocr/
-admin/
+ocr/
 .claude/
 CICD-SETUP.md
 
