@@ -1,5 +1,7 @@
 # Server 1586 - Last War Alliance Website
 
+[![Deploy to Production](https://github.com/username/your-repo/actions/workflows/deploy.yml/badge.svg)](https://github.com/username/your-repo/actions/workflows/deploy.yml)
+
 Official website for Server 1586 alliance management, council voting, and server rules.
 
 **Live Website**: [https://www.example.com](https://www.example.com)
