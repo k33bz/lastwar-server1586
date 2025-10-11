@@ -4,6 +4,11 @@
  * Handles all dynamic rendering and user interactions for the homepage.
  *
  * CHANGELOG:
+ * v1.9.3 - 2025-10-10
+ * - Fixed Chart.js date format parser (changed YYYY-MM-DD to yyyy-MM-dd)
+ * - Chart.js date-fns adapter requires lowercase format tokens
+ * - Power trends chart now displays correctly with time-based X-axis
+ *
  * v1.9.2 - 2025-10-10
  * - Added extensive debug logging to diagnose chart rendering issues
  * - Added error handling for missing power history data
@@ -1104,28 +1109,22 @@
     * @returns {Object} Parsed data with dates and alliance power values
     */
    function parsePowerHistoryCSV(csvText) {
-       console.log('parsePowerHistoryCSV() called');
-       console.log('CSV text length:', csvText ? csvText.length : 0);
-
        if (!csvText || csvText.trim().length === 0) {
-           console.error('CSV text is empty or null');
+           console.error('Power history CSV is empty or null');
            return null;
        }
 
        var lines = csvText.trim().split('\n');
-       console.log('Number of lines in CSV:', lines.length);
 
        if (lines.length < 2) {
-           console.error('CSV has less than 2 lines (need header + data)');
+           console.error('Power history CSV has insufficient data (need header + data rows)');
            return null;
        }
 
        // Parse header row (alliance tags)
        var headers = lines[0].split(',').map(function(h) { return h.trim(); });
-       console.log('Headers:', headers);
        var dateIndex = 0;
        var allianceTags = headers.slice(1); // Skip 'date' column
-       console.log('Alliance tags:', allianceTags);
 
        // Parse data rows
        var dates = [];
@@ -1140,7 +1139,7 @@
        for (var j = 1; j < lines.length; j++) {
            var values = lines[j].split(',').map(function(v) { return v.trim(); });
            if (values.length !== headers.length) {
-               console.warn('Line', j, 'has', values.length, 'values but expected', headers.length);
+               console.warn('Power history CSV line', j, 'has incorrect column count');
                continue;
            }
 
@@ -1154,17 +1153,13 @@
            }
        }
 
-       console.log('Parsed dates:', dates);
-       console.log('Parsed', Object.keys(datasets).length, 'alliance datasets');
+       console.log('Power history loaded:', allianceTags.length, 'alliances,', dates.length, 'data points');
 
-       var result = {
+       return {
            dates: dates,
            datasets: datasets,
            alliances: allianceTags
        };
-
-       console.log('Returning parsed data:', result);
-       return result;
    }
 
    /**
@@ -1198,11 +1193,8 @@
     * Render power trends chart using Chart.js
     */
    function renderPowerChart() {
-       console.log('renderPowerChart() called');
-       console.log('powerHistory:', powerHistory);
-
        if (!powerHistory) {
-           console.error('No power history data loaded');
+           console.error('No power history data loaded - cannot render chart');
            document.getElementById('lastDataUpdate').textContent = 'Error: No data';
            document.getElementById('dataPointCount').textContent = 'Error: No data';
            return;
@@ -1210,18 +1202,16 @@
 
        var ctx = document.getElementById('powerChart');
        if (!ctx) {
-           console.error('Power chart canvas not found');
+           console.error('Power chart canvas element not found');
            return;
        }
-
-       console.log('Canvas element found:', ctx);
-       console.log('Number of alliances in data:', powerHistory.alliances.length);
-       console.log('Number of dates:', powerHistory.dates.length);
 
        // Destroy existing chart if it exists
        if (powerChart) {
            powerChart.destroy();
        }
+
+       console.log('Rendering power chart with', powerHistory.alliances.length, 'alliances');
 
        // Only display top 15 alliances (even if CSV has more)
        var alliancesToShow = Math.min(15, powerHistory.alliances.length);
@@ -1314,14 +1304,14 @@
                    x: {
                        type: 'time',
                        time: {
-                           parser: 'YYYY-MM-DD',
+                           parser: 'yyyy-MM-dd',
                            unit: 'day',
                            displayFormats: {
-                               day: 'MMM D',
-                               week: 'MMM D',
-                               month: 'MMM YYYY'
+                               day: 'MMM d',
+                               week: 'MMM d',
+                               month: 'MMM yyyy'
                            },
-                           tooltipFormat: 'MMM D, YYYY'
+                           tooltipFormat: 'MMM d, yyyy'
                        },
                        display: true,
                        title: {
