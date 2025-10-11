@@ -4,10 +4,16 @@
     Server 1586 - Last War Alliance Homepage
     Main HTML Structure
 
-    Version: 1.4.2
-    Last Updated: 2025-10-08
+    Version: 1.5.0
+    Last Updated: 2025-10-10
 
     CHANGELOG:
+    v1.5.0 - 2025-10-10
+    - Added Chart.js date adapter for time-based power trends
+    - Power chart now accurately reflects time gaps between data points
+    - Rotation schedule displays last-generated timestamp
+    - Created comprehensive alliance data schema documentation
+
     v1.4.2 - 2025-10-08
     - Updated rotation schedule with configurable back-to-back prevention
     - Rotation script now prevents alliances from rotating in consecutive weeks
@@ -51,8 +57,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="version" content="1.4.2">
-    <meta name="last-updated" content="2025-10-08">
+    <meta name="version" content="1.5.0">
+    <meta name="last-updated" content="2025-10-10">
 
     <!-- Cache Control Headers -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -62,10 +68,12 @@
     <title>Server 1586 - Last War</title>
 
     <!-- Cache-busting: Version query parameters force browser to reload on updates -->
-    <link rel="stylesheet" href="css/styles.css?v=1.4.2">
+    <link rel="stylesheet" href="css/styles.css?v=1.5.0">
 
     <!-- Chart.js for Power Trends Visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Chart.js date adapter for time-based X-axis -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -132,7 +140,7 @@
             <!-- Rotation Schedule with Timezone Tooltips -->
             <div class="rotation-schedule">
                 <h3>Rotation Schedule</h3>
-                <p class="schedule-note">Hover over dates to see all timezones. Schedule updates when Top 15 rankings change.</p>
+                <p class="schedule-note" id="scheduleNote">Hover over dates to see all timezones. Schedule updates when Top 15 rankings change.</p>
                 <div id="rotationScheduleDisplay"></div>
             </div>
         </section>
@@ -225,9 +233,9 @@
     </div>
 
     <!-- Load Council Logic (still uses JS for functions) -->
-    <script src="data/council.js?v=1.4.2"></script>
+    <script src="data/council.js?v=1.5.0"></script>
 
     <!-- Load Main Application (loads JSON data asynchronously) -->
-    <script src="js/app.js?v=1.4.2"></script>
+    <script src="js/app.js?v=1.5.0"></script>
 </body>
 </html>

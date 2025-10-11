@@ -424,11 +424,55 @@ def update_schedule_file():
     # Combine: past + new future
     full_schedule = past_weeks + new_schedule
 
+    # Track top 3 and top 15 snapshots for change detection
+    top3_tags = [a['tag'] for a in alliances[:3]]
+    top15_tags = [a['tag'] for a in alliances[:15]]
+
+    # Check if alliances have changed since last generation
+    changes_detected = False
+    change_notes = []
+
+    if existing_schedule.get('metadata'):
+        old_top3 = existing_schedule['metadata'].get('top3Snapshot', [])
+        old_top15 = existing_schedule['metadata'].get('top15Snapshot', [])
+
+        if set(old_top3) != set(top3_tags):
+            changes_detected = True
+            change_notes.append('Top 3 alliances changed')
+            # Show details
+            added = set(top3_tags) - set(old_top3)
+            removed = set(old_top3) - set(top3_tags)
+            if added:
+                change_notes.append(f'  New in top 3: {", ".join(added)}')
+            if removed:
+                change_notes.append(f'  Left top 3: {", ".join(removed)}')
+
+        if set(old_top15) != set(top15_tags):
+            if not changes_detected:
+                changes_detected = True
+                change_notes.append('Top 15 alliances changed (rank order only)')
+            # Check if it's just reordering or actual membership change
+            added_15 = set(top15_tags) - set(old_top15)
+            removed_15 = set(old_top15) - set(top15_tags)
+            if added_15 or removed_15:
+                change_notes.append('Top 15 membership changed')
+                if added_15:
+                    change_notes.append(f'  New in top 15: {", ".join(added_15)}')
+                if removed_15:
+                    change_notes.append(f'  Left top 15: {", ".join(removed_15)}')
+
     # Create output
     output = {
         'generatedAt': datetime.now().isoformat() + 'Z',
         'epoch': WEEK_1_EPOCH.isoformat(),
         'currentWeekNumber': current_week,
+        'metadata': {
+            'top3Snapshot': top3_tags,
+            'top15Snapshot': top15_tags,
+            'lastGeneratedDate': datetime.now().strftime('%Y-%m-%d'),
+            'changesDetected': changes_detected,
+            'changeNotes': change_notes if change_notes else None
+        },
         'schedule': full_schedule
     }
 
@@ -476,9 +520,19 @@ def update_schedule_file():
         count = future_counts.get(tag, 0)
         print(f'  {tag:4s} (Rank {rank:2d}): {count:2d} rotations')
 
+    # Show change detection results
+    if changes_detected:
+        print('\n' + '=' * 60)
+        print('Alliance Ranking Changes Detected!')
+        print('=' * 60)
+        for note in change_notes:
+            print(f'  {note}')
+        print('\nℹ️  Rotation schedule regenerated with current rankings')
+
     print('\n' + '=' * 60)
     print('[SUCCESS] Schedule updated successfully!')
     print(f'          File: {SCHEDULE_FILE}')
+    print(f'          Last generated: {output["metadata"]["lastGeneratedDate"]}')
     print('=' * 60)
 
 

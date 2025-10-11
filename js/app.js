@@ -4,6 +4,16 @@
  * Handles all dynamic rendering and user interactions for the homepage.
  *
  * CHANGELOG:
+ * v1.9.0 - 2025-10-10
+ * - Added time-based spacing for power trends chart
+ * - Chart now uses proper time scale for X-axis
+ * - Data points spaced according to actual date gaps (1 day vs 7 days accurately reflected)
+ *
+ * v1.8.0 - 2025-10-10
+ * - Added rotation schedule metadata display (last generated date)
+ * - Shows warning when alliance rankings change
+ * - Reads metadata from rotation-schedule.json
+ *
  * v1.7.0 - 2025-10-08
  * - Added cache-busting to JSON data fetches
  * - Version query parameters force browser to reload updated data
@@ -587,6 +597,19 @@
 
        scheduleHtml += '</div>';
        document.getElementById('rotationScheduleDisplay').innerHTML = scheduleHtml;
+
+       // Update schedule note with last generated date from metadata
+       if (rotationSchedule.metadata && rotationSchedule.metadata.lastGeneratedDate) {
+           var scheduleNote = document.getElementById('scheduleNote');
+           var noteText = 'Rotation Schedule (last generated ' + rotationSchedule.metadata.lastGeneratedDate + '). Hover over dates to see all timezones.';
+
+           // Add change warning if top 3 or top 15 alliances changed
+           if (rotationSchedule.metadata.changesDetected && rotationSchedule.metadata.changeNotes) {
+               noteText += ' ⚠️ Rankings changed - schedule regenerated.';
+           }
+
+           scheduleNote.textContent = noteText;
+       }
    }
 
    /**
@@ -1151,16 +1174,25 @@
        var alliancesToShow = Math.min(15, powerHistory.alliances.length);
        var colors = generateChartColors(alliancesToShow);
 
-       // Build datasets for Chart.js (top 15 only)
+       // Build datasets for Chart.js (top 15 only) with time-based X coordinates
        var chartDatasets = [];
        for (var i = 0; i < alliancesToShow; i++) {
            var tag = powerHistory.alliances[i];
-           var data = powerHistory.datasets[tag];
+           var powerData = powerHistory.datasets[tag];
            var color = colors[i];
+
+           // Convert to x,y format where x is date for proper time spacing
+           var dataPoints = [];
+           for (var j = 0; j < powerHistory.dates.length; j++) {
+               dataPoints.push({
+                   x: powerHistory.dates[j],
+                   y: powerData[j]
+               });
+           }
 
            chartDatasets.push({
                label: tag,
-               data: data,
+               data: dataPoints,
                borderColor: color,
                backgroundColor: color,
                borderWidth: 2,
@@ -1175,7 +1207,6 @@
        powerChart = new Chart(ctx, {
            type: 'line',
            data: {
-               labels: powerHistory.dates,
                datasets: chartDatasets
            },
            options: {
@@ -1228,6 +1259,17 @@
                },
                scales: {
                    x: {
+                       type: 'time',
+                       time: {
+                           parser: 'YYYY-MM-DD',
+                           unit: 'day',
+                           displayFormats: {
+                               day: 'MMM D',
+                               week: 'MMM D',
+                               month: 'MMM YYYY'
+                           },
+                           tooltipFormat: 'MMM D, YYYY'
+                       },
                        display: true,
                        title: {
                            display: true,
@@ -1241,7 +1283,9 @@
                        ticks: {
                            color: '#A0A0A0',
                            maxRotation: 45,
-                           minRotation: 45
+                           minRotation: 45,
+                           autoSkip: true,
+                           maxTicksLimit: 10
                        },
                        grid: {
                            color: 'rgba(255, 255, 255, 0.1)'
@@ -1287,7 +1331,7 @@
       ============================================ */
 
    // Version for cache-busting (update this when deploying changes)
-   var APP_VERSION = '1.4.2';
+   var APP_VERSION = '1.5.0';
 
    /**
     * Load all data from JSON files with cache-busting

@@ -1,7 +1,34 @@
 {
-    "generatedAt": "2025-10-10T10:32:55.679263Z",
+    "generatedAt": "2025-10-10T21:57:47.280144Z",
     "epoch": "2025-05-19T02:00:00+00:00",
     "currentWeekNumber": 21,
+    "metadata": {
+        "top3Snapshot": [
+            "UvvU",
+            "ORCE",
+            "nkot"
+        ],
+        "top15Snapshot": [
+            "UvvU",
+            "ORCE",
+            "nkot",
+            "404a",
+            "STR8",
+            "FLM",
+            "EPIC",
+            "NYPR",
+            "SWBA",
+            "86KO",
+            "FNXS",
+            "UUSN",
+            "NiKi",
+            "L4TM",
+            "MTOP"
+        ],
+        "lastGeneratedDate": "2025-10-10",
+        "changesDetected": false,
+        "changeNotes": null
+    },
     "schedule": [
         {
             "weekNumber": 1,
@@ -168,30 +195,30 @@
             "startDate": "2025-10-06T02:00:00Z",
             "rotatingMembers": [
                 "EPIC",
-                "STR8"
+                "FLM"
             ]
         },
         {
             "weekNumber": 22,
             "startDate": "2025-10-13T02:00:00Z",
             "rotatingMembers": [
-                "86KO",
-                "NYPR"
+                "NYPR",
+                "SWBA"
             ]
         },
         {
             "weekNumber": 23,
             "startDate": "2025-10-20T02:00:00Z",
             "rotatingMembers": [
-                "MTOP",
-                "SWBA"
+                "86KO",
+                "FNXS"
             ]
         },
         {
             "weekNumber": 24,
             "startDate": "2025-10-27T02:00:00Z",
             "rotatingMembers": [
-                "FNXS",
+                "NiKi",
                 "UUSN"
             ]
         },
@@ -200,7 +227,7 @@
             "startDate": "2025-11-03T02:00:00Z",
             "rotatingMembers": [
                 "L4TM",
-                "NiKi"
+                "MTOP"
             ]
         },
         {
@@ -208,30 +235,30 @@
             "startDate": "2025-11-10T02:00:00Z",
             "rotatingMembers": [
                 "EPIC",
-                "STR8"
+                "FLM"
             ]
         },
         {
             "weekNumber": 27,
             "startDate": "2025-11-17T02:00:00Z",
             "rotatingMembers": [
-                "86KO",
-                "NYPR"
+                "NYPR",
+                "SWBA"
             ]
         },
         {
             "weekNumber": 28,
             "startDate": "2025-11-24T02:00:00Z",
             "rotatingMembers": [
-                "MTOP",
-                "SWBA"
+                "86KO",
+                "FNXS"
             ]
         },
         {
             "weekNumber": 29,
             "startDate": "2025-12-01T02:00:00Z",
             "rotatingMembers": [
-                "FNXS",
+                "NiKi",
                 "UUSN"
             ]
         },
@@ -240,7 +267,7 @@
             "startDate": "2025-12-08T02:00:00Z",
             "rotatingMembers": [
                 "L4TM",
-                "NiKi"
+                "MTOP"
             ]
         },
         {
@@ -248,30 +275,30 @@
             "startDate": "2025-12-15T02:00:00Z",
             "rotatingMembers": [
                 "EPIC",
-                "STR8"
+                "FLM"
             ]
         },
         {
             "weekNumber": 32,
             "startDate": "2025-12-22T02:00:00Z",
             "rotatingMembers": [
-                "86KO",
-                "NYPR"
+                "NYPR",
+                "SWBA"
             ]
         },
         {
             "weekNumber": 33,
             "startDate": "2025-12-29T02:00:00Z",
             "rotatingMembers": [
-                "MTOP",
-                "SWBA"
+                "86KO",
+                "FNXS"
             ]
         },
         {
             "weekNumber": 34,
             "startDate": "2026-01-05T02:00:00Z",
             "rotatingMembers": [
-                "FNXS",
+                "NiKi",
                 "UUSN"
             ]
         },
@@ -280,7 +307,7 @@
             "startDate": "2026-01-12T02:00:00Z",
             "rotatingMembers": [
                 "L4TM",
-                "NiKi"
+                "MTOP"
             ]
         },
         {
@@ -288,30 +315,30 @@
             "startDate": "2026-01-19T02:00:00Z",
             "rotatingMembers": [
                 "EPIC",
-                "STR8"
+                "FLM"
             ]
         },
         {
             "weekNumber": 37,
             "startDate": "2026-01-26T02:00:00Z",
             "rotatingMembers": [
-                "86KO",
-                "NYPR"
+                "NYPR",
+                "SWBA"
             ]
         },
         {
             "weekNumber": 38,
             "startDate": "2026-02-02T02:00:00Z",
             "rotatingMembers": [
-                "MTOP",
-                "SWBA"
+                "86KO",
+                "FNXS"
             ]
         },
         {
             "weekNumber": 39,
             "startDate": "2026-02-09T02:00:00Z",
             "rotatingMembers": [
-                "FNXS",
+                "NiKi",
                 "UUSN"
             ]
         },
@@ -320,7 +347,7 @@
             "startDate": "2026-02-16T02:00:00Z",
             "rotatingMembers": [
                 "L4TM",
-                "NiKi"
+                "MTOP"
             ]
         },
         {
@@ -328,30 +355,30 @@
             "startDate": "2026-02-23T02:00:00Z",
             "rotatingMembers": [
                 "EPIC",
-                "STR8"
+                "FLM"
             ]
         },
         {
             "weekNumber": 42,
             "startDate": "2026-03-02T02:00:00Z",
             "rotatingMembers": [
-                "86KO",
-                "NYPR"
+                "NYPR",
+                "SWBA"
             ]
         },
         {
             "weekNumber": 43,
             "startDate": "2026-03-09T02:00:00Z",
             "rotatingMembers": [
-                "MTOP",
-                "SWBA"
+                "86KO",
+                "FNXS"
             ]
         },
         {
             "weekNumber": 44,
             "startDate": "2026-03-16T02:00:00Z",
             "rotatingMembers": [
-                "FNXS",
+                "NiKi",
                 "UUSN"
             ]
         },
@@ -360,7 +387,7 @@
             "startDate": "2026-03-23T02:00:00Z",
             "rotatingMembers": [
                 "L4TM",
-                "NiKi"
+                "MTOP"
             ]
         },
         {
@@ -368,30 +395,30 @@
             "startDate": "2026-03-30T02:00:00Z",
             "rotatingMembers": [
                 "EPIC",
-                "STR8"
+                "FLM"
             ]
         },
         {
             "weekNumber": 47,
             "startDate": "2026-04-06T02:00:00Z",
             "rotatingMembers": [
-                "86KO",
-                "NYPR"
+                "NYPR",
+                "SWBA"
             ]
         },
         {
             "weekNumber": 48,
             "startDate": "2026-04-13T02:00:00Z",
             "rotatingMembers": [
-                "MTOP",
-                "SWBA"
+                "86KO",
+                "FNXS"
             ]
         },
         {
             "weekNumber": 49,
             "startDate": "2026-04-20T02:00:00Z",
             "rotatingMembers": [
-                "FNXS",
+                "NiKi",
                 "UUSN"
             ]
         },
@@ -400,7 +427,7 @@
             "startDate": "2026-04-27T02:00:00Z",
             "rotatingMembers": [
                 "L4TM",
-                "NiKi"
+                "MTOP"
             ]
         },
         {
@@ -408,30 +435,30 @@
             "startDate": "2026-05-04T02:00:00Z",
             "rotatingMembers": [
                 "EPIC",
-                "STR8"
+                "FLM"
             ]
         },
         {
             "weekNumber": 52,
             "startDate": "2026-05-11T02:00:00Z",
             "rotatingMembers": [
-                "86KO",
-                "NYPR"
+                "NYPR",
+                "SWBA"
             ]
         },
         {
             "weekNumber": 53,
             "startDate": "2026-05-18T02:00:00Z",
             "rotatingMembers": [
-                "MTOP",
-                "SWBA"
+                "86KO",
+                "FNXS"
             ]
         },
         {
             "weekNumber": 54,
             "startDate": "2026-05-25T02:00:00Z",
             "rotatingMembers": [
-                "FNXS",
+                "NiKi",
                 "UUSN"
             ]
         },
@@ -440,7 +467,7 @@
             "startDate": "2026-06-01T02:00:00Z",
             "rotatingMembers": [
                 "L4TM",
-                "NiKi"
+                "MTOP"
             ]
         },
         {
@@ -448,30 +475,30 @@
             "startDate": "2026-06-08T02:00:00Z",
             "rotatingMembers": [
                 "EPIC",
-                "STR8"
+                "FLM"
             ]
         },
         {
             "weekNumber": 57,
             "startDate": "2026-06-15T02:00:00Z",
             "rotatingMembers": [
-                "86KO",
-                "NYPR"
+                "NYPR",
+                "SWBA"
             ]
         },
         {
             "weekNumber": 58,
             "startDate": "2026-06-22T02:00:00Z",
             "rotatingMembers": [
-                "MTOP",
-                "SWBA"
+                "86KO",
+                "FNXS"
             ]
         },
         {
             "weekNumber": 59,
             "startDate": "2026-06-29T02:00:00Z",
             "rotatingMembers": [
-                "FNXS",
+                "NiKi",
                 "UUSN"
             ]
         },
@@ -480,7 +507,7 @@
             "startDate": "2026-07-06T02:00:00Z",
             "rotatingMembers": [
                 "L4TM",
-                "NiKi"
+                "MTOP"
             ]
         },
         {
@@ -488,30 +515,30 @@
             "startDate": "2026-07-13T02:00:00Z",
             "rotatingMembers": [
                 "EPIC",
-                "STR8"
+                "FLM"
             ]
         },
         {
             "weekNumber": 62,
             "startDate": "2026-07-20T02:00:00Z",
             "rotatingMembers": [
-                "86KO",
-                "NYPR"
+                "NYPR",
+                "SWBA"
             ]
         },
         {
             "weekNumber": 63,
             "startDate": "2026-07-27T02:00:00Z",
             "rotatingMembers": [
-                "MTOP",
-                "SWBA"
+                "86KO",
+                "FNXS"
             ]
         },
         {
             "weekNumber": 64,
             "startDate": "2026-08-03T02:00:00Z",
             "rotatingMembers": [
-                "FNXS",
+                "NiKi",
                 "UUSN"
             ]
         },
@@ -520,7 +547,7 @@
             "startDate": "2026-08-10T02:00:00Z",
             "rotatingMembers": [
                 "L4TM",
-                "NiKi"
+                "MTOP"
             ]
         },
         {
@@ -528,30 +555,30 @@
             "startDate": "2026-08-17T02:00:00Z",
             "rotatingMembers": [
                 "EPIC",
-                "STR8"
+                "FLM"
             ]
         },
         {
             "weekNumber": 67,
             "startDate": "2026-08-24T02:00:00Z",
             "rotatingMembers": [
-                "86KO",
-                "NYPR"
+                "NYPR",
+                "SWBA"
             ]
         },
         {
             "weekNumber": 68,
             "startDate": "2026-08-31T02:00:00Z",
             "rotatingMembers": [
-                "MTOP",
-                "SWBA"
+                "86KO",
+                "FNXS"
             ]
         },
         {
             "weekNumber": 69,
             "startDate": "2026-09-07T02:00:00Z",
             "rotatingMembers": [
-                "FNXS",
+                "NiKi",
                 "UUSN"
             ]
         },
@@ -560,7 +587,7 @@
             "startDate": "2026-09-14T02:00:00Z",
             "rotatingMembers": [
                 "L4TM",
-                "NiKi"
+                "MTOP"
             ]
         },
         {
@@ -568,15 +595,15 @@
             "startDate": "2026-09-21T02:00:00Z",
             "rotatingMembers": [
                 "EPIC",
-                "STR8"
+                "FLM"
             ]
         },
         {
             "weekNumber": 72,
             "startDate": "2026-09-28T02:00:00Z",
             "rotatingMembers": [
-                "86KO",
-                "NYPR"
+                "NYPR",
+                "SWBA"
             ]
         }
     ]

@@ -5,8 +5,8 @@ Official website for Server 1586 alliance management, council voting, and server
 **Live Website**: [https://www.example.com](https://www.example.com)
 **GitHub Repository**: [https://github.com/username/your-repo](https://github.com/username/your-repo)
 
-**Version**: 1.4.2
-**Last Updated**: October 9, 2025
+**Version**: 1.5.0
+**Last Updated**: October 10, 2025
 
 > **Note**: The website automatically redirects HTTP to HTTPS and adds www. prefix for security and consistency.
 
@@ -33,6 +33,9 @@ Official website for Server 1586 alliance management, council voting, and server
 - **Timezone Support**: Displays rotation times in multiple timezones with automatic DST detection
 - **Responsive Design**: Mobile-friendly interface with optimized layouts
 - **Fair Rotation Algorithm**: Ensures all alliances get equal representation over time
+- **Power Trends Chart**: Time-based alliance power visualization with accurate date spacing
+- **Rotation Schedule Metadata**: Displays last-generated timestamp and change detection
+- **Alliance Data Schema**: Comprehensive documentation for expandable alliance profiles
 
 ---
 
@@ -40,20 +43,25 @@ Official website for Server 1586 alliance management, council voting, and server
 
 ```
 Server1586/
-├── index.html              # Main HTML page (v1.4.0)
+├── index.html              # Main HTML page (v1.5.0)
 ├── css/
 │   └── styles.css          # Main stylesheet (v1.3.2)
 ├── js/
-│   └── app.js              # Main application logic (v1.6.0)
+│   └── app.js              # Main application logic (v1.9.0)
 ├── data/
-│   ├── alliances.json      # Top 15 alliance data
+│   ├── alliances.json      # Top 15 alliance data (expandable to 50)
 │   ├── rules.json          # Server rules
 │   ├── amendments.json     # Rule amendment history
-│   ├── rotation-schedule.json  # Pre-generated rotation schedule
-│   └── council.js          # Council utility functions (v2.0.0)
+│   ├── rotation-schedule.json  # Pre-generated rotation schedule with metadata
+│   ├── council.js          # Council utility functions (v2.0.0)
+│   ├── power-history.csv   # Alliance power trends over time
+│   ├── server-info.json    # Server Discord and metadata
+│   ├── signature-history.json  # R5 leadership and signature tracking
+│   └── ALLIANCE_SCHEMA.md  # Alliance data structure documentation
 ├── scripts/
 │   ├── deploy-ftp.py       # FTP deployment script
-│   ├── update-rotation-schedule.py  # Schedule generator (v2.0.0)
+│   ├── update-rotation-schedule.py  # Schedule generator (v2.2.0)
+│   ├── merge-signature-history.py  # R5 history merger
 │   ├── DEPLOY-README.md    # Deployment guide
 │   └── README.md           # Scripts documentation
 ├── images/                 # Screenshots and assets
@@ -238,9 +246,9 @@ The project uses semantic versioning:
 - **Patch** (1.0.X): Bug fixes or minor improvements
 
 Current versions:
-- Website: **1.4.2**
-- JavaScript: **1.7.0**
-- CSS: **1.4.1**
+- Website: **1.5.0**
+- JavaScript: **1.9.0**
+- CSS: **1.3.2**
 - Council: **2.0.0**
 - Schedule Script: **2.2.0**
 
@@ -301,5 +309,5 @@ For questions or issues, contact the server administrators.
 
 ---
 
-**Last Updated**: October 9, 2025
+**Last Updated**: October 10, 2025
 **Maintained by**: Server 1586 Council
