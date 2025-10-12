@@ -25,6 +25,9 @@ ocr/
 .claude/
 CICD-SETUP.md
 
+# Admin System (not ready for production)
+admin/
+
 # Backup and deleted files
 *.del
 *.js.del
