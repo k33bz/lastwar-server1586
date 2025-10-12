@@ -1,0 +1,9 @@
+param($path)
+Set-Content -Path "$path\login.php" -Value @"
+<!-- login.php -->
+<form method=\"post\" action=\"send_magic_link.php\">
+    <label for=\"email\">Alliance Email:</label>
+    <input type=\"email\" name=\"email\" required autocomplete=\"email\">
+    <button type=\"submit\">Send Magic Link</button>
+</form>
+"@

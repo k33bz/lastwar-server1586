@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "email": "admin@example.com",
+      "alliances": ["*"],
+      "role": "admin"
+    },
+    {
+      "email": "uvvu@example.com",
+      "alliances": ["uvvu"],
+      "role": "alliance"
+    },
+    {
+      "email": "orce@example.com",
+      "alliances": ["orce", "uvvu"],
+      "role": "alliance"
+    }
+  ]
+}

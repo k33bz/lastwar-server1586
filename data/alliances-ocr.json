@@ -1,0 +1,468 @@
+{
+  "processed_date": "2025-10-11",
+  "total_images": 24,
+  "successful": 20,
+  "failed": 4,
+  "alliances": [
+    {
+      "image": "2025-10-10_12-27-35.png",
+      "tag": "<HKU>",
+      "r5": "8lzHgz4Nm",
+      "anchor": [
+        505,
+        108,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 215,
+        "y": 113,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 385,
+        "y": 168,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-27-47.png",
+      "tag": "<ASLRBZ>",
+      "r5": "ULoveGuddik",
+      "anchor": [
+        502,
+        112,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 212,
+        "y": 117,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 382,
+        "y": 172,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-28-05.png",
+      "tag": "<LE4L>",
+      "r5": "Alessaurem",
+      "anchor": [
+        513,
+        108,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 223,
+        "y": 113,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 393,
+        "y": 168,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-28-18.png",
+      "tag": "<FLM>",
+      "r5": "Kiupzdldle",
+      "anchor": [
+        510,
+        112,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 220,
+        "y": 117,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 390,
+        "y": 172,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-28-27.png",
+      "tag": "<4O4A3>",
+      "r5": "@JNtqaw",
+      "anchor": [
+        509,
+        106,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 219,
+        "y": 111,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 389,
+        "y": 166,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-28-37.png",
+      "tag": "<NYPR>",
+      "r5": "SmamoOB5PR",
+      "anchor": [
+        506,
+        112,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 216,
+        "y": 117,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 386,
+        "y": 172,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-28-47.png",
+      "tag": "<SWBA>",
+      "r5": "OOn123123",
+      "anchor": [
+        504,
+        108,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 214,
+        "y": 113,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 384,
+        "y": 168,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-29-07.png",
+      "tag": "<FNXS>",
+      "r5": "GewDV",
+      "anchor": [
+        515,
+        109,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 225,
+        "y": 114,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 395,
+        "y": 169,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-29-16.png",
+      "tag": "<HIKI>",
+      "r5": "Lappafenomend",
+      "anchor": [
+        516,
+        121,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 226,
+        "y": 126,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 396,
+        "y": 181,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-29-26.png",
+      "tag": "<MEKU>",
+      "r5": "MdPubadaddlo",
+      "anchor": [
+        509,
+        111,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 219,
+        "y": 116,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 389,
+        "y": 171,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-29-35.png",
+      "tag": "<PFPB>",
+      "r5": "Ctzlanct",
+      "anchor": [
+        501,
+        111,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 211,
+        "y": 116,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 381,
+        "y": 171,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-29-48.png",
+      "tag": "<UUSN>",
+      "r5": "KibgKikTC",
+      "anchor": [
+        506,
+        108,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 216,
+        "y": 113,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 386,
+        "y": 168,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-29-56.png",
+      "tag": "<SK9B>>",
+      "r5": "1det21O327588",
+      "anchor": [
+        515,
+        114,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 225,
+        "y": 119,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 395,
+        "y": 174,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-30-08.png",
+      "tag": "<4I9BS3>",
+      "r5": "4+a#",
+      "anchor": [
+        509,
+        112,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 219,
+        "y": 117,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 389,
+        "y": 172,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-30-18.png",
+      "tag": "<L4B>",
+      "r5": "Dboaventua",
+      "anchor": [
+        504,
+        106,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 214,
+        "y": 111,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 384,
+        "y": 166,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-30-30.png",
+      "tag": "<WILU>",
+      "r5": "TBrown",
+      "anchor": [
+        508,
+        109,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 218,
+        "y": 114,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 388,
+        "y": 169,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-30-54.png",
+      "tag": "<NMMI>",
+      "r5": "Nblergd",
+      "anchor": [
+        502,
+        116,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 212,
+        "y": 121,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 382,
+        "y": 176,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-31-08.png",
+      "tag": "<BUST>",
+      "r5": "MndetxBetz58b",
+      "anchor": [
+        509,
+        115,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 219,
+        "y": 120,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 389,
+        "y": 175,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-31-20.png",
+      "tag": "<MXTL>",
+      "r5": "1te269817586",
+      "anchor": [
+        505,
+        112,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 215,
+        "y": 117,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 385,
+        "y": 172,
+        "width": 180,
+        "height": 25
+      }
+    },
+    {
+      "image": "2025-10-10_12-31-31.png",
+      "tag": "<REDR>",
+      "r5": "Libi",
+      "anchor": [
+        509,
+        108,
+        26,
+        26
+      ],
+      "tag_bbox": {
+        "x": 219,
+        "y": 113,
+        "width": 70,
+        "height": 18
+      },
+      "r5_bbox": {
+        "x": 389,
+        "y": 168,
+        "width": 180,
+        "height": 25
+      }
+    }
+  ]
+}

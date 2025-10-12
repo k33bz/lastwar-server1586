@@ -1,0 +1,24 @@
+# Environment configuration
+.env
+
+# Composer
+/vendor/
+composer.lock
+
+# Data files (keep structure, not actual data)
+users.json
+token_blacklist.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
