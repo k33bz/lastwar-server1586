@@ -3,6 +3,9 @@
  * Last War Alliance Rankings
  *
  * CHANGELOG:
+ * v1.4.3 - 2025-10-14
+ * - Fixed modal close button X icon centering with line-height: 1 and padding: 0
+ *
  * v1.4.2 - 2025-10-10
  * - Added R5 Leadership History styles for alliance modal
  * - Signature item display with check marks and version indicators
@@ -1258,6 +1261,8 @@ h1 {
     justify-content: center;
     border-radius: 50%;
     flex-shrink: 0;
+    line-height: 1;
+    padding: 0;
 }
 
 .modal-close:hover {
