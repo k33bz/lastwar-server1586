@@ -405,7 +405,7 @@ if (isset($_GET['tag'])) {
 
                 <div class="form-group">
                     <label>Alliance Name</label>
-                    <input type="text" name="name" value="<?= htmlspecialchars($alliance['name'] ?? '') ?>" required<?= $is_r4_only ? \' readonly style="background: #f0f0f0; cursor: not-allowed;"\' : \'\' ?>>
+                    <input type="text" name="name" value="<?= htmlspecialchars($alliance['name'] ?? '') ?>" required<?= $is_r4_only ? ' readonly style="background: #f0f0f0; cursor: not-allowed;"' : '' ?>>
                 </div>
 
                 <!-- Rules Signature Section -->
@@ -508,7 +508,7 @@ if (isset($_GET['tag'])) {
 
                 <div class="form-group">
                     <label>R5 Name</label>
-                    <input type="text" name="r5_name" value="<?= htmlspecialchars($r5_name) ?>" required<?= $is_r4_only ? \' readonly style="background: #f0f0f0; cursor: not-allowed;"\' : \'\' ?>>
+                    <input type="text" name="r5_name" value="<?= htmlspecialchars($r5_name) ?>" required<?= $is_r4_only ? ' readonly style="background: #f0f0f0; cursor: not-allowed;"' : '' ?>>
                 </div>
 
                 <div class="form-row">
