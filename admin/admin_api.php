@@ -2,9 +2,12 @@
 /**
  * Admin API - User management (admin and R5)
  *
- * @version 1.4.0
+ * @version 1.5.0
  * @date 2025-10-13
  * @changelog
+ *   1.5.0 (2025-10-13) - Revoke all JWT tokens when user is deleted
+ *                       - Blacklist all active_sessions before calling delete_user()
+ *                       - Prevents deleted users from accessing system with existing tokens
  *   1.4.0 (2025-10-13) - Implement R5 demotion rules
  *                       - R5 can promote users to R5 (already allowed)
  *                       - R5 cannot demote another R5 to R4 (new validation)
@@ -208,6 +211,15 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
             if ($is_r5 && $user['role'] === 'admin') {
                 http_response_code(403);
                 die('R5 users cannot delete admin accounts');
+            }
+
+            // Revoke all JWT tokens for the user before deletion
+            if (isset($user['active_sessions']) && is_array($user['active_sessions'])) {
+                foreach ($user['active_sessions'] as $session) {
+                    if (isset($session['jti']) && isset($session['exp'])) {
+                        blacklist_token($session['jti'], $session['exp']);
+                    }
+                }
             }
 
             delete_user($email);
