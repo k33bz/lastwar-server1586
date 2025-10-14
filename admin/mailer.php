@@ -4,9 +4,16 @@
  *
  * Handles email delivery for magic links and notifications
  *
- * @version 1.1.0
- * @date 2025-10-12
+ * @version 1.3.0
+ * @date 2025-10-13
  * @changelog
+ *   1.3.0 (2025-10-13) - Add personalized email greeting with username
+ *                      - Extract username from email if not provided
+ *                      - Update send_magic_link_email() signature with optional username parameter
+ *   1.2.0 (2025-10-13) - Enhanced magic link email design with gradient buttons
+ *                      - Added expiry badge and improved security messaging
+ *                      - Updated styling to match test email aesthetic
+ *                      - Added link box for alternative access method
  *   1.1.0 (2025-10-12) - Convert to HTML emails with professional styling
  *                      - Add no-reply notice to all emails
  *                      - Update to use SMTP_SSL (port 465) instead of STARTTLS (port 587)
@@ -14,7 +21,9 @@
  *   1.0.0 (2025-10-12) - Initial complete implementation with proper error handling
  */
 
-define('ADMIN_INIT', true);
+if (!defined('ADMIN_INIT')) {
+    define('ADMIN_INIT', true);
+}
 require_once __DIR__ . '/config.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -69,9 +78,14 @@ function send_email($to, $subject, $body, $is_html = false) {
  *
  * @param string $to Recipient email address
  * @param string $magic_link_url Magic link URL
+ * @param string $username Username for personalized greeting (optional, defaults to email prefix)
  * @return bool Success status
  */
-function send_magic_link_email($to, $magic_link_url) {
+function send_magic_link_email($to, $magic_link_url, $username = null) {
+    // If no username provided, extract from email
+    if ($username === null) {
+        $username = explode('@', $to)[0];
+    }
     $subject = 'Your Login Link for Last War 1586 Admin';
 
     $html_body = <<<EOT
@@ -99,109 +113,176 @@ function send_magic_link_email($to, $magic_link_url) {
         .header {
             text-align: center;
             margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #667eea;
         }
         .header h1 {
-            color: #2c3e50;
+            color: #667eea;
             margin: 0;
-            font-size: 24px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .header-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
         }
         .content {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+        }
+        .content p {
+            margin: 15px 0;
+            font-size: 15px;
         }
         .button {
             display: inline-block;
-            padding: 14px 32px;
-            background-color: #3498db;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #ffffff !important;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-weight: 600;
             text-align: center;
-            margin: 20px 0;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
         }
         .button:hover {
-            background-color: #2980b9;
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
         }
         .button-container {
             text-align: center;
-            margin: 30px 0;
+            margin: 35px 0;
         }
-        .security-notice {
-            background-color: #fff3cd;
-            border-left: 4px solid #ffc107;
+        .link-box {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
             padding: 15px;
             margin: 20px 0;
-            border-radius: 4px;
+            word-break: break-all;
+        }
+        .link-box p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 13px;
+        }
+        .link-box a {
+            color: #667eea;
+            font-size: 13px;
+            text-decoration: none;
+        }
+        .security-notice {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 6px;
         }
         .security-notice h3 {
             margin-top: 0;
             color: #856404;
-            font-size: 16px;
+            font-size: 17px;
+            font-weight: 700;
         }
         .security-notice ul {
-            margin: 10px 0;
-            padding-left: 20px;
+            margin: 15px 0;
+            padding-left: 25px;
         }
         .security-notice li {
             color: #856404;
-            margin: 5px 0;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
-            color: #666;
+            margin: 10px 0;
             font-size: 14px;
+        }
+        .security-notice strong {
+            font-weight: 700;
+        }
+        .expiry-badge {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 5px;
         }
         .no-reply-notice {
             background-color: #e8f4f8;
             border-left: 4px solid #3498db;
-            padding: 12px;
-            margin: 20px 0;
-            border-radius: 4px;
+            padding: 15px;
+            margin: 25px 0;
+            border-radius: 6px;
             font-size: 14px;
             color: #2c3e50;
+        }
+        .no-reply-notice strong {
+            font-weight: 700;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 2px solid #e0e0e0;
+            color: #666;
+            font-size: 14px;
+        }
+        .footer strong {
+            color: #667eea;
+            font-weight: 700;
+        }
+        .footer p {
+            margin: 8px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔐 Last War 1586 Admin Login</h1>
+            <h1>🔐 Last War 1586</h1>
+            <div class="header-badge">ADMIN LOGIN REQUEST</div>
         </div>
 
         <div class="content">
-            <p>Hello,</p>
-            <p>Click the button below to access your admin dashboard. This link will expire in <strong>10 minutes</strong>:</p>
+            <p><strong>Hello $username,</strong></p>
+            <p>You requested access to the Last War 1586 Admin Dashboard. Click the button below to securely log in:</p>
         </div>
 
         <div class="button-container">
-            <a href="$magic_link_url" class="button">Access Admin Dashboard</a>
+            <a href="$magic_link_url" class="button">🚀 Access Admin Dashboard</a>
         </div>
 
-        <div class="content">
-            <p style="color: #666; font-size: 14px;">Or copy and paste this link into your browser:</p>
-            <p style="word-break: break-all; color: #3498db; font-size: 13px;">$magic_link_url</p>
+        <div class="link-box">
+            <p><strong>Alternative:</strong> Copy and paste this link into your browser:</p>
+            <a href="$magic_link_url">$magic_link_url</a>
         </div>
 
         <div class="security-notice">
             <h3>🛡️ Security Information</h3>
             <ul>
-                <li>This link is <strong>single-use</strong> and will expire after one successful login</li>
-                <li>The link will expire in <strong>10 minutes</strong></li>
-                <li>Never share this link with anyone</li>
-                <li>If you did not request this login link, you can safely ignore this email</li>
+                <li>This link is <strong>single-use only</strong> and will become invalid after your first successful login</li>
+                <li>Link expires in <span class="expiry-badge">⏱️ 10 MINUTES</span></li>
+                <li><strong>Never share this link</strong> with anyone - it grants full access to your admin account</li>
+                <li>If you didn't request this login, you can safely ignore this email</li>
+                <li>For security, the link cannot be reused once clicked</li>
             </ul>
         </div>
 
         <div class="no-reply-notice">
-            <strong>Note:</strong> This is an automated message. Please do not reply to this email as this mailbox is not monitored.
+            <strong>⚠️ Note:</strong> This is an automated message from a no-reply email address. Please do not reply to this email as this mailbox is not monitored. For support, contact your server administrator.
         </div>
 
         <div class="footer">
-            <p>Best regards,<br><strong>The Last War 1586 Admin Team</strong></p>
-            <p style="font-size: 12px; color: #999;">This email was sent to $to</p>
+            <p>Best regards,</p>
+            <p><strong>The Last War 1586 Admin Team</strong></p>
+            <p style="font-size: 12px; color: #999; margin-top: 15px;">This email was sent to $to</p>
         </div>
     </div>
 </body>
