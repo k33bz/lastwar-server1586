@@ -15,7 +15,7 @@ import numpy as np
 import json
 
 # Paths
-FONT_DIR = Path(r"C:\Users\k33bz\OneDrive\git\lastwar-font-extractor\extracted_fonts")
+FONT_DIR = Path(r"C:\path\to\fonts\extracted_fonts")
 OUTPUT_DIR = Path(__file__).parent / "training_data"
 OUTPUT_DIR.mkdir(exist_ok=True)
 

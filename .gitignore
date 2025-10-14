@@ -103,3 +103,21 @@ coverage/
 # Build Outputs (if build process added)
 dist/
 build/
+
+# Sensitive user data
+admin/users.json
+admin/token_blacklist.json
+admin/.env
+# Local settings
+.claude/settings.local.json
+admin/.claude/settings.local.json
+# Temporary data files
+data/*.backup
+data/*_temp.json
+data/*_review_*.csv
+data/alliances-ocr*.json
+# Test files
+admin/test-smtp.php
+admin/test-smtp.py
+# Backup files
+*.backup

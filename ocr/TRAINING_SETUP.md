@@ -46,7 +46,7 @@ pip install pillow numpy easyocr
 ## Step 3: Generate Training Data
 
 ```bash
-cd C:\Users\k33bz\OneDrive\git\Server1586
+cd C:\path\to\project
 python ocr/generate-training-data.py
 ```
 

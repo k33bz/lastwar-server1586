@@ -230,7 +230,7 @@ Add token blacklisting to the `delete_user()` function.
 
 ```bash
 # On local machine
-cd C:/Users/k33bz/OneDrive/git/Server1586
+cd C:/path/to/project
 
 # Stage changes
 git add admin/alliance_edit.php

@@ -111,7 +111,7 @@ After setup, verify all three records:
 ```bash
 nslookup -type=txt example.com
 ```
-Should show: `v=spf1 +a +mx +ip4:68.65.120.147 include:spf.web-hosting.com ~all`
+Should show: `v=spf1 +a +mx +ip4:192.0.2.1 include:spf.web-hosting.com ~all`
 
 ### Check DKIM:
 ```bash

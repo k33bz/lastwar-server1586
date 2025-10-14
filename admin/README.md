@@ -271,7 +271,7 @@ php admin/cron.php
 **Automated (Cron):**
 ```cron
 # Run daily at 2 AM
-0 2 * * * /usr/bin/php /path/to/admin/cron.php
+0 2 * * * /usr/bin/php /path/to/project/admin/cron.php
 ```
 
 ### Backup Strategy

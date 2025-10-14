@@ -1,6 +1,10 @@
 # Environment configuration
 .env
 
+# Sensitive user data (keep .example versions)
+users.json
+token_blacklist.json
+
 # Composer
 /vendor/
 composer.lock

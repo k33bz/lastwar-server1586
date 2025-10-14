@@ -2,18 +2,25 @@
   "users": [
     {
       "email": "admin@example.com",
-      "alliances": ["*"],
+      "alliances": [
+        "*"
+      ],
       "role": "admin"
     },
     {
-      "email": "uvvu@example.com",
-      "alliances": ["uvvu"],
-      "role": "alliance"
+      "email": "r5-user@example.com",
+      "alliances": [
+        "UvvU"
+      ],
+      "role": "r5"
     },
     {
-      "email": "orce@example.com",
-      "alliances": ["orce", "uvvu"],
-      "role": "alliance"
+      "email": "r4-user@example.com",
+      "alliances": [
+        "UvvU",
+        "ORCE"
+      ],
+      "role": "r4"
     }
   ]
 }

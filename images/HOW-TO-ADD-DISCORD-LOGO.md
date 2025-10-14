@@ -10,7 +10,7 @@ The website is configured to display the Discord server icon at the top of the p
 4. Select **"Copy Image"** or **"Save Image As..."**
 5. If using Copy: Paste into an image editor and save
 6. Save the image as: `server-logo.png`
-7. Place it in this directory: `C:\Users\k33bz\OneDrive\git\Server1586\images\`
+7. Place it in this directory: `C:\path\to\project\images\`
 
 ## Method 2: From Browser Developer Tools
 

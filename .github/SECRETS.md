@@ -24,7 +24,7 @@ This document lists all secrets required for the GitHub Actions deployment workf
 | Secret Name | Description | Example Value | Current Production Value |
 |-------------|-------------|---------------|--------------------------|
 | `JWT_SECRET_KEY` | JWT signing key (min 32 chars) | `your-random-secret-key-here` | `your-production-jwt-secret` |
-| `SMTP_HOST` | SMTP server hostname | `mail.example.com` | `smtp.yourdomain.com` |
+| `SMTP_HOST` | SMTP server hostname | `mail.example.com` | `smtp.example.com` |
 | `SMTP_PORT` | SMTP port (465 for SSL, 587 for TLS) | `465` | `465` |
 | `SMTP_USER` | SMTP username (email address) | `noreply@example.com` | `noreply@yourdomain.com` |
 | `SMTP_PASS` | SMTP password | `your-smtp-password` | `your-production-password` |

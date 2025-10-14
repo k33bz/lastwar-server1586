@@ -1,5 +1,5 @@
 # Target directory
-$basePath = "C:\Users\k33bz\OneDrive\git\Server1586\admin"
+$basePath = "C:\path\to\project\admin"
 
 # Create folders
 New-Item -ItemType Directory -Force -Path $basePath

@@ -36,7 +36,7 @@ if sys.platform == 'win32':
 # Configuration
 SCRIPT_DIR = Path(__file__).parent
 PROJECT_ROOT = SCRIPT_DIR.parent
-FONTS_DIR = Path(r"C:\Users\k33bz\OneDrive\git\lastwar-font-extractor\extracted_fonts")
+FONTS_DIR = Path(r"C:\path\to\fonts\extracted_fonts")
 TRAINING_DIR = PROJECT_ROOT / "tesseract_training"
 TRAINING_DATA_DIR = TRAINING_DIR / "data"
 OUTPUT_DIR = TRAINING_DIR / "output"
