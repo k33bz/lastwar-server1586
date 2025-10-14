@@ -112,13 +112,51 @@ jobs:
           FTP_PASS: ${{ secrets.FTP_PASS }}
         run: python scripts/deploy-ftp-ci.py
 
+      - name: Install Composer dependencies via SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          # Install SSH client
+          sudo apt-get update
+          sudo apt-get install -y openssh-client
+
+          # Create SSH directory
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          # Add private key
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          # Add host to known_hosts to avoid prompt
+          ssh-keyscan -p $SSH_PORT -H $SSH_HOST >> ~/.ssh/known_hosts 2>/dev/null
+
+          # Test SSH connection
+          echo "Testing SSH connection to $SSH_USER@$SSH_HOST:$SSH_PORT..."
+          ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "echo 'SSH connection successful!'"
+
+          # Run composer install
+          echo "Running composer install in admin directory..."
+          ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST "cd ~/example.com/admin && composer install --no-dev --optimize-autoloader"
+
+          # Verify vendor directory exists
+          echo "Verifying vendor directory..."
+          ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST "ls -la ~/example.com/admin/vendor/autoload.php"
+
+          echo "✅ Composer dependencies installed successfully!"
+
       - name: Deployment summary
         if: success()
         run: |
           echo "✅ Deployment successful!"
           echo "🌐 Website: https://www.example.com"
+          echo "🔧 Admin Dashboard: https://www.example.com/admin/dashboard.php"
           echo "📦 Deployed from commit: ${{ github.sha }}"
           echo "👤 Deployed by: ${{ github.actor }}"
+          echo "✅ Composer dependencies installed via SSH"
 
       - name: Deployment failed
         if: failure()
