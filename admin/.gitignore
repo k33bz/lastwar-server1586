@@ -2,8 +2,9 @@
 .env
 
 # Composer
-/vendor/
-composer.lock
+# Note: vendor/ is committed to repo for deployment (alternative: run composer install on server)
+# /vendor/
+# composer.lock
 
 # Test files
 test_magic_links.php
