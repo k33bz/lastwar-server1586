@@ -1027,7 +1027,7 @@ h1 {
 
 .signatories-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 20px;
     margin-bottom: 30px;
 }
@@ -1035,12 +1035,12 @@ h1 {
 .signatory-card {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
     border-radius: 10px;
-    padding: 20px;
+    padding: 15px;
     border: 2px solid;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
     position: relative;
 }
 
@@ -1062,15 +1062,15 @@ h1 {
 }
 
 .signatory-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+    /* No hover effect - cards are not clickable */
 }
 
 .signatory-rank {
-    font-size: 1.8em;
+    font-size: 1.6em;
     font-weight: bold;
     color: #ffd700;
-    min-width: 50px;
+    min-width: 40px;
+    text-align: center;
 }
 
 .signatory-info {
@@ -1078,22 +1078,22 @@ h1 {
 }
 
 .signatory-alliance {
-    font-size: 1.3em;
+    font-size: 1.2em;
     font-weight: bold;
     color: #fff;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .signatory-r5 {
-    font-size: 0.95em;
+    font-size: 0.9em;
     color: #aaa;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .signatory-status {
-    font-size: 0.9em;
+    font-size: 0.85em;
     font-weight: bold;
-    padding: 5px 12px;
+    padding: 4px 10px;
     border-radius: 20px;
     display: inline-block;
 }
@@ -1582,9 +1582,13 @@ h1 {
 
 /* Make alliance cards clickable */
 .alliance-card,
-.podium-place,
-.signatory-card {
+.podium-place {
     cursor: pointer;
+}
+
+/* Signatory cards are not clickable - alliances can be clicked from main list */
+.signatory-card {
+    cursor: default;
 }
 
 /* ============================================

@@ -140,13 +140,26 @@
     * @returns {Object} Status object with signed, status, message, etc.
     */
    function getSignatureStatus(allianceTag) {
-       if (!signatureHistory || !signatureHistory.alliances) {
-           return { signed: false, status: 'no_data', message: 'Signature data not loaded', statusClass: 'pending' };
+       // Read directly from alliances array instead of separate signature history
+       var alliance = alliances.find(function(a) { return a.tag === allianceTag; });
+
+       if (!alliance) {
+           return { signed: false, status: 'no_data', message: 'Alliance not found', r5Name: 'N/A', statusClass: 'pending' };
        }
 
-       var alliance = signatureHistory.alliances.find(function(a) { return a.tag === allianceTag; });
-       if (!alliance || !alliance.r5History || alliance.r5History.length === 0) {
-           return { signed: false, status: 'no_r5', message: 'No R5 assigned', r5Name: 'No R5', statusClass: 'no-r5' };
+       // Get R5 name from r5 field (handle both string and object formats)
+       var r5Name = 'No R5';
+       if (alliance.r5) {
+           if (typeof alliance.r5 === 'string') {
+               r5Name = alliance.r5;
+           } else if (alliance.r5.name) {
+               r5Name = alliance.r5.name;
+           }
+       }
+
+       // Check r5History for detailed signature info
+       if (!alliance.r5History || alliance.r5History.length === 0) {
+           return { signed: false, status: 'no_r5', message: 'No R5 assigned', r5Name: r5Name, statusClass: 'no-r5' };
        }
 
        var currentR5 = alliance.r5History.find(function(r5) { return r5.current === true; });
@@ -155,7 +168,12 @@
            currentR5 = alliance.r5History[alliance.r5History.length - 1];
        }
 
-       var currentVersion = signatureHistory.currentRulesVersion || '1.0';
+       // Use r5Name from r5History if available, otherwise from r5 field
+       if (currentR5.r5Name) {
+           r5Name = currentR5.r5Name;
+       }
+
+       var currentVersion = getCurrentVersion();
        var hasSignedCurrent = currentR5.signatures && currentR5.signatures.some(function(sig) {
            return sig.version === currentVersion;
        });
@@ -166,7 +184,7 @@
                signed: true,
                status: 'signed',
                message: '✓ Signed',
-               r5Name: currentR5.r5Name,
+               r5Name: r5Name,
                signedAt: signature.signedAt,
                version: currentVersion,
                statusClass: 'signed'
@@ -184,7 +202,7 @@
                signed: false,
                status: 'grace_period',
                message: '⏳ ' + daysRemaining + ' day' + (daysRemaining !== 1 ? 's' : '') + ' left',
-               r5Name: currentR5.r5Name,
+               r5Name: r5Name,
                daysRemaining: daysRemaining,
                statusClass: 'pending'
            };
@@ -196,7 +214,7 @@
            signed: false,
            status: 'overdue',
            message: '⚠️ ' + daysOverdue + ' day' + (daysOverdue !== 1 ? 's' : '') + ' overdue',
-           r5Name: currentR5.r5Name,
+           r5Name: r5Name,
            daysOverdue: daysOverdue,
            statusClass: 'overdue'
        };
@@ -208,9 +226,7 @@
     * @returns {Object|null} Current R5 object or null
     */
    function getCurrentR5(allianceTag) {
-       if (!signatureHistory || !signatureHistory.alliances) return null;
-
-       var alliance = signatureHistory.alliances.find(function(a) { return a.tag === allianceTag; });
+       var alliance = alliances.find(function(a) { return a.tag === allianceTag; });
        if (!alliance || !alliance.r5History || alliance.r5History.length === 0) return null;
 
        var currentR5 = alliance.r5History.find(function(r5) { return r5.current === true; });
@@ -381,10 +397,17 @@
 
    /**
     * Render top 3 alliances podium with trophies
+    * Sorts by power to ensure top 3 by current power level
     */
    function renderPodium() {
        var podium = document.getElementById('podium');
-       var top3 = alliances.slice(0, 3);
+
+       // Sort alliances by power (descending) and take top 3
+       var sortedAlliances = alliances.slice().sort(function(a, b) {
+           return (b.power || 0) - (a.power || 0);
+       });
+       var top3 = sortedAlliances.slice(0, 3);
+
        var trophies = ['🏆', '🥈', '🥉'];
        var classes = ['first-place', 'second-place', 'third-place'];
 
@@ -403,11 +426,18 @@
    
    /**
     * Render alliances 4-15 in grid layout
+    * Only displays top 15 alliances by power
     */
    function renderAllianceGrid() {
        var grid = document.getElementById('allianceGrid');
-       var remaining = alliances.slice(3);
-       
+
+       // Sort alliances by power (descending) and take top 15
+       var sortedAlliances = alliances.slice().sort(function(a, b) {
+           return (b.power || 0) - (a.power || 0);
+       });
+       var top15 = sortedAlliances.slice(0, 15);
+       var remaining = top15.slice(3); // Ranks 4-15
+
        var html = '';
        for (var i = 0; i < remaining.length; i++) {
            var alliance = remaining[i];
@@ -423,16 +453,23 @@
    
    /**
     * Render R5 signatories with signature status
+    * Only displays top 15 alliances by power
     */
    function renderSignatories() {
        var grid = document.getElementById('signatoriesGrid');
 
+       // Sort alliances by power (descending) and take top 15
+       var sortedAlliances = alliances.slice().sort(function(a, b) {
+           return (b.power || 0) - (a.power || 0);
+       });
+       var top15 = sortedAlliances.slice(0, 15);
+
        var html = '';
-       for (var i = 0; i < alliances.length; i++) {
-           var alliance = alliances[i];
+       for (var i = 0; i < top15.length; i++) {
+           var alliance = top15[i];
            var status = getSignatureStatus(alliance.tag);
 
-           html += '<div class="signatory-card ' + status.statusClass + '" onclick="openAllianceModal(\'' + alliance.tag + '\')">';
+           html += '<div class="signatory-card ' + status.statusClass + '">';
            html += '<div class="signatory-rank">' + alliance.rank + '</div>';
            html += '<div class="signatory-info">';
            html += '<div class="signatory-alliance">' + alliance.tag + '</div>';
@@ -1005,9 +1042,9 @@
        }
 
        // R5 Leadership History Section
-       if (signatureHistory && signatureHistory.alliances) {
-           var allianceHistory = signatureHistory.alliances.find(function(a) { return a.tag === alliance.tag; });
-           if (allianceHistory && allianceHistory.r5History && allianceHistory.r5History.length > 0) {
+       if (alliance.r5History && alliance.r5History.length > 0) {
+           var allianceHistory = alliance;
+           if (true) {
                bodyHTML += '<div class="modal-section">';
                bodyHTML += '<h3 class="modal-section-title">R5 Leadership History</h3>';
 
@@ -1213,14 +1250,28 @@
 
        console.log('Rendering power chart with', powerHistory.alliances.length, 'alliances');
 
-       // Only display top 15 alliances (even if CSV has more)
-       var alliancesToShow = Math.min(15, powerHistory.alliances.length);
+       // Sort alliances by most recent power level and take top 10
+       var alliancesWithLatestPower = powerHistory.alliances.map(function(tag) {
+           var powerData = powerHistory.datasets[tag];
+           var latestPower = powerData[powerData.length - 1] || 0;
+           return { tag: tag, latestPower: latestPower };
+       });
+
+       // Sort by latest power (descending) and take top 10
+       alliancesWithLatestPower.sort(function(a, b) {
+           return b.latestPower - a.latestPower;
+       });
+       var top10Tags = alliancesWithLatestPower.slice(0, 10).map(function(item) {
+           return item.tag;
+       });
+
+       var alliancesToShow = top10Tags.length;
        var colors = generateChartColors(alliancesToShow);
 
-       // Build datasets for Chart.js (top 15 only) with time-based X coordinates
+       // Build datasets for Chart.js (top 10 by latest power) with time-based X coordinates
        var chartDatasets = [];
        for (var i = 0; i < alliancesToShow; i++) {
-           var tag = powerHistory.alliances[i];
+           var tag = top10Tags[i];
            var powerData = powerHistory.datasets[tag];
            var color = colors[i];
 
@@ -1382,14 +1433,13 @@
     */
    async function loadData() {
        try {
-           const [alliancesData, rulesData, amendmentsData, rotationScheduleData, powerHistoryCSV, serverInfoData, signatureHistoryData] = await Promise.all([
+           const [alliancesData, rulesData, amendmentsData, rotationScheduleData, powerHistoryCSV, serverInfoData] = await Promise.all([
                fetch('data/alliances.json?v=' + APP_VERSION).then(r => r.json()),
                fetch('data/rules.json?v=' + APP_VERSION).then(r => r.json()),
                fetch('data/amendments.json?v=' + APP_VERSION).then(r => r.json()),
                fetch('data/rotation-schedule.json?v=' + APP_VERSION).then(r => r.json()),
                fetch('data/power-history.csv?v=' + APP_VERSION).then(r => r.text()),
-               fetch('data/server-info.json?v=' + APP_VERSION).then(r => r.json()),
-               fetch('data/signature-history.json?v=' + APP_VERSION).then(r => r.json())
+               fetch('data/server-info.json?v=' + APP_VERSION).then(r => r.json())
            ]);
 
            alliances = alliancesData;
@@ -1397,7 +1447,6 @@
            amendments = amendmentsData;
            rotationSchedule = rotationScheduleData;
            serverInfo = serverInfoData;
-           signatureHistory = signatureHistoryData;
 
            // Parse power history CSV
            powerHistory = parsePowerHistoryCSV(powerHistoryCSV);
@@ -1406,7 +1455,7 @@
 
            console.log('Data loaded successfully');
            console.log('Server info:', serverInfo);
-           console.log('Signature history:', signatureHistory);
+           console.log('Alliances:', alliances.length);
            return true;
        } catch (error) {
            console.error('Error loading data:', error);

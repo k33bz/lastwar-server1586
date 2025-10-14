@@ -150,7 +150,7 @@
         <section class="rules-section">
             <div class="rules-header" onclick="toggleRules()">
                 <div class="rules-header-content">
-                    <h2>Server 1586 Rules & NAP15</h2>
+                    <h2 style="text-transform: uppercase;">SERVER 1586 RULES & NAP15</h2>
                     <span class="version-info" id="versionInfo">Version 1.0</span>
                 </div>
                 <div class="toggle-controls">
@@ -161,9 +161,22 @@
                     <span class="toggle-icon" id="toggleIcon">▼</span>
                 </div>
             </div>
-            
+
             <div class="rules-content" id="rulesContent">
+                <div class="signature-note" style="margin: 20px 30px 30px 30px;">
+                    <p><strong>To be eligible for NAP15 protections and benefits, each R5 must ratify the server rules.</strong></p>
+                    <p>New R5s have 7 days to ratify or the alliance loses NAP15 eligibility.</p>
+                </div>
                 <div class="rules-inner"></div>
+
+                <!-- R5 Signatories Section -->
+                <div style="padding: 0 30px 30px 30px;">
+                    <h3 style="color: #ffd700; text-align: center; font-size: 1.8em; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px;">R5 Signatories</h3>
+                    <p style="text-align: center; color: #aaa; margin-bottom: 30px;">
+                        Track which R5 leaders have signed the NAP15 rules.
+                    </p>
+                    <div class="signatories-grid" id="signatoriesGrid"></div>
+                </div>
             </div>
         </section>
 
@@ -197,19 +210,6 @@
                         <p><strong>Data Points:</strong> <span id="dataPointCount">Loading...</span></p>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- R5 Signatories Section -->
-        <section class="signatories-section">
-            <h2 class="section-title">R5 Signatories</h2>
-            <p style="text-align: center; color: #aaa; margin-bottom: 30px;">
-                Alliance leaders who have ratified the Server 1586 NAP15 Rules
-            </p>
-            <div class="signatories-grid" id="signatoriesGrid"></div>
-            <div class="signature-note">
-                <p>To be eligible for NAP15 protections and benefits, each R5 must ratify the server rules.</p>
-                <p>New R5s have 7 days to ratify or the alliance loses NAP15 eligibility.</p>
             </div>
         </section>
     </div>

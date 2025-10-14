@@ -1,10 +1,553 @@
-{
-  "alliances": [
+[
     {
-      "slug": "uvvu",
-      "name": "UVVU Alliance",
-      "description": "Example description",
-      "members": ["A", "B", "C"]
+        "rank": 1,
+        "tag": "UvvU",
+        "name": "veni vidi vici",
+        "r5": "쿠치나 ᓚᘏᗢ",
+        "signed": false,
+        "power": 6752848288,
+        "r5History": [
+            {
+                "r5Name": "쿠치나 ᓚᘏᗢ",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 2,
+        "tag": "ORCE",
+        "name": "Omega Force",
+        "r5": {
+            "name": "EchoJT",
+            "gameId": null,
+            "discordId": null
+        },
+        "signed": false,
+        "power": 6756239004,
+        "discord": {
+            "serverName": "Omega Force Official",
+            "inviteUrl": null,
+            "logoUrl": "images/discord-logos/ORCE.png",
+            "memberCount": null
+        },
+        "crossServer": {
+            "hasPartner": false,
+            "servers": [],
+            "partnerTags": [],
+            "network": null
+        },
+        "info": {
+            "description": "Elite alliance focused on teamwork and strategy",
+            "founded": null,
+            "languages": [
+                "English"
+            ],
+            "timezone": "Global",
+            "recruiting": false,
+            "requirements": {
+                "minPower": 50000000,
+                "minLevel": 25,
+                "activity": "High",
+                "notes": "Must participate in all alliance events"
+            }
+        },
+        "contact": {
+            "recruitmentContact": null,
+            "discordRecruitment": null
+        },
+        "achievements": {
+            "rankHistory": [],
+            "peakPower": 6710688392,
+            "peakRank": 1,
+            "specialties": [
+                "Territory Control",
+                "Event Participation"
+            ]
+        },
+        "metadata": {
+            "lastUpdated": "2025-10-10T12:26:44Z",
+            "verified": false,
+            "featured": true
+        },
+        "r5History": [
+            {
+                "r5Name": "EchoJT",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 3,
+        "tag": "nkot",
+        "name": "korea one team",
+        "r5": "잔인한노니 Noni",
+        "signed": false,
+        "power": 6395285401,
+        "r5History": [
+            {
+                "r5Name": "잔인한노니 Noni",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 4,
+        "tag": "404a",
+        "name": "Not Found",
+        "r5": "DjNinja17",
+        "signed": false,
+        "power": 5109356801,
+        "r5History": [
+            {
+                "r5Name": "DjNinja17",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 5,
+        "tag": "STR8",
+        "name": "STR8 SAVAGE",
+        "r5": "ULoveGucciiღ",
+        "signed": false,
+        "power": 5109356801,
+        "r5History": [
+            {
+                "r5Name": "ULoveGucciiღ",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 6,
+        "tag": "FLM",
+        "name": "LA FAMILIA",
+        "r5": "KiluaZoldic",
+        "signed": false,
+        "power": 5089247162,
+        "r5History": [
+            {
+                "r5Name": "KiluaZoldic",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 7,
+        "tag": "EPIC",
+        "name": "KarmaKings",
+        "r5": "MastaGinger",
+        "signed": false,
+        "power": 5072711352,
+        "r5History": [
+            {
+                "r5Name": "MastaGinger",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 8,
+        "tag": "NYPR",
+        "name": "NY Bats",
+        "r5": "Batman100x35PR",
+        "signed": false,
+        "power": 4537533393,
+        "r5History": [
+            {
+                "r5Name": "Batman100x35PR",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 9,
+        "tag": "SWBA",
+        "name": "SinnersWillBeAshed",
+        "r5": "Don123123",
+        "signed": false,
+        "power": 3798962862,
+        "r5History": [
+            {
+                "r5Name": "Don123123",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 10,
+        "tag": "86KO",
+        "name": "무적까까아니",
+        "r5": "ʚᴸᵘᶰᵃɞ",
+        "signed": false,
+        "power": 3534868874,
+        "r5History": [
+            {
+                "r5Name": "ʚᴸᵘᶰᵃɞ",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 11,
+        "tag": "FNXS",
+        "name": "F é n i x",
+        "r5": "Gera D Vc",
+        "signed": false,
+        "power": 2729722437,
+        "r5History": [
+            {
+                "r5Name": "Gera D Vc",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 12,
+        "tag": "UUSN",
+        "name": "Kantinny",
+        "r5": "KingKlik TC",
+        "signed": false,
+        "power": 1805983286,
+        "r5History": [
+            {
+                "r5Name": "KingKlik TC",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 13,
+        "tag": "NiKi",
+        "name": "NIKII",
+        "r5": "NakappaFenomeno",
+        "signed": false,
+        "power": 1803383398,
+        "r5History": [
+            {
+                "r5Name": "NakappaFenomeno",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 14,
+        "tag": "L4TM",
+        "name": "La Última Orden",
+        "r5": "R5 Name",
+        "signed": false,
+        "power": 1568161001,
+        "r5History": [
+            {
+                "r5Name": "R5 Name",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 15,
+        "tag": "MTOP",
+        "name": "MonteOlimpo",
+        "r5": {
+            "name": "MTOP test",
+            "gameId": "ThatGuy",
+            "discordId": null
+        },
+        "signed": false,
+        "power": 1455345480,
+        "r5History": [
+            {
+                "r5Name": "MTOP test",
+                "gameId": "ThatGuy",
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "discord": {
+            "serverName": null,
+            "inviteUrl": null,
+            "logoUrl": null
+        },
+        "contact": {
+            "recruitmentContact": "me!",
+            "discordRecruitment": null
+        },
+        "info": {
+            "description": "desc goes here!",
+            "timezone": "MDT",
+            "recruiting": true,
+            "requirements": {
+                "minPower": 9000,
+                "minLevel": 10,
+                "activity": "Casual",
+                "notes": null
+            }
+        },
+        "metadata": {
+            "lastUpdated": "2025-10-13T00:09:45Z"
+        }
+    },
+    {
+        "rank": 16,
+        "tag": "LE4L",
+        "name": "LE4L",
+        "r5": "Alessaurem",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "Alessaurem",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 17,
+        "tag": "MZKU",
+        "name": "MZKU",
+        "r5": "Grand Puba Daddio",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "Grand Puba Daddio",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 18,
+        "tag": "bfp8",
+        "name": "bfp8",
+        "r5": "Fr3lancr",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "Fr3lancr",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 19,
+        "tag": "sk98",
+        "name": "sk98",
+        "r5": "Commander 210321586",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "Commander 210321586",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 20,
+        "tag": "c4B",
+        "name": "c4B",
+        "r5": "Capboaventura",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "Capboaventura",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 21,
+        "tag": "1985",
+        "name": "1985",
+        "r5": "최사령 관",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "최사령 관",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 22,
+        "tag": "z5fa",
+        "name": "z5fa",
+        "r5": "yuridn",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "yuridn",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 23,
+        "tag": "w1l0",
+        "name": "w1l0",
+        "r5": "T Brown",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "T Brown",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 24,
+        "tag": "BOS7",
+        "name": "BOS7",
+        "r5": "Commander 1c8ef1586",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "Commander 1c8ef1586",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 25,
+        "tag": "NMMN",
+        "name": "NMMN",
+        "r5": "Nolergd",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "Nolergd",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
     }
-  ]
-}
+]
