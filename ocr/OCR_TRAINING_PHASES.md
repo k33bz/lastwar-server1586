@@ -41,10 +41,10 @@ Progressive approach to training OCR for alliance R5 name recognition, starting 
 - **Deliverable:** This document and updated README files
 
 ### Success Criteria:
-- [ ] Character mapping table created with 20+ mappings
-- [ ] Validation script runs successfully on all 23 images
-- [ ] Baseline accuracy measured for at least 2 OCR engines
-- [ ] Error patterns documented
+- [x] Character mapping table created with 20+ mappings
+- [x] Validation script runs successfully on all 23 images
+- [x] Baseline accuracy measured for at least 2 OCR engines
+- [x] Error patterns documented
 
 ---
 
@@ -182,12 +182,18 @@ Progressive approach to training OCR for alliance R5 name recognition, starting 
 
 ## Progress Tracking
 
-### Phase 1: Foundation
+### Phase 1: Foundation ✅ COMPLETE
 - [x] Initial 23 examples collected
-- [ ] Character substitution mapping created
-- [ ] Validation test suite built
-- [ ] Baseline accuracy measured
-- [ ] Phase documentation complete
+- [x] Character substitution mapping created
+- [x] Validation test suite built
+- [x] Baseline accuracy measured
+- [x] Phase documentation complete
+
+**Baseline Results:**
+- Tesseract: 33.3% word accuracy, 62.4% character accuracy
+- EasyOCR: 50.0% word accuracy, 72.4% character accuracy
+- Hard cases (emoji, superscripts): 0% accuracy
+- Korean-only: EasyOCR achieves 100% accuracy
 
 ### Phase 2: Expansion (Need 27 more examples)
 - [ ] 27 additional examples collected
