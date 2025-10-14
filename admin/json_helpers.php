@@ -11,7 +11,9 @@
  *   1.0.0 (2025-10-12) - Initial implementation with flock support
  */
 
-define('ADMIN_INIT', true);
+if (!defined('ADMIN_INIT')) {
+    define('ADMIN_INIT', true);
+}
 require_once __DIR__ . '/config.php';
 
 /**
@@ -170,10 +172,10 @@ function get_user_by_email($email) {
  *
  * @param string $email User email
  * @param array $alliances Alliance tags user can access
- * @param string $role User role (admin or alliance)
+ * @param string $role User role (admin, r5, or r4)
  * @return bool Success status
  */
-function add_user($email, $alliances, $role = 'alliance') {
+function add_user($email, $alliances, $role = 'r4') {
     try {
         return update_json_file(USERS_FILE, function(&$data) use ($email, $alliances, $role) {
             $email = strtolower(trim($email));

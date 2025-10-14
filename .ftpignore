@@ -25,8 +25,14 @@ ocr/
 .claude/
 CICD-SETUP.md
 
-# Admin System (not ready for production)
-admin/
+# Admin System - Exclude sensitive files only
+admin/.env
+admin/.claude/
+admin/.vscode/
+admin/test_magic_links.php
+admin/test-smtp.php
+admin/test-smtp.py
+admin/*.backup
 
 # Backup and deleted files
 *.del

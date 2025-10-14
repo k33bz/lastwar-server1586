@@ -61,7 +61,7 @@ JWT (JSON Web Token) is a compact, URL-safe token used for secure information ex
 .
 {
   "sub": "uvvu@example.com",  // subject, the user's email
-  "aud": "alliance",     // audience: "alliance" or "admin"
+  "aud": "r5",           // audience: "admin", "r5", or "r4"
   "alliances": ["UVVU"], // alliance slugs user can edit
   "exp": 1719999999,     // expiry
   "iat": 1719990000,     // issued at
@@ -84,7 +84,7 @@ use Firebase\JWT\Key;
 $payload = [
     'sub' => $user_email,
     'exp' => time() + 15 * 60,
-    'aud' => $role, // 'admin' or 'alliance'
+    'aud' => $role, // 'admin', 'r5', or 'r4'
     'alliances' => $allianceSlugs,
     'iat' => time(),
     'jti' => bin2hex(random_bytes(8)), // unique id
@@ -192,14 +192,14 @@ Example:
 {
   "users": [
     {
-      "email": "uvvu@example.com",
+      "email": "r5@example.com",
       "alliances": ["uvvu"],
-      "role": "alliance"
+      "role": "r5"
     },
     {
-      "email": "orce@example.com",
+      "email": "r4@example.com",
       "alliances": ["orce", "uvvu"],
-      "role": "alliance"
+      "role": "r4"
     },
     {
       "email": "admin@example.com",
@@ -215,7 +215,10 @@ Structure explanation:
 
 "alliances": array of slugs the user can edit. ["*"] grants superuser/admin rights.
 
-"role": "alliance" users can only edit their alliances, "admin" can manage users.
+"role" options:
+- "admin" - Full system access, can manage users and all alliances
+- "r5" - Can sign rules and manage assigned alliances
+- "r4" - Can view and edit assigned alliances (cannot sign rules)
 
 Managing Multiple Alliances per User:Just include all alliance slugs in arrays in "alliances" (e.g., for users managing several).
 
@@ -428,7 +431,7 @@ dashboard.php (example main admin view):
 require_once 'jwt.php';
 $user_token = require_jwt_session();
 
-// Show different content based on $user_token->aud ("admin" vs. "alliance")
+// Show different content based on $user_token->aud ("admin", "r5", or "r4")
 ?>
 <html><body>
 <h1>Welcome, <?=htmlspecialchars($user_token->sub)?></h1>

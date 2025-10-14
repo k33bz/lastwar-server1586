@@ -5,9 +5,14 @@
 /vendor/
 composer.lock
 
-# Data files (keep structure, not actual data)
-users.json
-token_blacklist.json
+# Test files
+test_magic_links.php
+test-smtp.php
+test-smtp.py
+
+# Backup files
+*.backup
+*.bak
 
 # IDE
 .vscode/
@@ -15,6 +20,9 @@ token_blacklist.json
 *.swp
 *.swo
 *~
+
+# Claude
+.claude/
 
 # OS
 .DS_Store

@@ -5,13 +5,18 @@
  * Provides JWT encoding, decoding, and session validation functions
  * for the Last War 1586 Admin authentication system
  *
- * @version 1.0.0
- * @date 2025-10-12
+ * @version 1.1.0
+ * @date 2025-10-13
  * @changelog
+ *   1.1.0 (2025-10-13) - Added active session tracking in users.json
+ *                       - Added track_active_session() and remove_active_session()
+ *                       - Added get_active_sessions() for admin dashboard
  *   1.0.0 (2025-10-12) - Initial complete implementation with proper error handling
  */
 
-define('ADMIN_INIT', true);
+if (!defined('ADMIN_INIT')) {
+    define('ADMIN_INIT', true);
+}
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/json_helpers.php';
 
@@ -133,13 +138,38 @@ function require_admin_session() {
  * @return bool True if user has access
  */
 function has_alliance_access($token, $alliance_tag) {
-    // Admin has access to all alliances
-    if ($token->aud === 'admin' || in_array('*', $token->alliances)) {
+    // Admin, R5, and R4 with * have access to all alliances
+    if ($token->aud === 'admin' || $token->aud === 'r5' || $token->aud === 'r4' || in_array('*', $token->alliances)) {
         return true;
     }
 
     // Check if alliance is in user's allowed list
     return in_array(strtolower($alliance_tag), array_map('strtolower', $token->alliances));
+}
+
+/**
+ * Check if user can sign rules (R5 only)
+ *
+ * @param object $token Decoded JWT token
+ * @param string $alliance_tag Alliance tag to check
+ * @return bool True if user can sign rules
+ */
+function can_sign_rules($token, $alliance_tag) {
+    // Only R5 or admin can sign rules
+    if ($token->aud === 'admin' || $token->aud === 'r5') {
+        return has_alliance_access($token, $alliance_tag);
+    }
+    return false;
+}
+
+/**
+ * Check if user is R4 or higher (R4, R5, or admin)
+ *
+ * @param object $token Decoded JWT token
+ * @return bool True if user is R4+
+ */
+function is_r4_or_higher($token) {
+    return in_array($token->aud, ['admin', 'r5', 'r4']);
 }
 
 /**
@@ -168,14 +198,22 @@ function create_magic_link_token($email, $user) {
  * @return string Session JWT token
  */
 function create_session_token($magic_token) {
+    $jti = bin2hex(random_bytes(16));
+    $exp = time() + SESSION_TOKEN_EXPIRY;
+
     $payload = [
         'sub' => $magic_token->sub,
         'aud' => $magic_token->aud,
         'alliances' => $magic_token->alliances,
-        'jti' => bin2hex(random_bytes(16))
+        'jti' => $jti
     ];
 
-    return encode_jwt($payload, SESSION_TOKEN_EXPIRY);
+    $token = encode_jwt($payload, SESSION_TOKEN_EXPIRY);
+
+    // Track active session in users.json
+    track_active_session($magic_token->sub, $jti, $exp);
+
+    return $token;
 }
 
 /**
@@ -223,6 +261,9 @@ function revoke_current_session() {
         try {
             $token = JWT::decode($_COOKIE['jwt'], new Key(SECRET_KEY, 'HS256'));
             blacklist_token($token->jti, $token->exp);
+
+            // Remove from active sessions tracking
+            remove_active_session($token->sub, $token->jti);
         } catch (Exception $e) {
             // Token already invalid, just clear cookie
             error_log("Error revoking token: " . $e->getMessage());
@@ -231,5 +272,118 @@ function revoke_current_session() {
 
     clear_session_cookie();
     return true;
+}
+
+/**
+ * Track active session in users.json
+ *
+ * @param string $email User email
+ * @param string $jti JWT ID
+ * @param int $exp Token expiry timestamp
+ * @return bool Success status
+ */
+function track_active_session($email, $jti, $exp) {
+    try {
+        return update_json_file(USERS_FILE, function(&$data) use ($email, $jti, $exp) {
+            $email = strtolower(trim($email));
+
+            foreach ($data['users'] as &$user) {
+                if (strtolower($user['email']) === $email) {
+                    // Initialize active_sessions if not exists
+                    if (!isset($user['active_sessions'])) {
+                        $user['active_sessions'] = [];
+                    }
+
+                    // Clean up expired sessions first
+                    $now = time();
+                    $user['active_sessions'] = array_values(array_filter(
+                        $user['active_sessions'],
+                        function($session) use ($now) {
+                            return isset($session['exp']) && $session['exp'] > $now;
+                        }
+                    ));
+
+                    // Add new session
+                    $user['active_sessions'][] = [
+                        'jti' => $jti,
+                        'exp' => $exp,
+                        'created_at' => time(),
+                        'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown'
+                    ];
+
+                    return true;
+                }
+            }
+
+            return false;
+        });
+    } catch (Exception $e) {
+        error_log("Error tracking session: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Remove active session from users.json
+ *
+ * @param string $email User email
+ * @param string $jti JWT ID
+ * @return bool Success status
+ */
+function remove_active_session($email, $jti) {
+    try {
+        return update_json_file(USERS_FILE, function(&$data) use ($email, $jti) {
+            $email = strtolower(trim($email));
+
+            foreach ($data['users'] as &$user) {
+                if (strtolower($user['email']) === $email) {
+                    if (isset($user['active_sessions'])) {
+                        $user['active_sessions'] = array_values(array_filter(
+                            $user['active_sessions'],
+                            function($session) use ($jti) {
+                                return $session['jti'] !== $jti;
+                            }
+                        ));
+                    }
+                    return true;
+                }
+            }
+
+            return false;
+        });
+    } catch (Exception $e) {
+        error_log("Error removing session: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Get active sessions for a user
+ *
+ * @param string $email User email
+ * @return array Array of active sessions
+ */
+function get_active_sessions($email) {
+    try {
+        $users_data = read_json_file(USERS_FILE);
+        $email = strtolower(trim($email));
+
+        foreach ($users_data['users'] as $user) {
+            if (strtolower($user['email']) === $email) {
+                $sessions = $user['active_sessions'] ?? [];
+
+                // Filter out expired sessions
+                $now = time();
+                return array_values(array_filter($sessions, function($session) use ($now) {
+                    return isset($session['exp']) && $session['exp'] > $now;
+                }));
+            }
+        }
+
+        return [];
+    } catch (Exception $e) {
+        error_log("Error getting active sessions: " . $e->getMessage());
+        return [];
+    }
 }
 ?>

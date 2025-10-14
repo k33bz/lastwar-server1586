@@ -6,7 +6,7 @@ Secure JWT-based email magic link login system for alliance and admin management
 
 - Passwordless login via email magic links
 - JWT-based stateless sessions
-- Role-based access: alliance vs global admin
+- Role-based access: Admin, R5, R4
 - JSON-backed user and alliance data
 - Token revocation via blacklist
 - Admin CRUD for users
@@ -165,9 +165,14 @@ Users are stored in `users.json`:
 {
   "users": [
     {
-      "email": "uvvu@example.com",
-      "alliances": ["uvvu"],
-      "role": "alliance"
+      "email": "r5@example.com",
+      "alliances": ["UvvU"],
+      "role": "r5"
+    },
+    {
+      "email": "r4@example.com",
+      "alliances": ["UvvU"],
+      "role": "r4"
     },
     {
       "email": "admin@example.com",
@@ -182,16 +187,22 @@ Users are stored in `users.json`:
 - `email`: User's email address (authentication identifier)
 - `alliances`: Array of alliance tags user can manage
   - Use `["*"]` for admin access to all alliances
-- `role`: Either `"alliance"` or `"admin"`
-  - `"admin"` can manage users
-  - `"alliance"` can only edit assigned alliances
+- `role`: One of `"admin"`, `"r5"`, or `"r4"`
+  - `"admin"` - Full system access, can manage all users and alliances
+  - `"r5"` - Can sign rules, manage assigned alliances, and create/edit R5 and R4 users for their assigned alliances only
+  - `"r4"` - Can view and edit assigned alliances (cannot sign rules or manage users)
 
 ### Adding Users
 
-**Via Dashboard (Admin Only):**
-1. Log in as admin
+**Via Dashboard (Admin or R5):**
+1. Log in as admin or R5
 2. Click "Add New User" on dashboard
 3. Enter email, alliances, and role
+   - **R5 users** can only:
+     - Create R5 or R4 users
+     - Assign alliances they have access to
+     - See only their assigned alliances in the form
+   - **Admin users** can create any role and grant access to all alliances
 
 **Via Direct JSON Edit:**
 1. Edit `admin/users.json`
@@ -200,10 +211,16 @@ Users are stored in `users.json`:
 
 ### Editing/Removing Users
 
-**Via Dashboard (Admin Only):**
-1. Log in as admin
+**Via Dashboard (Admin or R5):**
+1. Log in as admin or R5
 2. Click "Edit" next to user
 3. Update details or click "Delete User"
+   - **R5 users** can only:
+     - Edit/delete R5 and R4 users from their assigned alliances
+     - Assign alliances they have access to
+     - View only users who share at least one alliance with them
+     - Cannot edit admin users or promote users to admin
+   - **Admin users** have full access to edit/delete any user
 
 ## 🛡️ Security Features
 
@@ -211,7 +228,7 @@ Users are stored in `users.json`:
 - **HS256 Signing**: All tokens signed with SECRET_KEY
 - **Short Expiry**: Magic links (10 min), sessions (1 hour)
 - **Unique JTI**: Each token has unique ID for blacklisting
-- **Audience Claim**: Tokens specify role (admin/alliance)
+- **Audience Claim**: Tokens specify role (admin/r5/r4)
 - **Magic Flag**: Magic link tokens can't be used as session tokens
 
 ### Magic Link Security
@@ -358,6 +375,17 @@ For issues or questions, contact: admin@example.com
 ---
 
 ## 📝 Changelog
+
+### Version 1.2.0 (2025-10-13)
+- Added JWT token revocation functionality
+- Added active session tracking in users.json
+- Added "Revoke Sessions" button for admins on dashboard
+- R5 users can now create and manage R5 and R4 users
+- R5 users restricted to managing users from their assigned alliances only
+- R5 users can only assign alliances they have access to
+- User list filtered by alliance access for R5 users
+- R5 users cannot manage admin accounts
+- Added session status indicators on user management table
 
 ### Version 1.0.0 (2025-10-12)
 - Initial complete implementation
