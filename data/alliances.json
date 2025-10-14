@@ -145,6 +145,25 @@
     },
     {
         "rank": 6,
+        "tag": "LE4L",
+        "name": "LE4L",
+        "r5": "Alessaurem",
+        "signed": false,
+        "power": 4988688656,
+        "r5History": [
+            {
+                "r5Name": "Alessaurem",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "rank": 7,
         "tag": "LGbt",
         "name": "Legion d-Aba",
         "r5": "R5 of LGbt",
@@ -359,25 +378,6 @@
         "metadata": {
             "lastUpdated": "2025-10-13T00:09:45Z"
         }
-    },
-    {
-        "rank": 16,
-        "tag": "LE4L",
-        "name": "LE4L",
-        "r5": "Alessaurem",
-        "signed": false,
-        "power": 0,
-        "r5History": [
-            {
-                "r5Name": "Alessaurem",
-                "gameId": null,
-                "discordId": null,
-                "startDate": "2025-05-19T00:00:00Z",
-                "endDate": null,
-                "current": true,
-                "signatures": []
-            }
-        ]
     },
     {
         "rank": 16,

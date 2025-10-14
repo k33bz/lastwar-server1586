@@ -17,7 +17,7 @@ ALLIANCE_DATA = [
     [3, "nkot", "korea one team", 5053417714],
     [4, "STR8", "STR8 SAVAGE", 4998393046],
     [5, "EPIC", "KarmaKings", 4997451656],
-    [6, "LGbt", "Legion d-Aba", 4988688656],
+    [6, "LE4L", "LE4L", 4988688656],
     [7, "404a", "Not Found", 4982528656],
     [8, "FLM", "Fertile Magik A", 4703741062],
     [9, "NYPR", "NY Bats", 3785873485],
