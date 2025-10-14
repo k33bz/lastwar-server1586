@@ -79,6 +79,32 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Create production .env file
+        run: |
+          cat > admin/.env << 'EOF'
+          # JWT Secret Key
+          SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
+
+          # SMTP Configuration - cPanel Email
+          SMTP_HOST=${{ secrets.SMTP_HOST }}
+          SMTP_PORT=${{ secrets.SMTP_PORT }}
+          SMTP_USER=${{ secrets.SMTP_USER }}
+          SMTP_PASS=${{ secrets.SMTP_PASS }}
+          SMTP_FROM=${{ secrets.SMTP_FROM }}
+          SMTP_FROM_NAME="${{ secrets.SMTP_FROM_NAME }}"
+
+          # Application Configuration
+          APP_URL=${{ secrets.APP_URL }}
+          ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}
+
+          # Token Expiry (in seconds)
+          MAGIC_LINK_EXPIRY=600        # 10 minutes
+          SESSION_TOKEN_EXPIRY=3600    # 1 hour
+
+          # Environment
+          APP_ENV=production
+          EOF
+
       - name: Deploy via FTP
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
