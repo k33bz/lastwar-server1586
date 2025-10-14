@@ -1,0 +1,174 @@
+{
+  "metadata": {
+    "created": "2025-10-12",
+    "purpose": "OCR training data for alliance R5 name recognition",
+    "source": "Manual verification from game screenshots",
+    "total_entries": 23
+  },
+  "alliances": [
+    {
+      "tag": "ORCE",
+      "r5_name": "EchoJT",
+      "image_file": "2025-10-10_12-27-22.png",
+      "character_types": ["ascii"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "UvvU",
+      "r5_name": "쿠치나 ᓚᘏᗢ",
+      "image_file": "2025-10-10_12-27-10.png",
+      "character_types": ["korean", "emoji"],
+      "difficulty": "hard"
+    },
+    {
+      "tag": "NKOT",
+      "r5_name": "잔인한노니 Noni",
+      "image_file": "2025-10-10_12-27-35.png",
+      "character_types": ["korean", "ascii"],
+      "difficulty": "medium"
+    },
+    {
+      "tag": "STR8",
+      "r5_name": "ULoveGucciiღ",
+      "image_file": "2025-10-10_12-27-47.png",
+      "character_types": ["ascii", "special"],
+      "difficulty": "medium",
+      "notes": "Contains heart symbol ღ"
+    },
+    {
+      "tag": "EPIC",
+      "r5_name": "MastaGinger",
+      "image_file": "2025-10-10_12-27-57.png",
+      "character_types": ["ascii"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "LE4L",
+      "r5_name": "Alessaurem",
+      "image_file": "2025-10-10_12-28-05.png",
+      "character_types": ["ascii"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "FLM",
+      "r5_name": "KiluaZoldic",
+      "image_file": "2025-10-10_12-28-18.png",
+      "character_types": ["ascii"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "404a",
+      "r5_name": "DjNinja17",
+      "image_file": "2025-10-10_12-28-27.png",
+      "character_types": ["ascii", "numeric"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "NYPR",
+      "r5_name": "Batman100x35PR",
+      "image_file": "2025-10-10_12-28-37.png",
+      "character_types": ["ascii", "numeric"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "SWBA",
+      "r5_name": "Don123123",
+      "image_file": "2025-10-10_12-28-47.png",
+      "character_types": ["ascii", "numeric"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "86KO",
+      "r5_name": "ʚᴸᵘᶰᵃɞ",
+      "image_file": "2025-10-10_12-28-58.png",
+      "character_types": ["special", "superscript"],
+      "difficulty": "hard",
+      "notes": "Contains superscript characters and special brackets"
+    },
+    {
+      "tag": "FNXS",
+      "r5_name": "Gera D Vc",
+      "image_file": "2025-10-10_12-29-07.png",
+      "character_types": ["ascii"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "NiKi",
+      "r5_name": "NakappaFenomeno",
+      "image_file": "2025-10-10_12-29-16.png",
+      "character_types": ["ascii"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "MZKU",
+      "r5_name": "Grand Puba Daddio",
+      "image_file": "2025-10-10_12-29-26.png",
+      "character_types": ["ascii"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "bfp8",
+      "r5_name": "Fr3lancr",
+      "image_file": "2025-10-10_12-29-35.png",
+      "character_types": ["ascii", "numeric"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "UUSN",
+      "r5_name": "KingKlik TC",
+      "image_file": "2025-10-10_12-29-48.png",
+      "character_types": ["ascii"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "sk98",
+      "r5_name": "Commander 210321586",
+      "image_file": "2025-10-10_12-29-56.png",
+      "character_types": ["ascii", "numeric"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "c4B",
+      "r5_name": "Capboaventura",
+      "image_file": "2025-10-10_12-30-18.png",
+      "character_types": ["ascii"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "1985",
+      "r5_name": "최사령 관",
+      "image_file": "2025-10-10_12-30-08.png",
+      "character_types": ["korean"],
+      "difficulty": "medium"
+    },
+    {
+      "tag": "z5fa",
+      "r5_name": "yuridn",
+      "image_file": null,
+      "character_types": ["ascii"],
+      "difficulty": "easy",
+      "notes": "No image file available"
+    },
+    {
+      "tag": "w1l0",
+      "r5_name": "T Brown",
+      "image_file": "2025-10-10_12-30-30.png",
+      "character_types": ["ascii"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "BOS7",
+      "r5_name": "Commander 1c8ef1586",
+      "image_file": "2025-10-10_12-31-08.png",
+      "character_types": ["ascii", "numeric", "hex"],
+      "difficulty": "easy"
+    },
+    {
+      "tag": "NMMN",
+      "r5_name": "Nolergd",
+      "image_file": "2025-10-10_12-30-54.png",
+      "character_types": ["ascii"],
+      "difficulty": "easy"
+    }
+  ]
+}
