@@ -23,35 +23,35 @@ This document lists all secrets required for the GitHub Actions deployment workf
 
 | Secret Name | Description | Example Value | Current Production Value |
 |-------------|-------------|---------------|--------------------------|
-| `JWT_SECRET_KEY` | JWT signing key (min 32 chars) | `your-random-secret-key-here` | `hbzCn6DpAuVh6HQneotILdzMuEQeAW9CHSTB5ys7SdeRsd8FSiNTiXqcbnr5mZcuIHoz8tHDRbm4sGzgRwRdEA==` |
-| `SMTP_HOST` | SMTP server hostname | `mail.yourdomain.com` | `example.com` |
+| `JWT_SECRET_KEY` | JWT signing key (min 32 chars) | `your-random-secret-key-here` | `your-production-jwt-secret` |
+| `SMTP_HOST` | SMTP server hostname | `mail.example.com` | `smtp.yourdomain.com` |
 | `SMTP_PORT` | SMTP port (465 for SSL, 587 for TLS) | `465` | `465` |
-| `SMTP_USER` | SMTP username (email address) | `noreply@yourdomain.com` | `noreply@example.com` |
-| `SMTP_PASS` | SMTP password | `your-smtp-password` | `O5UYYkukI[IR` |
-| `SMTP_FROM` | From email address | `noreply@yourdomain.com` | `noreply@example.com` |
-| `SMTP_FROM_NAME` | From name displayed in emails | `Your Site Name` | `Last War 1586` |
-| `APP_URL` | Production URL | `https://www.yourdomain.com` | `https://www.example.com` |
-| `ADMIN_EMAIL` | Admin contact email | `admin@yourdomain.com` | `admin@example.com` |
+| `SMTP_USER` | SMTP username (email address) | `noreply@example.com` | `noreply@yourdomain.com` |
+| `SMTP_PASS` | SMTP password | `your-smtp-password` | `your-production-password` |
+| `SMTP_FROM` | From email address | `noreply@example.com` | `noreply@yourdomain.com` |
+| `SMTP_FROM_NAME` | From name displayed in emails | `Your Site Name` | `Your Production Name` |
+| `APP_URL` | Production URL | `https://www.example.com` | `https://www.yourdomain.com` |
+| `ADMIN_EMAIL` | Admin contact email | `admin@example.com` | `admin@yourdomain.com` |
 
 ## Quick Copy Commands
 
-Use these values from your current .env file:
+Copy the values from your local `.env` file and add them to GitHub Secrets:
 
 ```bash
 # JWT Secret Key
-JWT_SECRET_KEY=hbzCn6DpAuVh6HQneotILdzMuEQeAW9CHSTB5ys7SdeRsd8FSiNTiXqcbnr5mZcuIHoz8tHDRbm4sGzgRwRdEA==
+JWT_SECRET_KEY=your-jwt-secret-key-from-local-env
 
 # SMTP Configuration
-SMTP_HOST=example.com
+SMTP_HOST=your-smtp-host
 SMTP_PORT=465
-SMTP_USER=noreply@example.com
-SMTP_PASS=O5UYYkukI[IR
-SMTP_FROM=noreply@example.com
-SMTP_FROM_NAME=Last War 1586
+SMTP_USER=noreply@yourdomain.com
+SMTP_PASS=your-smtp-password
+SMTP_FROM=noreply@yourdomain.com
+SMTP_FROM_NAME=Your Site Name
 
 # Application
-APP_URL=https://www.example.com
-ADMIN_EMAIL=admin@example.com
+APP_URL=https://www.yourdomain.com
+ADMIN_EMAIL=admin@yourdomain.com
 ```
 
 ## Security Notes
