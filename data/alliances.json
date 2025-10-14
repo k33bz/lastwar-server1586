@@ -1,25 +1,6 @@
 [
     {
         "rank": 1,
-        "tag": "UvvU",
-        "name": "veni vidi vici",
-        "r5": "쿠치나 ᓚᘏᗢ",
-        "signed": false,
-        "power": 7804360932,
-        "r5History": [
-            {
-                "r5Name": "쿠치나 ᓚᘏᗢ",
-                "gameId": null,
-                "discordId": null,
-                "startDate": "2025-05-19T00:00:00Z",
-                "endDate": null,
-                "current": true,
-                "signatures": []
-            }
-        ]
-    },
-    {
-        "rank": 2,
         "tag": "ORCE",
         "name": "Omega Force",
         "r5": {
@@ -28,7 +9,7 @@
             "discordId": null
         },
         "signed": false,
-        "power": 6652835243,
+        "power": 7044519755,
         "discord": {
             "serverName": "Omega Force Official",
             "inviteUrl": null,
@@ -87,12 +68,31 @@
         ]
     },
     {
+        "rank": 2,
+        "tag": "UvvU",
+        "name": "veni vidi vici",
+        "r5": "쿠치나 ᓚᘏᗢ",
+        "signed": false,
+        "power": 6467618745,
+        "r5History": [
+            {
+                "r5Name": "쿠치나 ᓚᘏᗢ",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
         "rank": 3,
         "tag": "nkot",
         "name": "korea one team",
         "r5": "잔인한노니 Noni",
         "signed": false,
-        "power": 5653417793,
+        "power": 5005417714,
         "r5History": [
             {
                 "r5Name": "잔인한노니 Noni",
