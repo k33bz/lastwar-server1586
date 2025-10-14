@@ -26,7 +26,8 @@ ocr/
 CICD-SETUP.md
 
 # Admin System - Exclude sensitive files only
-# Note: admin/.env is generated during deployment from GitHub Secrets
+# Note: admin/.env is generated during deployment from GitHub Secrets and MUST be deployed
+!admin/.env
 admin/.claude/
 admin/.vscode/
 admin/test_magic_links.php

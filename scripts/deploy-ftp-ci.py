@@ -20,55 +20,74 @@ FTP_REMOTE_DIR = '/'
 PROJECT_ROOT = Path(__file__).parent.parent
 
 def load_ftpignore():
-    """Load .ftpignore patterns"""
+    """Load .ftpignore patterns (supports ! for negation/allow list)"""
     ftpignore_path = PROJECT_ROOT / '.ftpignore'
-    patterns = []
+    ignore_patterns = []
+    allow_patterns = []
 
     if ftpignore_path.exists():
         with open(ftpignore_path, 'r') as f:
             for line in f:
                 line = line.strip()
                 if line and not line.startswith('#'):
-                    patterns.append(line)
+                    if line.startswith('!'):
+                        # Negation pattern - explicitly allow this file
+                        allow_patterns.append(line[1:])  # Remove the ! prefix
+                    else:
+                        ignore_patterns.append(line)
 
+    total = len(ignore_patterns) + len(allow_patterns)
     print(f"[1/4] Loading .ftpignore patterns...")
-    print(f"      [OK] Loaded {len(patterns)} ignore patterns")
-    return patterns
+    print(f"      [OK] Loaded {total} patterns ({len(ignore_patterns)} ignore, {len(allow_patterns)} allow)")
+    return ignore_patterns, allow_patterns
 
-def should_ignore(file_path, patterns):
-    """Check if file should be ignored based on .ftpignore patterns"""
+def matches_pattern(file_path, pattern):
+    """Check if file_path matches the given pattern"""
     path_str = str(file_path)
 
-    for pattern in patterns:
-        # Handle directory patterns (ending with /)
-        if pattern.endswith('/'):
-            if pattern.rstrip('/') in path_str.split(os.sep):
-                return True
-        # Handle wildcard patterns
-        elif '*' in pattern:
-            import fnmatch
-            if fnmatch.fnmatch(path_str, pattern) or fnmatch.fnmatch(os.path.basename(path_str), pattern):
-                return True
-        # Handle exact matches
-        else:
-            if pattern in path_str or os.path.basename(path_str) == pattern:
-                return True
+    # Handle directory patterns (ending with /)
+    if pattern.endswith('/'):
+        if pattern.rstrip('/') in path_str.split(os.sep):
+            return True
+    # Handle wildcard patterns
+    elif '*' in pattern:
+        import fnmatch
+        if fnmatch.fnmatch(path_str, pattern) or fnmatch.fnmatch(os.path.basename(path_str), pattern):
+            return True
+    # Handle exact matches
+    else:
+        if pattern in path_str or os.path.basename(path_str) == pattern:
+            return True
 
     return False
 
-def get_files_to_upload(patterns):
+def should_ignore(file_path, ignore_patterns, allow_patterns):
+    """Check if file should be ignored (supports ! negation for allow list)"""
+    # First check if file is explicitly allowed (negation patterns)
+    for pattern in allow_patterns:
+        if matches_pattern(file_path, pattern):
+            return False  # Explicitly allowed, don't ignore
+
+    # Then check if file matches ignore patterns
+    for pattern in ignore_patterns:
+        if matches_pattern(file_path, pattern):
+            return True  # Matched ignore pattern, ignore it
+
+    return False  # No match, don't ignore
+
+def get_files_to_upload(ignore_patterns, allow_patterns):
     """Get list of files to upload (excluding ignored files)"""
     files = []
 
     for root, dirs, filenames in os.walk(PROJECT_ROOT):
         # Skip ignored directories
-        dirs[:] = [d for d in dirs if not should_ignore(os.path.join(root, d), patterns)]
+        dirs[:] = [d for d in dirs if not should_ignore(os.path.join(root, d), ignore_patterns, allow_patterns)]
 
         for filename in filenames:
             file_path = Path(root) / filename
             relative_path = file_path.relative_to(PROJECT_ROOT)
 
-            if not should_ignore(relative_path, patterns):
+            if not should_ignore(relative_path, ignore_patterns, allow_patterns):
                 files.append(relative_path)
 
     print(f"[2/4] Scanning for files to upload...")
@@ -149,11 +168,11 @@ def main():
     print(f"[DEBUG] FTP_PORT: {FTP_PORT}")
     print(f"[DEBUG] FTP_USER: {FTP_USER}")
 
-    # Load ignore patterns
-    patterns = load_ftpignore()
+    # Load ignore and allow patterns
+    ignore_patterns, allow_patterns = load_ftpignore()
 
     # Get files to upload
-    files = get_files_to_upload(patterns)
+    files = get_files_to_upload(ignore_patterns, allow_patterns)
 
     if not files:
         print("[ERROR] No files to upload!")
