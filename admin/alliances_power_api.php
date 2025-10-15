@@ -11,9 +11,15 @@
  * - add: Add new alliance
  * - delete: Remove alliance
  *
- * @version 2.0.0
+ * @version 2.2.0
  * @date 2025-10-15
  * @changelog
+ *   2.2.0 (2025-10-15) - Added CSV power history with datetime stamps
+ *                       - Auto-appends to CSV on power edits
+ *                       - Updates CSV header when alliances added/deleted
+ *   2.1.0 (2025-10-15) - Added audit logging and automatic backups
+ *                       - Backup created before every update/add/delete
+ *                       - Logs track who changed what and when
  *   2.0.0 (2025-10-15) - Added powereditor role support
  *                       - Power editors can list, update, and add alliances
  *                       - Only admins can delete alliances
@@ -30,6 +36,8 @@ try {
     require_once 'config.php';
     require_once 'jwt.php';
     require_once 'json_helpers.php';
+    require_once 'audit_logger.php';
+    require_once 'csv_helpers.php';
 } catch (Exception $e) {
     http_response_code(500);
     header('Content-Type: application/json');
@@ -88,6 +96,12 @@ try {
         // Load current alliances
         $alliances = json_read($alliances_file);
 
+        // Create backup before making changes
+        backup_alliances($alliances, $user->sub, 'power_edit');
+
+        // Track changes for audit log
+        $changes = [];
+
         // Update each alliance's tag, name, and power
         foreach ($input['alliances'] as $update) {
             $index = $update['index'] ?? null;
@@ -96,20 +110,53 @@ try {
                 continue; // Skip invalid indices
             }
 
-            // Update only tag, name, and power
-            if (isset($update['tag'])) {
+            $alliance_tag = $alliances[$index]['tag'];
+            $alliance_changes = [];
+
+            // Track and update tag
+            if (isset($update['tag']) && $update['tag'] !== $alliances[$index]['tag']) {
+                $alliance_changes['tag'] = [
+                    'old' => $alliances[$index]['tag'],
+                    'new' => trim($update['tag'])
+                ];
                 $alliances[$index]['tag'] = trim($update['tag']);
             }
-            if (isset($update['name'])) {
+
+            // Track and update name
+            if (isset($update['name']) && $update['name'] !== $alliances[$index]['name']) {
+                $alliance_changes['name'] = [
+                    'old' => $alliances[$index]['name'],
+                    'new' => trim($update['name'])
+                ];
                 $alliances[$index]['name'] = trim($update['name']);
             }
-            if (isset($update['power'])) {
+
+            // Track and update power
+            if (isset($update['power']) && (int)$update['power'] !== $alliances[$index]['power']) {
+                $alliance_changes['power'] = [
+                    'old' => $alliances[$index]['power'],
+                    'new' => (int)$update['power']
+                ];
                 $alliances[$index]['power'] = (int)$update['power'];
+            }
+
+            // Add to changes log if anything changed
+            if (!empty($alliance_changes)) {
+                $changes[$alliance_tag] = $alliance_changes;
             }
         }
 
         // Save updated alliances
         json_write($alliances_file, $alliances);
+
+        // Append power snapshot to CSV with datetime
+        append_power_snapshot($alliances);
+
+        // Log audit event with changes
+        log_audit_event('edit_alliance_power', $user->sub, [
+            'alliances_modified' => count($changes),
+            'changes' => $changes
+        ]);
 
         echo json_encode(['success' => true, 'message' => 'Alliances updated successfully']);
         break;
@@ -135,6 +182,9 @@ try {
             }
         }
 
+        // Create backup before adding
+        backup_alliances($alliances, $user->sub, 'add_alliance');
+
         // Create new alliance with minimal structure
         $newAlliance = [
             'tag' => trim($input['tag']),
@@ -159,6 +209,19 @@ try {
         $alliances[] = $newAlliance;
 
         json_write($alliances_file, $alliances);
+
+        // Update CSV header with new alliance
+        update_csv_header($alliances);
+
+        // Append power snapshot with new alliance
+        append_power_snapshot($alliances);
+
+        // Log audit event
+        log_audit_event('add_alliance', $user->sub, [
+            'alliance_tag' => $newAlliance['tag'],
+            'alliance_name' => $newAlliance['name'],
+            'initial_power' => $newAlliance['power']
+        ]);
 
         echo json_encode(['success' => true, 'message' => 'Alliance added successfully']);
         break;
@@ -188,12 +251,31 @@ try {
             exit;
         }
 
+        // Create backup before deleting
+        backup_alliances($alliances, $user->sub, 'delete_alliance');
+
         $deletedTag = $alliances[$index]['tag'];
+        $deletedName = $alliances[$index]['name'];
+        $deletedPower = $alliances[$index]['power'];
 
         // Remove alliance from array
         array_splice($alliances, $index, 1);
 
         json_write($alliances_file, $alliances);
+
+        // Update CSV header (remove deleted alliance column)
+        update_csv_header($alliances);
+
+        // Append power snapshot with deleted alliance removed
+        append_power_snapshot($alliances);
+
+        // Log audit event
+        log_audit_event('delete_alliance', $user->sub, [
+            'alliance_tag' => $deletedTag,
+            'alliance_name' => $deletedName,
+            'alliance_power' => $deletedPower,
+            'index' => $index
+        ]);
 
         echo json_encode(['success' => true, 'message' => "Alliance '{$deletedTag}' deleted successfully"]);
         break;

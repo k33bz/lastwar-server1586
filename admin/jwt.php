@@ -5,9 +5,13 @@
  * Provides JWT encoding, decoding, and session validation functions
  * for the Last War 1586 Admin authentication system
  *
- * @version 2.0.0
+ * @version 2.1.0
  * @date 2025-10-15
  * @changelog
+ *   2.1.0 (2025-10-15) - Added JWT key rotation support
+ *                       - Enhanced decode_jwt() with rotation fallback
+ *                       - Added conditional key rotation loading
+ *                       - Improved error handling for key rotation scenarios
  *   2.0.0 (2025-10-15) - Added powereditor role support
  *                       - Added powereditor flag to JWT tokens
  *                       - Added is_power_editor() helper function
@@ -24,6 +28,11 @@ require_once __DIR__ . '/json_helpers.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+
+// Load key rotation support if available and JWT classes are loaded
+if (file_exists(__DIR__ . '/secret_key_rotation.php') && class_exists('Firebase\JWT\JWT')) {
+    require_once __DIR__ . '/secret_key_rotation.php';
+}
 
 /**
  * Encode JWT token with payload
@@ -49,7 +58,7 @@ function encode_jwt($payload, $expiry = null) {
 }
 
 /**
- * Decode and validate JWT token
+ * Decode and validate JWT token with key rotation support
  *
  * @param string $token JWT token string
  * @return object Decoded token payload
@@ -57,7 +66,13 @@ function encode_jwt($payload, $expiry = null) {
  */
 function decode_jwt($token) {
     try {
-        $decoded = JWT::decode($token, new Key(SECRET_KEY, 'HS256'));
+        // Try with key rotation support if available
+        if (function_exists('decode_jwt_with_rotation')) {
+            $decoded = decode_jwt_with_rotation($token);
+        } else {
+            // Fallback to single key validation
+            $decoded = JWT::decode($token, new Key(SECRET_KEY, 'HS256'));
+        }
 
         // Check if token is blacklisted
         if (is_token_blacklisted($decoded->jti)) {
@@ -68,7 +83,7 @@ function decode_jwt($token) {
     } catch (\Firebase\JWT\ExpiredException $e) {
         throw new Exception('Token has expired');
     } catch (\Firebase\JWT\SignatureInvalidException $e) {
-        throw new Exception('Invalid token signature');
+        throw new Exception('Invalid token signature or key rotated');
     } catch (Exception $e) {
         throw new Exception('Invalid token: ' . $e->getMessage());
     }

@@ -108,6 +108,8 @@ build/
 admin/users.json
 admin/token_blacklist.json
 admin/.env
+admin/audit_log.json
+admin/backups/
 # Local settings
 .claude/settings.local.json
 admin/.claude/settings.local.json

@@ -2,9 +2,12 @@
 /**
  * Admin Dashboard - Main interface for alliance and admin users
  *
- * @version 1.6.0
+ * @version 1.7.0
  * @date 2025-10-15
  * @changelog
+ *   1.7.0 (2025-10-15) - Added JWT key rotation status monitoring
+ *                       - Added key rotation admin panel link
+ *                       - Integrated security status display for admins
  *   1.6.0 (2025-10-15) - Added powereditor role support
  *                       - Header badge shows "R5/POWEREDITOR" or "R4/POWEREDITOR"
  *                       - User management table shows powereditor flag in role column
@@ -32,6 +35,11 @@ require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/jwt.php';
 require_once __DIR__ . '/json_helpers.php';
 
+// Load key rotation support if available
+if (file_exists(__DIR__ . '/secret_key_rotation.php')) {
+    require_once __DIR__ . '/secret_key_rotation.php';
+}
+
 // Require valid session
 $user_token = require_jwt_session();
 
@@ -44,6 +52,16 @@ $alliances_data = is_array($alliances_data_raw) && isset($alliances_data_raw[0])
 $is_admin = ($user_token->aud === 'admin');
 $user_email = $user_token->sub;
 $user_alliances = $user_token->alliances;
+
+// Get key rotation status if available
+$key_rotation_status = null;
+if (function_exists('get_key_rotation_status')) {
+    try {
+        $key_rotation_status = get_key_rotation_status();
+    } catch (Exception $e) {
+        error_log("Failed to get key rotation status: " . $e->getMessage());
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -280,6 +298,39 @@ $user_alliances = $user_token->alliances;
         </form>
     </div>
 
+    <!-- Key Rotation Status (Admin Only) -->
+    <?php if ($is_admin && $key_rotation_status): ?>
+    <div class="section" style="background: <?= $key_rotation_status['current_key_age_days'] > 25 ? '#fff3cd' : '#d4edda' ?>; border-left: 4px solid <?= $key_rotation_status['current_key_age_days'] > 25 ? '#ffc107' : '#28a745' ?>;">
+        <h3 style="margin: 0 0 10px 0; color: #333;">🔐 JWT Key Security Status</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; font-size: 14px;">
+            <div>
+                <strong>Current Key Age:</strong><br>
+                <span style="color: <?= $key_rotation_status['current_key_age_days'] > 25 ? '#856404' : '#155724' ?>;">
+                    <?= $key_rotation_status['current_key_age_days'] ?> days
+                </span>
+            </div>
+            <div>
+                <strong>Last Rotation:</strong><br>
+                <?= $key_rotation_status['last_rotation'] ?>
+            </div>
+            <div>
+                <strong>Grace Period:</strong><br>
+                <?= $key_rotation_status['grace_period_active'] ? '🟡 Active' : '🟢 Inactive' ?>
+            </div>
+            <div>
+                <strong>Auto Rotation:</strong><br>
+                <?= AUTO_KEY_ROTATION_ENABLED ? '🟢 Enabled' : '🔴 Disabled' ?>
+            </div>
+        </div>
+        <?php if ($key_rotation_status['current_key_age_days'] > 25): ?>
+        <div style="margin-top: 10px; padding: 8px; background: rgba(255,193,7,0.1); border-radius: 4px; font-size: 13px;">
+            ⚠️ <strong>Key rotation recommended.</strong> Current key is over 25 days old.
+            <a href="key_rotation_admin_panel.php" style="color: #856404; text-decoration: underline;">Manage rotation →</a>
+        </div>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+
     <script>
         // Get token expiration from PHP
         const tokenExpiration = <?= $user_token->exp ?>;
@@ -440,6 +491,11 @@ $user_alliances = $user_token->alliances;
             <a href="../index.html" class="btn btn-primary" target="_blank">View Public Site</a>
             <?php if ($is_admin || $is_powereditor): ?>
                 <a href="alliances_power.php" class="btn btn-success">⚡ Alliance Power Editor</a>
+            <?php endif; ?>
+            <?php if ($is_admin): ?>
+                <a href="audit_log_viewer.php" class="btn btn-primary">📊 Audit Log Viewer</a>
+                <a href="backup_restore.php" class="btn btn-primary">💾 Backup & Restore</a>
+                <a href="key_rotation_admin_panel.php" class="btn btn-warning">🔐 Key Rotation</a>
             <?php endif; ?>
         </div>
     </div>

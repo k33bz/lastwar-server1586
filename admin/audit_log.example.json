@@ -1,0 +1,62 @@
+{
+  "logs": [
+    {
+      "id": "log_67123456789abcd",
+      "timestamp": "2025-10-15T14:30:00Z",
+      "action": "edit_alliance_power",
+      "user": "admin@example.com",
+      "ip": "192.168.1.100",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+      "details": {
+        "alliance_tag": "UvvU",
+        "changes": {
+          "power": {
+            "old": 1500000000,
+            "new": 1550000000
+          }
+        }
+      }
+    },
+    {
+      "id": "log_67123456789abce",
+      "timestamp": "2025-10-15T14:25:00Z",
+      "action": "login",
+      "user": "r5@example.com",
+      "ip": "192.168.1.101",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+      "details": {
+        "method": "magic_link"
+      }
+    },
+    {
+      "id": "log_67123456789abcf",
+      "timestamp": "2025-10-15T14:20:00Z",
+      "action": "add_user",
+      "user": "admin@example.com",
+      "ip": "192.168.1.100",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+      "details": {
+        "target_user": "newuser@example.com",
+        "changes": {
+          "role": "r4",
+          "alliances": ["UvvU", "ORCE"],
+          "powereditor": false
+        }
+      }
+    },
+    {
+      "id": "log_67123456789abcg",
+      "timestamp": "2025-10-15T14:15:00Z",
+      "action": "restore_alliance_backup",
+      "user": "admin@example.com",
+      "ip": "192.168.1.100",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+      "details": {
+        "backup_file": "2025-10-15_14-00-00_power_edit_by_admin.json",
+        "backup_timestamp": "2025-10-15T14:00:00Z",
+        "original_user": "admin@example.com",
+        "alliance_count": 15
+      }
+    }
+  ]
+}

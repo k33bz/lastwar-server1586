@@ -1,19 +1,16 @@
 <?php
 /**
- * Magic Link Callback - Validate magic link and establish session
+ * Enhanced Magic Link Callback with Key Rotation Support
  *
- * Processes magic link token, validates it, blacklists it, and creates session
+ * Example of how to update callback.php to handle key rotation
  *
- * @version 1.1.0
+ * @version 1.0.0
  * @date 2025-10-15
- * @changelog
- *   1.1.0 (2025-10-15) - Added audit logging for successful logins
- *   1.0.0 (2025-10-12) - Initial complete implementation
  */
 
 define('ADMIN_INIT', true);
 require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/jwt.php';
+require_once __DIR__ . '/enhanced_jwt_with_key_rotation.php';
 require_once __DIR__ . '/json_helpers.php';
 require_once __DIR__ . '/audit_logger.php';
 
@@ -26,13 +23,8 @@ if (!isset($_GET['token'])) {
 $magic_token_string = $_GET['token'];
 
 try {
-    // Decode and validate magic link token
-    $magic_token = decode_jwt($magic_token_string);
-
-    // Verify it's actually a magic link token
-    if (!isset($magic_token->magic) || $magic_token->magic !== true) {
-        throw new Exception('Not a valid magic link token');
-    }
+    // Validate magic link with key rotation support
+    $magic_token = validate_magic_link_with_key_rotation($magic_token_string);
 
     // Blacklist the magic link token (single-use enforcement)
     blacklist_token($magic_token->jti, $magic_token->exp);

@@ -35,6 +35,7 @@ $error_messages = [
     'expired' => 'Your session has expired. Please log in again.',
     'revoked' => 'Your session has been revoked. Please log in again.',
     'invalid' => 'Invalid session. Please log in again.',
+    'key_rotated' => 'Security keys have been rotated. Please log in again for your security.',
     'unknown_email' => 'Email address not recognized or not authorized.',
     'send_failed' => 'Failed to send magic link. Please try again.',
 ];

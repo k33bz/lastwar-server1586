@@ -67,6 +67,12 @@ define('APP_ENV', $_ENV['APP_ENV'] ?? 'production');
 // Token Expiry Configuration (in seconds)
 define('MAGIC_LINK_EXPIRY', (int)($_ENV['MAGIC_LINK_EXPIRY'] ?? 600));      // 10 minutes default
 define('SESSION_TOKEN_EXPIRY', (int)($_ENV['SESSION_TOKEN_EXPIRY'] ?? 3600)); // 1 hour default
+define('REFRESH_TOKEN_EXPIRY', (int)($_ENV['REFRESH_TOKEN_EXPIRY'] ?? 604800)); // 7 days default
+
+// Key Rotation Configuration
+define('AUTO_KEY_ROTATION_ENABLED', ($_ENV['AUTO_KEY_ROTATION_ENABLED'] ?? 'true') === 'true');
+define('KEY_ROTATION_INTERVAL_DAYS', (int)($_ENV['KEY_ROTATION_INTERVAL_DAYS'] ?? 30));
+define('KEY_ROTATION_GRACE_PERIOD', (int)($_ENV['KEY_ROTATION_GRACE_PERIOD'] ?? 300));
 
 // File Paths
 define('USERS_FILE', __DIR__ . '/users.json');

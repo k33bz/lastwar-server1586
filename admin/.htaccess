@@ -16,6 +16,11 @@
     Require all denied
 </Files>
 
+# Deny direct access to secret keys file (contains JWT keys)
+<Files "secret_keys.json">
+    Require all denied
+</Files>
+
 # Allow PHP scripts to access these files internally
 # (The above rules only block direct HTTP requests)
 
