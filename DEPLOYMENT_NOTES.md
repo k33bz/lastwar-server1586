@@ -108,7 +108,7 @@ function send_magic_link_email($to, $magic_link_url, $username = null) {
 ```
 
 **Examples:**
-- `admin@example.com` receives "Hello matthewkastro,"
+- `user@example.com` receives "Hello user,"
 - `admin@example.com` receives "Hello admin,"
 
 **Backwards Compatible:** All existing calls to `send_magic_link_email()` will continue to work without modification.
