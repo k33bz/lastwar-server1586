@@ -11,7 +11,7 @@ require_once 'jwt.php';
 
 $user = require_jwt_session();
 
-if ($user['role'] !== 'admin') {
+if ($user->aud !== 'admin') {
     header('Location: dashboard.php');
     exit;
 }
@@ -293,7 +293,7 @@ if ($user['role'] !== 'admin') {
                 <p style="color: #666; margin-top: 5px;">Manage alliance tags, names, and power values</p>
             </div>
             <div class="user-info">
-                Logged in as: <strong><?php echo htmlspecialchars($user['email']); ?></strong> (Admin)
+                Logged in as: <strong><?php echo htmlspecialchars($user->sub); ?></strong> (Admin)
             </div>
         </div>
 
