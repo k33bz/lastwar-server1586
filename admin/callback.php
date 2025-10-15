@@ -65,7 +65,10 @@ try {
         $error = 'expired';
     } elseif (strpos($error_msg, 'revoked') !== false) {
         $error = 'used'; // Magic link already used
-    } elseif (strpos($error_msg, 'key rotated') !== false || strpos($error_msg, 'Invalid token signature') !== false) {
+    } elseif (strpos($error_msg, 'key rotated') !== false ||
+               strpos($error_msg, 'Invalid token signature') !== false ||
+               strpos($error_msg, 'Token invalid with both current and previous keys') !== false ||
+               strpos($error_msg, 'invalid with both') !== false) {
         $error = 'key_rotated';
     }
 
