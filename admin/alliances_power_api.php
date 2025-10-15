@@ -11,9 +11,12 @@
  * - add: Add new alliance
  * - delete: Remove alliance
  *
- * @version 1.0.2
+ * @version 2.0.0
  * @date 2025-10-15
  * @changelog
+ *   2.0.0 (2025-10-15) - Added powereditor role support
+ *                       - Power editors can list, update, and add alliances
+ *                       - Only admins can delete alliances
  *   1.0.2 (2025-10-15) - Fixed JWT token object/array access bug ($user->aud)
  *   1.0.1 (2025-10-15) - Added error reporting and try-catch blocks for debugging
  *   1.0.0 (2025-10-14) - Initial implementation
@@ -34,14 +37,17 @@ try {
     exit;
 }
 
-// Require admin authentication
+// Require admin or power editor authentication
 $user = require_jwt_session();
 
-if ($user->aud !== 'admin') {
+if (!is_power_editor($user)) {
     http_response_code(403);
-    echo json_encode(['error' => 'Admin access required']);
+    echo json_encode(['error' => 'Power editor access required']);
     exit;
 }
+
+// Only admins can delete
+$can_delete = can_delete_alliances($user);
 
 header('Content-Type: application/json');
 
@@ -158,7 +164,13 @@ try {
         break;
 
     case 'delete':
-        // Delete alliance by index
+        // Delete alliance by index (admin only)
+        if (!$can_delete) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Admin access required to delete alliances']);
+            exit;
+        }
+
         $input = json_decode(file_get_contents('php://input'), true);
 
         if (!isset($input['index'])) {

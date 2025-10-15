@@ -5,18 +5,16 @@
  * Admin-only interface for bulk editing alliance power values
  * Displays all alliances in a single editable table
  *
- * @version 1.1.0
+ * @version 2.0.0
  * @date 2025-10-15
  * @changelog
+ *   2.0.0 (2025-10-15) - Added powereditor role support
+ *                       - Admins and power editors can now access page
+ *                       - Only admins can delete alliances (power editors edit-only)
+ *                       - Role display shows "R5/Power Editor" or "R4/Power Editor"
+ *                       - Delete buttons hidden for non-admin users
  *   1.1.0 (2025-10-15) - Refactored to stage all changes locally before saving
- *                       - Delete now marks for deletion, requires save to commit
- *                       - Added deletedIndices array to track pending deletes
- *                       - Save processes deletes, updates, and adds in sequence
- *                       - Moved email masking to shared email_utils.js
  *   1.0.2 (2025-10-15) - Fixed delete function to update UI immediately
- *                       - Added unsaved changes warning before delete
- *                       - Added email masking with click-to-reveal
- *                       - Improved error handling with console logging
  *   1.0.1 (2025-10-15) - Fixed JWT token object/array access bug
  *   1.0.0 (2025-10-14) - Initial implementation
  */
@@ -26,10 +24,14 @@ require_once 'jwt.php';
 
 $user = require_jwt_session();
 
-if ($user->aud !== 'admin') {
+// Allow admins or power editors
+if (!is_power_editor($user)) {
     header('Location: dashboard.php');
     exit;
 }
+
+// Check if user can delete alliances (admin only)
+$can_delete = can_delete_alliances($user);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -315,7 +317,14 @@ if ($user->aud !== 'admin') {
                     $masked = substr($parts[0], 0, 1) . str_repeat('*', max(6, strlen($parts[0]) - 2)) . substr($parts[0], -1) . '@' . $parts[1];
                     echo htmlspecialchars($masked);
                     ?>
-                </strong> (Admin)
+                </strong>
+                (<?php
+                    $role_display = ucfirst($user->aud);
+                    if ($user->aud !== 'admin' && isset($user->powereditor) && $user->powereditor) {
+                        $role_display .= '/Power Editor';
+                    }
+                    echo htmlspecialchars($role_display);
+                ?>)
             </div>
         </div>
 
@@ -369,6 +378,7 @@ if ($user->aud !== 'admin') {
 
     <script src="email_utils.js"></script>
     <script>
+        const CAN_DELETE_ALLIANCES = <?= $can_delete ? 'true' : 'false' ?>;
         let alliances = [];
         let deletedIndices = []; // Track indices of deleted alliances
         let hasUnsavedChanges = false;
@@ -474,7 +484,9 @@ if ($user->aud !== 'admin') {
                     <td>
                         ${alliance.isNew
                             ? `<button class="btn btn-danger" onclick="cancelNewAlliance(${alliance.index})">Cancel</button>`
-                            : `<button class="btn btn-danger" onclick="deleteAlliance(${alliance.index}, '${escapeHtml(alliance.tag)}')">Delete</button>`
+                            : (CAN_DELETE_ALLIANCES
+                                ? `<button class="btn btn-danger" onclick="deleteAlliance(${alliance.index}, '${escapeHtml(alliance.tag)}')">Delete</button>`
+                                : '<span style="color: #999; font-size: 12px;">Edit only</span>')
                         }
                     </td>
                 `;

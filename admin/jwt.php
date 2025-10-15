@@ -5,12 +5,14 @@
  * Provides JWT encoding, decoding, and session validation functions
  * for the Last War 1586 Admin authentication system
  *
- * @version 1.1.0
- * @date 2025-10-13
+ * @version 2.0.0
+ * @date 2025-10-15
  * @changelog
+ *   2.0.0 (2025-10-15) - Added powereditor role support
+ *                       - Added powereditor flag to JWT tokens
+ *                       - Added is_power_editor() helper function
+ *                       - Added can_delete_alliances() helper function
  *   1.1.0 (2025-10-13) - Added active session tracking in users.json
- *                       - Added track_active_session() and remove_active_session()
- *                       - Added get_active_sessions() for admin dashboard
  *   1.0.0 (2025-10-12) - Initial complete implementation with proper error handling
  */
 
@@ -173,6 +175,32 @@ function is_r4_or_higher($token) {
 }
 
 /**
+ * Check if user has power editor access
+ *
+ * @param object $token Decoded JWT token
+ * @return bool True if user can access power editor
+ */
+function is_power_editor($token) {
+    // Admins always have access
+    if ($token->aud === 'admin') {
+        return true;
+    }
+
+    // Check powereditor flag for R5/R4 users
+    return isset($token->powereditor) && $token->powereditor === true;
+}
+
+/**
+ * Check if user can delete alliances (admins only)
+ *
+ * @param object $token Decoded JWT token
+ * @return bool True if user can delete alliances
+ */
+function can_delete_alliances($token) {
+    return $token->aud === 'admin';
+}
+
+/**
  * Create magic link token
  *
  * @param string $email User email
@@ -184,6 +212,7 @@ function create_magic_link_token($email, $user) {
         'sub' => $email,
         'aud' => $user['role'],
         'alliances' => $user['alliances'],
+        'powereditor' => $user['powereditor'] ?? false,
         'jti' => bin2hex(random_bytes(16)),
         'magic' => true
     ];
@@ -205,6 +234,7 @@ function create_session_token($magic_token) {
         'sub' => $magic_token->sub,
         'aud' => $magic_token->aud,
         'alliances' => $magic_token->alliances,
+        'powereditor' => $magic_token->powereditor ?? false,
         'jti' => $jti
     ];
 
