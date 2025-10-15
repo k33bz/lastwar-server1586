@@ -415,6 +415,16 @@ $user_alliances = $user_token->alliances;
     <?php endif; ?>
 
     <div class="section">
+        <h2>Quick Links</h2>
+        <div class="actions">
+            <a href="../index.html" class="btn btn-primary" target="_blank">View Public Site</a>
+            <?php if ($is_admin): ?>
+                <a href="alliances_power.php" class="btn btn-success">⚡ Alliance Power Editor</a>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="section">
         <h2>Your Alliances</h2>
         <?php
         // Helper function to extract R5 name from either string or object format
@@ -557,16 +567,6 @@ $user_alliances = $user_token->alliances;
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
-    </div>
-
-    <div class="section">
-        <h2>Quick Links</h2>
-        <div class="actions">
-            <a href="../index.html" class="btn btn-primary" target="_blank">View Public Site</a>
-            <?php if ($is_admin): ?>
-                <a href="alliances_power.php" class="btn btn-success">⚡ Alliance Power Editor</a>
-            <?php endif; ?>
-        </div>
     </div>
 
     <script>

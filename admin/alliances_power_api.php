@@ -12,9 +12,20 @@
  * - delete: Remove alliance
  */
 
-require_once 'config.php';
-require_once 'jwt.php';
-require_once 'json_helpers.php';
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+try {
+    require_once 'config.php';
+    require_once 'jwt.php';
+    require_once 'json_helpers.php';
+} catch (Exception $e) {
+    http_response_code(500);
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'Failed to load dependencies: ' . $e->getMessage()]);
+    exit;
+}
 
 // Require admin authentication
 $user = require_jwt_session();
@@ -32,10 +43,11 @@ $action = $_GET['action'] ?? $_POST['action'] ?? 'list';
 // Path to alliances.json (parent directory)
 $alliances_file = __DIR__ . '/../data/alliances.json';
 
-switch ($action) {
-    case 'list':
-        // Return all alliances with tag, name, power
-        $alliances = json_read($alliances_file);
+try {
+    switch ($action) {
+        case 'list':
+            // Return all alliances with tag, name, power
+            $alliances = json_read($alliances_file);
 
         // Extract only needed fields and add index for editing
         $simplified = array_map(function($alliance, $index) {
@@ -167,8 +179,12 @@ switch ($action) {
         echo json_encode(['success' => true, 'message' => "Alliance '{$deletedTag}' deleted successfully"]);
         break;
 
-    default:
-        http_response_code(400);
-        echo json_encode(['error' => 'Invalid action']);
-        break;
+        default:
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid action']);
+            break;
+    }
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Server error: ' . $e->getMessage()]);
 }
