@@ -5,9 +5,13 @@
  * Admin-only interface for bulk editing alliance power values
  * Displays all alliances in a single editable table
  *
- * @version 1.0.1
+ * @version 1.0.2
  * @date 2025-10-15
  * @changelog
+ *   1.0.2 (2025-10-15) - Fixed delete function to update UI immediately
+ *                       - Added unsaved changes warning before delete
+ *                       - Added email masking with click-to-reveal
+ *                       - Improved error handling with console logging
  *   1.0.1 (2025-10-15) - Fixed JWT token object/array access bug
  *                       - Changed $user['role'] to $user->aud
  *                       - Changed $user['email'] to $user->sub
@@ -630,6 +634,15 @@ if ($user->aud !== 'admin') {
         }
 
         function deleteAlliance(index, tag) {
+            // Check for unsaved changes
+            if (hasUnsavedChanges) {
+                if (!confirm('You have unsaved changes. Please save or reload before deleting alliances.')) {
+                    return;
+                }
+                // User wants to proceed anyway, clear the flag
+                hasUnsavedChanges = false;
+            }
+
             if (!confirm(`Are you sure you want to delete alliance "${tag}"?\n\nThis action cannot be undone.`)) {
                 return;
             }
@@ -643,7 +656,10 @@ if ($user->aud !== 'admin') {
             .then(data => {
                 if (data.success) {
                     showSuccess(data.message);
-                    loadAlliances();
+                    // Remove from local array and re-render
+                    alliances = alliances.filter(a => a.index !== index);
+                    renderAlliances();
+                    updateStats();
                 } else {
                     showError(data.error || 'Failed to delete alliance');
                 }

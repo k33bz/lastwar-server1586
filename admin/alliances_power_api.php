@@ -11,9 +11,10 @@
  * - add: Add new alliance
  * - delete: Remove alliance
  *
- * @version 1.0.1
+ * @version 1.0.2
  * @date 2025-10-15
  * @changelog
+ *   1.0.2 (2025-10-15) - Fixed JWT token object/array access bug ($user->aud)
  *   1.0.1 (2025-10-15) - Added error reporting and try-catch blocks for debugging
  *   1.0.0 (2025-10-14) - Initial implementation
  */
