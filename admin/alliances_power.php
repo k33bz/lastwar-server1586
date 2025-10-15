@@ -5,16 +5,19 @@
  * Admin-only interface for bulk editing alliance power values
  * Displays all alliances in a single editable table
  *
- * @version 1.0.2
+ * @version 1.1.0
  * @date 2025-10-15
  * @changelog
+ *   1.1.0 (2025-10-15) - Refactored to stage all changes locally before saving
+ *                       - Delete now marks for deletion, requires save to commit
+ *                       - Added deletedIndices array to track pending deletes
+ *                       - Save processes deletes, updates, and adds in sequence
+ *                       - Moved email masking to shared email_utils.js
  *   1.0.2 (2025-10-15) - Fixed delete function to update UI immediately
  *                       - Added unsaved changes warning before delete
  *                       - Added email masking with click-to-reveal
  *                       - Improved error handling with console logging
  *   1.0.1 (2025-10-15) - Fixed JWT token object/array access bug
- *                       - Changed $user['role'] to $user->aud
- *                       - Changed $user['email'] to $user->sub
  *   1.0.0 (2025-10-14) - Initial implementation
  */
 
@@ -364,33 +367,11 @@ if ($user->aud !== 'admin') {
         </div>
     </div>
 
+    <script src="email_utils.js"></script>
     <script>
         let alliances = [];
+        let deletedIndices = []; // Track indices of deleted alliances
         let hasUnsavedChanges = false;
-
-        /**
-         * Toggle email visibility in header (PII protection)
-         */
-        function toggleHeaderEmail(emailSpan) {
-            const fullEmail = emailSpan.getAttribute('data-email');
-            const isHidden = emailSpan.classList.contains('email-hidden');
-
-            if (isHidden) {
-                // Show full email
-                emailSpan.textContent = fullEmail;
-                emailSpan.classList.remove('email-hidden');
-                emailSpan.classList.add('email-visible');
-                emailSpan.title = 'Click to hide email';
-            } else {
-                // Hide email (mask it)
-                const parts = fullEmail.split('@');
-                const masked = parts[0].substring(0, 1) + '*'.repeat(Math.max(6, parts[0].length - 2)) + parts[0].substring(parts[0].length - 1) + '@' + parts[1];
-                emailSpan.textContent = masked;
-                emailSpan.classList.remove('email-visible');
-                emailSpan.classList.add('email-hidden');
-                emailSpan.title = 'Click to show email';
-            }
-        }
 
         // Load alliances on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -433,6 +414,7 @@ if ($user->aud !== 'admin') {
                         throw new Error(data.error);
                     }
                     alliances = data.alliances;
+                    deletedIndices = []; // Reset deleted indices on fresh load
                     renderAlliances();
                     updateStats();
                     document.getElementById('loadingIndicator').style.display = 'none';
@@ -450,8 +432,9 @@ if ($user->aud !== 'admin') {
             const tbody = document.getElementById('alliancesBody');
             tbody.innerHTML = '';
 
-            // Sort by power (descending) for rank calculation
-            const sorted = [...alliances].sort((a, b) => (b.power || 0) - (a.power || 0));
+            // Filter out deleted alliances and sort by power (descending) for rank calculation
+            const active = alliances.filter(a => !deletedIndices.includes(a.index));
+            const sorted = [...active].sort((a, b) => (b.power || 0) - (a.power || 0));
 
             sorted.forEach((alliance, rank) => {
                 const row = document.createElement('tr');
@@ -505,8 +488,10 @@ if ($user->aud !== 'admin') {
         }
 
         function updateStats() {
-            const total = alliances.length;
-            const totalPower = alliances.reduce((sum, a) => sum + (a.power || 0), 0);
+            // Only count non-deleted alliances
+            const active = alliances.filter(a => !deletedIndices.includes(a.index));
+            const total = active.length;
+            const totalPower = active.reduce((sum, a) => sum + (a.power || 0), 0);
             const avgPower = total > 0 ? Math.round(totalPower / total) : 0;
 
             document.getElementById('totalAlliances').textContent = total;
@@ -534,7 +519,7 @@ if ($user->aud !== 'admin') {
                 update[field] = value;
             });
 
-            // Separate new alliances from updates
+            // Separate new alliances, updates, and deletes
             const newAlliances = updates.filter(u => {
                 const alliance = alliances.find(a => a.index === u.index);
                 return alliance && alliance.isNew;
@@ -542,34 +527,68 @@ if ($user->aud !== 'admin') {
 
             const existingUpdates = updates.filter(u => {
                 const alliance = alliances.find(a => a.index === u.index);
-                return alliance && !alliance.isNew;
+                return alliance && !alliance.isNew && !deletedIndices.includes(u.index);
             });
 
-            // Save existing alliance updates
-            if (existingUpdates.length > 0) {
-                fetch('alliances_power_api.php?action=update', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ alliances: existingUpdates })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Now save new alliances individually
-                        saveNewAlliances(newAlliances);
+            // Process in order: deletes -> updates -> adds
+            if (deletedIndices.length > 0) {
+                saveDeletes(deletedIndices).then(() => {
+                    if (existingUpdates.length > 0) {
+                        saveUpdates(existingUpdates).then(() => {
+                            saveNewAlliances(newAlliances);
+                        });
                     } else {
-                        showError(data.error || 'Failed to save changes');
+                        saveNewAlliances(newAlliances);
                     }
-                })
-                .catch(error => {
-                    showError('Failed to save changes: ' + error.message);
+                }).catch(error => {
+                    showError('Failed to delete alliances: ' + error.message);
+                });
+            } else if (existingUpdates.length > 0) {
+                saveUpdates(existingUpdates).then(() => {
+                    saveNewAlliances(newAlliances);
+                }).catch(error => {
+                    showError('Failed to update alliances: ' + error.message);
                 });
             } else if (newAlliances.length > 0) {
-                // Only new alliances to save
                 saveNewAlliances(newAlliances);
             } else {
                 showSuccess('No changes to save');
             }
+        }
+
+        function saveDeletes(indices) {
+            const promises = indices.map(index => {
+                return fetch('alliances_power_api.php?action=delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ index: index })
+                }).then(r => r.json());
+            });
+
+            return Promise.all(promises).then(results => {
+                const errors = results.filter(r => r.error);
+                if (errors.length > 0) {
+                    throw new Error('Some deletes failed: ' + errors.map(e => e.error).join(', '));
+                }
+                console.log(`Deleted ${indices.length} alliance(s)`);
+                return results;
+            });
+        }
+
+        function saveUpdates(updates) {
+            return fetch('alliances_power_api.php?action=update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ alliances: updates })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    throw new Error(data.error || 'Failed to save updates');
+                }
+                console.log(`Updated ${updates.length} alliance(s)`);
+                return data;
+            });
         }
 
         function saveNewAlliances(newAlliances) {
@@ -634,39 +653,19 @@ if ($user->aud !== 'admin') {
         }
 
         function deleteAlliance(index, tag) {
-            // Check for unsaved changes
-            if (hasUnsavedChanges) {
-                if (!confirm('You have unsaved changes. Please save or reload before deleting alliances.')) {
-                    return;
-                }
-                // User wants to proceed anyway, clear the flag
-                hasUnsavedChanges = false;
-            }
-
-            if (!confirm(`Are you sure you want to delete alliance "${tag}"?\n\nThis action cannot be undone.`)) {
+            if (!confirm(`Mark alliance "${tag}" for deletion?\n\nClick "Save All Changes" to permanently delete.`)) {
                 return;
             }
 
-            fetch('alliances_power_api.php?action=delete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ index: index })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showSuccess(data.message);
-                    // Remove from local array and re-render
-                    alliances = alliances.filter(a => a.index !== index);
-                    renderAlliances();
-                    updateStats();
-                } else {
-                    showError(data.error || 'Failed to delete alliance');
-                }
-            })
-            .catch(error => {
-                showError('Failed to delete alliance: ' + error.message);
-            });
+            // Mark as deleted locally
+            deletedIndices.push(index);
+            hasUnsavedChanges = true;
+
+            // Re-render to hide the deleted row
+            renderAlliances();
+            updateStats();
+
+            showSuccess(`Alliance "${tag}" marked for deletion. Click "Save All Changes" to commit.`);
         }
 
         function reloadAlliances() {
