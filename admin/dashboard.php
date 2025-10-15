@@ -563,6 +563,9 @@ $user_alliances = $user_token->alliances;
         <h2>Quick Links</h2>
         <div class="actions">
             <a href="../index.html" class="btn btn-primary" target="_blank">View Public Site</a>
+            <?php if ($is_admin): ?>
+                <a href="alliances_power.php" class="btn btn-success">⚡ Alliance Power Editor</a>
+            <?php endif; ?>
         </div>
     </div>
 
