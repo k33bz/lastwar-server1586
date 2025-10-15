@@ -346,4 +346,18 @@ function cleanup_blacklist() {
         return 0;
     }
 }
+
+/**
+ * Alias for read_json_file() for backward compatibility
+ */
+function json_read($path) {
+    return read_json_file($path);
+}
+
+/**
+ * Alias for write_json_file() for backward compatibility
+ */
+function json_write($path, $data) {
+    return write_json_file($path, $data);
+}
 ?>
