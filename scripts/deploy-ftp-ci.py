@@ -214,7 +214,12 @@ def main():
             sys.exit(1)
         else:
             print("[SUCCESS] Deployment completed successfully!")
-            print(f"         Website: https://www.example.com")
+            # Use APP_URL from environment if set, otherwise use generic message
+            app_url = os.environ.get('APP_URL', 'production server')
+            if app_url.startswith('http'):
+                print(f"         Website: {app_url}")
+            else:
+                print(f"         Website deployed successfully")
             sys.exit(0)
 
     except Exception as e:

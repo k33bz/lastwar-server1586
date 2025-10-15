@@ -68,7 +68,7 @@ jobs:
 
     environment:
       name: production
-      url: https://www.example.com
+      url: ${{ secrets.APP_URL }}
 
     steps:
       - name: Checkout code
@@ -110,6 +110,7 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASS: ${{ secrets.FTP_PASS }}
+          APP_URL: ${{ secrets.APP_URL }}
         run: python scripts/deploy-ftp-ci.py
 
       - name: Install Composer dependencies via SSH
@@ -118,6 +119,7 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_USER: ${{ secrets.SSH_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
           # Install SSH client
           sudo apt-get update
@@ -140,20 +142,22 @@ jobs:
 
           # Run composer install
           echo "Running composer install in admin directory..."
-          ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST "cd ~/example.com/admin && composer install --no-dev --optimize-autoloader"
+          ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST "cd ~/${DEPLOY_PATH}/admin && composer install --no-dev --optimize-autoloader"
 
           # Verify vendor directory exists
           echo "Verifying vendor directory..."
-          ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST "ls -la ~/example.com/admin/vendor/autoload.php"
+          ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST "ls -la ~/${DEPLOY_PATH}/admin/vendor/autoload.php"
 
           echo "✅ Composer dependencies installed successfully!"
 
       - name: Deployment summary
         if: success()
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
         run: |
           echo "✅ Deployment successful!"
-          echo "🌐 Website: https://www.example.com"
-          echo "🔧 Admin Dashboard: https://www.example.com/admin/dashboard.php"
+          echo "🌐 Website: ${APP_URL}"
+          echo "🔧 Admin Dashboard: ${APP_URL}/admin/dashboard.php"
           echo "📦 Deployed from commit: ${{ github.sha }}"
           echo "👤 Deployed by: ${{ github.actor }}"
           echo "✅ Composer dependencies installed via SSH"
