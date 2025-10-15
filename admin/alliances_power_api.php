@@ -36,7 +36,7 @@ try {
 // Require admin authentication
 $user = require_jwt_session();
 
-if ($user['role'] !== 'admin') {
+if ($user->aud !== 'admin') {
     http_response_code(403);
     echo json_encode(['error' => 'Admin access required']);
     exit;
