@@ -102,10 +102,16 @@ def get_next_rotation_date() -> datetime:
 
 
 def load_alliances() -> List[Dict]:
-    """Load alliance data from JSON file."""
+    """Load alliance data from JSON file and calculate ranks based on power."""
     with open(ALLIANCES_FILE, 'r', encoding='utf-8') as f:
         alliances = json.load(f)
-    return alliances
+    
+    # Sort by power (descending) and assign ranks
+    sorted_alliances = sorted(alliances, key=lambda x: x.get('power', 0), reverse=True)
+    for i, alliance in enumerate(sorted_alliances):
+        alliance['rank'] = i + 1
+    
+    return sorted_alliances
 
 
 def load_schedule() -> Dict:
@@ -126,8 +132,13 @@ def load_schedule() -> Dict:
 
 def get_rotating_pool(alliances: List[Dict]) -> List[Dict]:
     """Get alliances with ranks 6-15 for rotation pool."""
-    rotating_alliances = [a for a in alliances if 6 <= a['rank'] <= 15]
-    return sorted(rotating_alliances, key=lambda x: x['rank'])
+    # Sort by power (descending) and assign ranks
+    sorted_alliances = sorted(alliances, key=lambda x: x.get('power', 0), reverse=True)
+    for i, alliance in enumerate(sorted_alliances):
+        alliance['rank'] = i + 1
+    
+    rotating_alliances = [a for a in sorted_alliances if 6 <= a['rank'] <= 15]
+    return rotating_alliances
 
 
 def count_recent_rotations(schedule: List[Dict], current_week: int, lookback_weeks: int) -> Counter:

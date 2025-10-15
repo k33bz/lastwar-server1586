@@ -3,6 +3,9 @@
  * Last War Alliance Rankings
  *
  * CHANGELOG:
+ * v1.4.7 - 2025-10-14
+ * - Fixed modal close button X icon centering using ::before pseudo-element with absolute positioning
+ *
  * v1.4.3 - 2025-10-14
  * - Fixed modal close button X icon centering with line-height: 1 and padding: 0
  *
@@ -1251,7 +1254,7 @@ h1 {
     background: none;
     border: none;
     color: #fff;
-    font-size: 2.5em;
+    font-size: 2em;
     cursor: pointer;
     transition: all 0.3s ease;
     width: 40px;
@@ -1261,7 +1264,7 @@ h1 {
     justify-content: center;
     border-radius: 50%;
     flex-shrink: 0;
-    line-height: 1;
+    line-height: 0;
     padding: 0;
 }
 

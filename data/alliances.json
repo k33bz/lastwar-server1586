@@ -1,6 +1,5 @@
 [
     {
-        "rank": 1,
         "tag": "ORCE",
         "name": "Omega Force",
         "r5": {
@@ -68,7 +67,6 @@
         ]
     },
     {
-        "rank": 2,
         "tag": "UvvU",
         "name": "veni vidi vici",
         "r5": "쿠치나 ᓚᘏᗢ",
@@ -87,7 +85,6 @@
         ]
     },
     {
-        "rank": 3,
         "tag": "nkot",
         "name": "korea one team",
         "r5": "잔인한노니 Noni",
@@ -106,7 +103,6 @@
         ]
     },
     {
-        "rank": 4,
         "tag": "STR8",
         "name": "STR8 SAVAGE",
         "r5": "ULoveGucciiღ",
@@ -125,7 +121,6 @@
         ]
     },
     {
-        "rank": 5,
         "tag": "EPIC",
         "name": "KarmaKings",
         "r5": "MastaGinger",
@@ -144,26 +139,6 @@
         ]
     },
     {
-        "rank": 6,
-        "tag": "LGbt",
-        "name": "Legion d-Aba",
-        "r5": "R5 of LGbt",
-        "signed": false,
-        "power": 4988688656,
-        "r5History": [
-            {
-                "r5Name": "R5 of LGbt",
-                "gameId": null,
-                "discordId": null,
-                "startDate": "2025-10-12T00:00:00Z",
-                "endDate": null,
-                "current": true,
-                "signatures": []
-            }
-        ]
-    },
-    {
-        "rank": 7,
         "tag": "404a",
         "name": "Not Found",
         "r5": "DjNinja17",
@@ -182,7 +157,6 @@
         ]
     },
     {
-        "rank": 8,
         "tag": "LE4L",
         "name": "Legião del Alba",
         "r5": "Alessaurem",
@@ -201,7 +175,6 @@
         ]
     },
     {
-        "rank": 9,
         "tag": "FLM",
         "name": "Fortis Legio Magna",
         "r5": "KiluaZoldic",
@@ -220,7 +193,6 @@
         ]
     },
     {
-        "rank": 10,
         "tag": "NYPR",
         "name": "NY Bats",
         "r5": "Batman100x35PR",
@@ -239,7 +211,6 @@
         ]
     },
     {
-        "rank": 11,
         "tag": "SWBA",
         "name": "SinnersWillBeAshed",
         "r5": "Don123123",
@@ -258,7 +229,6 @@
         ]
     },
     {
-        "rank": 12,
         "tag": "86KO",
         "name": "??",
         "r5": "ʚᴸᵘᶰᵃɞ",
@@ -277,7 +247,6 @@
         ]
     },
     {
-        "rank": 13,
         "tag": "FNXS",
         "name": "F é n i x",
         "r5": "Gera D Vc",
@@ -296,7 +265,6 @@
         ]
     },
     {
-        "rank": 14,
         "tag": "MTOP",
         "name": "MonteOlimpo",
         "r5": {
@@ -342,26 +310,6 @@
         }
     },
     {
-        "rank": 15,
-        "tag": "Zvrl",
-        "name": "Zvrl",
-        "r5": "R5 of Zvrl",
-        "signed": false,
-        "power": 1835354254,
-        "r5History": [
-            {
-                "r5Name": "R5 of Zvrl",
-                "gameId": null,
-                "discordId": null,
-                "startDate": "2025-10-12T00:00:00Z",
-                "endDate": null,
-                "current": true,
-                "signatures": []
-            }
-        ]
-    },
-    {
-        "rank": 16,
         "tag": "NiKi",
         "name": "NIKII",
         "r5": "NakappaFenomeno",
@@ -380,7 +328,6 @@
         ]
     },
     {
-        "rank": 17,
         "tag": "MZKU",
         "name": "Mazoku",
         "r5": "Grand Puba Daddio",
@@ -399,7 +346,6 @@
         ]
     },
     {
-        "rank": 18,
         "tag": "bfp8",
         "name": "Zxrll",
         "r5": "Fr3lancr",
@@ -418,7 +364,6 @@
         ]
     },
     {
-        "rank": 19,
         "tag": "UUSN",
         "name": "Kantinny",
         "r5": "KingKlik TC",
@@ -437,7 +382,6 @@
         ]
     },
     {
-        "rank": 20,
         "tag": "LSKJ",
         "name": "The Lasts",
         "r5": "R5 of LSKJ",
@@ -456,7 +400,6 @@
         ]
     },
     {
-        "rank": 21,
         "tag": "sk98",
         "name": "The Lastc",
         "r5": "Commander 210321586",
@@ -475,7 +418,6 @@
         ]
     },
     {
-        "rank": 22,
         "tag": "1985",
         "name": "1985",
         "r5": "최사령 관",
@@ -494,7 +436,6 @@
         ]
     },
     {
-        "rank": 23,
         "tag": "C4B",
         "name": "United Fight",
         "r5": "Capboaventura",
@@ -513,26 +454,6 @@
         ]
     },
     {
-        "rank": 24,
-        "tag": "FRHD",
-        "name": "United Fight",
-        "r5": "R5 of FRHD",
-        "signed": false,
-        "power": 543481248,
-        "r5History": [
-            {
-                "r5Name": "R5 of FRHD",
-                "gameId": null,
-                "discordId": null,
-                "startDate": "2025-10-12T00:00:00Z",
-                "endDate": null,
-                "current": true,
-                "signatures": []
-            }
-        ]
-    },
-    {
-        "rank": 25,
         "tag": "z5fa",
         "name": "lustig store",
         "r5": "yuridn",
@@ -551,7 +472,6 @@
         ]
     },
     {
-        "rank": 26,
         "tag": "w1l0",
         "name": "MountainDew",
         "r5": "T Brown",
@@ -570,45 +490,6 @@
         ]
     },
     {
-        "rank": 27,
-        "tag": "LeSo",
-        "name": "loving tstore",
-        "r5": "R5 of LeSo",
-        "signed": false,
-        "power": 417254829,
-        "r5History": [
-            {
-                "r5Name": "R5 of LeSo",
-                "gameId": null,
-                "discordId": null,
-                "startDate": "2025-10-12T00:00:00Z",
-                "endDate": null,
-                "current": true,
-                "signatures": []
-            }
-        ]
-    },
-    {
-        "rank": 28,
-        "tag": "BrzS",
-        "name": "Boys of sin",
-        "r5": "R5 of BrzS",
-        "signed": false,
-        "power": 324686789,
-        "r5History": [
-            {
-                "r5Name": "R5 of BrzS",
-                "gameId": null,
-                "discordId": null,
-                "startDate": "2025-10-12T00:00:00Z",
-                "endDate": null,
-                "current": true,
-                "signatures": []
-            }
-        ]
-    },
-    {
-        "rank": 29,
         "tag": "BOS7",
         "name": "Born of sin",
         "r5": "Commander 1c8ef1586",
@@ -627,26 +508,6 @@
         ]
     },
     {
-        "rank": 30,
-        "tag": "SXRS",
-        "name": "Sanguinário451",
-        "r5": "R5 of SXRS",
-        "signed": false,
-        "power": 321887989,
-        "r5History": [
-            {
-                "r5Name": "R5 of SXRS",
-                "gameId": null,
-                "discordId": null,
-                "startDate": "2025-10-12T00:00:00Z",
-                "endDate": null,
-                "current": true,
-                "signatures": []
-            }
-        ]
-    },
-    {
-        "rank": 31,
         "tag": "NMMN",
         "name": "VictoryOrExtinction",
         "r5": "Nolergd",
@@ -665,26 +526,6 @@
         ]
     },
     {
-        "rank": 32,
-        "tag": "AMhE",
-        "name": "Shuarma",
-        "r5": "R5 of AMhE",
-        "signed": false,
-        "power": 285526323,
-        "r5History": [
-            {
-                "r5Name": "R5 of AMhE",
-                "gameId": null,
-                "discordId": null,
-                "startDate": "2025-10-12T00:00:00Z",
-                "endDate": null,
-                "current": true,
-                "signatures": []
-            }
-        ]
-    },
-    {
-        "rank": 33,
         "tag": "SLTR",
         "name": "Slither de Caos",
         "r5": "R5 of SLTR",
@@ -703,26 +544,6 @@
         ]
     },
     {
-        "rank": 34,
-        "tag": "MXtL",
-        "name": "Azteca",
-        "r5": "R5 of MXtL",
-        "signed": false,
-        "power": 271175314,
-        "r5History": [
-            {
-                "r5Name": "R5 of MXtL",
-                "gameId": null,
-                "discordId": null,
-                "startDate": "2025-10-12T00:00:00Z",
-                "endDate": null,
-                "current": true,
-                "signatures": []
-            }
-        ]
-    },
-    {
-        "rank": 35,
         "tag": "Redr",
         "name": "Red",
         "r5": "R5 of Redr",
@@ -741,7 +562,6 @@
         ]
     },
     {
-        "rank": 36,
         "tag": "SLMA",
         "name": "astanhão",
         "r5": "R5 of SLMA",
@@ -759,9 +579,7 @@
             }
         ]
     },
-    {
-        "rank": 37,
-        "tag": "SWSL",
+    {        "tag": "SWSL",
         "name": "The Nerds",
         "r5": "R5 of SWSL",
         "signed": false,
@@ -778,9 +596,7 @@
             }
         ]
     },
-    {
-        "rank": 38,
-        "tag": "NRDS",
+    {        "tag": "NRDS",
         "name": "The Nerds",
         "r5": "R5 of NRDS",
         "signed": false,
@@ -797,9 +613,7 @@
             }
         ]
     },
-    {
-        "rank": 39,
-        "tag": "RDCS",
+    {        "tag": "RDCS",
         "name": "Reino do Caos",
         "r5": "R5 of RDCS",
         "signed": false,
@@ -816,9 +630,7 @@
             }
         ]
     },
-    {
-        "rank": 40,
-        "tag": "CHVL",
+    {        "tag": "CHVL",
         "name": "Elites de Caos",
         "r5": "R5 of CHVL",
         "signed": false,
@@ -835,9 +647,7 @@
             }
         ]
     },
-    {
-        "rank": 41,
-        "tag": "NFLA",
+    {        "tag": "NFLA",
         "name": "GettinxZooted",
         "r5": "R5 of NFLA",
         "signed": false,
@@ -854,9 +664,7 @@
             }
         ]
     },
-    {
-        "rank": 42,
-        "tag": "Lbdu",
+    {        "tag": "Lbdu",
         "name": "Laëla",
         "r5": "R5 of Lbdu",
         "signed": false,
@@ -873,9 +681,7 @@
             }
         ]
     },
-    {
-        "rank": 43,
-        "tag": "nic1",
+    {        "tag": "nic1",
         "name": "nicolinha",
         "r5": "R5 of nic1",
         "signed": false,
@@ -892,9 +698,7 @@
             }
         ]
     },
-    {
-        "rank": 44,
-        "tag": "LsBJ",
+    {        "tag": "LsBJ",
         "name": "astanhão",
         "r5": "R5 of LsBJ",
         "signed": false,
@@ -911,9 +715,7 @@
             }
         ]
     },
-    {
-        "rank": 45,
-        "tag": "LeGA",
+    {        "tag": "LeGA",
         "name": "LeGa",
         "r5": "R5 of LeGA",
         "signed": false,
@@ -930,9 +732,7 @@
             }
         ]
     },
-    {
-        "rank": 46,
-        "tag": "Lepa",
+    {        "tag": "Lepa",
         "name": "Lucasloco",
         "r5": "R5 of Lepa",
         "signed": false,
@@ -949,9 +749,7 @@
             }
         ]
     },
-    {
-        "rank": 47,
-        "tag": "Bbr1",
+    {        "tag": "Bbr1",
         "name": "Lascanonn",
         "r5": "R5 of Bbr1",
         "signed": false,
@@ -968,9 +766,7 @@
             }
         ]
     },
-    {
-        "rank": 48,
-        "tag": "RU66",
+    {        "tag": "RU66",
         "name": "Rur",
         "r5": "R5 of RU66",
         "signed": false,
@@ -987,9 +783,7 @@
             }
         ]
     },
-    {
-        "rank": 49,
-        "tag": "LsN0",
+    {        "tag": "LsN0",
         "name": "Bur",
         "r5": "R5 of LsN0",
         "signed": false,
@@ -1006,9 +800,7 @@
             }
         ]
     },
-    {
-        "rank": 50,
-        "tag": "L4TM",
+    {        "tag": "L4TM",
         "name": "La Última Orden",
         "r5": "R5 of L4TM",
         "signed": false,
@@ -1025,9 +817,7 @@
             }
         ]
     },
-    {
-        "rank": 51,
-        "tag": "SHDW",
+    {        "tag": "SHDW",
         "name": "La Última Orden",
         "r5": "R5 of SHDW",
         "signed": false,
@@ -1044,9 +834,7 @@
             }
         ]
     },
-    {
-        "rank": 52,
-        "tag": "SWGE",
+    {        "tag": "SWGE",
         "name": "Nooooooooooooo",
         "r5": "R5 of SWGE",
         "signed": false,
@@ -1063,9 +851,7 @@
             }
         ]
     },
-    {
-        "rank": 53,
-        "tag": "rico",
+    {        "tag": "rico",
         "name": "brassssiiiiillllll",
         "r5": "R5 of rico",
         "signed": false,
@@ -1082,9 +868,7 @@
             }
         ]
     },
-    {
-        "rank": 54,
-        "tag": "MAnD",
+    {        "tag": "MAnD",
         "name": "Elon dono",
         "r5": "R5 of MAnD",
         "signed": false,
@@ -1101,9 +885,7 @@
             }
         ]
     },
-    {
-        "rank": 55,
-        "tag": "Gwc",
+    {        "tag": "Gwc",
         "name": "Gwc",
         "r5": "R5 of Gwc",
         "signed": false,
@@ -1120,9 +902,7 @@
             }
         ]
     },
-    {
-        "rank": 56,
-        "tag": "nand",
+    {        "tag": "nand",
         "name": "NATIVOS BRR",
         "r5": "R5 of nand",
         "signed": false,
@@ -1139,9 +919,7 @@
             }
         ]
     },
-    {
-        "rank": 57,
-        "tag": "MbSt",
+    {        "tag": "MbSt",
         "name": "NATIONS 999",
         "r5": "R5 of MbSt",
         "signed": false,
@@ -1158,9 +936,7 @@
             }
         ]
     },
-    {
-        "rank": 58,
-        "tag": "JEWS",
+    {        "tag": "JEWS",
         "name": "Turbo Jews",
         "r5": "R5 of JEWS",
         "signed": false,
@@ -1177,9 +953,7 @@
             }
         ]
     },
-    {
-        "rank": 59,
-        "tag": "FYPE",
+    {        "tag": "FYPE",
         "name": "Gods low",
         "r5": "R5 of FYPE",
         "signed": false,
@@ -1196,9 +970,7 @@
             }
         ]
     },
-    {
-        "rank": 60,
-        "tag": "tzh",
+    {        "tag": "tzh",
         "name": "zombiehitter",
         "r5": "R5 of tzh",
         "signed": false,
@@ -1215,9 +987,7 @@
             }
         ]
     },
-    {
-        "rank": 61,
-        "tag": "BSoG",
+    {        "tag": "BSoG",
         "name": "peahakBurr",
         "r5": "R5 of BSoG",
         "signed": false,
@@ -1234,9 +1004,7 @@
             }
         ]
     },
-    {
-        "rank": 62,
-        "tag": "1586",
+    {        "tag": "1586",
         "name": "placeholder1",
         "r5": "R5 of 1586",
         "signed": false,
@@ -1253,9 +1021,7 @@
             }
         ]
     },
-    {
-        "rank": 63,
-        "tag": "TSTG",
+    {        "tag": "TSTG",
         "name": "peahakBurr",
         "r5": "R5 of TSTG",
         "signed": false,
@@ -1272,9 +1038,7 @@
             }
         ]
     },
-    {
-        "rank": 64,
-        "tag": "jea4",
+    {        "tag": "jea4",
         "name": "jea4",
         "r5": "R5 of jea4",
         "signed": false,
@@ -1291,9 +1055,7 @@
             }
         ]
     },
-    {
-        "rank": 65,
-        "tag": "TmpL",
+    {        "tag": "TmpL",
         "name": "무적길드군",
         "r5": "R5 of TmpL",
         "signed": false,
@@ -1310,9 +1072,7 @@
             }
         ]
     },
-    {
-        "rank": 66,
-        "tag": "LHPS",
+    {        "tag": "LHPS",
         "name": "Evil Walks Loudly",
         "r5": "R5 of LHPS",
         "signed": false,
@@ -1329,9 +1089,7 @@
             }
         ]
     },
-    {
-        "rank": 67,
-        "tag": "EWE1",
+    {        "tag": "EWE1",
         "name": "Evil Walks Eternity",
         "r5": "R5 of EWE1",
         "signed": false,
@@ -1348,9 +1106,7 @@
             }
         ]
     },
-    {
-        "rank": 68,
-        "tag": "SGE2",
+    {        "tag": "SGE2",
         "name": "SavagesGataEat2",
         "r5": "R5 of SGE2",
         "signed": false,
@@ -1367,9 +1123,7 @@
             }
         ]
     },
-    {
-        "rank": 69,
-        "tag": "LGLW",
+    {        "tag": "LGLW",
         "name": "Sanguinário451",
         "r5": "R5 of LGLW",
         "signed": false,
@@ -1386,9 +1140,7 @@
             }
         ]
     },
-    {
-        "rank": 70,
-        "tag": "RNWF",
+    {        "tag": "RNWF",
         "name": "Chaos",
         "r5": "R5 of RNWF",
         "signed": false,
@@ -1405,9 +1157,7 @@
             }
         ]
     },
-    {
-        "rank": 71,
-        "tag": "qpdl",
+    {        "tag": "qpdl",
         "name": "qpdl",
         "r5": "R5 of qpdl",
         "signed": false,
@@ -1424,9 +1174,7 @@
             }
         ]
     },
-    {
-        "rank": 72,
-        "tag": "ArtW",
+    {        "tag": "ArtW",
         "name": "Reinforced",
         "r5": "R5 of ArtW",
         "signed": false,
@@ -1443,9 +1191,7 @@
             }
         ]
     },
-    {
-        "rank": 73,
-        "tag": "jein",
+    {        "tag": "jein",
         "name": "jein",
         "r5": "R5 of jein",
         "signed": false,
@@ -1462,9 +1208,7 @@
             }
         ]
     },
-    {
-        "rank": 74,
-        "tag": "RSTE",
+    {        "tag": "RSTE",
         "name": "Resistancë",
         "r5": "R5 of RSTE",
         "signed": false,
@@ -1481,9 +1225,7 @@
             }
         ]
     },
-    {
-        "rank": 75,
-        "tag": "MT7",
+    {        "tag": "MT7",
         "name": "Deuses da guerra",
         "r5": "R5 of MT7",
         "signed": false,
@@ -1500,9 +1242,7 @@
             }
         ]
     },
-    {
-        "rank": 76,
-        "tag": "poci",
+    {        "tag": "poci",
         "name": "Blackk666",
         "r5": "R5 of poci",
         "signed": false,
@@ -1519,9 +1259,7 @@
             }
         ]
     },
-    {
-        "rank": 77,
-        "tag": "EvLB",
+    {        "tag": "EvLB",
         "name": "Boom de guerre",
         "r5": "R5 of EvLB",
         "signed": false,
@@ -1538,9 +1276,7 @@
             }
         ]
     },
-    {
-        "rank": 78,
-        "tag": "SOUL",
+    {        "tag": "SOUL",
         "name": "BloodStone",
         "r5": "R5 of SOUL",
         "signed": false,
@@ -1557,9 +1293,7 @@
             }
         ]
     },
-    {
-        "rank": 79,
-        "tag": "MssH",
+    {        "tag": "MssH",
         "name": "Evarlasting",
         "r5": "R5 of MssH",
         "signed": false,
@@ -1576,9 +1310,7 @@
             }
         ]
     },
-    {
-        "rank": 80,
-        "tag": "STNK",
+    {        "tag": "STNK",
         "name": "TEMPLAP",
         "r5": "R5 of STNK",
         "signed": false,
@@ -1595,9 +1327,7 @@
             }
         ]
     },
-    {
-        "rank": 81,
-        "tag": "7kr",
+    {        "tag": "7kr",
         "name": "TEMPLAR",
         "r5": "R5 of 7kr",
         "signed": false,
@@ -1614,9 +1344,7 @@
             }
         ]
     },
-    {
-        "rank": 82,
-        "tag": "lpe",
+    {        "tag": "lpe",
         "name": "love peace",
         "r5": "R5 of lpe",
         "signed": false,
@@ -1633,9 +1361,7 @@
             }
         ]
     },
-    {
-        "rank": 83,
-        "tag": "joumH",
+    {        "tag": "joumH",
         "name": "love peace",
         "r5": "R5 of joumH",
         "signed": false,
@@ -1652,9 +1378,7 @@
             }
         ]
     },
-    {
-        "rank": 84,
-        "tag": "6mko",
+    {        "tag": "6mko",
         "name": "jaimani",
         "r5": "R5 of 6mko",
         "signed": false,
@@ -1671,9 +1395,7 @@
             }
         ]
     },
-    {
-        "rank": 85,
-        "tag": "c4B",
+    {        "tag": "c4B",
         "name": "c4B",
         "r5": "Capboaventura",
         "signed": false,

@@ -7,8 +7,8 @@ Official website for Server 1586 alliance management, council voting, and server
 **Live Website**: [https://www.example.com](https://www.example.com)
 **GitHub Repository**: [https://github.com/username/your-repo](https://github.com/username/your-repo)
 
-**Version**: 1.5.0
-**Last Updated**: October 10, 2025
+**Version**: 2.0.0
+**Last Updated**: October 14, 2025
 
 > **Note**: The website automatically redirects HTTP to HTTPS and adds www. prefix for security and consistency.
 
@@ -51,7 +51,7 @@ Server1586/
 ├── js/
 │   └── app.js              # Main application logic (v1.9.3)
 ├── data/
-│   ├── alliances.json      # Top 15 alliance data (expandable to 50)
+│   ├── alliances.json      # Alliance data without rank fields (ranks calculated dynamically)
 │   ├── rules.json          # Server rules
 │   ├── amendments.json     # Rule amendment history
 │   ├── rotation-schedule.json  # Pre-generated rotation schedule with metadata
@@ -193,19 +193,27 @@ See [scripts/README.md](scripts/README.md) for detailed schedule management docu
 
 ### Alliance Data (`data/alliances.json`)
 
-Update alliance rankings and information:
+**v2.0.0 Breaking Change**: Rank fields have been removed. Ranks are now calculated dynamically based on power.
+
+Update alliance information (ranks calculated automatically by power):
 
 ```json
 [
   {
-    "rank": 1,
     "tag": "UvvU",
     "name": "veni vidi vici",
+    "power": 7804360932,
     "r5": "R5 Name",
     "signed": true
   }
 ]
 ```
+
+**Key Changes**:
+- ❌ No more `"rank"` field in JSON
+- ✅ Ranks calculated dynamically from `"power"` field
+- ✅ Eliminates rank/power mismatches
+- ✅ Single source of truth (power determines rank)
 
 ### Server Rules (`data/rules.json`)
 
@@ -267,8 +275,8 @@ The project uses semantic versioning:
 - **Patch** (1.0.X): Bug fixes or minor improvements
 
 Current versions:
-- Website: **1.5.0**
-- JavaScript: **1.9.0**
+- Website: **2.0.0**
+- JavaScript: **2.0.0**
 - CSS: **1.3.2**
 - Council: **2.0.0**
 - Schedule Script: **2.2.0**
@@ -331,5 +339,5 @@ For questions or issues, contact the server administrators.
 
 ---
 
-**Last Updated**: October 10, 2025
+**Last Updated**: October 14, 2025
 **Maintained by**: Server 1586 Council

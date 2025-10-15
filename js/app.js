@@ -4,6 +4,13 @@
  * Handles all dynamic rendering and user interactions for the homepage.
  *
  * CHANGELOG:
+ * v2.0.0 - 2025-10-14
+ * - BREAKING: Removed rank fields from alliances.json
+ * - Added calculateRanks() function to compute ranks dynamically based on power
+ * - Ranks now automatically calculated on data load, eliminating rank/power mismatches
+ * - Updated all rendering functions to use calculated ranks instead of stored values
+ * - Cleaner data structure with single source of truth (power determines rank)
+ *
  * v1.9.3 - 2025-10-10
  * - Fixed Chart.js date format parser (changed YYYY-MM-DD to yyyy-MM-dd)
  * - Chart.js date-fns adapter requires lowercase format tokens
@@ -318,6 +325,25 @@
       ============================================ */
    
    /**
+    * Calculate rank for each alliance based on power (descending order)
+    * @param {Array} alliances - Array of alliance objects
+    * @returns {Array} Alliances with calculated rank property
+    */
+   function calculateRanks(alliances) {
+       // Sort by power (descending) and assign ranks
+       var sortedAlliances = alliances.slice().sort(function(a, b) {
+           return (b.power || 0) - (a.power || 0);
+       });
+       
+       // Add calculated rank to each alliance
+       for (var i = 0; i < sortedAlliances.length; i++) {
+           sortedAlliances[i].rank = i + 1;
+       }
+       
+       return sortedAlliances;
+   }
+
+   /**
     * Normalize alliance data to handle both v1.0 and v2.0 formats
     * @param {Object} alliance - Alliance data
     * @returns {Object} Normalized alliance data
@@ -397,16 +423,13 @@
 
    /**
     * Render top 3 alliances podium with trophies
-    * Sorts by power to ensure top 3 by current power level
+    * Uses pre-calculated ranks (alliances already sorted by power)
     */
    function renderPodium() {
        var podium = document.getElementById('podium');
 
-       // Sort alliances by power (descending) and take top 3
-       var sortedAlliances = alliances.slice().sort(function(a, b) {
-           return (b.power || 0) - (a.power || 0);
-       });
-       var top3 = sortedAlliances.slice(0, 3);
+       // Take top 3 alliances (already sorted by power with calculated ranks)
+       var top3 = alliances.slice(0, 3);
 
        var trophies = ['🏆', '🥈', '🥉'];
        var classes = ['first-place', 'second-place', 'third-place'];
@@ -431,11 +454,8 @@
    function renderAllianceGrid() {
        var grid = document.getElementById('allianceGrid');
 
-       // Sort alliances by power (descending) and take top 15
-       var sortedAlliances = alliances.slice().sort(function(a, b) {
-           return (b.power || 0) - (a.power || 0);
-       });
-       var top15 = sortedAlliances.slice(0, 15);
+       // Take top 15 alliances (already sorted by power with calculated ranks)
+       var top15 = alliances.slice(0, 15);
        var remaining = top15.slice(3); // Ranks 4-15
 
        var html = '';
@@ -458,11 +478,8 @@
    function renderSignatories() {
        var grid = document.getElementById('signatoriesGrid');
 
-       // Sort alliances by power (descending) and take top 15
-       var sortedAlliances = alliances.slice().sort(function(a, b) {
-           return (b.power || 0) - (a.power || 0);
-       });
-       var top15 = sortedAlliances.slice(0, 15);
+       // Take top 15 alliances (already sorted by power with calculated ranks)
+       var top15 = alliances.slice(0, 15);
 
        var html = '';
        for (var i = 0; i < top15.length; i++) {
@@ -1425,7 +1442,7 @@
       ============================================ */
 
    // Version for cache-busting (update this when deploying changes)
-   var APP_VERSION = '1.5.0';
+   var APP_VERSION = '1.5.1';
 
    /**
     * Load all data from JSON files with cache-busting
@@ -1442,7 +1459,8 @@
                fetch('data/server-info.json?v=' + APP_VERSION).then(r => r.json())
            ]);
 
-           alliances = alliancesData;
+           // Calculate ranks based on power before assigning
+           alliances = calculateRanks(alliancesData);
            serverRules = rulesData;
            amendments = amendmentsData;
            rotationSchedule = rotationScheduleData;
