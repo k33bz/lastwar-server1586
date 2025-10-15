@@ -85,6 +85,13 @@ try {
             $backup_file = backup_alliances($alliances, $user->sub, $reason);
 
             if ($backup_file) {
+                // Log to audit
+                log_audit_event('manual_backup', $user->sub, [
+                    'reason' => $reason,
+                    'filename' => basename($backup_file),
+                    'alliance_count' => count($alliances)
+                ]);
+
                 echo json_encode([
                     'success' => true,
                     'message' => 'Manual backup created successfully',

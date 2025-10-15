@@ -27,6 +27,7 @@ $backups = get_alliance_backups(100);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alliance Backup & Restore - Last War 1586 Admin</title>
+    <script src="email_utils.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -134,6 +135,41 @@ $backups = get_alliance_backups(100);
             color: #999;
             padding: 40px;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            overflow: auto;
+        }
+        .modal-content {
+            background: white;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            line-height: 1;
+            padding: 0;
+        }
+        .modal-close:hover {
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -205,7 +241,11 @@ $backups = get_alliance_backups(100);
                                     <?= htmlspecialchars(ucfirst(str_replace('_', ' ', $backup['reason']))) ?>
                                 </span>
                             </td>
-                            <td><?= htmlspecialchars($backup['user']) ?></td>
+                            <td>
+                                <span class="masked-email" data-email="<?= htmlspecialchars($backup['user']) ?>">
+                                    <script>document.write(maskEmail('<?= htmlspecialchars($backup['user']) ?>'));</script>
+                                </span>
+                            </td>
                             <td><?= htmlspecialchars($backup['alliance_count']) ?></td>
                             <td><?= htmlspecialchars(format_bytes($backup['size'])) ?></td>
                             <td>
@@ -232,28 +272,98 @@ $backups = get_alliance_backups(100);
     </div>
 
     <!-- Preview Modal -->
-    <div id="preview-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; overflow: auto;">
-        <div style="background: white; max-width: 800px; margin: 50px auto; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div id="preview-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
                 <h2 style="color: #333; margin: 0;">Backup Preview</h2>
-                <button onclick="closePreview()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #999;">×</button>
+                <button onclick="closeModal('preview-modal')" class="modal-close">×</button>
             </div>
-            <div id="preview-content" style="max-height: 500px; overflow-y: auto;">
+            <div id="preview-content" style="max-height: 500px; overflow-y: auto; margin-top: 20px;">
                 Loading...
             </div>
         </div>
     </div>
 
+    <!-- Manual Backup Modal -->
+    <div id="manual-backup-modal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 style="color: #333; margin: 0;">Create Manual Backup</h2>
+                <button onclick="closeModal('manual-backup-modal')" class="modal-close">×</button>
+            </div>
+            <div style="margin-top: 20px;">
+                <label for="backup-reason" style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">Reason for backup (optional):</label>
+                <input type="text" id="backup-reason" placeholder="e.g., Before major changes" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <div style="margin-top: 20px; text-align: right;">
+                    <button onclick="closeModal('manual-backup-modal')" class="btn btn-secondary" style="margin-right: 10px;">Cancel</button>
+                    <button onclick="confirmManualBackup()" class="btn btn-primary">Create Backup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Restore Confirmation Modal -->
+    <div id="restore-modal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 style="color: #333; margin: 0;">⚠️ Confirm Restore</h2>
+                <button onclick="closeModal('restore-modal')" class="modal-close">×</button>
+            </div>
+            <div style="margin-top: 20px;">
+                <div class="warning-box" style="margin-bottom: 20px;">
+                    <strong>Warning: This action will affect the live site immediately!</strong>
+                    <div style="margin-top: 10px;">
+                        <div><strong>Backup:</strong> <span id="restore-filename"></span></div>
+                        <div><strong>Timestamp:</strong> <span id="restore-timestamp"></span></div>
+                    </div>
+                </div>
+                <p style="margin-bottom: 15px;">This will:</p>
+                <ul style="margin-left: 20px; margin-bottom: 20px; color: #666;">
+                    <li>Replace the current alliance data with the backup data</li>
+                    <li>Create a "pre-restore" backup of the current state first</li>
+                    <li>Update the public site rankings immediately</li>
+                </ul>
+                <label for="restore-confirm" style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">Type "OK" to confirm (case-sensitive):</label>
+                <input type="text" id="restore-confirm" placeholder="OK" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 14px; margin-bottom: 20px;">
+                <div style="text-align: right;">
+                    <button onclick="closeModal('restore-modal')" class="btn btn-secondary" style="margin-right: 10px;">Cancel</button>
+                    <button onclick="confirmRestore()" class="btn btn-success">Restore Backup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div id="message-modal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="message-title" style="color: #333; margin: 0;"></h2>
+                <button onclick="closeMessageModal()" class="modal-close">×</button>
+            </div>
+            <div id="message-content" style="margin-top: 20px; padding: 15px; border-radius: 5px;">
+            </div>
+            <div style="margin-top: 20px; text-align: right;">
+                <button onclick="closeMessageModal()" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        let pendingRestoreFilename = '';
+
         function createManualBackup() {
-            const reason = prompt('Enter a reason for this manual backup (optional):');
-            if (reason === null) {
-                return; // User cancelled
-            }
+            document.getElementById('backup-reason').value = '';
+            openModal('manual-backup-modal');
+        }
+
+        function confirmManualBackup() {
+            const reason = document.getElementById('backup-reason').value || 'manual';
 
             const formData = new FormData();
             formData.append('action', 'manual_backup');
-            formData.append('reason', reason || 'manual');
+            formData.append('reason', reason);
+
+            closeModal('manual-backup-modal');
 
             fetch('backup_restore_api.php', {
                 method: 'POST',
@@ -262,32 +372,39 @@ $backups = get_alliance_backups(100);
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('✅ Manual backup created successfully!\n\n' + (data.message || ''));
-                    location.reload();
+                    showMessage('Success', '✅ Manual backup created successfully!', 'success');
+                    setTimeout(() => location.reload(), 1500);
                 } else {
-                    alert('❌ Error: ' + (data.error || 'Unknown error occurred'));
+                    showMessage('Error', '❌ ' + (data.error || 'Unknown error occurred'), 'error');
                 }
             })
             .catch(error => {
                 console.error('Error creating manual backup:', error);
-                alert('Failed to create manual backup. Please try again.');
+                showMessage('Error', '❌ Failed to create manual backup. Please try again.', 'error');
             });
         }
 
         function restoreBackup(filename, timestamp) {
-            if (!confirm(`⚠️ Are you sure you want to restore from this backup?\n\nBackup: ${filename}\nTimestamp: ${timestamp}\n\nThis will replace the current alliance data.\nA backup of the current state will be created first.`)) {
-                return;
-            }
+            pendingRestoreFilename = filename;
+            document.getElementById('restore-filename').textContent = filename;
+            document.getElementById('restore-timestamp').textContent = timestamp;
+            document.getElementById('restore-confirm').value = '';
+            openModal('restore-modal');
+        }
 
-            // Second confirmation
-            if (!confirm('This action will affect the live site immediately.\n\nType OK to confirm (case-sensitive):') || prompt('Type OK to confirm:') !== 'OK') {
-                alert('Restore cancelled.');
+        function confirmRestore() {
+            const confirmation = document.getElementById('restore-confirm').value;
+
+            if (confirmation !== 'OK') {
+                showMessage('Error', '❌ You must type "OK" exactly to confirm the restore.', 'error');
                 return;
             }
 
             const formData = new FormData();
             formData.append('action', 'restore');
-            formData.append('filename', filename);
+            formData.append('filename', pendingRestoreFilename);
+
+            closeModal('restore-modal');
 
             fetch('backup_restore_api.php', {
                 method: 'POST',
@@ -296,24 +413,22 @@ $backups = get_alliance_backups(100);
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('✅ Backup restored successfully!\n\n' + (data.message || ''));
-                    location.reload();
+                    showMessage('Success', '✅ Backup restored successfully!', 'success');
+                    setTimeout(() => location.reload(), 1500);
                 } else {
-                    alert('❌ Error: ' + (data.error || 'Unknown error occurred'));
+                    showMessage('Error', '❌ ' + (data.error || 'Unknown error occurred'), 'error');
                 }
             })
             .catch(error => {
                 console.error('Error restoring backup:', error);
-                alert('Failed to restore backup. Please try again.');
+                showMessage('Error', '❌ Failed to restore backup. Please try again.', 'error');
             });
         }
 
         async function viewBackup(filename) {
-            const modal = document.getElementById('preview-modal');
             const content = document.getElementById('preview-content');
-
-            modal.style.display = 'block';
             content.innerHTML = 'Loading backup preview...';
+            openModal('preview-modal');
 
             try {
                 const response = await fetch('backup_restore_api.php?action=preview&filename=' + encodeURIComponent(filename));
@@ -353,8 +468,39 @@ $backups = get_alliance_backups(100);
             }
         }
 
-        function closePreview() {
-            document.getElementById('preview-modal').style.display = 'none';
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showMessage(title, message, type) {
+            document.getElementById('message-title').textContent = title;
+            const content = document.getElementById('message-content');
+            content.textContent = message;
+
+            // Style based on type
+            if (type === 'success') {
+                content.style.backgroundColor = '#d4edda';
+                content.style.color = '#155724';
+                content.style.border = '1px solid #c3e6cb';
+            } else if (type === 'error') {
+                content.style.backgroundColor = '#f8d7da';
+                content.style.color = '#721c24';
+                content.style.border = '1px solid #f5c6cb';
+            } else {
+                content.style.backgroundColor = '#d1ecf1';
+                content.style.color = '#0c5460';
+                content.style.border = '1px solid #bee5eb';
+            }
+
+            openModal('message-modal');
+        }
+
+        function closeMessageModal() {
+            closeModal('message-modal');
         }
 
         function escapeHtml(text) {
@@ -363,17 +509,21 @@ $backups = get_alliance_backups(100);
             return div.innerHTML;
         }
 
-        // Close modal on outside click
-        document.getElementById('preview-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closePreview();
-            }
+        // Close modals on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
         });
 
-        // Close modal on ESC key
+        // Close modals on ESC key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                closePreview();
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
             }
         });
     </script>
