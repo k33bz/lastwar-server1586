@@ -4,6 +4,14 @@
  *
  * Admin-only interface for bulk editing alliance power values
  * Displays all alliances in a single editable table
+ *
+ * @version 1.0.1
+ * @date 2025-10-15
+ * @changelog
+ *   1.0.1 (2025-10-15) - Fixed JWT token object/array access bug
+ *                       - Changed $user['role'] to $user->aud
+ *                       - Changed $user['email'] to $user->sub
+ *   1.0.0 (2025-10-14) - Initial implementation
  */
 
 require_once 'config.php';
@@ -293,7 +301,14 @@ if ($user->aud !== 'admin') {
                 <p style="color: #666; margin-top: 5px;">Manage alliance tags, names, and power values</p>
             </div>
             <div class="user-info">
-                Logged in as: <strong><?php echo htmlspecialchars($user->sub); ?></strong> (Admin)
+                Logged in as: <strong class="email-display email-hidden" data-email="<?= htmlspecialchars($user->sub) ?>" style="cursor: pointer;" onclick="toggleHeaderEmail(this)" title="Click to show/hide email">
+                    <?php
+                    // Mask user's email
+                    $parts = explode('@', $user->sub);
+                    $masked = substr($parts[0], 0, 1) . str_repeat('*', max(6, strlen($parts[0]) - 2)) . substr($parts[0], -1) . '@' . $parts[1];
+                    echo htmlspecialchars($masked);
+                    ?>
+                </strong> (Admin)
             </div>
         </div>
 
@@ -349,6 +364,30 @@ if ($user->aud !== 'admin') {
         let alliances = [];
         let hasUnsavedChanges = false;
 
+        /**
+         * Toggle email visibility in header (PII protection)
+         */
+        function toggleHeaderEmail(emailSpan) {
+            const fullEmail = emailSpan.getAttribute('data-email');
+            const isHidden = emailSpan.classList.contains('email-hidden');
+
+            if (isHidden) {
+                // Show full email
+                emailSpan.textContent = fullEmail;
+                emailSpan.classList.remove('email-hidden');
+                emailSpan.classList.add('email-visible');
+                emailSpan.title = 'Click to hide email';
+            } else {
+                // Hide email (mask it)
+                const parts = fullEmail.split('@');
+                const masked = parts[0].substring(0, 1) + '*'.repeat(Math.max(6, parts[0].length - 2)) + parts[0].substring(parts[0].length - 1) + '@' + parts[1];
+                emailSpan.textContent = masked;
+                emailSpan.classList.remove('email-visible');
+                emailSpan.classList.add('email-hidden');
+                emailSpan.title = 'Click to show email';
+            }
+        }
+
         // Load alliances on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadAlliances();
@@ -368,8 +407,27 @@ if ($user->aud !== 'admin') {
             document.getElementById('tableContainer').style.display = 'none';
 
             fetch('alliances_power_api.php?action=list')
-                .then(response => response.json())
+                .then(response => {
+                    // Check if response is OK
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    // Get the raw text first to debug
+                    return response.text().then(text => {
+                        console.log('API Response:', text);
+                        try {
+                            return JSON.parse(text);
+                        } catch (e) {
+                            console.error('JSON Parse Error:', e);
+                            console.error('Response text:', text);
+                            throw new Error('Invalid JSON response from API: ' + text.substring(0, 100));
+                        }
+                    });
+                })
                 .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
                     alliances = data.alliances;
                     renderAlliances();
                     updateStats();
@@ -378,6 +436,7 @@ if ($user->aud !== 'admin') {
                     hasUnsavedChanges = false;
                 })
                 .catch(error => {
+                    console.error('Load error:', error);
                     showError('Failed to load alliances: ' + error.message);
                     document.getElementById('loadingIndicator').style.display = 'none';
                 });

@@ -10,6 +10,12 @@
  * - update: Update all alliances (bulk save)
  * - add: Add new alliance
  * - delete: Remove alliance
+ *
+ * @version 1.0.1
+ * @date 2025-10-15
+ * @changelog
+ *   1.0.1 (2025-10-15) - Added error reporting and try-catch blocks for debugging
+ *   1.0.0 (2025-10-14) - Initial implementation
  */
 
 // Enable error reporting for debugging
