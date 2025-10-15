@@ -4,6 +4,7 @@
 # Sensitive user data (keep .example versions)
 users.json
 token_blacklist.json
+secret_keys.json
 
 # Composer
 /vendor/

@@ -155,6 +155,11 @@ $backups = get_alliance_backups(100);
                 <li><strong>Deletes</strong> an alliance</li>
                 <li><strong>Restores</strong> from a backup (creates a "pre-restore" backup)</li>
             </ul>
+            <div style="margin-top: 15px;">
+                <button onclick="createManualBackup()" class="btn btn-primary">
+                    💾 Create Manual Backup Now
+                </button>
+            </div>
         </div>
 
         <div class="warning-box">
@@ -240,6 +245,35 @@ $backups = get_alliance_backups(100);
     </div>
 
     <script>
+        function createManualBackup() {
+            const reason = prompt('Enter a reason for this manual backup (optional):');
+            if (reason === null) {
+                return; // User cancelled
+            }
+
+            const formData = new FormData();
+            formData.append('action', 'manual_backup');
+            formData.append('reason', reason || 'manual');
+
+            fetch('backup_restore_api.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Manual backup created successfully!\n\n' + (data.message || ''));
+                    location.reload();
+                } else {
+                    alert('❌ Error: ' + (data.error || 'Unknown error occurred'));
+                }
+            })
+            .catch(error => {
+                console.error('Error creating manual backup:', error);
+                alert('Failed to create manual backup. Please try again.');
+            });
+        }
+
         function restoreBackup(filename, timestamp) {
             if (!confirm(`⚠️ Are you sure you want to restore from this backup?\n\nBackup: ${filename}\nTimestamp: ${timestamp}\n\nThis will replace the current alliance data.\nA backup of the current state will be created first.`)) {
                 return;

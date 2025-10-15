@@ -117,6 +117,10 @@ if (function_exists('get_key_rotation_status')) {
             background: #28a745;
             color: white;
         }
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
         .btn-danger { background: #e74c3c; color: white; }
         .btn-danger .timer {
             display: block;

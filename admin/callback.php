@@ -59,11 +59,13 @@ try {
 
     // Determine error type
     $error = 'invalid';
-    if (strpos($e->getMessage(), 'expired') !== false) {
+    $error_msg = $e->getMessage();
+
+    if (strpos($error_msg, 'expired') !== false) {
         $error = 'expired';
-    } elseif (strpos($e->getMessage(), 'revoked') !== false) {
+    } elseif (strpos($error_msg, 'revoked') !== false) {
         $error = 'used'; // Magic link already used
-    } elseif (strpos($e->getMessage(), 'key rotated') !== false) {
+    } elseif (strpos($error_msg, 'key rotated') !== false || strpos($error_msg, 'Invalid token signature') !== false) {
         $error = 'key_rotated';
     }
 

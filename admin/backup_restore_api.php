@@ -74,6 +74,27 @@ try {
             }
             break;
 
+        case 'manual_backup':
+            // Create manual backup
+            $reason = $_POST['reason'] ?? 'manual';
+
+            // Load current alliances data
+            $alliances = read_json_file(ALLIANCES_FILE);
+
+            // Create backup
+            $backup_file = backup_alliances($alliances, $user->sub, $reason);
+
+            if ($backup_file) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Manual backup created successfully',
+                    'filename' => basename($backup_file)
+                ]);
+            } else {
+                throw new Exception('Manual backup creation failed');
+            }
+            break;
+
         default:
             throw new Exception('Invalid action');
     }
