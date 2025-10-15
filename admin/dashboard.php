@@ -2,9 +2,14 @@
 /**
  * Admin Dashboard - Main interface for alliance and admin users
  *
- * @version 1.5.0
- * @date 2025-10-13
+ * @version 1.6.0
+ * @date 2025-10-15
  * @changelog
+ *   1.6.0 (2025-10-15) - Added powereditor role support
+ *                       - Header badge shows "R5/POWEREDITOR" or "R4/POWEREDITOR"
+ *                       - User management table shows powereditor flag in role column
+ *                       - Power editors can access Alliance Power Editor from Quick Links
+ *                       - Added Delete Alliance button for admins (calls alliance_delete_api.php)
  *   1.5.0 (2025-10-13) - Added PII protection for email addresses
  *                       - Emails masked by default (show first 2 chars + domain)
  *                       - Click-to-reveal functionality with eye icon in table
@@ -248,6 +253,8 @@ $user_alliances = $user_token->alliances;
                 </strong>
                 <?php
                 $role = $user_token->aud;
+                $is_powereditor = isset($user_token->powereditor) && $user_token->powereditor;
+
                 $badge_colors = [
                     'admin' => 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     'r5' => 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
@@ -255,7 +262,12 @@ $user_alliances = $user_token->alliances;
                     'alliance' => '#6c757d'
                 ];
                 $badge_color = $badge_colors[$role] ?? '#6c757d';
+
+                // Build role label with powereditor if applicable
                 $role_label = strtoupper($role);
+                if ($role !== 'admin' && $is_powereditor) {
+                    $role_label .= '/POWEREDITOR';
+                }
                 ?>
                 <span class="badge" style="background: <?= $badge_color ?>;"><?= $role_label ?></span>
             </div>
@@ -382,7 +394,15 @@ $user_alliances = $user_token->alliances;
                                     </span>
                                 </div>
                             </td>
-                            <td><?= htmlspecialchars($user['role']) ?></td>
+                            <td>
+                                <?php
+                                $display_role = htmlspecialchars($user['role']);
+                                if ($user['role'] !== 'admin' && isset($user['powereditor']) && $user['powereditor']) {
+                                    $display_role .= '/powereditor';
+                                }
+                                echo $display_role;
+                                ?>
+                            </td>
                             <td><?= htmlspecialchars(implode(', ', $user['alliances'])) ?></td>
                             <td>
                                 <span class="session-count" data-count="<?= count($active_sessions) ?>">
@@ -418,7 +438,7 @@ $user_alliances = $user_token->alliances;
         <h2>Quick Links</h2>
         <div class="actions">
             <a href="../index.html" class="btn btn-primary" target="_blank">View Public Site</a>
-            <?php if ($is_admin): ?>
+            <?php if ($is_admin || $is_powereditor): ?>
                 <a href="alliances_power.php" class="btn btn-success">⚡ Alliance Power Editor</a>
             <?php endif; ?>
         </div>
@@ -563,6 +583,15 @@ $user_alliances = $user_token->alliances;
                                 <?= is_r4_or_higher($user_token) ? 'Edit Alliance' : 'View/Sign Alliance' ?>
                             </a>
                         <?php endif; ?>
+                        <?php if ($is_admin): ?>
+                            <button
+                                class="btn btn-danger btn-small"
+                                onclick="deleteAlliance('<?= htmlspecialchars($alliance['tag'] ?? '', ENT_QUOTES) ?>')"
+                                title="Delete this alliance from the system"
+                            >
+                                Delete Alliance
+                            </button>
+                        <?php endif; ?>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -661,6 +690,43 @@ $user_alliances = $user_token->alliances;
             .catch(error => {
                 console.error('Error revoking tokens:', error);
                 alert('Failed to revoke sessions. Please try again.');
+            });
+        }
+
+        /**
+         * Delete an alliance from the system
+         */
+        function deleteAlliance(allianceTag) {
+            if (!confirm(`Are you sure you want to delete alliance "${allianceTag}"?\n\nThis action CANNOT be undone and will:\n- Remove the alliance from all data files\n- Delete all associated history and signatures\n- Impact the public site rankings\n\nType the alliance tag to confirm: ${allianceTag}`)) {
+                return;
+            }
+
+            const confirmTag = prompt(`Please type the alliance tag "${allianceTag}" to confirm deletion:`);
+            if (confirmTag !== allianceTag) {
+                alert('Alliance tag does not match. Deletion cancelled.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('action', 'delete_alliance');
+            formData.append('tag', allianceTag);
+
+            fetch('alliance_delete_api.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Successfully deleted alliance "${allianceTag}"`);
+                    location.reload();
+                } else {
+                    alert(`Error: ${data.error || 'Unknown error occurred'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting alliance:', error);
+                alert('Failed to delete alliance. Please try again.');
             });
         }
 

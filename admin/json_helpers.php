@@ -5,9 +5,11 @@
  * Provides secure read/write operations for JSON files with proper
  * file locking to prevent race conditions during concurrent access
  *
- * @version 1.0.0
- * @date 2025-10-12
+ * @version 1.1.0
+ * @date 2025-10-15
  * @changelog
+ *   1.1.0 (2025-10-15) - Added powereditor parameter to add_user() and update_user()
+ *                       - powereditor stored as boolean in users.json
  *   1.0.0 (2025-10-12) - Initial implementation with flock support
  */
 
@@ -173,11 +175,12 @@ function get_user_by_email($email) {
  * @param string $email User email
  * @param array $alliances Alliance tags user can access
  * @param string $role User role (admin, r5, or r4)
+ * @param bool $powereditor Power editor flag (can edit alliance power)
  * @return bool Success status
  */
-function add_user($email, $alliances, $role = 'r4') {
+function add_user($email, $alliances, $role = 'r4', $powereditor = false) {
     try {
-        return update_json_file(USERS_FILE, function(&$data) use ($email, $alliances, $role) {
+        return update_json_file(USERS_FILE, function(&$data) use ($email, $alliances, $role, $powereditor) {
             $email = strtolower(trim($email));
 
             // Check if user already exists
@@ -191,7 +194,8 @@ function add_user($email, $alliances, $role = 'r4') {
             $data['users'][] = [
                 'email' => $email,
                 'alliances' => $alliances,
-                'role' => $role
+                'role' => $role,
+                'powereditor' => $powereditor
             ];
 
             return true;
@@ -208,11 +212,12 @@ function add_user($email, $alliances, $role = 'r4') {
  * @param string $email User email
  * @param array $alliances New alliance tags
  * @param string $role New role
+ * @param bool $powereditor Power editor flag (can edit alliance power)
  * @return bool Success status
  */
-function update_user($email, $alliances, $role) {
+function update_user($email, $alliances, $role, $powereditor = false) {
     try {
-        return update_json_file(USERS_FILE, function(&$data) use ($email, $alliances, $role) {
+        return update_json_file(USERS_FILE, function(&$data) use ($email, $alliances, $role, $powereditor) {
             $email = strtolower(trim($email));
             $found = false;
 
@@ -220,6 +225,7 @@ function update_user($email, $alliances, $role) {
                 if (strtolower($user['email']) === $email) {
                     $user['alliances'] = $alliances;
                     $user['role'] = $role;
+                    $user['powereditor'] = $powereditor;
                     $found = true;
                     break;
                 }

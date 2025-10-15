@@ -2,9 +2,14 @@
 /**
  * Admin API - User management (admin and R5)
  *
- * @version 1.5.0
- * @date 2025-10-13
+ * @version 1.6.0
+ * @date 2025-10-15
  * @changelog
+ *   1.6.0 (2025-10-15) - Added powereditor role support
+ *                       - Checkbox for powereditor flag in add/edit forms (admin-only)
+ *                       - R5 users cannot grant powereditor access
+ *                       - Admin role users cannot have powereditor flag (automatic access)
+ *                       - Power editor checkbox hidden when admin role selected
  *   1.5.0 (2025-10-13) - Revoke all JWT tokens when user is deleted
  *                       - Blacklist all active_sessions before calling delete_user()
  *                       - Prevents deleted users from accessing system with existing tokens
@@ -62,6 +67,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'add') {
         }
 
         $role = $_POST['role'] ?? 'r4';
+        $powereditor = isset($_POST['powereditor']) && $_POST['powereditor'] === '1';
 
         // R5 validation: cannot create admin users or grant all alliances
         if ($is_r5) {
@@ -71,6 +77,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'add') {
                 $error = 'R5 users cannot grant access to all alliances';
             } elseif (!in_array($role, ['r5', 'r4'])) {
                 $error = 'R5 users can only create R5 or R4 users';
+            } elseif ($powereditor) {
+                $error = 'R5 users cannot grant power editor access';
             } else {
                 // R5 can only assign alliances they have access to
                 $r5_alliances = $user_token->alliances;
@@ -83,8 +91,13 @@ if (isset($_GET['action']) && $_GET['action'] === 'add') {
             }
         }
 
+        // Admins cannot have powereditor flag (they automatically have access)
+        if ($role === 'admin') {
+            $powereditor = false;
+        }
+
         if (!isset($error)) {
-            if (add_user($email, $alliances, $role)) {
+            if (add_user($email, $alliances, $role, $powereditor)) {
                 header('Location: dashboard.php');
                 exit;
             } else {
@@ -153,7 +166,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'add') {
             </div>
             <div class="form-group">
                 <label>Role:</label>
-                <select name="role">
+                <select name="role" id="role-select" onchange="updatePowerEditorVisibility()">
                     <option value="r4">R4 (Can edit all alliance data)</option>
                     <option value="r5">R5 (Can edit + sign rules)</option>
                     <?php if ($is_admin): ?>
@@ -161,9 +174,29 @@ if (isset($_GET['action']) && $_GET['action'] === 'add') {
                     <?php endif; ?>
                 </select>
             </div>
+            <?php if ($is_admin): ?>
+                <div class="form-group" id="powereditor-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="powereditor" value="1">
+                        <strong>Power Editor</strong> - Can edit all alliance power values (but cannot delete alliances)
+                    </label>
+                </div>
+            <?php endif; ?>
             <button type="submit">Add User</button>
             <a href="dashboard.php" class="btn-secondary">Cancel</a>
         </form>
+        <script>
+            function updatePowerEditorVisibility() {
+                const roleSelect = document.getElementById('role-select');
+                const powerEditorGroup = document.getElementById('powereditor-group');
+                if (powerEditorGroup) {
+                    // Hide power editor checkbox if admin is selected
+                    powerEditorGroup.style.display = (roleSelect.value === 'admin') ? 'none' : 'block';
+                }
+            }
+            // Initial check on page load
+            updatePowerEditorVisibility();
+        </script>
     </body>
     </html>
     <?php
@@ -235,6 +268,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
             }
 
             $role = $_POST['role'];
+            $powereditor = isset($_POST['powereditor']) && $_POST['powereditor'] === '1';
 
             // R5 validation: cannot change user to admin or grant all alliances
             if ($is_r5) {
@@ -244,6 +278,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
                     $error = 'R5 users cannot grant access to all alliances';
                 } elseif (!in_array($role, ['r5', 'r4'])) {
                     $error = 'R5 users can only manage R5 or R4 users';
+                } elseif ($powereditor) {
+                    $error = 'R5 users cannot grant power editor access';
                 } else {
                     // Check if trying to demote an R5 user to R4
                     if ($user['role'] === 'r5' && $role === 'r4') {
@@ -269,8 +305,13 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
                 }
             }
 
+            // Admins cannot have powereditor flag (they automatically have access)
+            if ($role === 'admin') {
+                $powereditor = false;
+            }
+
             if (!isset($error)) {
-                update_user($email, $alliances, $role);
+                update_user($email, $alliances, $role, $powereditor);
                 header('Location: dashboard.php');
                 exit;
             }
@@ -338,7 +379,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
             </div>
             <div class="form-group">
                 <label>Role:</label>
-                <select name="role">
+                <select name="role" id="role-select" onchange="updatePowerEditorVisibility()">
                     <option value="r4" <?= $user['role'] === 'r4' ? 'selected' : '' ?>>R4 (Can edit all alliance data)</option>
                     <option value="r5" <?= $user['role'] === 'r5' ? 'selected' : '' ?>>R5 (Can edit + sign rules)</option>
                     <?php if ($is_admin): ?>
@@ -346,10 +387,30 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
                     <?php endif; ?>
                 </select>
             </div>
+            <?php if ($is_admin): ?>
+                <div class="form-group" id="powereditor-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="powereditor" value="1" <?= (isset($user['powereditor']) && $user['powereditor']) ? 'checked' : '' ?>>
+                        <strong>Power Editor</strong> - Can edit all alliance power values (but cannot delete alliances)
+                    </label>
+                </div>
+            <?php endif; ?>
             <button type="submit" class="btn-primary">Update User</button>
             <button type="submit" name="delete" class="btn-danger" onclick="return confirm('Are you sure?')">Delete User</button>
             <a href="dashboard.php" class="btn-secondary">Cancel</a>
         </form>
+        <script>
+            function updatePowerEditorVisibility() {
+                const roleSelect = document.getElementById('role-select');
+                const powerEditorGroup = document.getElementById('powereditor-group');
+                if (powerEditorGroup) {
+                    // Hide power editor checkbox if admin is selected
+                    powerEditorGroup.style.display = (roleSelect.value === 'admin') ? 'none' : 'block';
+                }
+            }
+            // Initial check on page load
+            updatePowerEditorVisibility();
+        </script>
     </body>
     </html>
     <?php

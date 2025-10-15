@@ -1,0 +1,53 @@
+# Apache .htaccess Configuration for Admin Directory
+# Last War 1586 Server - Admin Panel Security
+
+# Deny direct access to users.json (contains PII - email addresses)
+<Files "users.json">
+    Require all denied
+</Files>
+
+# Deny direct access to blacklist.json (security data)
+<Files "blacklist.json">
+    Require all denied
+</Files>
+
+# Deny direct access to .env files (contains sensitive configuration)
+<Files ".env">
+    Require all denied
+</Files>
+
+# Allow PHP scripts to access these files internally
+# (The above rules only block direct HTTP requests)
+
+# Prevent directory listing
+Options -Indexes
+
+# Security Headers
+<IfModule mod_headers.c>
+    # Prevent clickjacking
+    Header always set X-Frame-Options "DENY"
+
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Enable XSS protection
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Referrer Policy
+    Header always set Referrer-Policy "no-referrer"
+
+    # Remove server signature
+    Header unset Server
+    Header unset X-Powered-By
+</IfModule>
+
+# Block common exploit attempts
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Block access to backup files
+    RewriteRule ^.*\.(bak|backup|old|swp|tmp)$ - [F,L]
+
+    # Block access to git files
+    RewriteRule ^\.git - [F,L]
+</IfModule>
