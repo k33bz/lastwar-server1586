@@ -207,8 +207,8 @@ include 'includes/header.php';
                     <?php foreach ($backups as $backup): ?>
                         <tr>
                             <td>
-                                <strong><?= htmlspecialchars(date('Y-m-d H:i:s', strtotime($backup['timestamp']))) ?></strong><br>
-                                <small style="color: #999;"><?= htmlspecialchars(time_ago($backup['timestamp'])) ?></small>
+                                <strong><?= isset($backup['timestamp']) ? htmlspecialchars(date('Y-m-d H:i:s', strtotime($backup['timestamp']))) : 'N/A' ?></strong><br>
+                                <small style="color: #999;"><?= isset($backup['timestamp']) ? htmlspecialchars(time_ago($backup['timestamp'])) : 'N/A' ?></small>
                             </td>
                             <td>
                                 <span class="backup-reason reason-<?= htmlspecialchars($backup['reason']) ?>">
@@ -216,12 +216,10 @@ include 'includes/header.php';
                                 </span>
                             </td>
                             <td>
-                                <span class="masked-email" data-email="<?= htmlspecialchars($backup['user']) ?>">
-                                    <script>document.write(maskEmail('<?= htmlspecialchars($backup['user']) ?>'));</script>
-                                </span>
+                                <?= emailDisplay($backup['user'] ?? 'unknown', true) ?>
                             </td>
-                            <td><?= htmlspecialchars($backup['alliance_count']) ?></td>
-                            <td><?= htmlspecialchars(format_bytes($backup['size'])) ?></td>
+                            <td><?= isset($backup['alliance_count']) ? htmlspecialchars($backup['alliance_count']) : '0' ?></td>
+                            <td><?= isset($backup['size']) ? htmlspecialchars(format_bytes($backup['size'])) : 'N/A' ?></td>
                             <td>
                                 <div class="actions">
                                     <button
