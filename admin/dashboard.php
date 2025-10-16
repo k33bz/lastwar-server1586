@@ -259,15 +259,19 @@ try {
                         <h3>📊 System Administration</h3>
                         <span class="card-badge system">System</span>
                     </div>
-                    <p>System maintenance and development utilities</p>
+                    <p>System maintenance and testing utilities</p>
                     <div class="action-buttons">
                         <a href="test_dependencies.php" class="btn btn-primary">
                             <span class="btn-icon">🔧</span>
                             System Check
                         </a>
+                        <a href="generate_test_token.php" class="btn btn-secondary">
+                            <span class="btn-icon">🔑</span>
+                            Generate Test Token
+                        </a>
                     </div>
                 </div>
-                
+
                 <div class="section-card development">
                     <div class="card-header">
                         <h3>🔧 Development Tools</h3>
