@@ -100,7 +100,7 @@ function send_rotation_notification($result) {
             }
         }
         
-        $subject = 'JWT Secret Key Rotated - Last War 1586 Admin';
+        $subject = 'JWT Secret Key Rotated - ' . ($_ENV['APP_NAME'] ?? 'Last War 1586 Admin');
         $message = "
 The JWT secret key has been automatically rotated as scheduled.
 
@@ -115,7 +115,7 @@ Users will need to log in again.
 This is an automated security measure.
 No action is required unless you notice any issues.
 
-Admin Panel: " . APP_URL . "/admin/key_rotation_admin_panel.php
+<?php echo $_ENV['APP_NAME'] ?? 'Admin Panel'; ?>: " . APP_URL . "/admin/key_rotation_admin_panel.php
         ";
         
         foreach ($admin_emails as $email) {

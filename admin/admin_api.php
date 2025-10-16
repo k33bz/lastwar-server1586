@@ -30,23 +30,25 @@
  *   1.0.0 (2025-10-12) - Initial implementation (admin only)
  */
 
-if (!defined('ADMIN_INIT')) {
-    define('ADMIN_INIT', true);
-}
-require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/jwt.php';
-require_once __DIR__ . '/json_helpers.php';
+// Require JWT authentication
+require_once 'jwt.php';
 
-// Require either admin or R5 session
-$user_token = require_jwt_session();
-$is_admin = ($user_token->aud === 'admin');
-$is_r5 = ($user_token->aud === 'r5');
+$user = require_jwt_session();
 
-// Only admin and R5 can access user management
-if (!$is_admin && !$is_r5) {
-    http_response_code(403);
-    die('Access denied. Admin or R5 privileges required.');
-}
+// Set page title for header
+$page_title = "User Management";
+
+// Use JWT user token
+$user_token = $user;
+
+$is_admin = ($user->aud === 'admin');
+$is_r5 = ($user->aud === 'r5');
+
+// Include proper helper functions
+require_once 'json_helpers.php';
+require_once 'audit_logger.php';
+
+define('ALLIANCES_FILE', __DIR__ . '/../data/alliances.json');
 
 // Load available alliances
 $alliances_data = read_json_file(ALLIANCES_FILE);
@@ -97,31 +99,86 @@ if (isset($_GET['action']) && $_GET['action'] === 'add') {
         }
 
         if (!isset($error)) {
-            if (add_user($email, $alliances, $role, $powereditor)) {
-                header('Location: dashboard.php');
-                exit;
-            } else {
-                $error = 'Failed to add user';
+            try {
+                $success = add_user_data($email, $alliances, $role, $powereditor);
+                if ($success) {
+                    log_audit_event('user_added', $user->sub, [
+                        'target_email' => $email,
+                        'role' => $role,
+                        'powereditor' => $powereditor,
+                        'alliances' => $alliances
+                    ]);
+                    header('Location: user_management.php?success=user_added');
+                    exit;
+                } else {
+                    $error = 'Failed to add user';
+                }
+            } catch (Exception $e) {
+                $error = $e->getMessage();
             }
         }
     }
+    // Include shared header
+    include 'includes/header.php';
     ?>
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Add User</title>
+
+    <div class="page-header">
+        <h1 class="page-title">👥 Add New User</h1>
+        <p class="page-description">Create a new user account with role and alliance assignments</p>
+    </div>
+
+    <div class="container">
         <style>
-            body { font-family: sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
-            .form-group { margin-bottom: 15px; }
-            label { display: block; margin-bottom: 5px; font-weight: bold; }
-            input[type="email"], select { width: 100%; padding: 8px; }
-            button { padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; }
-            .btn-secondary { padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; text-decoration: none; display: inline-block; margin-left: 10px; }
-            .btn-secondary:hover { background: #5a6268; }
-            .checkbox-group { border: 1px solid #ddd; padding: 15px; border-radius: 5px; max-height: 200px; overflow-y: auto; }
-            .checkbox-item { margin: 8px 0; }
-            .checkbox-item input { margin-right: 8px; }
-            .checkbox-all { background: #f0f0f0; padding: 10px; margin-bottom: 10px; border-radius: 3px; }
+            .container {
+                background: white;
+                padding: 2rem;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                margin-bottom: 2rem;
+                max-width: 800px;
+            }
+            .form-group { 
+                margin-bottom: 1.5rem; 
+            }
+            label { 
+                display: block; 
+                margin-bottom: 0.5rem; 
+                font-weight: 600;
+                color: #333;
+            }
+            input[type="email"], select { 
+                width: 100%; 
+                padding: 0.75rem;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 0.9rem;
+            }
+            .checkbox-group { 
+                border: 1px solid #ddd; 
+                padding: 1rem; 
+                border-radius: 4px; 
+                max-height: 200px; 
+                overflow-y: auto;
+                background: #f8f9fa;
+            }
+            .checkbox-item { 
+                margin: 0.5rem 0; 
+            }
+            .checkbox-item input { 
+                margin-right: 0.5rem; 
+            }
+            .checkbox-all { 
+                background: #e9ecef; 
+                padding: 0.75rem; 
+                margin-bottom: 0.75rem; 
+                border-radius: 4px;
+                font-weight: 600;
+            }
+            .actions {
+                margin-top: 2rem;
+                padding-top: 1rem;
+                border-top: 1px solid #eee;
+            }
         </style>
         <script>
             function toggleAllAlliances(checkbox) {
@@ -129,9 +186,6 @@ if (isset($_GET['action']) && $_GET['action'] === 'add') {
                 checkboxes.forEach(cb => cb.disabled = checkbox.checked);
             }
         </script>
-    </head>
-    <body>
-        <h1>Add New User</h1>
         <?php if (isset($error)): ?>
             <p style="color:red;"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
@@ -182,9 +236,13 @@ if (isset($_GET['action']) && $_GET['action'] === 'add') {
                     </label>
                 </div>
             <?php endif; ?>
-            <button type="submit">Add User</button>
-            <a href="dashboard.php" class="btn-secondary">Cancel</a>
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">Add User</button>
+                <a href="user_management.php" class="btn btn-secondary">← Back to Users</a>
+                <a href="dashboard.php" class="btn btn-secondary">Cancel</a>
+            </div>
         </form>
+        
         <script>
             function updatePowerEditorVisibility() {
                 const roleSelect = document.getElementById('role-select');
@@ -197,8 +255,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'add') {
             // Initial check on page load
             updatePowerEditorVisibility();
         </script>
-    </body>
-    </html>
+    </div>
+
+    <?php include 'includes/footer.php'; ?>
     <?php
     exit;
 }
@@ -206,14 +265,14 @@ if (isset($_GET['action']) && $_GET['action'] === 'add') {
 // Handle edit user
 if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email'])) {
     $email = $_GET['email'];
-    $user = get_user_by_email($email);
+    $user_data = get_user_by_email($email);
 
-    if (!$user) {
+    if (!$user_data) {
         die('User not found');
     }
 
     // R5 validation: cannot edit admin users
-    if ($is_r5 && $user['role'] === 'admin') {
+    if ($is_r5 && $user_data['role'] === 'admin') {
         http_response_code(403);
         die('R5 users cannot edit admin accounts');
     }
@@ -221,7 +280,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
     // R5 validation: can only edit users from their alliances
     if ($is_r5) {
         $r5_alliances = $user_token->alliances;
-        $target_alliances = $user['alliances'];
+        $target_alliances = $user_data['alliances'];
 
         // Check if R5 has access to at least one of target user's alliances
         $has_overlap = false;
@@ -241,23 +300,33 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['delete'])) {
             // R5 validation: cannot delete admin users
-            if ($is_r5 && $user['role'] === 'admin') {
+            if ($is_r5 && $user_data['role'] === 'admin') {
                 http_response_code(403);
                 die('R5 users cannot delete admin accounts');
             }
 
             // Revoke all JWT tokens for the user before deletion
-            if (isset($user['active_sessions']) && is_array($user['active_sessions'])) {
-                foreach ($user['active_sessions'] as $session) {
-                    if (isset($session['jti']) && isset($session['exp'])) {
-                        blacklist_token($session['jti'], $session['exp']);
-                    }
+            $active_sessions = get_active_sessions($email);
+            foreach ($active_sessions as $session) {
+                if (isset($session['jti']) && isset($session['exp'])) {
+                    blacklist_token($session['jti'], $session['exp']);
                 }
             }
 
-            delete_user($email);
-            header('Location: dashboard.php');
-            exit;
+            try {
+                $success = delete_user_data($email);
+                if ($success) {
+                    log_audit_event('user_deleted', $user->sub, [
+                        'target_email' => $email
+                    ]);
+                    header('Location: user_management.php?success=user_deleted');
+                    exit;
+                } else {
+                    $error = 'Failed to delete user';
+                }
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
         } else {
             // Get selected alliances from checkboxes
             $alliances = [];
@@ -282,7 +351,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
                     $error = 'R5 users cannot grant power editor access';
                 } else {
                     // Check if trying to demote an R5 user to R4
-                    if ($user['role'] === 'r5' && $role === 'r4') {
+                    if ($user_data['role'] === 'r5' && $role === 'r4') {
                         // Get logged-in user's email
                         $current_user_email = strtolower($user_token->sub);
 
@@ -311,42 +380,46 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
             }
 
             if (!isset($error)) {
-                update_user($email, $alliances, $role, $powereditor);
-                header('Location: dashboard.php');
-                exit;
+                try {
+                    $success = update_user_data($email, $alliances, $role, $powereditor);
+                    if ($success) {
+                        log_audit_event('user_updated', $user->sub, [
+                            'target_email' => $email,
+                            'role' => $role,
+                            'powereditor' => $powereditor,
+                            'alliances' => $alliances
+                        ]);
+                        header('Location: user_management.php?success=user_updated');
+                        exit;
+                    } else {
+                        $error = 'Failed to update user';
+                    }
+                } catch (Exception $e) {
+                    $error = $e->getMessage();
+                }
             }
         }
     }
 
-    $user_has_all = in_array('*', $user['alliances']);
+    $user_has_all = in_array('*', $user_data['alliances']);
+    
+    // Include shared header
+    include 'includes/header.php';
     ?>
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Edit User</title>
-        <style>
-            body { font-family: sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
-            .form-group { margin-bottom: 15px; }
-            label { display: block; margin-bottom: 5px; font-weight: bold; }
-            select { width: 100%; padding: 8px; }
-            button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
-            .btn-primary { background: #667eea; color: white; }
-            .btn-danger { background: #e74c3c; color: white; }
-            .btn-secondary { padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; text-decoration: none; display: inline-block; margin-left: 10px; }
-            .btn-secondary:hover { background: #5a6268; }
-            .checkbox-group { border: 1px solid #ddd; padding: 15px; border-radius: 5px; max-height: 200px; overflow-y: auto; }
-            .checkbox-item { margin: 8px 0; }
-            .checkbox-item input { margin-right: 8px; }
-            .checkbox-all { background: #f0f0f0; padding: 10px; margin-bottom: 10px; border-radius: 3px; }
-        </style>
+
+    <div class="page-header">
+        <h1 class="page-title">✏️ Edit User: <?= htmlspecialchars($email) ?></h1>
+        <p class="page-description">Modify user role and alliance assignments</p>
+    </div>
+
+    <div class="container">
         <script>
             function toggleAllAlliances(checkbox) {
                 const checkboxes = document.querySelectorAll('input[name="alliances[]"]');
                 checkboxes.forEach(cb => cb.disabled = checkbox.checked);
             }
         </script>
-    </head>
-    <body>
+
         <h1>Edit User: <?= htmlspecialchars($email) ?></h1>
         <?php if (isset($error)): ?>
             <p style="color:red;"><?= htmlspecialchars($error) ?></p>
@@ -368,7 +441,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
                         if ($is_r5 && !in_array($alliance['tag'], $user_token->alliances) && !in_array('*', $user_token->alliances)) {
                             continue;
                         }
-                        $is_checked = in_array($alliance['tag'], $user['alliances']);
+                        $is_checked = in_array($alliance['tag'], $user_data['alliances']);
                     ?>
                         <label class="checkbox-item">
                             <input type="checkbox" name="alliances[]" value="<?= htmlspecialchars($alliance['tag']) ?>" <?= $is_checked ? 'checked' : '' ?> <?= $user_has_all ? 'disabled' : '' ?>>
@@ -380,25 +453,29 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
             <div class="form-group">
                 <label>Role:</label>
                 <select name="role" id="role-select" onchange="updatePowerEditorVisibility()">
-                    <option value="r4" <?= $user['role'] === 'r4' ? 'selected' : '' ?>>R4 (Can edit all alliance data)</option>
-                    <option value="r5" <?= $user['role'] === 'r5' ? 'selected' : '' ?>>R5 (Can edit + sign rules)</option>
+                    <option value="r4" <?= $user_data['role'] === 'r4' ? 'selected' : '' ?>>R4 (Can edit all alliance data)</option>
+                    <option value="r5" <?= $user_data['role'] === 'r5' ? 'selected' : '' ?>>R5 (Can edit + sign rules)</option>
                     <?php if ($is_admin): ?>
-                        <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : '' ?>>Admin (Full access)</option>
+                        <option value="admin" <?= $user_data['role'] === 'admin' ? 'selected' : '' ?>>Admin (Full access)</option>
                     <?php endif; ?>
                 </select>
             </div>
             <?php if ($is_admin): ?>
                 <div class="form-group" id="powereditor-group">
                     <label class="checkbox-item">
-                        <input type="checkbox" name="powereditor" value="1" <?= (isset($user['powereditor']) && $user['powereditor']) ? 'checked' : '' ?>>
+                        <input type="checkbox" name="powereditor" value="1" <?= (isset($user_data['powereditor']) && $user_data['powereditor']) ? 'checked' : '' ?>>
                         <strong>Power Editor</strong> - Can edit all alliance power values (but cannot delete alliances)
                     </label>
                 </div>
             <?php endif; ?>
-            <button type="submit" class="btn-primary">Update User</button>
-            <button type="submit" name="delete" class="btn-danger" onclick="return confirm('Are you sure?')">Delete User</button>
-            <a href="dashboard.php" class="btn-secondary">Cancel</a>
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">Update User</button>
+                <button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete User</button>
+                <a href="user_management.php" class="btn btn-secondary">← Back to Users</a>
+                <a href="dashboard.php" class="btn btn-secondary">Cancel</a>
+            </div>
         </form>
+        
         <script>
             function updatePowerEditorVisibility() {
                 const roleSelect = document.getElementById('role-select');
@@ -411,8 +488,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
             // Initial check on page load
             updatePowerEditorVisibility();
         </script>
-    </body>
-    </html>
+    </div>
+
+    <?php include 'includes/footer.php'; ?>
     <?php
     exit;
 }

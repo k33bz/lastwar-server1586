@@ -47,6 +47,6 @@ if (file_exists(__DIR__ . '/secret_key_rotation.php')) {
 }
 
 echo "\n🎉 JWT Key Rotation System is now active!\n";
-echo "🔗 Access admin panel: key_rotation_admin_panel.php\n";
+echo "🔗 Access " . ($_ENV['APP_NAME'] ?? 'admin panel') . ": key_rotation_admin_panel.php\n";
 echo "📋 Setup cron jobs as documented in SECRET_KEY_ROTATION_SETUP.md\n";
 ?>

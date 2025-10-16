@@ -57,7 +57,7 @@ define('SMTP_PORT', (int)($_ENV['SMTP_PORT'] ?? 587));
 define('SMTP_USER', $_ENV['SMTP_USER'] ?? '');
 define('SMTP_PASS', $_ENV['SMTP_PASS'] ?? '');
 define('SMTP_FROM', $_ENV['SMTP_FROM'] ?? 'noreply@localhost');
-define('SMTP_FROM_NAME', $_ENV['SMTP_FROM_NAME'] ?? 'Last War 1586');
+define('SMTP_FROM_NAME', $_ENV['SMTP_FROM_NAME'] ?? ($_ENV['APP_NAME'] ?? 'Last War 1586'));
 
 // Application Configuration
 define('APP_URL', rtrim($_ENV['APP_URL'] ?? 'http://localhost', '/'));

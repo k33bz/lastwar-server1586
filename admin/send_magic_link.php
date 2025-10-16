@@ -48,10 +48,14 @@ try {
     $magic_link_url = APP_URL . '/admin/callback.php?token=' . $magic_token;
 
     // Send magic link email
-    send_magic_link_email($email, $magic_link_url);
+    $email_result = send_magic_link_email($email, $magic_link_url);
 
-    // Log successful send (optional)
-    error_log("Magic link sent to: $email");
+    if (!$email_result) {
+        throw new Exception("Email sending returned false");
+    }
+
+    // Log successful send
+    error_log("Magic link sent successfully to: $email");
 
     // Redirect with success message
     header('Location: login.php?success=sent');
@@ -59,7 +63,7 @@ try {
 
 } catch (Exception $e) {
     // Log error
-    error_log("Failed to send magic link to $email: " . $e->getMessage());
+    error_log("FAILED to send magic link to $email: " . $e->getMessage());
 
     // Redirect with error
     header('Location: login.php?error=send_failed');

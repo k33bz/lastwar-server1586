@@ -303,7 +303,7 @@ function send_emergency_rotation_notification($reason) {
             }
         }
         
-        $subject = 'SECURITY ALERT: Emergency JWT Key Rotation - Last War 1586';
+        $subject = 'SECURITY ALERT: Emergency JWT Key Rotation - ' . ($_ENV['APP_NAME'] ?? 'Last War 1586');
         $message = "
         SECURITY ALERT: Emergency JWT key rotation has been performed.
         

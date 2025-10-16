@@ -19,55 +19,49 @@
  *   1.0.0 (2025-10-14) - Initial implementation
  */
 
-require_once 'config.php';
+// Require JWT authentication and power editor access
 require_once 'jwt.php';
+require_once 'includes/email_utils.php';
 
 $user = require_jwt_session();
 
-// Allow admins or power editors
+// Check if user has power editor access (admin or powereditor flag)
 if (!is_power_editor($user)) {
-    header('Location: dashboard.php');
-    exit;
+    header('Location: dashboard.php?error=access_denied');
+    exit();
 }
+
+// Set page title for header
+$page_title = "Alliance Power Editor";
 
 // Check if user can delete alliances (admin only)
 $can_delete = can_delete_alliances($user);
+
+// Include shared header
+include 'includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alliance Power Editor - Last War 1586</title>
+
+<div class="page-header">
+    <h1 class="page-title">⚔️ Alliance Power Editor</h1>
+    <p class="page-description">Bulk edit alliance power values and manage alliance data</p>
+</div>
+
+<div class="container">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
             background: white;
             border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
             border-bottom: 2px solid #eee;
         }
 
@@ -79,6 +73,46 @@ $can_delete = can_delete_alliances($user);
         .user-info {
             color: #666;
             font-size: 14px;
+        }
+        
+        .email-text {
+            font-weight: normal;
+        }
+        
+        .email-masked {
+            font-family: monospace;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .email-toggle-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.2rem;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+            margin-left: 0.25rem;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .email-toggle-btn:hover {
+            background: rgba(0,0,0,0.1);
+        }
+        
+        .email-toggle-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: #666;
+            transition: fill 0.2s ease;
+        }
+        
+        .email-toggle-btn:hover svg {
+            fill: #333;
         }
 
         .actions {
@@ -301,8 +335,7 @@ $can_delete = can_delete_alliances($user);
             }
         }
     </style>
-</head>
-<body>
+
     <div class="container">
         <div class="header">
             <div>
@@ -310,14 +343,7 @@ $can_delete = can_delete_alliances($user);
                 <p style="color: #666; margin-top: 5px;">Manage alliance tags, names, and power values</p>
             </div>
             <div class="user-info">
-                Logged in as: <strong class="email-display email-hidden" data-email="<?= htmlspecialchars($user->sub) ?>" style="cursor: pointer;" onclick="toggleHeaderEmail(this)" title="Click to show/hide email">
-                    <?php
-                    // Mask user's email
-                    $parts = explode('@', $user->sub);
-                    $masked = substr($parts[0], 0, 1) . str_repeat('*', max(6, strlen($parts[0]) - 2)) . substr($parts[0], -1) . '@' . $parts[1];
-                    echo htmlspecialchars($masked);
-                    ?>
-                </strong>
+                Logged in as: <?php echo emailDisplay($user->sub, true); ?>
                 (<?php
                     $role_display = ucfirst($user->aud);
                     if ($user->aud !== 'admin' && isset($user->powereditor) && $user->powereditor) {
@@ -376,8 +402,27 @@ $can_delete = can_delete_alliances($user);
         </div>
     </div>
 
-    <script src="email_utils.js"></script>
     <script>
+        // Email toggle function
+        function toggleSingleEmail(button) {
+            var emailSpan = button.previousElementSibling;
+            var isShowingMasked = emailSpan.classList.contains('email-masked');
+            
+            if (isShowingMasked) {
+                // Show full email
+                emailSpan.textContent = emailSpan.dataset.email;
+                emailSpan.classList.remove('email-masked');
+                button.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>';
+                button.title = 'Hide email';
+            } else {
+                // Show masked email
+                emailSpan.textContent = emailSpan.dataset.masked;
+                emailSpan.classList.add('email-masked');
+                button.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
+                button.title = 'Show email';
+            }
+        }
+        
         const CAN_DELETE_ALLIANCES = <?= $can_delete ? 'true' : 'false' ?>;
         let alliances = [];
         let deletedIndices = []; // Track indices of deleted alliances
@@ -713,5 +758,6 @@ $can_delete = can_delete_alliances($user);
             return div.innerHTML;
         }
     </script>
-</body>
-</html>
+</div>
+
+<?php include 'includes/footer.php'; ?>

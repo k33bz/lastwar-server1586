@@ -86,7 +86,9 @@ function send_magic_link_email($to, $magic_link_url, $username = null) {
     if ($username === null) {
         $username = explode('@', $to)[0];
     }
-    $subject = 'Your Login Link for Last War 1586 Admin';
+    $app_name = $_ENV['APP_NAME'] ?? 'Last War 1586 Admin';
+    $app_name_short = $_ENV['APP_NAME'] ?? 'Last War 1586';
+    $subject = 'Your Login Link for ' . $app_name;
 
     $html_body = <<<EOT
 <!DOCTYPE html>
@@ -246,13 +248,13 @@ function send_magic_link_email($to, $magic_link_url, $username = null) {
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔐 Last War 1586</h1>
+            <h1>🔐 $app_name_short</h1>
             <div class="header-badge">ADMIN LOGIN REQUEST</div>
         </div>
 
         <div class="content">
             <p><strong>Hello $username,</strong></p>
-            <p>You requested access to the Last War 1586 Admin Dashboard. Click the button below to securely log in:</p>
+            <p>You requested access to the $app_name Dashboard. Click the button below to securely log in:</p>
         </div>
 
         <div class="button-container">
@@ -281,7 +283,7 @@ function send_magic_link_email($to, $magic_link_url, $username = null) {
 
         <div class="footer">
             <p>Best regards,</p>
-            <p><strong>The Last War 1586 Admin Team</strong></p>
+            <p><strong>The $app_name Team</strong></p>
             <p style="font-size: 12px; color: #999; margin-top: 15px;">This email was sent to $to</p>
         </div>
     </div>
@@ -299,7 +301,8 @@ EOT;
  * @return bool Success status
  */
 function send_test_email($to) {
-    $subject = 'Last War 1586 Admin - SMTP Test Email';
+    $app_name = $_ENV['APP_NAME'] ?? 'Last War 1586 Admin';
+    $subject = $app_name . ' - SMTP Test Email';
 
     $html_body = <<<EOT
 <!DOCTYPE html>
@@ -424,7 +427,7 @@ function send_test_email($to) {
         </div>
 
         <div class="footer">
-            <p>Best regards,<br><strong>The Last War 1586 Admin Team</strong></p>
+            <p>Best regards,<br><strong>The $app_name Team</strong></p>
             <p style="font-size: 12px; color: #999;">Test email sent to $to</p>
         </div>
     </div>

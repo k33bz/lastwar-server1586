@@ -49,10 +49,10 @@ if (!isset($user)) {
                         <a href="user_management.php" class="quick-action">
                             👥 User Management
                         </a>
-                        <a href="audit_log_viewer.php" class="quick-action">
+                        <a href="security_audit.php" class="quick-action">
                             📋 Audit Logs
                         </a>
-                        <a href="backup_restore.php" class="quick-action">
+                        <a href="security_backups.php" class="quick-action">
                             💾 Backups
                         </a>
                         <a href="security_monitor.php" class="quick-action">
@@ -79,10 +79,10 @@ if (!isset($user)) {
                     <h4>System Info</h4>
                     <div class="system-info">
                         <div class="info-item">
-                            <strong>Version:</strong> v2.1.0
+                            <strong>Version:</strong> v3.0.0
                         </div>
                         <div class="info-item">
-                            <strong>Last Updated:</strong> Oct 15, 2025
+                            <strong>Last Updated:</strong> Oct 16, 2025
                         </div>
                         <div class="info-item">
                             <strong>Security Level:</strong> <span class="security-high">Enterprise</span>
@@ -96,8 +96,8 @@ if (!isset($user)) {
                     <p>&copy; <?php echo date('Y'); ?> <?php echo $_ENV['APP_NAME'] ?? 'Admin Panel'; ?>. All rights reserved.</p>
                 </div>
                 <div class="footer-links">
-                    <a href="../documentation/" target="_blank">Documentation</a>
-                    <a href="../support/" target="_blank">Support</a>
+                    <a href="https://github.com/k33bz/lastwar-server1586" target="_blank">GitHub Repository</a>
+                    <a href="https://github.com/k33bz/lastwar-server1586/issues" target="_blank">Report Issue</a>
                     <a href="#" onclick="showSecurityInfo()">Security Info</a>
                 </div>
             </div>

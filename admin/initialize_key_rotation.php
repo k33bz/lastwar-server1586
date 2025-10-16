@@ -38,7 +38,7 @@ try {
     }
     
     echo "\n🎉 JWT Key Rotation System is ready!\n";
-    echo "🔗 Admin panel: key_rotation_admin_panel.php\n";
+    echo "🔗 " . ($_ENV['APP_NAME'] ?? 'Admin panel') . ": key_rotation_admin_panel.php\n";
     echo "📋 Don't forget to set up cron jobs:\n";
     echo "   0 2 * * * php " . __DIR__ . "/cron_key_rotation.php\n";
     echo "   0 * * * * php " . __DIR__ . "/cron_token_cleanup.php\n";

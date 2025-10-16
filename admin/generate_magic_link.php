@@ -69,7 +69,7 @@ $users_data = read_json_file(USERS_FILE);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generate Magic Link - Last War 1586 Admin</title>
+    <title>Generate Magic Link - <?php echo $_ENV['APP_NAME'] ?? 'Last War 1586 Admin'; ?></title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {

@@ -69,6 +69,22 @@ switch ($action) {
         fclose($output);
         exit;
 
+    case 'raw':
+        // Return raw JSON log file content
+        $audit_file = __DIR__ . '/audit_log.json';
+        
+        if (file_exists($audit_file)) {
+            header('Content-Type: application/json');
+            echo file_get_contents($audit_file);
+        } else {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'logs' => [],
+                'message' => 'No audit log file found'
+            ]);
+        }
+        exit;
+
     default:
         http_response_code(400);
         echo json_encode(['error' => 'Invalid action']);

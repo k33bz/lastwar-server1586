@@ -38,6 +38,7 @@ try {
     require_once 'json_helpers.php';
     require_once 'audit_logger.php';
     require_once 'csv_helpers.php';
+    require_once 'includes/alliance_helper.php';
 } catch (Exception $e) {
     http_response_code(500);
     header('Content-Type: application/json');
@@ -149,8 +150,8 @@ try {
         // Save updated alliances
         json_write($alliances_file, $alliances);
 
-        // Append power snapshot to CSV with datetime
-        append_power_snapshot($alliances);
+        // Update CSV using helper (more comprehensive than append_power_snapshot)
+        AllianceHelper::updateAllianceCSV($alliances);
 
         // Log audit event with changes
         log_audit_event('edit_alliance_power', $user->sub, [
@@ -278,6 +279,56 @@ try {
         ]);
 
         echo json_encode(['success' => true, 'message' => "Alliance '{$deletedTag}' deleted successfully"]);
+        break;
+
+    case 'update_single_power':
+        // Update single alliance power using helper
+        $input = json_decode(file_get_contents('php://input'), true);
+        
+        if (!isset($input['tag']) || !isset($input['power'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Tag and power required']);
+            exit;
+        }
+        
+        $tag = trim($input['tag']);
+        $new_power = (int)$input['power'];
+        
+        if ($new_power < 0) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Power cannot be negative']);
+            exit;
+        }
+        
+        // Use helper to update power (handles CSV, history, etc.)
+        $result = AllianceHelper::updateAlliancePower($tag, $new_power, $user);
+        
+        if (!$result['success']) {
+            http_response_code(400);
+            echo json_encode(['error' => $result['error']]);
+            exit;
+        }
+        
+        // Log audit event
+        log_audit_event('update_single_alliance_power', $user->sub, [
+            'alliance_tag' => $tag,
+            'old_power' => $result['old_power'],
+            'new_power' => $result['new_power'],
+            'power_change' => $result['power_change'],
+            'new_rank' => $result['new_rank']
+        ]);
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Alliance power updated successfully',
+            'data' => [
+                'alliance_tag' => $tag,
+                'old_power' => $result['old_power'],
+                'new_power' => $result['new_power'],
+                'power_change' => $result['power_change'],
+                'new_rank' => $result['new_rank']
+            ]
+        ]);
         break;
 
         default:

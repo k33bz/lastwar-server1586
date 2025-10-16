@@ -158,50 +158,20 @@ function sanitize_filename($filename) {
 }
 
 /**
- * Get audit logs with filtering and pagination
+ * Get recent audit logs for display
  *
- * @param array $filters Filters (user, action, date_from, date_to)
  * @param int $limit Number of logs to return
- * @param int $offset Offset for pagination
- * @return array Array of log entries
+ * @return array Array of recent log entries
  */
-function get_audit_logs($filters = [], $limit = 100, $offset = 0) {
+function get_recent_audit_logs($limit = 10) {
     try {
         $data = read_json_file(AUDIT_LOG_FILE);
         $logs = $data['logs'] ?? [];
 
-        // Apply filters
-        if (!empty($filters['user'])) {
-            $logs = array_filter($logs, function($log) use ($filters) {
-                return stripos($log['user'], $filters['user']) !== false;
-            });
-        }
-
-        if (!empty($filters['action'])) {
-            $logs = array_filter($logs, function($log) use ($filters) {
-                return $log['action'] === $filters['action'];
-            });
-        }
-
-        if (!empty($filters['date_from'])) {
-            $logs = array_filter($logs, function($log) use ($filters) {
-                return $log['timestamp'] >= $filters['date_from'];
-            });
-        }
-
-        if (!empty($filters['date_to'])) {
-            $logs = array_filter($logs, function($log) use ($filters) {
-                return $log['timestamp'] <= $filters['date_to'];
-            });
-        }
-
-        // Re-index array after filtering
-        $logs = array_values($logs);
-
-        // Apply pagination
-        return array_slice($logs, $offset, $limit);
+        // Return most recent logs
+        return array_slice($logs, 0, $limit);
     } catch (Exception $e) {
-        error_log("Failed to get audit logs: " . $e->getMessage());
+        error_log("Failed to get recent audit logs: " . $e->getMessage());
         return [];
     }
 }

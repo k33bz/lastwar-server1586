@@ -21,7 +21,7 @@ add_rotation_headers($user);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Last War 1586 Admin</title>
+    <title>Dashboard - <?php echo $_ENV['APP_NAME'] ?? 'Last War 1586 Admin'; ?></title>
     <!-- Include rotation JavaScript -->
     <?= get_rotation_javascript() ?>
 </head>

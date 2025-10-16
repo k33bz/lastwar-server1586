@@ -14,6 +14,65 @@ define('ADMIN_INIT', true);
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/jwt.php';
 
+// Handle magic link authentication
+if (isset($_GET['magic'])) {
+    $magic_token = $_GET['magic'];
+    $magic_links_file = __DIR__ . '/magic_links.json';
+    
+    if (file_exists($magic_links_file)) {
+        $magic_links = json_decode(file_get_contents($magic_links_file), true) ?? [];
+        
+        if (isset($magic_links[$magic_token])) {
+            $link_data = $magic_links[$magic_token];
+            
+            // Check if link is still valid
+            if ($link_data['expires_at'] > time() && !$link_data['used']) {
+                // Mark link as used
+                $magic_links[$magic_token]['used'] = true;
+                file_put_contents($magic_links_file, json_encode($magic_links, JSON_PRETTY_PRINT));
+                
+                // Get user data
+                require_once 'json_helpers.php';
+                $user_data = get_user_by_email($link_data['email']);
+                
+                if ($user_data) {
+                    // Create JWT token
+                    $jwt_payload = [
+                        'sub' => $user_data['email'],
+                        'aud' => $user_data['role'],
+                        'alliances' => $user_data['alliances'],
+                        'powereditor' => $user_data['powereditor'] ?? false,
+                        'iat' => time(),
+                        'exp' => time() + (8 * 60 * 60), // 8 hours
+                        'jti' => bin2hex(random_bytes(16))
+                    ];
+                    
+                    $jwt_token = create_jwt($jwt_payload);
+                    set_session_cookie($jwt_token);
+                    
+                    // Log the login
+                    require_once 'audit_logger.php';
+                    log_audit_event('magic_link_login', $user_data['email'], [
+                        'created_by' => $link_data['created_by'],
+                        'ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'unknown'
+                    ]);
+                    
+                    header('Location: dashboard.php');
+                    exit;
+                } else {
+                    $error = 'unknown_email';
+                }
+            } else {
+                $error = 'expired';
+            }
+        } else {
+            $error = 'invalid';
+        }
+    } else {
+        $error = 'invalid';
+    }
+}
+
 // If already logged in, redirect to dashboard
 if (isset($_COOKIE['jwt'])) {
     try {
@@ -49,7 +108,7 @@ $success_messages = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Last War 1586</title>
+    <title>Admin Login - <?php echo $_ENV['APP_NAME'] ?? 'Last War 1586'; ?></title>
     <style>
         * {
             margin: 0;
@@ -184,7 +243,7 @@ $success_messages = [
 </head>
 <body>
     <div class="login-container">
-        <h1>Last War 1586</h1>
+        <h1><?php echo $_ENV['APP_NAME'] ?? 'Last War 1586'; ?></h1>
         <p class="subtitle">Alliance Admin Portal</p>
 
         <?php if ($error && isset($error_messages[$error])): ?>
