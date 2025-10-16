@@ -25,34 +25,10 @@ if ($user->aud !== 'admin') {
 // Set page title for header
 $page_title = "Backup & Restore";
 
-// Mock function to get backups
-function get_alliance_backups($limit = 100) {
-    $backup_dir = __DIR__ . '/backups';
-    $backups = [];
-    
-    if (is_dir($backup_dir)) {
-        $files = glob($backup_dir . '/alliances_*.json');
-        rsort($files); // Most recent first
-        
-        foreach (array_slice($files, 0, $limit) as $file) {
-            $filename = basename($file);
-            if (preg_match('/alliances_(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})_(.+)\.json/', $filename, $matches)) {
-                $backups[] = [
-                    'file' => $filename,
-                    'path' => $file,
-                    'timestamp' => $matches[1],
-                    'reason' => $matches[2],
-                    'size' => filesize($file),
-                    'date' => filemtime($file)
-                ];
-            }
-        }
-    }
-    
-    return $backups;
-}
+// Load audit logger for backup functions
+require_once __DIR__ . '/audit_logger.php';
 
-// Get backups
+// Get backups (function is defined in audit_logger.php)
 $backups = get_alliance_backups(100);
 
 // Include shared header
