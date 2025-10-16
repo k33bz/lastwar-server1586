@@ -1,5 +1,10 @@
 # Admin Panel Shared Components
 
+## 📍 Navigation
+- **← Back to Admin**: [../README.md](../README.md)
+- **← Back to Main**: [../../README.md](../../README.md)
+- **📚 Full Documentation**: [../../DOCUMENTATION.md](../../DOCUMENTATION.md)
+
 ## Overview
 This directory contains shared header and footer components for the admin panel to ensure consistent design and functionality across all admin pages.
 
@@ -194,4 +199,16 @@ Add page-specific styles after including the header:
 
 **Mobile display issues**
 - Test viewport meta tag is not overridden
-- Ensure content fits within responsive breakpoints
+- Ensure content fits within responsive breakpoints---
+
+
+## 📞 Support & Contact
+
+For questions about shared components:
+- **Admin Documentation**: [../README.md](../README.md)
+- **Main Documentation**: [../../README.md](../../README.md)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/username/your-repo/issues)
+
+---
+
+**Version**: 3.0.0 | **Last Updated**: October 16, 2025 | **Part of**: [Server 1586 Admin System](../README.md)

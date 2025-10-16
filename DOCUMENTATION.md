@@ -1,6 +1,6 @@
 # Server 1586 - Complete Documentation Index
 
-**Version:** 2.1.0
+**Version:** 3.0.0
 **Last Updated:** October 16, 2025
 **Repository:** [lastwar-server1586](https://github.com/k33bz/lastwar-server1586)
 
@@ -276,15 +276,19 @@ See [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md) for detailed secu
 - **Security Changelog:** [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md)
 - **Version Summary:** [admin/VERSION_SUMMARY.md](admin/VERSION_SUMMARY.md)
 
-### Current Version: 2.1.0
+### Current Version: 3.0.0
 **Major Features:**
 - JWT authentication with magic links
-- Secret key rotation system
-- Audit logging
-- Backup & restore
-- Email masking for PII
+- Multi-factor authentication (TOTP, backup codes, hardware keys)
+- Advanced security monitoring and threat detection
+- Real-time audit logging with viewer
+- Automatic backup & restore system
+- JWT key rotation with emergency capabilities
+- Email masking for PII protection
 - Power Editor (APE) role
-- Security monitoring
+- Device management and registration
+- Rate limiting and IP blocking
+- Security management dashboard
 - Shared components (header, footer, styles, scripts)
 
 ---

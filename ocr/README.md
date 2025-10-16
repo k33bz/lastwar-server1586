@@ -1,6 +1,12 @@
-# OCR Work - Alliance R5 Name Recognition
+# OCR System - Alliance R5 Name Recognition
 
-This folder contains OCR (Optical Character Recognition) work for automatically extracting alliance R5 names from Last War screenshots.
+Advanced OCR (Optical Character Recognition) system for automatically extracting alliance R5 names from Last War screenshots.
+
+## 📍 Navigation
+- **← Back to Main**: [../README.md](../README.md)
+- **📚 Full Documentation**: [../DOCUMENTATION.md](../DOCUMENTATION.md)
+- **🔧 Admin Panel**: [../admin/README.md](../admin/README.md)
+- **📊 Training Data**: [training_data/README.md](training_data/README.md)
 
 ## 📋 Documentation
 
@@ -163,3 +169,15 @@ cat reports/baseline_accuracy.json
 **Last Updated:** October 14, 2025
 **Status:** Phase 1 Complete ✅
 **Next Milestone:** 50 training examples for Phase 2
+---
+
+## 📞 Support & Contact
+
+For questions about OCR and image processing:
+- **Main Documentation**: [../README.md](../README.md)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/username/your-repo/issues)
+- **Training Data**: [training_data/README.md](training_data/README.md)
+
+---
+
+**Version**: 3.0.0 | **Last Updated**: October 16, 2025 | **Part of**: [Server 1586 Project](../README.md)

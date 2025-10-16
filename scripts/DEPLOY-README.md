@@ -2,6 +2,12 @@
 
 This guide explains how to deploy the Server 1586 website to your hosting provider using FTP with credentials stored in Windows Credential Manager.
 
+## 📍 Navigation
+- **← Back to Scripts**: [README.md](README.md)
+- **← Back to Main**: [../README.md](../README.md)
+- **📚 Full Documentation**: [../DOCUMENTATION.md](../DOCUMENTATION.md)
+- **🔧 Admin Deployment**: [../admin/DEPLOYMENT.md](../admin/DEPLOYMENT.md)
+
 ## Prerequisites
 
 Install required Python packages:

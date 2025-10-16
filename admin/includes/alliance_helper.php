@@ -7,13 +7,13 @@
  * @date 2025-10-15
  */
 
-require_once 'json_helpers.php';
+require_once __DIR__ . '/../json_helpers.php';
 
 class AllianceHelper {
     
-    private static $alliances_file = __DIR__ . '/../data/alliances.json';
-    private static $csv_file = __DIR__ . '/../data/alliances.csv';
-    private static $history_file = __DIR__ . '/../data/alliance_history.json';
+    private static $alliances_file = __DIR__ . '/../../data/alliances.json';
+    private static $csv_file = __DIR__ . '/../../data/alliances.csv';
+    private static $history_file = __DIR__ . '/../../data/alliance_history.json';
     
     /**
      * Load alliances data from JSON file

@@ -7,8 +7,8 @@ Official website for Server 1586 alliance management, council voting, and server
 **Live Website**: [https://www.example.com](https://www.example.com)
 **GitHub Repository**: [https://github.com/username/your-repo](https://github.com/username/your-repo)
 
-**Version**: 2.0.0
-**Last Updated**: October 14, 2025
+**Version**: 3.0.0
+**Last Updated**: October 16, 2025
 
 > **Note**: The website automatically redirects HTTP to HTTPS and adds www. prefix for security and consistency.
 
@@ -18,6 +18,8 @@ Official website for Server 1586 alliance management, council voting, and server
 
 - [Features](#features)
 - [Project Structure](#project-structure)
+- [Quick Start](#quick-start)
+- [Documentation Index](#documentation-index)
 - [Setup & Installation](#setup--installation)
 - [Deployment](#deployment)
 - [Council Rotation System](#council-rotation-system)
@@ -29,6 +31,7 @@ Official website for Server 1586 alliance management, council voting, and server
 
 ## ✨ Features
 
+### Public Website
 - **Alliance Rankings**: Display top 15 alliances with podium design for top 3
 - **Council Voting System**: Rotating council members (ranks 6-15) with automatic weekly rotation
 - **Server Rules**: Collapsible rules section with amendment history tracking
@@ -36,8 +39,18 @@ Official website for Server 1586 alliance management, council voting, and server
 - **Responsive Design**: Mobile-friendly interface with optimized layouts
 - **Fair Rotation Algorithm**: Ensures all alliances get equal representation over time
 - **Power Trends Chart**: Time-based alliance power visualization with accurate date spacing
-- **Rotation Schedule Metadata**: Displays last-generated timestamp and change detection
 - **Alliance Data Schema**: Comprehensive documentation for expandable alliance profiles
+
+### Admin Panel (v3.0.0)
+- **JWT Authentication**: Passwordless magic link login system
+- **Role-Based Access**: Admin, R5, R4, and Power Editor (APE) roles
+- **Multi-Factor Authentication**: TOTP support with backup codes
+- **Secret Key Rotation**: Automatic 30-day JWT key rotation with emergency rotation
+- **Security Monitoring**: Real-time threat detection and IP blocking
+- **Audit Logging**: Comprehensive security event tracking with real-time viewer
+- **Backup & Restore**: Automatic backups with point-in-time recovery
+- **Email Masking**: PII protection for user data
+- **Alliance Management**: Full CRUD operations for alliance data
 
 ---
 
@@ -45,40 +58,96 @@ Official website for Server 1586 alliance management, council voting, and server
 
 ```
 Server1586/
-├── index.html              # Main HTML page (v1.5.0)
+├── index.html              # Main public website entry point
+├── index.php               # PHP redirect handler
+├── login.php               # Public login page
+├── logout.php              # Public logout handler
 ├── css/
 │   └── styles.css          # Main stylesheet (v1.3.2)
 ├── js/
-│   └── app.js              # Main application logic (v1.9.3)
+│   └── app.js              # Main application logic (v2.0.0)
 ├── data/
-│   ├── alliances.json      # Alliance data without rank fields (ranks calculated dynamically)
+│   ├── alliances.json      # Alliance data (power-based ranking)
 │   ├── rules.json          # Server rules
 │   ├── amendments.json     # Rule amendment history
-│   ├── rotation-schedule.json  # Pre-generated rotation schedule with metadata
+│   ├── rotation-schedule.json  # Pre-generated rotation schedule
 │   ├── council.js          # Council utility functions (v2.0.0)
 │   ├── power-history.csv   # Alliance power trends over time
 │   ├── server-info.json    # Server Discord and metadata
-│   ├── signature-history.json  # R5 leadership and signature tracking
+│   ├── signature-history.json  # R5 leadership tracking
 │   └── ALLIANCE_SCHEMA.md  # Alliance data structure documentation
+├── admin/                  # PHP Admin Panel (v3.0.0)
+│   ├── config.php          # Environment and dependency loading
+│   ├── jwt.php             # JWT token management
+│   ├── mailer.php          # Email functionality
+│   ├── dashboard.php       # Main admin interface
+│   ├── security_*.php      # Security management tools
+│   ├── *_api.php           # API endpoints for data management
+│   ├── users.json          # User permissions and roles
+│   ├── includes/           # Shared PHP components
+│   ├── vendor/             # Composer dependencies
+│   ├── .env                # Environment configuration (NOT in git)
+│   └── composer.json       # PHP dependencies
 ├── scripts/
-│   ├── deploy-ftp.py       # FTP deployment script (local)
-│   ├── deploy-ftp-ci.py    # FTP deployment script (CI/CD)
-│   ├── validate-csv.py     # CSV format validator
+│   ├── deploy-ftp.py       # FTP deployment script
 │   ├── update-rotation-schedule.py  # Schedule generator (v2.2.0)
-│   ├── merge-signature-history.py  # R5 history merger
 │   ├── run-tests.py        # Unit test runner
-│   ├── DEPLOY-README.md    # Deployment guide
 │   └── README.md           # Scripts documentation
+├── ocr/                    # OCR training and processing
+│   ├── process-screenshots-v3.py  # Screenshot processor (v3.0.0)
+│   ├── training_data/      # OCR training datasets
+│   └── README.md           # OCR documentation
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml      # GitHub Actions CI/CD workflow
-├── images/                 # Screenshots and assets
+├── images/                 # Static assets and logos
+├── .kiro/steering/         # AI assistant guidance files
 ├── .ftpignore             # FTP deployment exclusions
 ├── .gitignore             # Git exclusions
-├── CICD-SETUP.md          # CI/CD setup guide
-├── CLAUDE.md              # Developer documentation
 └── README.md              # This file
 ```
+
+---
+
+## 🚀 Quick Start
+
+### For Users
+- **Live Website**: [https://www.example.com](https://www.example.com)
+- **Admin Login**: [https://www.example.com/admin/login.php](https://www.example.com/admin/login.php)
+
+### For Developers
+- **Frontend Setup**: See [Setup & Installation](#setup--installation) below
+- **Admin Panel Setup**: See [admin/README.md](admin/README.md)
+- **Deployment Guide**: See [DEPLOYMENT.md](admin/DEPLOYMENT.md)
+
+### For Contributors
+- **Development Guide**: See [CLAUDE.md](CLAUDE.md)
+- **Complete Documentation**: See [DOCUMENTATION.md](DOCUMENTATION.md)
+
+---
+
+## 📚 Documentation Index
+
+### Core Documentation
+- **[README.md](README.md)** - This file (main overview)
+- **[DOCUMENTATION.md](DOCUMENTATION.md)** - Complete documentation index
+- **[CLAUDE.md](CLAUDE.md)** - Developer guide and architecture
+
+### Component Documentation
+- **[admin/README.md](admin/README.md)** - Admin panel (v3.0.0)
+- **[scripts/README.md](scripts/README.md)** - Automation scripts
+- **[ocr/README.md](ocr/README.md)** - OCR processing system
+- **[data/ALLIANCE_SCHEMA.md](data/ALLIANCE_SCHEMA.md)** - Data structure documentation
+
+### Setup & Deployment
+- **[admin/DEPLOYMENT.md](admin/DEPLOYMENT.md)** - Production deployment guide
+- **[CICD-SETUP.md](CICD-SETUP.md)** - GitHub Actions setup
+- **[admin/setup-local-env.md](admin/setup-local-env.md)** - Local development setup
+
+### Specialized Guides
+- **[admin/ADMIN_FUNCTIONALITY.md](admin/ADMIN_FUNCTIONALITY.md)** - Admin panel features
+- **[admin/ALLIANCE_MANAGEMENT_GUIDE.md](admin/ALLIANCE_MANAGEMENT_GUIDE.md)** - Alliance management
+- **[admin/SECRET_KEY_ROTATION_SETUP.md](admin/SECRET_KEY_ROTATION_SETUP.md)** - Security setup
 
 ---
 
@@ -97,22 +166,36 @@ Server1586/
    cd Server1586
    ```
 
-2. **Start local web server**:
+2. **Start local web server** (frontend):
    ```bash
    python -m http.server 8000
    ```
 
-3. **Open in browser**:
+3. **Setup admin panel** (optional):
+   ```bash
+   cd admin
+   composer install
+   cp .env.example .env
+   # Edit .env with your configuration
+   php -S localhost:8080
    ```
-   http://localhost:8000
+
+4. **Open in browser**:
+   ```
+   Frontend: http://localhost:8000
+   Admin Panel: http://localhost:8080
    ```
 
-### Install Python Dependencies
+### Install Dependencies
 
-For deployment and schedule management:
-
+**Python** (for deployment and schedule management):
 ```bash
 pip install pywin32
+```
+
+**PHP** (for admin panel):
+```bash
+cd admin && composer install
 ```
 
 ---
@@ -275,11 +358,13 @@ The project uses semantic versioning:
 - **Patch** (1.0.X): Bug fixes or minor improvements
 
 Current versions:
-- Website: **2.0.0**
+- Website: **3.0.0**
+- Admin Panel: **3.0.0**
 - JavaScript: **2.0.0**
 - CSS: **1.3.2**
 - Council: **2.0.0**
 - Schedule Script: **2.2.0**
+- OCR Processor: **3.0.0**
 
 ### Key Technologies
 
@@ -339,5 +424,21 @@ For questions or issues, contact the server administrators.
 
 ---
 
-**Last Updated**: October 14, 2025
-**Maintained by**: Server 1586 Council
+---
+
+## 📞 Support & Contact
+
+For questions, issues, or contributions:
+- **GitHub Issues**: [Report bugs or request features](https://github.com/username/your-repo/issues)
+- **Server Discord**: [Join Server 1586 Discord](https://discord.gg/e53v2Dnp)
+- **Admin Contact**: Contact server administrators
+
+---
+
+## 📄 License
+
+This project is private and intended for Server 1586 alliance management only.
+
+---
+
+**Version**: 3.0.0 | **Last Updated**: October 16, 2025 | **Maintained by**: Server 1586 Council

@@ -1,6 +1,12 @@
-# Scripts
+# Scripts Documentation
 
-Utility scripts for managing Server 1586 rotation schedule.
+Utility scripts for managing Server 1586 rotation schedule and automation.
+
+## 📍 Navigation
+- **← Back to Main**: [../README.md](../README.md)
+- **📚 Full Documentation**: [../DOCUMENTATION.md](../DOCUMENTATION.md)
+- **🚀 Deployment Guide**: [DEPLOY-README.md](DEPLOY-README.md)
+- **🔧 Admin Panel**: [../admin/README.md](../admin/README.md)
 
 ## update-rotation-schedule.py (Recommended)
 
@@ -127,3 +133,16 @@ Both scripts update: `data/rotation-schedule.json`
 ## Files Read:
 - `data/alliances.json` (Python script only)
 - `data/rotation-schedule.json` (both scripts)
+
+---
+
+## 📞 Support & Contact
+
+For questions about scripts and automation:
+- **Main Documentation**: [../README.md](../README.md)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/username/your-repo/issues)
+- **Deployment Guide**: [DEPLOY-README.md](DEPLOY-README.md)
+
+---
+
+**Version**: 2.2.0 | **Last Updated**: October 16, 2025 | **Part of**: [Server 1586 Project](../README.md)

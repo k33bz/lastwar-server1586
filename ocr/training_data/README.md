@@ -2,6 +2,11 @@
 
 This directory contains manually verified training data for OCR (Optical Character Recognition) of alliance R5 names from Last War game screenshots.
 
+## 📍 Navigation
+- **← Back to OCR**: [../README.md](../README.md)
+- **← Back to Main**: [../../README.md](../../README.md)
+- **📚 Full Documentation**: [../../DOCUMENTATION.md](../../DOCUMENTATION.md)
+
 ## Purpose
 
 To improve automated extraction of alliance data from ranking screenshots by providing ground truth labels for R5 names, which often contain:
@@ -111,3 +116,15 @@ To add new training data:
 3. Manually verify R5 name character-by-character
 4. Add entry to both CSV and JSON files
 5. Commit with message: "Add OCR training data for [ALLIANCE_TAG]"
+---
+
+## 📞 Support & Contact
+
+For questions about training data:
+- **OCR Documentation**: [../README.md](../README.md)
+- **Main Documentation**: [../../README.md](../../README.md)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/username/your-repo/issues)
+
+---
+
+**Last Updated**: October 16, 2025 | **Part of**: [Server 1586 OCR System](../README.md)

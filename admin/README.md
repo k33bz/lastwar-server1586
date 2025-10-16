@@ -1,6 +1,12 @@
-# Server1586 Admin System v2.1.0
+# Server1586 Admin System v3.0.0
 
 Enterprise-grade secure JWT-based authentication system with advanced security features for alliance and admin management.
+
+## 📍 Navigation
+- **← Back to Main**: [../README.md](../README.md)
+- **📚 Full Documentation**: [../DOCUMENTATION.md](../DOCUMENTATION.md)
+- **🚀 Deployment Guide**: [DEPLOYMENT.md](DEPLOYMENT.md)
+- **⚙️ Local Setup**: [setup-local-env.md](setup-local-env.md)
 
 ## 🔐 Security Features
 
@@ -10,12 +16,14 @@ Enterprise-grade secure JWT-based authentication system with advanced security f
 - **Role-Based Access**: Admin, R5, R4, Power Editor roles
 - **Token Management**: Automatic revocation and blacklisting
 
-### Advanced Security (v1.0.0)
+### Advanced Security (v3.0.0)
 - **🔄 JWT Key Rotation**: Automatic 30-day key rotation with emergency rotation
-- **🛡️ Multi-Factor Authentication**: TOTP support with backup codes
-- **📊 Security Monitoring**: Rate limiting, IP blocking, threat detection
-- **🔍 Audit Logging**: Comprehensive security event tracking
+- **🛡️ Multi-Factor Authentication**: TOTP support with backup codes and hardware keys
+- **📊 Security Monitoring**: Real-time threat detection and IP blocking
+- **🔍 Audit Logging**: Comprehensive security event tracking with real-time viewer
 - **⚡ Real-time Protection**: Automatic blocking of suspicious activity
+- **💾 Backup & Restore**: Automatic backups with point-in-time recovery
+- **🔒 Email Masking**: PII protection for user data
 
 ### Security Metrics
 - **Authentication Strength**: 100/100
@@ -24,34 +32,131 @@ Enterprise-grade secure JWT-based authentication system with advanced security f
 - **Monitoring Coverage**: 95/100
 - **Incident Response**: 100/100
 
-## 📁 Folder Structure
+## 📁 Admin Directory Structure
 
 ```
-Server1586/
-├── admin/
+admin/
+├── Core System Files
 │   ├── config.php              # Configuration and environment loading
-│   ├── jwt.php                 # JWT encoding/decoding and session management
+│   ├── jwt.php                 # JWT token management and validation
 │   ├── json_helpers.php        # JSON file operations with locking
-│   ├── mailer.php              # Email sending via PHPMailer
+│   ├── csv_helpers.php         # CSV file operations
+│   ├── mailer.php              # Email functionality (v1.3.0)
+│   └── audit_logger.php        # Security event logging
+│
+├── Authentication & Session Management
 │   ├── login.php               # Login form page
-│   ├── send_magic_link.php     # Magic link generation and email sending
+│   ├── send_magic_link.php     # Magic link generation and email
 │   ├── callback.php            # Magic link validation and session creation
-│   ├── dashboard.php           # Main dashboard for logged-in users
-│   ├── allies_api.php          # Alliance data editing
-│   ├── admin_api.php           # User management (admin only)
 │   ├── logout.php              # Session termination
-│   ├── cron.php                # Token blacklist cleanup script
+│   ├── refresh_session.php     # Session refresh endpoint
+│   └── generate_magic_link.php # Magic link utilities
+│
+├── User Interface Pages
+│   ├── dashboard.php           # Main admin dashboard
+│   ├── alliance_edit.php       # Alliance editing interface
+│   ├── alliances_power.php     # Power management interface
+│   ├── user_management.php     # User administration
+│   ├── device_management.php   # Device management
+│   └── sign_rules.php          # Rule signing interface
+│
+├── API Endpoints
+│   ├── admin_api.php           # User management API
+│   ├── allies_api.php          # Alliance data API
+│   ├── alliance_edit_api.php   # Alliance editing API
+│   ├── alliance_delete_api.php # Alliance deletion API
+│   ├── alliances_power_api.php # Power management API
+│   ├── user_management_api.php # User management API
+│   ├── backup_restore_api.php  # Backup & restore API
+│   ├── audit_log_api.php       # Audit log API
+│   └── revoke_token_api.php    # Token revocation API
+│
+├── Security Management (v3.0.0)
+│   ├── security_monitor.php    # Security dashboard and monitoring
+│   ├── security_audit.php      # Real-time audit log viewer
+│   ├── security_backups.php    # Backup management interface
+│   ├── security_keys.php       # JWT key rotation management
+│   ├── security_mfa.php        # Multi-factor authentication
+│   ├── secret_key_rotation.php # Key rotation utilities
+│   └── token_rotation.php      # Token management utilities
+│
+├── Automation & Maintenance
+│   ├── cron.php                # Token cleanup (legacy)
+│   ├── cron_token_cleanup.php  # Token blacklist cleanup
+│   ├── cron_key_rotation.php   # Automatic key rotation
+│   ├── initialize_audit_system.php    # Audit system setup
+│   ├── initialize_key_rotation.php    # Key rotation setup
+│   ├── fix_audit_log.php       # Audit log repair utilities
+│   └── fix_key_sync.php        # Key synchronization repair
+│
+├── Data Files
 │   ├── users.json              # User permissions database
+│   ├── users.json.example      # User database template
 │   ├── token_blacklist.json    # Revoked JWT tokens
+│   ├── token_blacklist.json.example # Blacklist template
+│   ├── secret_keys.json        # JWT signing keys (v3.0.0)
+│   ├── audit_log.json          # Security event log
+│   ├── audit_log.example.json  # Audit log template
+│   ├── security_events.json    # Security monitoring data
+│   ├── magic_links.json        # Active magic links
+│   ├── ip_blacklist.json       # Blocked IP addresses
+│   └── rate_limits.json        # Rate limiting data
+│
+├── Configuration & Environment
 │   ├── .env                    # Environment configuration (NOT in git)
-│   ├── .env.example            # Environment template
+│   ├── .env.example            # Production environment template
+│   ├── .env.local.example      # Local development template
 │   ├── composer.json           # PHP dependencies
+│   ├── composer.lock           # Dependency lock file
 │   ├── .gitignore              # Git ignore rules
-│   ├── guide.md                # Technical guide (original spec)
+│   └── .htaccess               # Apache configuration
+│
+├── Documentation
 │   ├── README.md               # This file
-│   └── vendor/                 # Composer dependencies
-└── data/
-    └── alliances.json          # Alliance data (parent directory)
+│   ├── ADMIN_FUNCTIONALITY.md  # Feature documentation
+│   ├── ALLIANCE_MANAGEMENT_GUIDE.md # Alliance management guide
+│   ├── DEPLOYMENT.md           # Production deployment guide
+│   ├── setup-local-env.md      # Local development setup
+│   ├── SECRET_KEY_ROTATION_SETUP.md # Security setup guide
+│   ├── DKIM-SETUP.md           # Email authentication setup
+│   ├── ENV-CONFIG.md           # Environment configuration guide
+│   ├── COMPOSER-INSTALL.md     # Dependency installation guide
+│   ├── SECURITY_CHANGELOG.md   # Security update history
+│   ├── VERSION_SUMMARY.md      # Version information
+│   └── guide.md                # Technical guide (original spec)
+│
+├── Testing & Development
+│   ├── test_dependencies.php   # Dependency verification
+│   ├── test_smtp.php           # Email testing
+│   ├── test_magic_link_email.php # Magic link email testing
+│   ├── test_alliances_api.php  # Alliance API testing
+│   ├── test_roles.php          # Role-based access testing
+│   ├── test_audit_init.php     # Audit system testing
+│   ├── debug_email_content.php # Email debugging
+│   ├── compare_emails.php      # Email comparison utilities
+│   └── test.php                # General testing utilities
+│
+├── Shared Components
+│   └── includes/
+│       ├── header.php          # Shared page header
+│       ├── footer.php          # Shared page footer
+│       ├── styles.css          # Shared CSS styles
+│       ├── scripts.js          # Shared JavaScript
+│       ├── api_helpers.php     # API utilities
+│       ├── email_utils.php     # Email masking utilities
+│       └── README.md           # Includes documentation
+│
+├── Backups (Auto-generated)
+│   └── backups/
+│       ├── alliances_backup_YYYYMMDD_HHMMSS.json
+│       ├── users_backup_YYYYMMDD_HHMMSS.json
+│       └── audit_backup_YYYYMMDD_HHMMSS.json
+│
+└── Dependencies
+    └── vendor/                 # Composer dependencies
+        ├── firebase/php-jwt/   # JWT library
+        ├── phpmailer/phpmailer/ # Email library
+        └── vlucas/phpdotenv/   # Environment variables
 ```
 
 ## 🚀 Installation
@@ -376,17 +481,40 @@ echo "Test email sent!";
 8. **Use strong SMTP passwords with app-specific passwords**
 9. **Regular backups of user and alliance data**
 
+---
+
+## 📞 Support & Contact
+
+For issues or questions:
+- **Main Documentation**: [../README.md](../README.md)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/username/your-repo/issues)
+- **Admin Contact**: admin@example.com
+
+---
+
 ## 📄 License
 
 Proprietary - Last War 1586 Server
 
-## 📞 Support
+---
 
-For issues or questions, contact: admin@example.com
+**Version**: 3.0.0 | **Last Updated**: October 16, 2025 | **Part of**: [Server 1586 Project](../README.md)
 
 ---
 
 ## 📝 Changelog
+
+### Version 3.0.0 (2025-10-16)
+- **🔧 Security Management Suite**: Complete security dashboard with monitoring, audit logs, backups, and key management
+- **🛡️ Enhanced MFA**: Multi-factor authentication with TOTP, backup codes, and hardware key support
+- **📊 Real-time Security Monitoring**: Live threat detection, IP blocking, and security event tracking
+- **💾 Advanced Backup System**: Automatic backups with point-in-time recovery and restore capabilities
+- **🔍 Audit Log Viewer**: Real-time audit log monitoring with filtering and search
+- **🔑 JWT Key Management**: Advanced key rotation with emergency rotation and grace periods
+- **🔒 Email Masking**: PII protection system for user data privacy
+- **📱 Device Management**: Device registration and management for enhanced security
+- **🚨 Rate Limiting**: Advanced rate limiting with IP-based blocking
+- **📈 Security Analytics**: Comprehensive security metrics and reporting
 
 ### Version 2.1.0 (2025-10-15)
 - **🔄 JWT Key Rotation System**: Automatic 30-day key rotation with emergency rotation capability

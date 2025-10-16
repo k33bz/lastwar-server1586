@@ -2,6 +2,12 @@
 
 Automated extraction of alliance data from game screenshots.
 
+## 📍 Navigation
+- **← Back to Scripts**: [README.md](README.md)
+- **← Back to Main**: [../README.md](../README.md)
+- **📚 Full Documentation**: [../DOCUMENTATION.md](../DOCUMENTATION.md)
+- **🔍 OCR System**: [../ocr/README.md](../ocr/README.md)
+
 ## Overview
 
 This script processes two types of screenshots:
