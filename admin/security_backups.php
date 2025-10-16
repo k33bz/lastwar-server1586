@@ -153,14 +153,6 @@ include 'includes/header.php';
             color: #333;
         }
     </style>
-</head>
-<body>
-    <div class="header">
-        <h1>💾 Alliance Backup & Restore</h1>
-        <div>
-            <a href="dashboard.php" class="btn btn-secondary">← Back to Dashboard</a>
-        </div>
-    </div>
 
     <div class="section">
         <h2>About Backups</h2>
