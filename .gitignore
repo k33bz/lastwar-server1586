@@ -109,7 +109,12 @@ admin/users.json
 admin/token_blacklist.json
 admin/.env
 admin/audit_log.json
+admin/magic_links.json
 admin/backups/
+admin/secret_keys.json
+admin/ip_blacklist.json
+admin/rate_limits.json
+admin/security_events.json
 # Local settings
 .claude/settings.local.json
 admin/.claude/settings.local.json

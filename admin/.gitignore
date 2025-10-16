@@ -5,6 +5,8 @@
 users.json
 token_blacklist.json
 secret_keys.json
+magic_links.json
+audit_log.json
 
 # Composer
 /vendor/

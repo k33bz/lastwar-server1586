@@ -1,39 +1,42 @@
 # FTP Deployment Ignore File
 # Files and directories listed here will NOT be uploaded to the FTP server
 
-# Development and Documentation
-README.md
-CLAUDE.md
-LICENSE
-*.md
+# Development and Documentation (root level only)
+/README.md
+/CLAUDE.md
+/LICENSE
+/*.md
 !index.html
 
-# Scripts and Tools
-scripts/
-.vscode/
-.idea/
+# Scripts and Tools (deployment scripts not needed on server)
+/scripts/
+/.vscode/
+/.idea/
 
 # Version Control
-.git/
-.gitignore
-.gitattributes
-.github/
+/.git/
+/.gitignore
+/.gitattributes
+/.github/
 
 # CI/CD and Training Files
-tesseract_training/
-ocr/
-.claude/
-CICD-SETUP.md
+/tesseract_training/
+/ocr/
+/.claude/
+/.kiro/
+/CICD-SETUP.md
 
-# Admin System - Exclude sensitive files only
+# Admin System - Exclude development/test files only
 # Note: admin/.env is generated during deployment from GitHub Secrets and MUST be deployed
 !admin/.env
 admin/.claude/
 admin/.vscode/
-admin/test_magic_links.php
-admin/test-smtp.php
-admin/test-smtp.py
+admin/test*.php
+admin/test*.py
+admin/compare_emails.php
+admin/debug_email_content.php
 admin/*.backup
+admin/backups/
 
 # Backup and deleted files
 *.del
@@ -56,10 +59,14 @@ npm-debug.log
 yarn-error.log
 package-lock.json
 
-# Images (development only)
-images/
+# Images - Exclude source files only, deploy production images
 *.psd
 *.ai
+/images/alliance_cards/*.png
+/images/alliance_cards/processed/
+/images/server_rankings/*.png
+/images/server_rankings/processed/
+/images/src/
 
 # Backup and Temporary Files
 *.bak

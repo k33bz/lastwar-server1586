@@ -1,0 +1,9 @@
+{
+    "example_hash": {
+        "email": "user@example.com",
+        "created_by": "admin@example.com",
+        "created_at": 1234567890,
+        "expires_at": 1234654290,
+        "used": false
+    }
+}
