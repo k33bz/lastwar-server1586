@@ -1,11 +1,11 @@
 <?php
 /**
- * Multi-Factor Authentication System
+ * Security: Multi-Factor Authentication (MFA) System
  *
  * Provides TOTP-based 2FA, backup codes, and hardware key support
  *
- * @version 1.0.0
- * @date 2025-10-15
+ * @version 3.0.0
+ * @date 2025-10-16
  */
 
 if (!defined('ADMIN_INIT')) {

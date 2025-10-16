@@ -446,7 +446,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php endif; ?>
                 <?php if ($user->aud === 'admin'): ?>
                 <a href="user_management.php" class="nav-link <?php echo $current_page === 'user_management.php' ? 'active' : ''; ?>">Users</a>
-                <a href="audit_log_viewer.php" class="nav-link <?php echo $current_page === 'audit_log_viewer.php' ? 'active' : ''; ?>">Logs</a>
+                <a href="security_audit.php" class="nav-link <?php echo $current_page === 'security_audit.php' || $current_page === 'audit_log_viewer.php' ? 'active' : ''; ?>">Logs</a>
                 <a href="security_monitor.php" class="nav-link <?php echo $current_page === 'security_monitor.php' ? 'active' : ''; ?>">Security</a>
                 <?php endif; ?>
             </nav>

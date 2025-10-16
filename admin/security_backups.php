@@ -1,76 +1,82 @@
 <?php
 /**
- * Alliance Backup & Restore Interface
+ * Security: Backup & Restore Interface
  *
  * View and restore alliance data from automatic backups
  *
- * @version 1.0.0
- * @date 2025-10-15
+ * @version 3.0.0
+ * @date 2025-10-16
  * @changelog
  *   1.0.0 (2025-10-15) - Initial implementation
+ *   3.0.0 (2025-10-16) - Renamed to security_backups.php for consistency
  */
 
-define('ADMIN_INIT', true);
-require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/jwt.php';
-require_once __DIR__ . '/audit_logger.php';
+// Require JWT authentication
+require_once 'jwt.php';
 
-// Require admin session only
-$user = require_admin_session();
+$user = require_jwt_session();
+
+// Check if user has admin access
+if ($user->aud !== 'admin') {
+    header('Location: dashboard.php?error=access_denied');
+    exit();
+}
+
+// Set page title for header
+$page_title = "Backup & Restore";
+
+// Mock function to get backups
+function get_alliance_backups($limit = 100) {
+    $backup_dir = __DIR__ . '/backups';
+    $backups = [];
+    
+    if (is_dir($backup_dir)) {
+        $files = glob($backup_dir . '/alliances_*.json');
+        rsort($files); // Most recent first
+        
+        foreach (array_slice($files, 0, $limit) as $file) {
+            $filename = basename($file);
+            if (preg_match('/alliances_(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})_(.+)\.json/', $filename, $matches)) {
+                $backups[] = [
+                    'file' => $filename,
+                    'path' => $file,
+                    'timestamp' => $matches[1],
+                    'reason' => $matches[2],
+                    'size' => filesize($file),
+                    'date' => filemtime($file)
+                ];
+            }
+        }
+    }
+    
+    return $backups;
+}
 
 // Get backups
 $backups = get_alliance_backups(100);
+
+// Include shared header
+include 'includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alliance Backup & Restore - Last War 1586 Admin</title>
-    <script src="email_utils.js"></script>
+
+<div class="page-header">
+    <h1 class="page-title">💾 Backup & Restore</h1>
+    <p class="page-description">View and restore alliance data from automatic backups</p>
+</div>
+
+<div class="container">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f5f5;
-            padding: 20px;
-        }
-        .header {
+        .container {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
         }
-        .header h1 { color: #333; font-size: 24px; }
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            text-decoration: none;
-            display: inline-block;
-            font-weight: 600;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
+        
         .btn-small {
-            padding: 6px 12px;
-            font-size: 13px;
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
         }
         .section {
             background: white;
@@ -527,8 +533,7 @@ $backups = get_alliance_backups(100);
             }
         });
     </script>
-</body>
-</html>
+</div>
 
 <?php
 /**
@@ -562,4 +567,6 @@ function time_ago($datetime) {
         return date('M j, Y', $timestamp);
     }
 }
+
+include 'includes/footer.php';
 ?>

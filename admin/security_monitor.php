@@ -1,12 +1,16 @@
 <?php
 /**
- * Advanced Security Monitoring System
+ * Security: Advanced Monitoring System
  *
  * Provides rate limiting, IP blocking, suspicious activity detection,
- * and real-time security monitoring
+ * and real-time security monitoring. Central hub for all security tools.
  *
- * @version 1.0.0
- * @date 2025-10-15
+ * @version 3.0.0
+ * @date 2025-10-16
+ * @changelog
+ *   3.0.0 (2025-10-16) - Added Security Management section with links
+ *                       - Part of security reorganization v3.0
+ *   1.0.0 (2025-10-15) - Initial version
  */
 
 if (!defined('ADMIN_INIT')) {
@@ -743,25 +747,25 @@ include 'includes/header.php';
         <h2 class="section-title">Security Management</h2>
         <p class="section-description">Access advanced security configuration and management tools</p>
         <div class="management-grid">
-            <a href="key_rotation_admin_panel.php" class="management-card">
+            <a href="security_keys.php" class="management-card">
                 <div class="management-icon">🔄</div>
                 <h3>JWT Key Rotation</h3>
                 <p>Manage JWT secret key rotation, view rotation history, and perform emergency rotations</p>
                 <div class="card-action">Manage Keys →</div>
             </a>
-            <a href="mfa_system.php" class="management-card">
+            <a href="security_mfa.php" class="management-card">
                 <div class="management-icon">🔐</div>
                 <h3>MFA System</h3>
                 <p>Multi-factor authentication management, TOTP setup, and backup codes</p>
                 <div class="card-action">Manage MFA →</div>
             </a>
-            <a href="audit_log_viewer.php" class="management-card">
+            <a href="security_audit.php" class="management-card">
                 <div class="management-icon">📋</div>
                 <h3>Audit Logs</h3>
                 <p>View comprehensive audit trail of all administrative actions and security events</p>
                 <div class="card-action">View Logs →</div>
             </a>
-            <a href="backup_restore.php" class="management-card">
+            <a href="security_backups.php" class="management-card">
                 <div class="management-icon">💾</div>
                 <h3>Backup & Restore</h3>
                 <p>View and restore alliance data from automatic and manual backups</p>

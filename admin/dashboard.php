@@ -1,803 +1,870 @@
 <?php
 /**
- * Admin Dashboard - Main interface for alliance and admin users
- *
- * @version 1.7.0
- * @date 2025-10-15
- * @changelog
- *   1.7.0 (2025-10-15) - Added JWT key rotation status monitoring
- *                       - Added key rotation admin panel link
- *                       - Integrated security status display for admins
- *   1.6.0 (2025-10-15) - Added powereditor role support
- *                       - Header badge shows "R5/POWEREDITOR" or "R4/POWEREDITOR"
- *                       - User management table shows powereditor flag in role column
- *                       - Power editors can access Alliance Power Editor from Quick Links
- *                       - Added Delete Alliance button for admins (calls alliance_delete_api.php)
- *   1.5.0 (2025-10-13) - Added PII protection for email addresses
- *                       - Emails masked by default (show first 2 chars + domain)
- *                       - Click-to-reveal functionality with eye icon in table
- *                       - Header email also masked with click-to-reveal
- *   1.4.0 (2025-10-13) - Added alliance-based filtering for R5 user management
- *                       - R5 can only view/manage users from their assigned alliances
- *   1.3.0 (2025-10-13) - Added R5 user management capability
- *                       - R5 can view and manage R5/R4 users (not admins)
- *                       - Magic link generation and token revocation restricted to admins
- *   1.2.0 (2025-10-13) - Added JWT token revocation functionality
- *                       - Added active session tracking and display
- *                       - Added "Revoke Sessions" button for admins
- *   1.1.0 (2025-10-13) - Initial implementation
+ * Admin Dashboard
+ * Version: 1.0.0
+ * Main admin panel overview
  */
 
-if (!defined('ADMIN_INIT')) {
-    define('ADMIN_INIT', true);
-}
-require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/jwt.php';
-require_once __DIR__ . '/json_helpers.php';
+// Require JWT authentication
+require_once 'jwt.php';
 
-// Load key rotation support if available
-if (file_exists(__DIR__ . '/secret_key_rotation.php')) {
-    require_once __DIR__ . '/secret_key_rotation.php';
-}
+$user = require_jwt_session();
 
-// Require valid session
-$user_token = require_jwt_session();
+// Set page title for header
+$page_title = "Dashboard";
 
-// Load data
-$users_data = read_json_file(USERS_FILE);
-$alliances_data_raw = file_exists(ALLIANCES_FILE) ? read_json_file(ALLIANCES_FILE) : [];
-// Handle both array format and object format
-$alliances_data = is_array($alliances_data_raw) && isset($alliances_data_raw[0]) ? $alliances_data_raw : ($alliances_data_raw['alliances'] ?? []);
+// Include shared header
+include 'includes/header.php';
 
-$is_admin = ($user_token->aud === 'admin');
-$user_email = $user_token->sub;
-$user_alliances = $user_token->alliances;
+// Get system statistics
+$stats = [
+    'total_users' => 0,
+    'total_alliances' => 0,
+    'security_events' => 0,
+    'last_backup' => 'Never'
+];
 
-// Get key rotation status if available
-$key_rotation_status = null;
-if (function_exists('get_key_rotation_status')) {
-    try {
-        $key_rotation_status = get_key_rotation_status();
-    } catch (Exception $e) {
-        error_log("Failed to get key rotation status: " . $e->getMessage());
+try {
+    // Count users from users.json
+    $users_file = __DIR__ . '/users.json';
+    if (file_exists($users_file)) {
+        $users_data = json_decode(file_get_contents($users_file), true);
+        $stats['total_users'] = count($users_data['users'] ?? []);
     }
+    
+    // Count alliances from alliances.json
+    $alliances_file = __DIR__ . '/../data/alliances.json';
+    if (file_exists($alliances_file)) {
+        $alliances_data = json_decode(file_get_contents($alliances_file), true);
+        $stats['total_alliances'] = count($alliances_data ?? []);
+    }
+    
+    // Count recent audit events
+    $audit_file = __DIR__ . '/audit_log.json';
+    if (file_exists($audit_file)) {
+        $audit_data = json_decode(file_get_contents($audit_file), true);
+        $recent_events = 0;
+        $yesterday = time() - 86400;
+        foreach ($audit_data as $event) {
+            if (isset($event['timestamp']) && strtotime($event['timestamp']) > $yesterday) {
+                $recent_events++;
+            }
+        }
+        $stats['security_events'] = $recent_events;
+    }
+    
+    // Check for recent backups
+    $backup_dir = __DIR__ . '/../backups';
+    if (is_dir($backup_dir)) {
+        $files = glob($backup_dir . '/alliances_*.json');
+        if (!empty($files)) {
+            $latest_backup = max(array_map('filemtime', $files));
+            $stats['last_backup'] = date('M j, Y H:i', $latest_backup);
+        }
+    }
+} catch (Exception $e) {
+    // Use default stats if files unavailable
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Last War 1586 Admin</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f5f5;
-            padding: 20px;
-        }
-        .header {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .header h1 { color: #333; font-size: 24px; }
-        .user-info { color: #666; font-size: 14px; }
-        .badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            margin-left: 10px;
-        }
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 13px;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-        .btn-warning {
-            background: #f39c12;
-            color: white;
-        }
-        .btn-danger { background: #e74c3c; color: white; }
-        .btn-danger .timer {
-            display: block;
-            font-size: 11px;
-            opacity: 0.9;
-            margin-top: 3px;
-        }
-        .btn-danger.expiring-soon {
-            background: #d35400;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-        .section {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .section h2 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-        .alliance-card {
-            border: 2px solid #eee;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        .alliance-card h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        th {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: #333;
-        }
-        .actions { display: flex; gap: 10px; }
-        .signature-table {
-            width: 100%;
-            margin: 15px 0;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-        .signature-table th {
-            background: #667eea;
-            color: white;
-            padding: 8px;
-            text-align: left;
-            font-size: 12px;
-        }
-        .signature-table td {
-            padding: 8px;
-            border-bottom: 1px solid #eee;
-        }
-        .signature-table tr:last-child td {
-            border-bottom: none;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-weight: 600;
-            font-size: 11px;
-            color: white;
-        }
-        .btn-revoke {
-            background: #e74c3c;
-            color: white;
-            padding: 6px 12px;
-            font-size: 13px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .btn-revoke:disabled {
-            background: #bdc3c7;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-        .session-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-left: 8px;
-        }
-        .session-indicator.active {
-            background: #28a745;
-            box-shadow: 0 0 4px #28a745;
-        }
-        .session-indicator.inactive {
-            background: #bdc3c7;
-        }
-        .email-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .email-hidden {
-            font-family: monospace;
-            letter-spacing: 2px;
-        }
-        .email-visible {
-            font-family: inherit;
-        }
-        .eye-icon {
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 3px;
-            display: inline-flex;
-            align-items: center;
-            transition: background-color 0.2s;
-        }
-        .eye-icon:hover {
-            background-color: #f0f0f0;
-        }
-        .eye-icon svg {
-            width: 18px;
-            height: 18px;
-            fill: #666;
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <div>
-            <h1>Last War 1586 Admin Dashboard</h1>
-            <div class="user-info">
-                Logged in as:
-                <strong class="email-display email-hidden" data-email="<?= htmlspecialchars($user_email) ?>" style="cursor: pointer;" onclick="toggleHeaderEmail(this)" title="Click to show/hide email">
-                    <?php
-                    // Mask current user's email
-                    $parts = explode('@', $user_email);
-                    $masked = substr($parts[0], 0, 1) . str_repeat('*', max(6, strlen($parts[0]) - 2)) . substr($parts[0], -1) . '@' . $parts[1];
-                    echo htmlspecialchars($masked);
-                    ?>
-                </strong>
-                <?php
-                $role = $user_token->aud;
-                $is_powereditor = isset($user_token->powereditor) && $user_token->powereditor;
 
-                $badge_colors = [
-                    'admin' => 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    'r5' => 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                    'r4' => 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-                    'alliance' => '#6c757d'
-                ];
-                $badge_color = $badge_colors[$role] ?? '#6c757d';
-
-                // Build role label with powereditor if applicable
-                $role_label = strtoupper($role);
-                if ($role !== 'admin' && $is_powereditor) {
-                    $role_label .= '/POWEREDITOR';
-                }
-                ?>
-                <span class="badge" style="background: <?= $badge_color ?>;"><?= $role_label ?></span>
-            </div>
+<div class="dashboard-header">
+    <div class="header-content">
+        <h1 class="dashboard-title">
+            <span class="title-icon">🏛️</span>
+            <?php echo $_ENV['APP_NAME'] ?? 'Last War 1586 Admin'; ?>
+        </h1>
+        <p class="dashboard-subtitle">Welcome back, <?php echo htmlspecialchars(explode('@', $user->sub)[0]); ?></p>
+        <div class="user-badge">
+            <span class="role-badge role-<?php echo strtolower($user->aud); ?>">
+                <?php echo strtoupper($user->aud); ?>
+                <?php if (is_power_editor($user)): ?>
+                    <span class="power-badge">⚡ POWER</span>
+                <?php endif; ?>
+            </span>
         </div>
-        <form method="POST" action="logout.php" style="margin: 0;">
-            <button type="submit" class="btn btn-danger" id="logoutBtn">
-                Logout
-                <span class="timer" id="sessionTimer">Loading...</span>
-            </button>
-        </form>
     </div>
+</div>
 
-    <!-- Key Rotation Status (Admin Only) -->
-    <?php if ($is_admin && $key_rotation_status): ?>
-    <div class="section" style="background: <?= $key_rotation_status['current_key_age_days'] > 25 ? '#fff3cd' : '#d4edda' ?>; border-left: 4px solid <?= $key_rotation_status['current_key_age_days'] > 25 ? '#ffc107' : '#28a745' ?>;">
-        <h3 style="margin: 0 0 10px 0; color: #333;">🔐 JWT Key Security Status</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; font-size: 14px;">
-            <div>
-                <strong>Current Key Age:</strong><br>
-                <span style="color: <?= $key_rotation_status['current_key_age_days'] > 25 ? '#856404' : '#155724' ?>;">
-                    <?= $key_rotation_status['current_key_age_days'] ?> days
-                </span>
+<div class="stats-overview">
+    <div class="stats-grid">
+        <div class="stat-card users">
+            <div class="stat-header">
+                <div class="stat-icon">👥</div>
+                <div class="stat-trend positive">+2</div>
             </div>
-            <div>
-                <strong>Last Rotation:</strong><br>
-                <?= $key_rotation_status['last_rotation'] ?>
-            </div>
-            <div>
-                <strong>Grace Period:</strong><br>
-                <?= $key_rotation_status['grace_period_active'] ? '🟡 Active' : '🟢 Inactive' ?>
-            </div>
-            <div>
-                <strong>Auto Rotation:</strong><br>
-                <?= AUTO_KEY_ROTATION_ENABLED ? '🟢 Enabled' : '🔴 Disabled' ?>
-            </div>
+            <div class="stat-number"><?php echo number_format($stats['total_users']); ?></div>
+            <div class="stat-label">Active Users</div>
         </div>
-        <?php if ($key_rotation_status['current_key_age_days'] > 25): ?>
-        <div style="margin-top: 10px; padding: 8px; background: rgba(255,193,7,0.1); border-radius: 4px; font-size: 13px;">
-            ⚠️ <strong>Key rotation recommended.</strong> Current key is over 25 days old.
-            <a href="key_rotation_admin_panel.php" style="color: #856404; text-decoration: underline;">Manage rotation →</a>
+        
+        <div class="stat-card alliances">
+            <div class="stat-header">
+                <div class="stat-icon">⚔️</div>
+                <div class="stat-trend neutral">—</div>
+            </div>
+            <div class="stat-number"><?php echo number_format($stats['total_alliances']); ?></div>
+            <div class="stat-label">Alliances</div>
         </div>
-        <?php endif; ?>
+        
+        <div class="stat-card security">
+            <div class="stat-header">
+                <div class="stat-icon">🛡️</div>
+                <div class="stat-trend <?php echo $stats['security_events'] > 5 ? 'negative' : 'positive'; ?>">
+                    <?php echo $stats['security_events'] > 5 ? '⚠️' : '✓'; ?>
+                </div>
+            </div>
+            <div class="stat-number"><?php echo number_format($stats['security_events']); ?></div>
+            <div class="stat-label">Security Events (24h)</div>
+        </div>
+        
+        <div class="stat-card backup">
+            <div class="stat-header">
+                <div class="stat-icon">💾</div>
+                <div class="stat-trend positive">✓</div>
+            </div>
+            <div class="stat-number"><?php echo $stats['last_backup'] === 'Never' ? '—' : '✓'; ?></div>
+            <div class="stat-label">Last: <?php echo $stats['last_backup']; ?></div>
+        </div>
     </div>
-    <?php endif; ?>
+</div>
 
-    <script>
-        // Get token expiration from PHP
-        const tokenExpiration = <?= $user_token->exp ?>;
-
-        function updateTimer() {
-            const now = Math.floor(Date.now() / 1000);
-            const timeLeft = tokenExpiration - now;
-
-            const btn = document.getElementById('logoutBtn');
-            const timer = document.getElementById('sessionTimer');
-
-            if (timeLeft <= 0) {
-                timer.textContent = 'Session expired';
-                btn.classList.add('expiring-soon');
-                setTimeout(() => {
-                    window.location.href = 'login.php?error=expired';
-                }, 2000);
-                return;
-            }
-
-            // Calculate hours, minutes, seconds
-            const hours = Math.floor(timeLeft / 3600);
-            const minutes = Math.floor((timeLeft % 3600) / 60);
-            const seconds = timeLeft % 60;
-
-            // Format timer display
-            if (hours > 0) {
-                timer.textContent = `Session: ${hours}h ${minutes}m`;
-            } else if (minutes > 0) {
-                timer.textContent = `Session: ${minutes}m ${seconds}s`;
-            } else {
-                timer.textContent = `Session: ${seconds}s`;
-            }
-
-            // Add warning class if less than 5 minutes
-            if (timeLeft < 300) {
-                btn.classList.add('expiring-soon');
-            } else {
-                btn.classList.remove('expiring-soon');
-            }
-        }
-
-        // Update timer immediately and then every second
-        updateTimer();
-        setInterval(updateTimer, 1000);
-    </script>
-
-    <?php if ($is_admin || $user_token->aud === 'r5'): ?>
-        <div class="section">
-            <h2>User Management</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Alliances</th>
-                        <th>Session Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($users_data['users'] as $user):
-                        // R5 users can only see users from their alliances
-                        if (!$is_admin && $user_token->aud === 'r5') {
-                            // Cannot see admin users
-                            if ($user['role'] === 'admin') {
-                                continue;
-                            }
-
-                            // Check if user belongs to any of R5's alliances
-                            $r5_alliances = $user_token->alliances;
-                            $user_alliances = $user['alliances'];
-
-                            // Skip if user has '*' (shouldn't happen for non-admins, but check)
-                            if (in_array('*', $user_alliances)) {
-                                continue;
-                            }
-
-                            // Check for alliance overlap
-                            $has_overlap = false;
-                            foreach ($user_alliances as $alliance) {
-                                if (in_array($alliance, $r5_alliances) || in_array('*', $r5_alliances)) {
-                                    $has_overlap = true;
-                                    break;
-                                }
-                            }
-
-                            // Skip if no alliance overlap
-                            if (!$has_overlap) {
-                                continue;
-                            }
-                        }
-
-                        $active_sessions = get_active_sessions($user['email']);
-                        $has_active = count($active_sessions) > 0;
-                    ?>
-                        <tr data-user-email="<?= htmlspecialchars($user['email']) ?>">
-                            <td>
-                                <div class="email-container">
-                                    <span class="email-display email-hidden" data-email="<?= htmlspecialchars($user['email']) ?>">
-                                        <?php
-                                        // Mask email: show first 2 chars + domain
-                                        $parts = explode('@', $user['email']);
-                                        $masked = substr($parts[0], 0, 1) . str_repeat('*', max(6, strlen($parts[0]) - 2)) . substr($parts[0], -1) . '@' . $parts[1];
-                                        echo htmlspecialchars($masked);
-                                        ?>
-                                    </span>
-                                    <span class="eye-icon" onclick="toggleEmail(this)" title="Show/Hide Email">
-                                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path class="eye-open" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-                                        </svg>
-                                    </span>
-                                </div>
-                            </td>
-                            <td>
-                                <?php
-                                $display_role = htmlspecialchars($user['role']);
-                                if ($user['role'] !== 'admin' && isset($user['powereditor']) && $user['powereditor']) {
-                                    $display_role .= '/powereditor';
-                                }
-                                echo $display_role;
-                                ?>
-                            </td>
-                            <td><?= htmlspecialchars(implode(', ', $user['alliances'])) ?></td>
-                            <td>
-                                <span class="session-count" data-count="<?= count($active_sessions) ?>">
-                                    <?= count($active_sessions) ?> active
-                                </span>
-                                <span class="session-indicator <?= $has_active ? 'active' : 'inactive' ?>"></span>
-                            </td>
-                            <td>
-                                <div class="actions">
-                                    <a href="admin_api.php?action=edit&email=<?= urlencode($user['email']) ?>" class="btn btn-primary btn-small">Edit</a>
-                                    <?php if ($is_admin): ?>
-                                        <a href="generate_magic_link.php?email=<?= urlencode($user['email']) ?>" class="btn btn-success btn-small">🔗 Magic Link</a>
-                                        <button
-                                            class="btn-revoke btn-small"
-                                            onclick="revokeUserTokens('<?= htmlspecialchars($user['email'], ENT_QUOTES) ?>')"
-                                            <?= $has_active ? '' : 'disabled' ?>
-                                        >
-                                            Revoke Sessions
-                                        </button>
-                                    <?php endif; ?>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-            <br>
-            <a href="admin_api.php?action=add" class="btn btn-primary">Add New User</a>
-        </div>
-    <?php endif; ?>
-
-    <div class="section">
-        <h2>Quick Links</h2>
-        <div class="actions">
-            <a href="../index.html" class="btn btn-primary" target="_blank">View Public Site</a>
-            <?php if ($is_admin || $is_powereditor): ?>
-                <a href="alliances_power.php" class="btn btn-success">⚡ Alliance Power Editor</a>
+<div class="dashboard-content">
+    <div class="quick-actions">
+        <h2 class="section-title">
+            <span class="section-icon">⚡</span>
+            Quick Actions
+        </h2>
+        <div class="quick-actions-grid">
+            <a href="alliance_edit.php" class="quick-action-card">
+                <div class="action-icon">✏️</div>
+                <div class="action-title">Alliance Editor</div>
+                <div class="action-desc">View all alliances</div>
+            </a>
+            
+            <?php if ($user->aud === 'admin' || is_power_editor($user)): ?>
+            <a href="alliances_power.php" class="quick-action-card power">
+                <div class="action-icon">⚡</div>
+                <div class="action-title">Power Editor</div>
+                <div class="action-desc">Edit alliance power</div>
+            </a>
             <?php endif; ?>
-            <?php if ($is_admin): ?>
-                <a href="audit_log_viewer.php" class="btn btn-primary">📊 Audit Log Viewer</a>
-                <a href="backup_restore.php" class="btn btn-primary">💾 Backup & Restore</a>
-                <a href="key_rotation_admin_panel.php" class="btn btn-warning">🔐 Key Rotation</a>
+            
+            <?php if ($user->aud === 'admin'): ?>
+            <a href="user_management.php" class="quick-action-card">
+                <div class="action-icon">👥</div>
+                <div class="action-title">User Management</div>
+                <div class="action-desc">Manage users & roles</div>
+            </a>
+            
+            <a href="security_audit.php" class="quick-action-card">
+                <div class="action-icon">📊</div>
+                <div class="action-title">Audit Logs</div>
+                <div class="action-desc">View system logs</div>
+            </a>
+            <?php endif; ?>
+            
+            <?php if ($user->aud === 'r5'): ?>
+            <a href="alliance_edit.php" class="quick-action-card">
+                <div class="action-icon">✏️</div>
+                <div class="action-title">Edit Alliance</div>
+                <div class="action-desc">Update alliance info</div>
+            </a>
             <?php endif; ?>
         </div>
     </div>
 
-    <div class="section">
-        <h2>Your Alliances</h2>
-        <?php
-        // Helper function to extract R5 name from either string or object format
-        function get_r5_name($r5_data) {
-            if (is_string($r5_data)) {
-                return $r5_data;
-            } elseif (is_array($r5_data) && isset($r5_data['name'])) {
-                return $r5_data['name'];
-            }
-            return 'N/A';
-        }
+    <div class="main-sections">
+        <!-- Alliance Management - Available to all roles -->
+        <div class="section-group">
+            <h2 class="section-title">
+                <span class="section-icon">⚔️</span>
+                Alliance Management
+            </h2>
+            
+            <div class="section-card primary">
+                <div class="card-header">
+                    <h3>Alliance Operations</h3>
+                    <span class="card-badge">Core</span>
+                </div>
+                <p>Manage alliance data, power levels, and member information</p>
+                <div class="action-buttons">
+                    <a href="alliance_edit.php" class="btn btn-primary">
+                        <span class="btn-icon">✏️</span>
+                        Alliance Editor
+                    </a>
+                    <?php if ($user->aud === 'admin' || is_power_editor($user)): ?>
+                        <a href="alliances_power.php" class="btn btn-power">
+                            <span class="btn-icon">⚡</span>
+                            Power Editor
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($user->aud === 'r5'): ?>
+                        <a href="alliance_edit.php" class="btn btn-secondary">
+                            <span class="btn-icon">✏️</span>
+                            Edit Alliance
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+        
+        <?php if ($user->aud === 'admin'): ?>
+        <!-- Admin-only sections -->
+        <div class="section-group">
+            <h2 class="section-title">
+                <span class="section-icon">👑</span>
+                Administrative Control
+            </h2>
+            
+            <div class="section-cards-grid">
+                <div class="section-card admin">
+                    <div class="card-header">
+                        <h3>👥 User Management</h3>
+                        <span class="card-badge admin">Admin</span>
+                    </div>
+                    <p>Manage user accounts, roles, and authentication</p>
+                    <div class="action-buttons">
+                        <a href="user_management.php" class="btn btn-primary">
+                            <span class="btn-icon">👥</span>
+                            User Management
+                        </a>
+                        <a href="admin_api.php?action=add" class="btn btn-secondary">
+                            <span class="btn-icon">➕</span>
+                            Add User
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="section-card security">
+                    <div class="card-header">
+                        <h3>🛡️ Security & Monitoring</h3>
+                        <span class="card-badge security">Security</span>
+                    </div>
+                    <p>Monitor system security, manage authentication, and audit logs</p>
+                    <div class="action-buttons">
+                        <a href="security_monitor.php" class="btn btn-primary">
+                            <span class="btn-icon">📡</span>
+                            Monitor
+                        </a>
+                        <a href="security_keys.php" class="btn btn-secondary">
+                            <span class="btn-icon">🔑</span>
+                            JWT Keys
+                        </a>
+                        <a href="security_mfa.php" class="btn btn-secondary">
+                            <span class="btn-icon">🔐</span>
+                            MFA
+                        </a>
+                        <a href="security_audit.php" class="btn btn-secondary">
+                            <span class="btn-icon">📋</span>
+                            Audit Logs
+                        </a>
+                        <a href="security_backups.php" class="btn btn-secondary">
+                            <span class="btn-icon">💾</span>
+                            Backups
+                        </a>
+                    </div>
+                </div>
 
-        // Helper function to get all signatures from r5History
-        function get_all_signatures($alliance) {
-            $signatures = [];
-            if (isset($alliance['r5History']) && is_array($alliance['r5History'])) {
-                foreach ($alliance['r5History'] as $history) {
-                    if (isset($history['signatures']) && is_array($history['signatures'])) {
-                        foreach ($history['signatures'] as $sig) {
-                            $signatures[] = $sig;
-                        }
-                    }
-                }
-            }
-            return $signatures;
-        }
-
-        // Helper function to calculate signature status
-        function get_signature_status($version, $signedAt = null) {
-            // Known version release dates
-            $version_dates = [
-                '1.0' => '2025-05-19T00:00:00Z',
-                '1.1' => '2025-10-05T00:00:00Z',
-                '1.2' => '2025-10-05T00:00:00Z'
-            ];
-
-            // If version not found, can't calculate status
-            if (!isset($version_dates[$version])) {
-                return ['status' => 'Unknown', 'color' => '#999'];
-            }
-
-            $release_date = strtotime($version_dates[$version]);
-            $deadline = $release_date + (30 * 24 * 60 * 60); // 30 days after release
-            $now = time();
-
-            // If signed
-            if ($signedAt) {
-                $signed_timestamp = strtotime($signedAt);
-                return ['status' => 'Signed', 'color' => '#28a745'];
-            }
-
-            // If past deadline
-            if ($now > $deadline) {
-                $days_overdue = floor(($now - $deadline) / (24 * 60 * 60));
-                return ['status' => $days_overdue . ' days overdue', 'color' => '#e74c3c'];
-            }
-
-            // If pending
-            $days_remaining = ceil(($deadline - $now) / (24 * 60 * 60));
-            return ['status' => 'Pending (' . $days_remaining . ' days remaining)', 'color' => '#f39c12'];
-        }
-
-        $accessible_alliances = [];
-        if (in_array('*', $user_alliances)) {
-            $accessible_alliances = $alliances_data;
-        } else {
-            foreach ($alliances_data as $alliance) {
-                if (in_array(strtolower($alliance['tag'] ?? ''), array_map('strtolower', $user_alliances))) {
-                    $accessible_alliances[] = $alliance;
-                }
-            }
-        }
-
-        if (empty($accessible_alliances)): ?>
-            <p>No alliances assigned to your account.</p>
-        <?php else: ?>
-            <?php foreach ($accessible_alliances as $alliance): ?>
-                <div class="alliance-card">
-                    <h3><?= htmlspecialchars($alliance['tag'] ?? 'N/A') ?> - <?= htmlspecialchars($alliance['name'] ?? 'Unknown') ?></h3>
-                    <p><strong>R5:</strong> <?= htmlspecialchars(get_r5_name($alliance['r5'] ?? null)) ?></p>
-                    <p><strong>Rank:</strong> <?= htmlspecialchars($alliance['rank'] ?? 'N/A') ?></p>
-
-                    <?php
-                    // Get all signatures for this alliance
-                    $signatures = get_all_signatures($alliance);
-
-                    // Known versions (from amendments)
-                    $all_versions = ['1.0', '1.1', '1.2'];
-
-                    // Build map of versions to signatures
-                    $version_signatures = [];
-                    foreach ($signatures as $sig) {
-                        $version = $sig['version'] ?? null;
-                        if ($version) {
-                            // Keep track of the latest signature for each version
-                            if (!isset($version_signatures[$version]) ||
-                                strtotime($sig['signedAt']) > strtotime($version_signatures[$version]['signedAt'])) {
-                                $version_signatures[$version] = $sig;
-                            }
-                        }
-                    }
-                    ?>
-
-                    <table class="signature-table">
-                        <thead>
-                            <tr>
-                                <th>Version</th>
-                                <th>Status</th>
-                                <th>Signer</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($all_versions as $version): ?>
-                                <?php
-                                $sig = $version_signatures[$version] ?? null;
-                                $signed_at = $sig ? $sig['signedAt'] : null;
-                                $signed_by = $sig ? ($sig['signedBy'] ?? 'Unknown') : '-';
-                                $status_info = get_signature_status($version, $signed_at);
-                                ?>
-                                <tr>
-                                    <td><strong><?= htmlspecialchars($version) ?></strong></td>
-                                    <td>
-                                        <span class="status-badge" style="background-color: <?= $status_info['color'] ?>;">
-                                            <?= htmlspecialchars($status_info['status']) ?>
-                                        </span>
-                                    </td>
-                                    <td><?= htmlspecialchars($signed_by) ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-
-                    <div class="actions">
-                        <?php if (is_r4_or_higher($user_token) || can_sign_rules($user_token, $alliance['tag'] ?? '')): ?>
-                            <a href="alliance_edit.php?tag=<?= urlencode($alliance['tag'] ?? '') ?>" class="btn btn-primary">
-                                <?= is_r4_or_higher($user_token) ? 'Edit Alliance' : 'View/Sign Alliance' ?>
+                <div class="section-card system">
+                    <div class="card-header">
+                        <h3>📊 System Administration</h3>
+                        <span class="card-badge system">System</span>
+                    </div>
+                    <p>System maintenance and development utilities</p>
+                    <div class="action-buttons">
+                        <a href="test_dependencies.php" class="btn btn-primary">
+                            <span class="btn-icon">🔧</span>
+                            System Check
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="section-card development">
+                    <div class="card-header">
+                        <h3>🔧 Development Tools</h3>
+                        <span class="card-badge dev">Dev</span>
+                    </div>
+                    <p>Testing and development utilities</p>
+                    <div class="action-buttons">
+                        <a href="test_alliances_api.php" class="btn btn-primary">
+                            <span class="btn-icon">🧪</span>
+                            Test API
+                        </a>
+                        <a href="test_audit_init.php" class="btn btn-secondary">
+                            <span class="btn-icon">🔍</span>
+                            Test Audit
+                        </a>
+                        <a href="fix_audit_log.php" class="btn btn-secondary">
+                            <span class="btn-icon">🔨</span>
+                            Fix Logs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-group">
+            <h2 class="section-title">
+                <span class="section-icon">📧</span>
+                Communication & Access
+            </h2>
+            
+            <div class="section-card communication">
+                <div class="card-header">
+                    <h3>Magic Link Management</h3>
+                    <span class="card-badge communication">Email</span>
+                </div>
+                <p>Email management and magic link generation</p>
+                <div class="action-buttons">
+                    <a href="send_magic_link.php" class="btn btn-primary">
+                        <span class="btn-icon">📧</span>
+                        Send Magic Link
+                    </a>
+                    <a href="generate_magic_link.php" class="btn btn-secondary">
+                        <span class="btn-icon">🔗</span>
+                        Generate Links
+                    </a>
+                    <a href="callback.php" class="btn btn-secondary">
+                        <span class="btn-icon">🔄</span>
+                        OAuth Callback
+                    </a>
+                </div>
+            </div>
+        </div>
+        <?php elseif ($user->aud === 'r5'): ?>
+        <!-- R5-specific sections -->
+        <div class="section-group">
+            <h2 class="section-title">
+                <span class="section-icon">⭐</span>
+                R5 Leadership
+            </h2>
+            
+            <div class="section-cards-grid">
+                <div class="section-card r5">
+                    <div class="card-header">
+                        <h3>📝 Alliance Administration</h3>
+                        <span class="card-badge r5">R5</span>
+                    </div>
+                    <p>Manage your alliance settings and sign server rules</p>
+                    <div class="action-buttons">
+                        <a href="alliance_edit.php" class="btn btn-primary">
+                            <span class="btn-icon">✏️</span>
+                            Edit Alliance
+                        </a>
+                        <a href="alliance_edit.php" class="btn btn-secondary">
+                            <span class="btn-icon">✏️</span>
+                            Edit All
+                        </a>
+                        <?php if (is_power_editor($user)): ?>
+                            <a href="alliances_power.php" class="btn btn-power">
+                                <span class="btn-icon">⚡</span>
+                                Power Editor
                             </a>
-                        <?php endif; ?>
-                        <?php if ($is_admin): ?>
-                            <button
-                                class="btn btn-danger btn-small"
-                                onclick="deleteAlliance('<?= htmlspecialchars($alliance['tag'] ?? '', ENT_QUOTES) ?>')"
-                                title="Delete this alliance from the system"
-                            >
-                                Delete Alliance
-                            </button>
                         <?php endif; ?>
                     </div>
                 </div>
-            <?php endforeach; ?>
+                
+                <?php if (is_power_editor($user)): ?>
+                <div class="section-card power">
+                    <div class="card-header">
+                        <h3>⚡ Power Management</h3>
+                        <span class="card-badge power">Power Editor</span>
+                    </div>
+                    <p>Edit alliance power values and manage alliance data</p>
+                    <div class="action-buttons">
+                        <a href="alliances_power.php" class="btn btn-power">
+                            <span class="btn-icon">⚡</span>
+                            Power Editor
+                        </a>
+                        <a href="alliance_edit.php" class="btn btn-secondary">
+                            <span class="btn-icon">✏️</span>
+                            Editor
+                        </a>
+                    </div>
+                </div>
+                <?php endif; ?>
+                
+                <div class="section-card members">
+                    <div class="card-header">
+                        <h3>👥 Member Management</h3>
+                        <span class="card-badge members">Members</span>
+                    </div>
+                    <p>Manage alliance members and recruitment</p>
+                    <div class="action-buttons">
+                        <a href="alliance_members.php" class="btn btn-primary">
+                            <span class="btn-icon">👥</span>
+                            Members
+                        </a>
+                        <a href="recruitment.php" class="btn btn-secondary">
+                            <span class="btn-icon">📢</span>
+                            Recruitment
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <?php elseif ($user->aud === 'r4'): ?>
+        <!-- R4-specific sections -->
+        <div class="section-group">
+            <h2 class="section-title">
+                <span class="section-icon">🛡️</span>
+                R4 Operations
+            </h2>
+            
+            <div class="section-cards-grid">
+                <div class="section-card r4">
+                    <div class="card-header">
+                        <h3>📝 Alliance Data</h3>
+                        <span class="card-badge r4">R4</span>
+                    </div>
+                    <p>View and edit alliance information</p>
+                    <div class="action-buttons">
+                        <a href="alliance_edit.php" class="btn btn-primary">
+                            <span class="btn-icon">✏️</span>
+                            Edit Alliance
+                        </a>
+                        <a href="alliance_edit.php" class="btn btn-secondary">
+                            <span class="btn-icon">✏️</span>
+                            Editor
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="section-card statistics">
+                    <div class="card-header">
+                        <h3>📊 Alliance Statistics</h3>
+                        <span class="card-badge statistics">Stats</span>
+                    </div>
+                    <p>View alliance power and member statistics</p>
+                    <div class="action-buttons">
+                        <a href="alliance_stats.php" class="btn btn-primary">
+                            <span class="btn-icon">📊</span>
+                            Statistics
+                        </a>
+                        <a href="power_history.php" class="btn btn-secondary">
+                            <span class="btn-icon">📈</span>
+                            Power History
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <?php endif; ?>
     </div>
+</div>
 
-    <script>
-        /**
-         * Toggle email visibility in header (PII protection)
-         */
-        function toggleHeaderEmail(emailSpan) {
-            const fullEmail = emailSpan.getAttribute('data-email');
-            const isHidden = emailSpan.classList.contains('email-hidden');
+<style>
+/* Dashboard Header */
+.dashboard-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin: -2rem -2rem 2rem -2rem;
+    border-radius: 0 0 20px 20px;
+}
 
-            if (isHidden) {
-                // Show full email
-                emailSpan.textContent = fullEmail;
-                emailSpan.classList.remove('email-hidden');
-                emailSpan.classList.add('email-visible');
-                emailSpan.title = 'Click to hide email';
-            } else {
-                // Hide email (mask it)
-                const parts = fullEmail.split('@');
-                const masked = parts[0].substring(0, 1) + '*'.repeat(Math.max(6, parts[0].length - 2)) + parts[0].substring(parts[0].length - 1) + '@' + parts[1];
-                emailSpan.textContent = masked;
-                emailSpan.classList.remove('email-visible');
-                emailSpan.classList.add('email-hidden');
-                emailSpan.title = 'Click to show email';
-            }
-        }
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
 
-        /**
-         * Toggle email visibility in table (PII protection)
-         */
-        function toggleEmail(eyeIcon) {
-            const emailSpan = eyeIcon.previousElementSibling;
-            const fullEmail = emailSpan.getAttribute('data-email');
-            const isHidden = emailSpan.classList.contains('email-hidden');
+.dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
 
-            if (isHidden) {
-                // Show full email
-                emailSpan.textContent = fullEmail;
-                emailSpan.classList.remove('email-hidden');
-                emailSpan.classList.add('email-visible');
-                eyeIcon.title = 'Hide Email';
-            } else {
-                // Hide email (mask it)
-                const parts = fullEmail.split('@');
-                const masked = parts[0].substring(0, 1) + '*'.repeat(Math.max(6, parts[0].length - 2)) + parts[0].substring(parts[0].length - 1) + '@' + parts[1];
-                emailSpan.textContent = masked;
-                emailSpan.classList.remove('email-visible');
-                emailSpan.classList.add('email-hidden');
-                eyeIcon.title = 'Show Email';
-            }
-        }
+.title-icon {
+    font-size: 3rem;
+}
 
-        /**
-         * Revoke all active tokens for a user
-         */
-        function revokeUserTokens(email) {
-            if (!confirm(`Are you sure you want to revoke all active sessions for ${email}?\n\nThis will immediately log out the user from all devices.`)) {
-                return;
-            }
+.dashboard-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+}
 
-            const formData = new FormData();
-            formData.append('action', 'revoke_user_tokens');
-            formData.append('email', email);
+.user-badge {
+    display: flex;
+    gap: 1rem;
+}
 
-            fetch('revoke_token_api.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(`Successfully revoked all sessions for ${email}`);
+.role-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
-                    // Update UI
-                    const row = document.querySelector(`tr[data-user-email="${email}"]`);
-                    if (row) {
-                        const sessionCount = row.querySelector('.session-count');
-                        const sessionIndicator = row.querySelector('.session-indicator');
-                        const revokeBtn = row.querySelector('.btn-revoke');
+.power-badge {
+    background: #f39c12;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
 
-                        if (sessionCount) sessionCount.textContent = '0 active';
-                        if (sessionIndicator) {
-                            sessionIndicator.classList.remove('active');
-                            sessionIndicator.classList.add('inactive');
-                        }
-                        if (revokeBtn) revokeBtn.disabled = true;
-                    }
-                } else {
-                    alert(`Error: ${data.error || 'Unknown error occurred'}`);
-                }
-            })
-            .catch(error => {
-                console.error('Error revoking tokens:', error);
-                alert('Failed to revoke sessions. Please try again.');
-            });
-        }
+/* Stats Overview */
+.stats-overview {
+    margin-bottom: 3rem;
+}
 
-        /**
-         * Delete an alliance from the system
-         */
-        function deleteAlliance(allianceTag) {
-            if (!confirm(`Are you sure you want to delete alliance "${allianceTag}"?\n\nThis action CANNOT be undone and will:\n- Remove the alliance from all data files\n- Delete all associated history and signatures\n- Impact the public site rankings\n\nType the alliance tag to confirm: ${allianceTag}`)) {
-                return;
-            }
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
 
-            const confirmTag = prompt(`Please type the alliance tag "${allianceTag}" to confirm deletion:`);
-            if (confirmTag !== allianceTag) {
-                alert('Alliance tag does not match. Deletion cancelled.');
-                return;
-            }
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
 
-            const formData = new FormData();
-            formData.append('action', 'delete_alliance');
-            formData.append('tag', allianceTag);
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
 
-            fetch('alliance_delete_api.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(`Successfully deleted alliance "${allianceTag}"`);
-                    location.reload();
-                } else {
-                    alert(`Error: ${data.error || 'Unknown error occurred'}`);
-                }
-            })
-            .catch(error => {
-                console.error('Error deleting alliance:', error);
-                alert('Failed to delete alliance. Please try again.');
-            });
-        }
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
 
-        /**
-         * Auto-refresh session counts every 30 seconds
-         */
-        setInterval(function() {
-            // Refresh page to update session counts
-            // Could be replaced with AJAX polling if needed
-            location.reload();
-        }, 30000);
-    </script>
-</body>
-</html>
+.stat-card.users::before { background: linear-gradient(90deg, #3498db, #2980b9); }
+.stat-card.alliances::before { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+.stat-card.security::before { background: linear-gradient(90deg, #f39c12, #e67e22); }
+.stat-card.backup::before { background: linear-gradient(90deg, #27ae60, #229954); }
+
+.stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.stat-icon {
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.stat-trend {
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.stat-trend.positive { background: #d4edda; color: #155724; }
+.stat-trend.negative { background: #f8d7da; color: #721c24; }
+.stat-trend.neutral { background: #e2e3e5; color: #6c757d; }
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Quick Actions */
+.quick-actions {
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-icon {
+    font-size: 1.8rem;
+}
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.quick-action-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    text-align: center;
+}
+
+.quick-action-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #667eea;
+}
+
+.quick-action-card.power {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    color: white;
+}
+
+.action-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.action-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.action-desc {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+/* Main Sections */
+.main-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.section-group {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.section-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.section-card {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.section-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.section-card.primary { border-left: 4px solid #667eea; }
+.section-card.admin { border-left: 4px solid #e74c3c; }
+.section-card.security { border-left: 4px solid #f39c12; }
+.section-card.system { border-left: 4px solid #27ae60; }
+.section-card.development { border-left: 4px solid #9b59b6; }
+.section-card.communication { border-left: 4px solid #3498db; }
+.section-card.r5 { border-left: 4px solid #f1c40f; }
+.section-card.r4 { border-left: 4px solid #95a5a6; }
+.section-card.power { border-left: 4px solid #e67e22; }
+.section-card.members { border-left: 4px solid #2ecc71; }
+.section-card.statistics { border-left: 4px solid #8e44ad; }
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.card-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.card-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.card-badge.admin { background: #fee; color: #c33; }
+.card-badge.security { background: #fff3cd; color: #856404; }
+.card-badge.system { background: #d4edda; color: #155724; }
+.card-badge.dev { background: #e2e3f1; color: #6f42c1; }
+.card-badge.communication { background: #cce5ff; color: #004085; }
+.card-badge.r5 { background: #fff3cd; color: #856404; }
+.card-badge.r4 { background: #e2e3e5; color: #6c757d; }
+.card-badge.power { background: #ffe8cc; color: #cc5500; }
+.card-badge.members { background: #d1ecf1; color: #0c5460; }
+.card-badge.statistics { background: #f3e5f5; color: #6a1b9a; }
+.card-badge.core { background: #667eea; color: white; }
+
+.section-card p {
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-icon {
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+.btn-power {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    color: white;
+}
+
+.btn-power:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-content {
+        padding: 0 1rem;
+    }
+    
+    .dashboard-title {
+        font-size: 2rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-cards-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-group {
+        padding: 1.5rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .btn {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-header {
+        margin: -1rem -1rem 1rem -1rem;
+    }
+    
+    .header-content {
+        padding: 0 1rem;
+    }
+    
+    .dashboard-title {
+        font-size: 1.75rem;
+    }
+    
+    .section-group {
+        padding: 1rem;
+    }
+}
+</style>
+
+<?php include 'includes/footer.php'; ?>

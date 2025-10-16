@@ -1,18 +1,22 @@
 <?php
 /**
- * Secret Key Rotation Admin Panel
+ * Security: JWT Key Management
  *
  * Web interface for managing JWT secret key rotation
  * Admin-only access required
  *
- * @version 1.0.0
- * @date 2025-10-15
+ * @version 3.0.0
+ * @date 2025-10-16
  */
 
+session_start();
 define('ADMIN_INIT', true);
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/enhanced_jwt_with_key_rotation.php';
 require_once __DIR__ . '/secret_key_rotation.php';
+
+// Set page title for header
+$page_title = "JWT Key Rotation";
 
 // Require admin authentication
 $user = require_enhanced_admin_session_with_key_rotation();
@@ -26,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     switch ($action) {
         case 'rotate_key':
-            $reason = trim($_POST['reason'] ?? 'Manual rotation via admin panel');
+            $reason = trim($_POST['reason'] ?? 'Manual rotation via ' . ($_ENV['APP_NAME'] ?? 'admin panel'));
             $result = rotate_secret_key($user->sub, $reason);
             
             if ($result['success']) {
@@ -53,167 +57,147 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $status = get_key_rotation_status();
 $env_sync = validate_env_key_sync();
 
+// Include shared header
+include 'includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JWT Key Rotation - Admin Panel</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .header {
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .status-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-        }
-        .status-card h3 {
-            margin: 0 0 10px 0;
-            color: #333;
-        }
-        .status-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
-        }
-        .warning {
-            border-left-color: #f39c12;
-            background: #fef9e7;
-        }
-        .warning .status-value {
-            color: #f39c12;
-        }
-        .danger {
-            border-left-color: #e74c3c;
-            background: #fdf2f2;
-        }
-        .danger .status-value {
-            color: #e74c3c;
-        }
-        .success {
-            border-left-color: #27ae60;
-            background: #f0f9f4;
-        }
-        .success .status-value {
-            color: #27ae60;
-        }
-        .action-section {
-            margin: 30px 0;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-        .emergency-section {
-            border-color: #e74c3c;
-            background: #fdf2f2;
-        }
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-            margin: 5px;
-        }
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-        .btn-danger {
-            background: #e74c3c;
-            color: white;
-        }
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        .form-group {
-            margin: 15px 0;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .alert {
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .alert-success {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-        }
-        .alert-error {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-        }
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .history-table th, .history-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        .history-table th {
-            background: #f8f9fa;
-            font-weight: 600;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🔐 JWT Secret Key Rotation</h1>
-            <p>Manage JWT secret key rotation for enhanced security</p>
-        </div>
 
-        <?php if ($message): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($message) ?></div>
-        <?php endif; ?>
+<div class="page-header">
+    <h1 class="page-title">🔄 JWT Key Rotation Management</h1>
+    <p class="page-description">Manage JWT secret key rotation for enhanced security</p>
+</div>
 
-        <?php if ($error): ?>
-            <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
-        <?php endif; ?>
+<?php if ($message): ?>
+    <div class="alert alert-success"><?php echo htmlspecialchars($message); ?></div>
+<?php endif; ?>
+
+<?php if ($error): ?>
+    <div class="alert alert-error"><?php echo htmlspecialchars($error); ?></div>
+<?php endif; ?>
+
+<div class="container">
+<style>
+.container {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.status-card {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+}
+
+.status-card h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1rem;
+}
+
+.status-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #3498db;
+    margin-bottom: 0.25rem;
+}
+
+.warning {
+    border-left-color: #f39c12;
+    background: #fef9e7;
+}
+
+.warning .status-value {
+    color: #f39c12;
+}
+
+.danger {
+    border-left-color: #e74c3c;
+    background: #fdf2f2;
+}
+
+.danger .status-value {
+    color: #e74c3c;
+}
+
+.success {
+    border-left-color: #27ae60;
+    background: #f0f9f4;
+}
+
+.success .status-value {
+    color: #27ae60;
+}
+
+.action-section {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+}
+
+.emergency-section {
+    border-color: #e74c3c;
+    background: #fdf2f2;
+}
+
+.form-group {
+    margin: 1rem 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.history-table th, .history-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.history-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+}
+
+.actions-footer {
+    margin-top: 2rem;
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+</style>
 
         <!-- Status Overview -->
         <h2>Current Status</h2>
@@ -310,11 +294,11 @@ $env_sync = validate_env_key_sync();
             </tbody>
         </table>
 
-        <!-- Actions -->
-        <div style="margin-top: 30px; text-align: center;">
-            <a href="dashboard.php" class="btn btn-secondary">← Back to Dashboard</a>
-            <a href="audit_log_viewer.php" class="btn btn-secondary">View Audit Logs</a>
-        </div>
+    <!-- Actions -->
+    <div class="actions-footer">
+        <a href="dashboard.php" class="btn btn-secondary">← Back to Dashboard</a>
+        <a href="audit_logger.php" class="btn btn-secondary">View Audit Logs</a>
     </div>
-</body>
-</html>
+</div>
+
+<?php include 'includes/footer.php'; ?>
