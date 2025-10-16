@@ -96,22 +96,28 @@ def get_files_to_upload(ignore_patterns, allow_patterns):
 
 def ensure_remote_dir(ftp, remote_path):
     """Create remote directory if it doesn't exist"""
+    if not remote_path:
+        return
+
     dirs = remote_path.split('/')
-    current_dir = ''
+    current_path = ''
 
     for dir_name in dirs:
         if not dir_name:
             continue
 
-        current_dir = f"{current_dir}/{dir_name}" if current_dir else dir_name
+        # Build absolute path
+        current_path = f"{current_path}/{dir_name}" if current_path else dir_name
 
         try:
-            ftp.cwd(current_dir)
+            # Try to change to absolute path
+            ftp.cwd('/' + current_path)
         except ftplib.error_perm:
+            # Directory doesn't exist, create it
             try:
-                ftp.mkd(current_dir)
-                ftp.cwd(current_dir)
-            except ftplib.error_perm:
+                ftp.mkd('/' + current_path)
+            except ftplib.error_perm as e:
+                # Directory might already exist or permission denied
                 pass
 
 def upload_files(ftp, files):
