@@ -134,12 +134,14 @@ try {
             Quick Actions
         </h2>
         <div class="quick-actions-grid">
+            <?php if ($user->aud !== 'r4'): ?>
             <a href="alliance_edit.php" class="quick-action-card">
                 <div class="action-icon">✏️</div>
                 <div class="action-title">Alliance Editor</div>
-                <div class="action-desc">View all alliances</div>
+                <div class="action-desc"><?php echo $user->aud === 'r5' ? 'Update alliance info' : 'View all alliances'; ?></div>
             </a>
-            
+            <?php endif; ?>
+
             <?php if ($user->aud === 'admin' || is_power_editor($user)): ?>
             <a href="alliances_power.php" class="quick-action-card power">
                 <div class="action-icon">⚡</div>
@@ -147,39 +149,32 @@ try {
                 <div class="action-desc">Edit alliance power</div>
             </a>
             <?php endif; ?>
-            
+
             <?php if ($user->aud === 'admin'): ?>
             <a href="user_management.php" class="quick-action-card">
                 <div class="action-icon">👥</div>
                 <div class="action-title">User Management</div>
                 <div class="action-desc">Manage users & roles</div>
             </a>
-            
+
             <a href="security_audit.php" class="quick-action-card">
                 <div class="action-icon">📊</div>
                 <div class="action-title">Audit Logs</div>
                 <div class="action-desc">View system logs</div>
             </a>
             <?php endif; ?>
-            
-            <?php if ($user->aud === 'r5'): ?>
-            <a href="alliance_edit.php" class="quick-action-card">
-                <div class="action-icon">✏️</div>
-                <div class="action-title">Edit Alliance</div>
-                <div class="action-desc">Update alliance info</div>
-            </a>
-            <?php endif; ?>
         </div>
     </div>
 
     <div class="main-sections">
-        <!-- Alliance Management - Available to all roles -->
+        <!-- Alliance Management - Available to admin, R5, and power editors -->
+        <?php if ($user->aud !== 'r4'): ?>
         <div class="section-group">
             <h2 class="section-title">
                 <span class="section-icon">⚔️</span>
                 Alliance Management
             </h2>
-            
+
             <div class="section-card primary">
                 <div class="card-header">
                     <h3>Alliance Operations</h3>
@@ -197,15 +192,10 @@ try {
                             Power Editor
                         </a>
                     <?php endif; ?>
-                    <?php if ($user->aud === 'r5'): ?>
-                        <a href="alliance_edit.php" class="btn btn-secondary">
-                            <span class="btn-icon">✏️</span>
-                            Edit Alliance
-                        </a>
-                    <?php endif; ?>
                 </div>
             </div>
         </div>
+        <?php endif; ?>
         
         <?php if ($user->aud === 'admin'): ?>
         <!-- Admin-only sections -->
@@ -410,26 +400,22 @@ try {
                 <span class="section-icon">🛡️</span>
                 R4 Operations
             </h2>
-            
+
             <div class="section-cards-grid">
                 <div class="section-card r4">
                     <div class="card-header">
-                        <h3>📝 Alliance Data</h3>
+                        <h3>📝 Alliance Editor</h3>
                         <span class="card-badge r4">R4</span>
                     </div>
-                    <p>View and edit alliance information</p>
+                    <p>View and edit your alliance information</p>
                     <div class="action-buttons">
                         <a href="alliance_edit.php" class="btn btn-primary">
                             <span class="btn-icon">✏️</span>
                             Edit Alliance
                         </a>
-                        <a href="alliance_edit.php" class="btn btn-secondary">
-                            <span class="btn-icon">✏️</span>
-                            Editor
-                        </a>
                     </div>
                 </div>
-                
+
                 <div class="section-card statistics">
                     <div class="card-header">
                         <h3>📊 Alliance Statistics</h3>
@@ -441,7 +427,7 @@ try {
                             <span class="btn-icon">📊</span>
                             Statistics
                         </a>
-                        <a href="power_history.php" class="btn btn-secondary">
+                        <a href="alliance_power_history.php" class="btn btn-secondary">
                             <span class="btn-icon">📈</span>
                             Power History
                         </a>
