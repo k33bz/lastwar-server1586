@@ -471,4 +471,436 @@ function cleanup_security_data() {
     
     return $cleaned;
 }
+
+// Web Interface starts here
+require_once 'jwt.php';
+
+$user = require_jwt_session();
+
+// Check if user has admin access
+if ($user->aud !== 'admin') {
+    header('Location: dashboard.php?error=access_denied');
+    exit();
+}
+
+// Set page title for header
+$page_title = "Security Monitor";
+
+// Handle cleanup request
+if (isset($_POST['cleanup'])) {
+    $cleanup_stats = cleanup_security_data();
+    $cleanup_message = "Cleanup completed: {$cleanup_stats['rate_limits']} rate limit entries, {$cleanup_stats['temp_blocks']} expired blocks, {$cleanup_stats['old_events']} old events removed.";
+}
+
+// Get security statistics
+$stats = get_security_stats();
+
+// Get recent security events
+initialize_security_files();
+$security_log = read_json_file(SECURITY_LOG_FILE);
+$recent_events = array_slice($security_log['events'], 0, 50); // Last 50 events
+
+// Get current blacklist
+$blacklist = read_json_file(IP_BLACKLIST_FILE);
+
+// Include shared header
+include 'includes/header.php';
 ?>
+
+<div class="page-header">
+    <h1 class="page-title">🔒 Security Monitor</h1>
+    <p class="page-description">Real-time security monitoring and threat detection</p>
+</div>
+
+<div class="container">
+    <style>
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #2c3e50;
+            text-align: center;
+        }
+        
+        .stat-card.warning {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+        
+        .stat-card.danger {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .section-description {
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .management-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .management-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .management-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .management-icon {
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+
+        .management-card h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .management-card p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .card-action {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .management-card:hover .card-action {
+            color: #764ba2;
+        }
+        
+        .events-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .events-table th,
+        .events-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .events-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .events-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .event-type {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .event-type.failed_login {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .event-type.rate_limit_exceeded {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .event-type.blocked_ip_access {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .event-type.auto_ip_block {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .ip-list {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background: #34495e;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+
+    <?php if (isset($cleanup_message)): ?>
+        <div class="alert alert-success">
+            <?= htmlspecialchars($cleanup_message) ?>
+        </div>
+    <?php endif; ?>
+
+    <!-- Security Management -->
+    <div class="section">
+        <h2 class="section-title">Security Management</h2>
+        <p class="section-description">Access advanced security configuration and management tools</p>
+        <div class="management-grid">
+            <a href="key_rotation_admin_panel.php" class="management-card">
+                <div class="management-icon">🔄</div>
+                <h3>JWT Key Rotation</h3>
+                <p>Manage JWT secret key rotation, view rotation history, and perform emergency rotations</p>
+                <div class="card-action">Manage Keys →</div>
+            </a>
+            <a href="mfa_system.php" class="management-card">
+                <div class="management-icon">🔐</div>
+                <h3>MFA System</h3>
+                <p>Multi-factor authentication management, TOTP setup, and backup codes</p>
+                <div class="card-action">Manage MFA →</div>
+            </a>
+            <a href="audit_log_viewer.php" class="management-card">
+                <div class="management-icon">📋</div>
+                <h3>Audit Logs</h3>
+                <p>View comprehensive audit trail of all administrative actions and security events</p>
+                <div class="card-action">View Logs →</div>
+            </a>
+            <a href="backup_restore.php" class="management-card">
+                <div class="management-icon">💾</div>
+                <h3>Backup & Restore</h3>
+                <p>View and restore alliance data from automatic and manual backups</p>
+                <div class="card-action">Manage Backups →</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Security Statistics -->
+    <div class="section">
+        <h2 class="section-title">Security Overview</h2>
+        <div class="stats-grid">
+            <div class="stat-card <?= $stats['events_last_hour'] > 50 ? 'warning' : '' ?>">
+                <span class="stat-number"><?= number_format($stats['events_last_hour']) ?></span>
+                <div class="stat-label">Events (Last Hour)</div>
+            </div>
+            <div class="stat-card <?= $stats['events_last_24h'] > 500 ? 'warning' : '' ?>">
+                <span class="stat-number"><?= number_format($stats['events_last_24h']) ?></span>
+                <div class="stat-label">Events (24 Hours)</div>
+            </div>
+            <div class="stat-card <?= $stats['permanent_blocks'] > 0 ? 'danger' : '' ?>">
+                <span class="stat-number"><?= number_format($stats['permanent_blocks']) ?></span>
+                <div class="stat-label">Permanent Blocks</div>
+            </div>
+            <div class="stat-card <?= $stats['active_temp_blocks'] > 0 ? 'warning' : '' ?>">
+                <span class="stat-number"><?= number_format($stats['active_temp_blocks']) ?></span>
+                <div class="stat-label">Active Temp Blocks</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number"><?= number_format($stats['total_rate_limit_keys']) ?></span>
+                <div class="stat-label">Rate Limit Trackers</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Security Events -->
+    <div class="section">
+        <h2 class="section-title">Recent Security Events</h2>
+        <?php if (empty($recent_events)): ?>
+            <p>No security events recorded.</p>
+        <?php else: ?>
+            <table class="events-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Event Type</th>
+                        <th>IP Address</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($recent_events as $event): ?>
+                        <tr>
+                            <td><?= date('Y-m-d H:i:s', $event['timestamp']) ?></td>
+                            <td>
+                                <span class="event-type <?= htmlspecialchars($event['event_type']) ?>">
+                                    <?= htmlspecialchars($event['event_type']) ?>
+                                </span>
+                            </td>
+                            <td><?= htmlspecialchars($event['ip']) ?></td>
+                            <td>
+                                <?php if (!empty($event['details'])): ?>
+                                    <?php foreach ($event['details'] as $key => $value): ?>
+                                        <strong><?= htmlspecialchars($key) ?>:</strong> 
+                                        <?= htmlspecialchars(is_array($value) ? json_encode($value) : $value) ?><br>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </div>
+
+    <!-- IP Blacklist -->
+    <div class="section">
+        <h2 class="section-title">IP Blacklist</h2>
+        
+        <h3>Permanent Blocks</h3>
+        <?php if (empty($blacklist['ips'])): ?>
+            <p>No permanently blocked IPs.</p>
+        <?php else: ?>
+            <div class="ip-list">
+                <?php foreach ($blacklist['ips'] as $ip): ?>
+                    <?= htmlspecialchars($ip) ?><br>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <h3 style="margin-top: 2rem;">Temporary Blocks</h3>
+        <?php 
+        $active_blocks = array_filter($blacklist['auto_blocks'], function($block) {
+            return $block['expires'] > time();
+        });
+        ?>
+        <?php if (empty($active_blocks)): ?>
+            <p>No active temporary blocks.</p>
+        <?php else: ?>
+            <table class="events-table">
+                <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>Reason</th>
+                        <th>Blocked At</th>
+                        <th>Expires</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($active_blocks as $block): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($block['ip']) ?></td>
+                            <td><?= htmlspecialchars($block['reason']) ?></td>
+                            <td><?= date('Y-m-d H:i:s', $block['blocked_at']) ?></td>
+                            <td><?= date('Y-m-d H:i:s', $block['expires']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </div>
+
+    <!-- Maintenance -->
+    <div class="section">
+        <h2 class="section-title">Maintenance</h2>
+        <p>Clean up expired rate limits, temporary blocks, and old security events.</p>
+        <form method="post" style="margin-top: 1rem;">
+            <button type="submit" name="cleanup" class="btn btn-warning">
+                🧹 Clean Up Security Data
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Auto-refresh every 30 seconds
+    setTimeout(function() {
+        window.location.reload();
+    }, 30000);
+</script>
+
+<?php include 'includes/footer.php'; ?>
