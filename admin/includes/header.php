@@ -1,10 +1,14 @@
 <?php
 /**
  * Admin Panel Shared Header
- * Version: 1.1.0
+ * Version: 1.2.0
  * Provides consistent navigation and security checks
  *
  * Changelog:
+ * v1.2.0 (2025-10-17) - Fixed dropdown menu hover behavior
+ *   - Added invisible bridge between trigger and menu to prevent closing
+ *   - Added smooth fade-in/fade-out transitions
+ *   - Improved dropdown reliability and user experience
  * v1.1.0 (2025-10-17) - Enhanced navigation with dropdown menus
  *   - Converted nav to dropdown structure for better organization
  *   - Removed duplicate "Logs" link (now under Security dropdown)
@@ -138,6 +142,22 @@ $current_page = basename($_SERVER['PHP_SELF']);
             transform: translateY(2px);
         }
 
+        /* Create invisible bridge between trigger and menu */
+        .nav-dropdown::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 0.5rem;
+            background: transparent;
+            display: none;
+        }
+
+        .nav-dropdown:hover::before {
+            display: block;
+        }
+
         .nav-dropdown-menu {
             position: absolute;
             top: calc(100% + 0.5rem);
@@ -147,13 +167,19 @@ $current_page = basename($_SERVER['PHP_SELF']);
             border-radius: 6px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             min-width: 200px;
-            display: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
             z-index: 1000;
             padding: 0.5rem 0;
         }
 
         .nav-dropdown:hover .nav-dropdown-menu {
-            display: block;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0s;
         }
 
         .nav-dropdown-menu .nav-link {
