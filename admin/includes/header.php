@@ -1,8 +1,18 @@
 <?php
 /**
  * Admin Panel Shared Header
- * Version: 1.0.0
+ * Version: 1.1.0
  * Provides consistent navigation and security checks
+ *
+ * Changelog:
+ * v1.1.0 (2025-10-17) - Enhanced navigation with dropdown menus
+ *   - Converted nav to dropdown structure for better organization
+ *   - Removed duplicate "Logs" link (now under Security dropdown)
+ *   - Added Alliances dropdown (Editor, Power Editor, Tag Manager)
+ *   - Added Users dropdown (Manage Users, Magic Links, Send Login Link)
+ *   - Added Security dropdown (Monitor, Audit Logs, JWT Keys, MFA, Backups)
+ *   - Added hover animations and better visual hierarchy
+ * v1.0.0 (2025-10-15) - Initial header with flat navigation
  */
 
 // Security check - ensure JWT user is available
@@ -84,7 +94,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             gap: 0.5rem;
             align-items: center;
         }
-        
+
         .nav-link {
             color: #6c757d;
             text-decoration: none;
@@ -93,16 +103,73 @@ $current_page = basename($_SERVER['PHP_SELF']);
             transition: all 0.2s;
             font-size: 0.875rem;
             font-weight: 500;
+            position: relative;
         }
-        
+
         .nav-link:hover {
             background-color: #f8f9fa;
             color: #2c3e50;
         }
-        
+
         .nav-link.active {
             background-color: #2c3e50;
             color: white;
+        }
+
+        /* Dropdown Menu Styles */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-trigger {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            cursor: pointer;
+        }
+
+        .nav-dropdown-trigger::after {
+            content: '▾';
+            font-size: 0.7rem;
+            transition: transform 0.2s;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-trigger::after {
+            transform: translateY(2px);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            left: 0;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            padding: 0.5rem 0;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            display: block;
+        }
+
+        .nav-dropdown-menu .nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 0;
+            white-space: nowrap;
+        }
+
+        .nav-dropdown-menu .nav-link:hover {
+            background-color: #f8f9fa;
+        }
+
+        .nav-dropdown-menu .nav-link.active {
+            background-color: #e9ecef;
+            color: #2c3e50;
         }
         
         .user-info {
@@ -440,14 +507,49 @@ $current_page = basename($_SERVER['PHP_SELF']);
             
             <nav class="admin-nav">
                 <a href="dashboard.php" class="nav-link <?php echo $current_page === 'dashboard.php' ? 'active' : ''; ?>">Dashboard</a>
-                <a href="alliance_edit.php" class="nav-link <?php echo $current_page === 'alliance_edit.php' ? 'active' : ''; ?>">Alliances</a>
-                <?php if ($user->aud === 'admin' || (function_exists('is_power_editor') && is_power_editor($user))): ?>
-                <a href="alliances_power.php" class="nav-link <?php echo $current_page === 'alliances_power.php' ? 'active' : ''; ?>">Power Editor</a>
-                <?php endif; ?>
+
+                <!-- Alliances Dropdown -->
+                <div class="nav-dropdown">
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['alliance_edit.php', 'alliances_power.php', 'alliance_tags_manager.php']) ? 'active' : ''; ?>">
+                        Alliances
+                    </div>
+                    <div class="nav-dropdown-menu">
+                        <a href="alliance_edit.php" class="nav-link <?php echo $current_page === 'alliance_edit.php' ? 'active' : ''; ?>">Editor</a>
+                        <?php if ($user->aud === 'admin' || (function_exists('is_power_editor') && is_power_editor($user))): ?>
+                        <a href="alliances_power.php" class="nav-link <?php echo $current_page === 'alliances_power.php' ? 'active' : ''; ?>">Power Editor</a>
+                        <?php endif; ?>
+                        <?php if ($user->aud === 'admin'): ?>
+                        <a href="alliance_tags_manager.php" class="nav-link <?php echo $current_page === 'alliance_tags_manager.php' ? 'active' : ''; ?>">Tag Manager</a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
                 <?php if ($user->aud === 'admin'): ?>
-                <a href="user_management.php" class="nav-link <?php echo $current_page === 'user_management.php' ? 'active' : ''; ?>">Users</a>
-                <a href="security_audit.php" class="nav-link <?php echo $current_page === 'security_audit.php' || $current_page === 'audit_log_viewer.php' ? 'active' : ''; ?>">Logs</a>
-                <a href="security_monitor.php" class="nav-link <?php echo $current_page === 'security_monitor.php' ? 'active' : ''; ?>">Security</a>
+                <!-- Users Dropdown -->
+                <div class="nav-dropdown">
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['user_management.php', 'generate_magic_link.php', 'send_magic_link.php']) ? 'active' : ''; ?>">
+                        Users
+                    </div>
+                    <div class="nav-dropdown-menu">
+                        <a href="user_management.php" class="nav-link <?php echo $current_page === 'user_management.php' ? 'active' : ''; ?>">Manage Users</a>
+                        <a href="generate_magic_link.php" class="nav-link <?php echo $current_page === 'generate_magic_link.php' ? 'active' : ''; ?>">Magic Links</a>
+                        <a href="send_magic_link.php" class="nav-link <?php echo $current_page === 'send_magic_link.php' ? 'active' : ''; ?>">Send Login Link</a>
+                    </div>
+                </div>
+
+                <!-- Security Dropdown -->
+                <div class="nav-dropdown">
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['security_monitor.php', 'security_audit.php', 'audit_log_viewer.php', 'security_keys.php', 'security_mfa.php', 'security_backups.php']) ? 'active' : ''; ?>">
+                        Security
+                    </div>
+                    <div class="nav-dropdown-menu">
+                        <a href="security_monitor.php" class="nav-link <?php echo $current_page === 'security_monitor.php' ? 'active' : ''; ?>">Monitor</a>
+                        <a href="security_audit.php" class="nav-link <?php echo $current_page === 'security_audit.php' || $current_page === 'audit_log_viewer.php' ? 'active' : ''; ?>">Audit Logs</a>
+                        <a href="security_keys.php" class="nav-link <?php echo $current_page === 'security_keys.php' ? 'active' : ''; ?>">JWT Keys</a>
+                        <a href="security_mfa.php" class="nav-link <?php echo $current_page === 'security_mfa.php' ? 'active' : ''; ?>">MFA</a>
+                        <a href="security_backups.php" class="nav-link <?php echo $current_page === 'security_backups.php' ? 'active' : ''; ?>">Backups</a>
+                    </div>
+                </div>
                 <?php endif; ?>
             </nav>
             

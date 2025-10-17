@@ -14,6 +14,7 @@ if (!defined('ADMIN_INIT')) {
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/jwt.php';
 require_once __DIR__ . '/json_helpers.php';
+require_once __DIR__ . '/audit_logger.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -90,6 +91,12 @@ if ($action === 'revoke_user_tokens') {
 
         // Save updated users data
         write_json_file(USERS_FILE, $users_data);
+
+        // Log audit event
+        log_audit_event('tokens_revoked', $admin_token->sub, [
+            'target_user' => $email,
+            'revoked_by' => $admin_token->sub
+        ]);
 
         echo json_encode([
             'success' => true,

@@ -30,6 +30,36 @@ This directory contains shared header and footer components for the admin panel 
   - Session timeout warnings
   - Auto-refresh functionality
 
+### `breadcrumbs.php` (NEW - v3.0.0)
+- **Purpose**: Provides breadcrumb navigation and contextual help components
+- **Features**:
+  - Auto-detecting breadcrumb navigation trails
+  - Parent-child page relationships
+  - Contextual help tooltips (4-position support)
+  - Help modals for detailed information
+  - Accessible ARIA labels
+  - Icon support for visual clarity
+
+### `styles.css` (v3.0.0)
+- **Purpose**: Consolidated shared CSS for all admin pages
+- **Features**:
+  - Breadcrumb navigation styles
+  - Help tooltip system with directional arrows
+  - Help modal system with animations
+  - Mobile responsive design
+  - Consistent color scheme and spacing
+
+### `scripts.js` (v1.1.0)
+- **Purpose**: Shared JavaScript utilities for admin pages
+- **Features**:
+  - Modal management (open, close, backdrop)
+  - Toast notifications
+  - Email masking utilities
+  - Form serialization helpers
+  - API request wrappers
+  - String and data utilities
+  - Copy to clipboard functionality
+
 ## Usage
 
 ### Basic Implementation
@@ -43,7 +73,13 @@ $page_title = "Your Page Title";
 
 // Include shared header
 include 'includes/header.php';
+
+// Include breadcrumbs helper (NEW)
+require_once 'includes/breadcrumbs.php';
 ?>
+
+<!-- Render breadcrumb navigation (NEW) -->
+<?php echo render_breadcrumbs(); ?>
 
 <!-- Your page content here -->
 <div class="page-header">
@@ -56,6 +92,119 @@ include 'includes/header.php';
 </div>
 
 <?php include 'includes/footer.php'; ?>
+```
+
+### Breadcrumb Navigation
+
+**Auto-detecting breadcrumbs** based on current page:
+
+```php
+// Automatically detects current page from $_SERVER['PHP_SELF']
+<?php echo render_breadcrumbs(); ?>
+```
+
+**Manual page specification:**
+
+```php
+// Explicitly set the current page
+<?php echo render_breadcrumbs('security_monitor.php'); ?>
+```
+
+**Configuring breadcrumb trails:**
+
+Edit `includes/breadcrumbs.php` to add new pages to `$breadcrumb_config`:
+
+```php
+$breadcrumb_config = [
+    'your_page.php' => [
+        'title' => 'Your Page Title',
+        'icon' => '📄',  // Optional emoji icon
+        'parent' => 'dashboard.php'  // Parent page (null for root)
+    ]
+];
+```
+
+### Contextual Help System
+
+#### Help Tooltips
+
+**Basic tooltip:**
+
+```php
+<label for="field_name">
+    Field Label
+    <?php echo help_tooltip('This is helpful tooltip text'); ?>
+</label>
+```
+
+**Positioned tooltip:**
+
+```php
+<!-- Position options: top, right, bottom, left -->
+<?php echo help_tooltip('Help text here', 'right'); ?>
+<?php echo help_tooltip('Help text here', 'bottom'); ?>
+```
+
+**Example in form:**
+
+```php
+<div class="form-group">
+    <label for="expiry_days">
+        Token Expiry (days)
+        <?php echo help_tooltip('Number of days before token expires (1-365)', 'right'); ?>
+    </label>
+    <input type="number" id="expiry_days" name="expiry_days" class="form-control">
+</div>
+```
+
+#### Help Modals
+
+**Basic modal:**
+
+```php
+<h3>
+    Section Title
+    <?php echo help_modal('Modal Title', 'Detailed content here', 'unique-modal-id'); ?>
+</h3>
+```
+
+**Modal with HTML content:**
+
+```php
+<?php
+$modal_content = '
+    <p>Introduction paragraph.</p>
+    <h4>Subsection</h4>
+    <ul>
+        <li>List item 1</li>
+        <li>List item 2</li>
+    </ul>
+    <pre><code>Code example</code></pre>
+';
+
+echo help_modal('Detailed Help', $modal_content, 'my-help-modal');
+?>
+```
+
+**Full example:**
+
+```php
+<div class="info-box">
+    <h3>
+        What is a Test Token?
+        <?php echo help_modal(
+            'Understanding Test Tokens',
+            '<p>Test tokens are JWT tokens used for:</p>
+            <ul>
+                <li><strong>API Testing:</strong> Automated integration tests</li>
+                <li><strong>Development:</strong> Quick API endpoint testing</li>
+                <li><strong>CI/CD:</strong> Deployment authentication</li>
+            </ul>',
+            'test-token-help'
+        ); ?>
+    </h3>
+    <p>Brief description...</p>
+</div>
 ```
 
 ### Required Session Variables
@@ -164,6 +313,14 @@ Add page-specific styles after including the header:
 - `../support/` - Support page links
 
 ## Version History
+
+### v3.0.0 (2025-10-16)
+- **NEW**: Breadcrumb navigation system (`breadcrumbs.php`)
+- **NEW**: Contextual help tooltips with 4-position support
+- **NEW**: Help modal system for detailed information
+- **NEW**: Consolidated shared CSS (`styles.css`)
+- **NEW**: Shared JavaScript utilities (`scripts.js`)
+- Enhanced documentation and usage examples
 
 ### v1.0.0 (2025-10-15)
 - Initial implementation

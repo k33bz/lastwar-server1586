@@ -16,6 +16,16 @@ Enterprise-grade secure JWT-based authentication system with advanced security f
 - **Role-Based Access**: Admin, R5, R4, Power Editor roles
 - **Token Management**: Automatic revocation and blacklisting
 
+## 📊 Data Visualization Features
+
+### Power Analytics
+- **📈 Interactive Charts**: Chart.js-powered alliance power trends
+- **📅 Time Series**: Historical power tracking with date-based visualization
+- **🎨 Multi-Alliance View**: Color-coded lines for each alliance
+- **🔍 Interactive Tooltips**: Hover for detailed power values and dates
+- **📱 Responsive Design**: Charts adapt to all screen sizes
+- **📋 Data Export**: View both chart and tabular data formats
+
 ### Advanced Security (v3.0.0)
 - **🔄 JWT Key Rotation**: Automatic 30-day key rotation with emergency rotation
 - **🛡️ Multi-Factor Authentication**: TOTP support with backup codes and hardware keys
@@ -56,6 +66,7 @@ admin/
 │   ├── dashboard.php           # Main admin dashboard
 │   ├── alliance_edit.php       # Alliance editing interface
 │   ├── alliances_power.php     # Power management interface
+│   ├── alliance_power_history.php # Power trends visualization
 │   ├── user_management.php     # User administration
 │   ├── device_management.php   # Device management
 │   └── sign_rules.php          # Rule signing interface
@@ -374,6 +385,43 @@ Users are stored in `users.json`:
 - `X-XSS-Protection: 1; mode=block`
 - `Referrer-Policy: strict-origin-when-cross-origin`
 
+## � Powert History & Analytics
+
+### Alliance Power Tracking
+
+The admin system includes comprehensive power history tracking and visualization:
+
+**Power History Page** (`alliance_power_history.php`):
+- **📈 Interactive Line Chart**: Multi-alliance power trends over time
+- **📅 Time-based Analysis**: Date-driven X-axis with proper time formatting
+- **🎨 Color-coded Lines**: Each alliance gets a unique color for easy identification
+- **🔍 Interactive Features**: 
+  - Hover tooltips showing exact power values and dates
+  - Clickable legend to show/hide specific alliances
+  - Responsive design that adapts to screen size
+- **📋 Data Table**: Traditional tabular view below the chart
+- **📊 Chart.js Integration**: Modern, performant charting library
+
+**Features:**
+- **Multi-Alliance Support**: View all alliances on one chart
+- **Date Formatting**: Proper time-series handling with date-fns adapter
+- **Power Formatting**: Numbers displayed with commas (e.g., "1,234,567")
+- **Responsive Canvas**: Chart automatically resizes with container
+- **Grid Lines**: Subtle grid for easier value reading
+
+**Access:**
+- Available to all authenticated admin users
+- Accessible from main dashboard navigation
+- Uses existing power history CSV data
+- No additional setup required
+
+### Data Sources
+
+Power history data is sourced from:
+- `../data/power-history.csv` - Main power tracking file
+- Automatic integration with existing data structure
+- No database required - file-based storage
+
 ## 🛠️ Maintenance
 
 ### Token Blacklist Cleanup
@@ -515,6 +563,8 @@ Proprietary - Last War 1586 Server
 - **📱 Device Management**: Device registration and management for enhanced security
 - **🚨 Rate Limiting**: Advanced rate limiting with IP-based blocking
 - **📈 Security Analytics**: Comprehensive security metrics and reporting
+- **📊 Power Trends Visualization**: Interactive Chart.js-powered alliance power history charts
+- **🎨 Enhanced Data Views**: Multi-alliance power tracking with responsive design
 
 ### Version 2.1.0 (2025-10-15)
 - **🔄 JWT Key Rotation System**: Automatic 30-day key rotation with emergency rotation capability

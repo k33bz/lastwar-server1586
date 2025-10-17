@@ -1,0 +1,522 @@
+[
+    {
+        "id": "casual",
+        "name": "Casual",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "competitive",
+        "name": "Competitive",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "active_daily",
+        "name": "Active Daily",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "chill_crew",
+        "name": "Chill Crew",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "no_drama",
+        "name": "No Drama",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "veteran_friendly",
+        "name": "Veteran Friendly",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "new_player_friendly",
+        "name": "New Player Friendly",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "english_speaking",
+        "name": "English Speaking",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "global_alliance",
+        "name": "Global Alliance",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "timezone_coordinated",
+        "name": "Timezone Coordinated",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "discord_required",
+        "name": "Discord Required",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "no_spend_required",
+        "name": "No Spend Required",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "whale_friendly",
+        "name": "Whale Friendly",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "whale_only",
+        "name": "Whale Only",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "f2p_friendly",
+        "name": "Free-to-Play Friendly",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "strategic_focus",
+        "name": "Strategic Focus",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "fast_growth",
+        "name": "Fast Growth",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "loyal_core",
+        "name": "Loyal Core",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "recruiting_now",
+        "name": "Recruiting Now",
+        "category": "identity",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "territory_control",
+        "name": "Territory Control",
+        "category": "gameplay",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "event_participation",
+        "name": "Event Participation",
+        "category": "gameplay",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "alliance_pvp",
+        "name": "Alliance PvP",
+        "category": "gameplay",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "resource_raiding",
+        "name": "Resource Raiding",
+        "category": "gameplay",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "fast_rally_response",
+        "name": "Fast Rally Response",
+        "category": "gameplay",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "war_coordination",
+        "name": "War Coordination",
+        "category": "gameplay",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "map_dominance",
+        "name": "Map Dominance",
+        "category": "gameplay",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "alliance_donations",
+        "name": "Alliance Donations",
+        "category": "gameplay",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "hero_development",
+        "name": "Hero Development",
+        "category": "gameplay",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "speed_building",
+        "name": "Speed Building",
+        "category": "gameplay",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "vs_daily_3_2m",
+        "name": "VS Daily Score 3.2M",
+        "category": "performance",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "vs_daily_5_5m",
+        "name": "VS Daily Score 5.5M",
+        "category": "performance",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "vs_daily_7_2m",
+        "name": "VS Daily Score 7.2M",
+        "category": "performance",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "vs_league_diamond",
+        "name": "VS League Diamond",
+        "category": "performance",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "vs_league_gold",
+        "name": "VS League Gold",
+        "category": "performance",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "arena_focused",
+        "name": "Arena Focused",
+        "category": "performance",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "server_leader",
+        "name": "Server Leader",
+        "category": "performance",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "high_kill_count",
+        "name": "High Kill Count",
+        "category": "performance",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "maxed_tech",
+        "name": "Maxed Tech",
+        "category": "performance",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "elite_heroes",
+        "name": "Elite Heroes",
+        "category": "performance",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "level_5_territory",
+        "name": "Level 5 Territory",
+        "category": "performance",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "max_fortifications",
+        "name": "Max Fortifications",
+        "category": "performance",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "daily_checkin",
+        "name": "Daily Check-In",
+        "category": "dynamics",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "chat_active",
+        "name": "Alliance Chat Active",
+        "category": "dynamics",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "mentorship_available",
+        "name": "Mentorship Available",
+        "category": "dynamics",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "merge_open",
+        "name": "Alliance Merge Open",
+        "category": "dynamics",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "drama_free_zone",
+        "name": "Drama-Free Zone",
+        "category": "dynamics",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "respectful_players",
+        "name": "Respectful Players",
+        "category": "dynamics",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "organized_leadership",
+        "name": "Organized Leadership",
+        "category": "dynamics",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "rules_enforced",
+        "name": "Alliance Rules Enforced",
+        "category": "dynamics",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "events_weekly",
+        "name": "Alliance Events Weekly",
+        "category": "dynamics",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "shared_goals",
+        "name": "Alliance Goals Shared",
+        "category": "dynamics",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    },
+    {
+        "id": "teaching_training",
+        "name": "Teaching and Training",
+        "category": "dynamics",
+        "votes": 0,
+        "active": true,
+        "verified": true,
+        "createdAt": "2025-10-16T00:00:00Z",
+        "createdBy": "system"
+    }
+]

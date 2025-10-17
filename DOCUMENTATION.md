@@ -219,6 +219,24 @@ scripts/
 - CORS headers for API security
 - Input validation and sanitization
 - File locking for concurrent write operations
+- **Test Token System** (NEW): Generate long-lived JWT tokens for API testing
+  - Simplified token generation without email requirement
+  - Environment-specific (localhost vs production)
+  - Token management UI in Security Monitor
+  - Revocation capability with audit logging
+
+### Test Token Generation
+Located at `admin/generate_test_token.php`:
+- **Purpose**: Create long-lived JWT tokens for API testing and automation
+- **Features**:
+  - Auto-generated identifiers (`test-{role}-{timestamp}`)
+  - Configurable expiry (1-365 days)
+  - Role selection (admin/r5/r4)
+  - Alliance access control
+  - Toast notification for copy feedback
+  - Localhost vs production key awareness
+- **Management**: View and revoke tokens in Security Monitor
+- **Testing**: Use `admin/test_token_auth.php` to verify token validity
 
 ### Security Changelog
 See [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md) for detailed security updates.

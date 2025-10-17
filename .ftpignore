@@ -38,6 +38,12 @@ admin/debug_email_content.php
 admin/*.backup
 admin/backups/
 
+# Test Tokens - NEVER DEPLOY
+test-*.txt
+test-token-*.txt
+admin/test-*.txt
+admin/tests/test-results.json
+
 # Backup and deleted files
 *.del
 *.js.del

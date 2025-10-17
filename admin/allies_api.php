@@ -12,6 +12,7 @@ if (!defined('ADMIN_INIT')) {
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/jwt.php';
 require_once __DIR__ . '/json_helpers.php';
+require_once __DIR__ . '/audit_logger.php';
 
 $user_token = require_jwt_session();
 
@@ -74,6 +75,16 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['tag']))
 
         // Write back in the original format (array)
         write_json_file(ALLIANCES_FILE, $alliances_array);
+
+        // Log audit event
+        log_audit_event('alliance_edited', $user_token->sub, [
+            'alliance_tag' => $tag,
+            'changes' => [
+                'name' => $_POST['name'] ?? $alliance['name'],
+                'r5' => $_POST['r5'] ?? $r5_name,
+                'signed' => isset($_POST['signed'])
+            ]
+        ]);
 
         header('Location: dashboard.php');
         exit;

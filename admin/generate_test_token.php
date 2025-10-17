@@ -3,9 +3,21 @@
  * Generate Test Token
  *
  * Admin-only page to generate long-lived JWT tokens for API testing
- * Tokens are valid for 30 days and can be used for automated testing
+ * Tokens are valid for configurable days and can be used for automated testing
  *
- * @version 1.0.0
+ * Changelog:
+ * - v1.4.1 (2025-10-16): Fixed download filename to use full identifier instead of just role
+ *                        (e.g., test-r4-ape-1760671927.txt instead of test-token-r4-{timestamp}.txt)
+ * - v1.4.0 (2025-10-16): Fixed identifier to include APE suffix (test-{role}[-ape]-{timestamp})
+ *                        for better distinction between R4/R4+APE and R5/R5+APE tokens
+ * - v1.3.0 (2025-10-16): Added breadcrumb navigation, contextual help tooltips,
+ *                        and help modal for detailed token information
+ * - v1.2.0 (2025-10-16): Replaced alert with toast notification for copy feedback
+ * - v1.1.0 (2025-10-16): Simplified token generation without email requirement,
+ *                        added localhost testing instructions
+ * - v1.0.0 (2025-10-16): Initial release
+ *
+ * @version 1.4.1
  * @date 2025-10-16
  */
 
@@ -26,17 +38,12 @@ $error = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'generate') {
     try {
-        $test_email = trim($_POST['test_email'] ?? '');
         $test_role = $_POST['test_role'] ?? 'r4';
         $test_alliances = isset($_POST['test_alliances']) ? explode(',', $_POST['test_alliances']) : ['*'];
         $test_powereditor = isset($_POST['test_powereditor']);
         $expiry_days = (int)($_POST['expiry_days'] ?? 30);
 
         // Validate inputs
-        if (empty($test_email) || !filter_var($test_email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception('Valid email address required');
-        }
-
         if (!in_array($test_role, ['admin', 'r5', 'r4'])) {
             throw new Exception('Invalid role selected');
         }
@@ -53,12 +60,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $test_alliances = ['*'];
         }
 
-        // Generate test token
+        // Generate test token with simple identifier
         $jti = bin2hex(random_bytes(16));
         $expiry_seconds = $expiry_days * 24 * 60 * 60;
 
+        // Create identifier: test-{role}[-ape]-{timestamp}
+        $role_suffix = $test_powereditor ? '-ape' : '';
+        $test_identifier = 'test-' . $test_role . $role_suffix . '-' . time();
+
         $payload = [
-            'sub' => $test_email,
+            'sub' => $test_identifier,
             'aud' => $test_role,
             'alliances' => $test_alliances,
             'powereditor' => $test_powereditor,
@@ -69,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $generated_token = encode_jwt($payload, $expiry_seconds);
 
         $token_info = [
-            'email' => $test_email,
+            'identifier' => $test_identifier,
             'role' => $test_role,
             'alliances' => $test_alliances,
             'powereditor' => $test_powereditor,
@@ -81,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
         // Log token generation
         log_audit_event('generate_test_token', $user->sub, [
-            'test_email' => $test_email,
+            'test_identifier' => $test_identifier,
             'role' => $test_role,
             'alliances' => $test_alliances,
             'powereditor' => $test_powereditor,
@@ -96,7 +107,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 // Include shared header
 include 'includes/header.php';
+
+// Include breadcrumbs helper
+require_once 'includes/breadcrumbs.php';
 ?>
+
+<?php echo render_breadcrumbs(); ?>
 
 <div class="test-token-container">
     <div class="page-header">
@@ -137,12 +153,29 @@ include 'includes/header.php';
             </div>
         </div>
 
+        <div class="localhost-notice">
+            <h3>🔧 Testing on Localhost</h3>
+            <p><strong>IMPORTANT:</strong> Localhost and production use different JWT secret keys!</p>
+            <ul>
+                <li>This token was generated on <strong><?php echo $_SERVER['HTTP_HOST']; ?></strong></li>
+                <li>It will ONLY work on this environment</li>
+                <li>Generate a separate token on localhost to test locally</li>
+                <li>Generate a separate token on production to test in production</li>
+            </ul>
+            <div class="test-url-box">
+                <strong>Test this token at:</strong>
+                <div class="url-display">
+                    <code><?php echo 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/test_token_auth.php'; ?></code>
+                </div>
+            </div>
+        </div>
+
         <div class="token-info">
             <h3>Token Information</h3>
             <table class="info-table">
                 <tr>
-                    <td><strong>Email:</strong></td>
-                    <td><?php echo htmlspecialchars($token_info['email']); ?></td>
+                    <td><strong>Identifier:</strong></td>
+                    <td><code><?php echo htmlspecialchars($token_info['identifier']); ?></code></td>
                 </tr>
                 <tr>
                     <td><strong>Role:</strong></td>
@@ -178,11 +211,14 @@ include 'includes/header.php';
         <div class="usage-instructions">
             <h3>Usage Instructions</h3>
             <div class="instruction-box">
-                <h4>Using with curl:</h4>
-                <pre><code>curl -H "Cookie: jwt=YOUR_TOKEN" https://yourdomain.com/admin/dashboard.php</code></pre>
+                <h4>Test Token Authentication (curl):</h4>
+                <pre><code>curl -b "jwt=YOUR_TOKEN" <?php echo 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/test_token_auth.php'; ?></code></pre>
+
+                <h4>Access Dashboard (curl):</h4>
+                <pre><code>curl -b "jwt=YOUR_TOKEN" <?php echo 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/dashboard.php'; ?></code></pre>
 
                 <h4>Using with JavaScript fetch:</h4>
-                <pre><code>fetch('https://yourdomain.com/admin/dashboard.php', {
+                <pre><code>fetch('<?php echo 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/dashboard.php'; ?>', {
     credentials: 'include',
     headers: {
         'Cookie': 'jwt=YOUR_TOKEN'
@@ -192,7 +228,8 @@ include 'includes/header.php';
                 <h4>Using with Python requests:</h4>
                 <pre><code>import requests
 cookies = {'jwt': 'YOUR_TOKEN'}
-response = requests.get('https://yourdomain.com/admin/dashboard.php', cookies=cookies)</code></pre>
+response = requests.get('<?php echo 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/dashboard.php'; ?>', cookies=cookies)
+print(response.status_code, response.headers.get('content-type'))</code></pre>
             </div>
         </div>
 
@@ -219,28 +256,23 @@ response = requests.get('https://yourdomain.com/admin/dashboard.php', cookies=co
             <input type="hidden" name="action" value="generate">
 
             <div class="form-group">
-                <label for="test_email">Test User Email</label>
-                <input type="email"
-                       id="test_email"
-                       name="test_email"
-                       class="form-control"
-                       placeholder="test@example.com"
-                       required>
-                <small class="form-help">Email address for the test token (doesn't need to exist in users.json)</small>
-            </div>
-
-            <div class="form-group">
-                <label for="test_role">Role</label>
+                <label for="test_role">
+                    Role / Access Level
+                    <?php echo help_tooltip('Determines the permission level of the test token. R4 has basic access, R5 can sign rules, Admin has full control.', 'right'); ?>
+                </label>
                 <select id="test_role" name="test_role" class="form-control" required>
                     <option value="r4">R4 - Basic Access</option>
                     <option value="r5">R5 - Alliance Leader</option>
                     <option value="admin">Admin - Full Access</option>
                 </select>
-                <small class="form-help">Access level for the test token</small>
+                <small class="form-help">Access level for the test token (identifier format: test-{role}[-ape]-{timestamp})</small>
             </div>
 
             <div class="form-group">
-                <label for="test_alliances">Alliances (comma-separated)</label>
+                <label for="test_alliances">
+                    Alliances (comma-separated)
+                    <?php echo help_tooltip('Use * for access to all alliances, or specify specific alliance tags separated by commas (e.g., UvvU, 1984, K44)', 'right'); ?>
+                </label>
                 <input type="text"
                        id="test_alliances"
                        name="test_alliances"
@@ -254,12 +286,16 @@ response = requests.get('https://yourdomain.com/admin/dashboard.php', cookies=co
                 <label class="checkbox-label">
                     <input type="checkbox" name="test_powereditor" id="test_powereditor">
                     <span>Power Editor Access</span>
+                    <?php echo help_tooltip('Grants permission to edit alliance power values directly. Only admins and specially authorized users should have this permission.', 'right'); ?>
                 </label>
                 <small class="form-help">Allow editing alliance power values</small>
             </div>
 
             <div class="form-group">
-                <label for="expiry_days">Token Expiry (days)</label>
+                <label for="expiry_days">
+                    Token Expiry (days)
+                    <?php echo help_tooltip('How long the token remains valid. Recommended: 30 days for testing, 7 days for CI/CD, 365 days for long-term automation.', 'right'); ?>
+                </label>
                 <input type="number"
                        id="expiry_days"
                        name="expiry_days"
@@ -281,7 +317,37 @@ response = requests.get('https://yourdomain.com/admin/dashboard.php', cookies=co
         </form>
 
         <div class="info-box">
-            <h3>What is a Test Token?</h3>
+            <h3>
+                What is a Test Token?
+                <?php echo help_modal(
+                    'Understanding Test Tokens',
+                    '<p>Test tokens are specialized JWT (JSON Web Token) authentication tokens designed for:</p>
+                    <h4>Primary Use Cases:</h4>
+                    <ul>
+                        <li><strong>Automated Testing:</strong> Run integration tests against the admin API without manual login</li>
+                        <li><strong>Development:</strong> Test API endpoints efficiently during development</li>
+                        <li><strong>CI/CD Pipelines:</strong> Authenticate automated deployment and update scripts</li>
+                        <li><strong>Debugging:</strong> Test specific user roles and permission scenarios</li>
+                        <li><strong>API Integration:</strong> Integrate third-party tools with the admin system</li>
+                    </ul>
+                    <h4>Security Features:</h4>
+                    <ul>
+                        <li>All test token generation is logged in the audit log</li>
+                        <li>Tokens can be revoked instantly from Security Monitor</li>
+                        <li>Configurable expiry (1-365 days) for security control</li>
+                        <li>Role-based permissions (R4, R5, Admin)</li>
+                        <li>Alliance-specific access control</li>
+                    </ul>
+                    <h4>Important Notes:</h4>
+                    <ul>
+                        <li><strong>Environment-Specific:</strong> Localhost and production use different secret keys - tokens are NOT interchangeable</li>
+                        <li><strong>Identifier Format:</strong> Auto-generated as <code>test-{role}[-ape]-{timestamp}</code> (APE suffix added if Power Editor enabled)</li>
+                        <li><strong>Storage:</strong> Keep tokens secure - they provide full access based on assigned role</li>
+                        <li><strong>Best Practice:</strong> Use shortest expiry period needed for your use case</li>
+                    </ul>',
+                    'test-token-help'
+                ); ?>
+            </h3>
             <p>Test tokens are long-lived JWT tokens that can be used for:</p>
             <ul>
                 <li><strong>Automated Testing:</strong> Run integration tests against the admin API</li>
@@ -289,7 +355,7 @@ response = requests.get('https://yourdomain.com/admin/dashboard.php', cookies=co
                 <li><strong>CI/CD:</strong> Authenticate automated deployment scripts</li>
                 <li><strong>Debugging:</strong> Test specific user roles and permissions</li>
             </ul>
-            <p><strong>Note:</strong> Test tokens are logged in the audit log and can be revoked anytime.</p>
+            <p><strong>Note:</strong> Test tokens are logged in the audit log and can be revoked anytime. <em>Click the ℹ️ icon for detailed information.</em></p>
         </div>
     </div>
     <?php endif; ?>
@@ -450,6 +516,62 @@ response = requests.get('https://yourdomain.com/admin/dashboard.php', cookies=co
 .token-actions {
     display: flex;
     gap: 1rem;
+}
+
+/* Localhost Notice */
+.localhost-notice {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.localhost-notice h3 {
+    color: #856404;
+    margin-bottom: 0.75rem;
+    margin-top: 0;
+}
+
+.localhost-notice p {
+    color: #856404;
+    margin-bottom: 0.75rem;
+}
+
+.localhost-notice ul {
+    color: #856404;
+    margin: 0.5rem 0 1rem 1.5rem;
+    padding: 0;
+}
+
+.localhost-notice li {
+    margin-bottom: 0.5rem;
+}
+
+.test-url-box {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.test-url-box strong {
+    display: block;
+    color: #856404;
+    margin-bottom: 0.5rem;
+}
+
+.url-display {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+}
+
+.url-display code {
+    color: #495057;
+    font-size: 0.9rem;
+    word-break: break-all;
 }
 
 /* Token Info Table */
@@ -646,6 +768,30 @@ response = requests.get('https://yourdomain.com/admin/dashboard.php', cookies=co
     justify-content: center;
 }
 
+/* Copy Toast Notification */
+.copy-toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(40, 167, 69, 0.4);
+    font-weight: 600;
+    font-size: 1rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 10000;
+    pointer-events: none;
+}
+
+.copy-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .test-token-container {
@@ -672,6 +818,13 @@ response = requests.get('https://yourdomain.com/admin/dashboard.php', cookies=co
     .info-table td:first-child {
         width: auto;
     }
+
+    .copy-toast {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+        text-align: center;
+    }
 }
 </style>
 
@@ -679,9 +832,10 @@ response = requests.get('https://yourdomain.com/admin/dashboard.php', cookies=co
 function copyToken() {
     const tokenElement = document.getElementById('generatedToken');
     const token = tokenElement.textContent;
+    const button = event.target.closest('button');
 
     navigator.clipboard.writeText(token).then(() => {
-        alert('Token copied to clipboard!');
+        showCopySuccess(button);
     }).catch(err => {
         console.error('Failed to copy token:', err);
         // Fallback: select text
@@ -689,8 +843,34 @@ function copyToken() {
         range.selectNode(tokenElement);
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
-        alert('Token selected. Press Ctrl+C (or Cmd+C) to copy.');
+        showCopySuccess(button, 'Token selected! Press Ctrl+C to copy.');
     });
+}
+
+function showCopySuccess(button, message = 'Token copied to clipboard!') {
+    // Store original button content
+    const originalContent = button.innerHTML;
+
+    // Update button to show success
+    button.innerHTML = '<span class="btn-icon">✓</span>' + message.split('!')[0];
+    button.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+
+    // Create and show toast notification
+    const toast = document.createElement('div');
+    toast.className = 'copy-toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    // Trigger animation
+    setTimeout(() => toast.classList.add('show'), 10);
+
+    // Reset button and remove toast after delay
+    setTimeout(() => {
+        button.innerHTML = originalContent;
+        button.style.background = '';
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 2000);
 }
 
 function downloadToken() {
@@ -700,9 +880,11 @@ function downloadToken() {
     const content = `# Test JWT Token
 # Generated: ${tokenInfo.issued_at || 'N/A'}
 # Expires: ${tokenInfo.expires_at || 'N/A'}
-# Email: ${tokenInfo.email || 'N/A'}
+# Identifier: ${tokenInfo.identifier || 'N/A'}
 # Role: ${tokenInfo.role || 'N/A'}
 # Alliances: ${(tokenInfo.alliances || []).join(', ')}
+# Power Editor: ${tokenInfo.powereditor ? 'Yes' : 'No'}
+# JWT ID: ${tokenInfo.jti || 'N/A'}
 
 ${token}
 `;
@@ -711,7 +893,7 @@ ${token}
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `test-token-${tokenInfo.role || 'user'}.txt`;
+    a.download = `${tokenInfo.identifier || 'test-token'}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

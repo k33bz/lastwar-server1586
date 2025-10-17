@@ -24,6 +24,7 @@ try {
     require_once 'config.php';
     require_once 'jwt.php';
     require_once 'json_helpers.php';
+    require_once 'audit_logger.php';
 } catch (Exception $e) {
     http_response_code(500);
     header('Content-Type: application/json');
@@ -81,6 +82,13 @@ try {
 
         // Save updated alliances
         json_write($alliances_file, $alliances);
+
+        // Log audit event
+        log_audit_event('alliance_deleted', $user->sub, [
+            'alliance_tag' => $tag,
+            'alliance_name' => $deleted_name,
+            'previous_rank' => $index_to_delete + 1
+        ]);
 
         echo json_encode([
             'success' => true,

@@ -3,9 +3,13 @@
  *
  * Common JavaScript functions used across admin pages
  *
- * @version 1.0.0
+ * @version 1.2.0
  * @date 2025-10-16
  * @changelog
+ *   1.2.0 (2025-10-16) - Enhanced confirmAction() and added alertModal() to replace alert() and confirm()
+ *                       - Added danger mode, custom button text, animations
+ *                       - Added keyboard support (ESC, Enter)
+ *   1.1.0 (2025-10-16) - Added closeModalOnBackdrop() for help modal support
  *   1.0.0 (2025-10-16) - Initial consolidated utilities
  */
 
@@ -120,6 +124,17 @@ function closeAllModals() {
 }
 
 /**
+ * Close modal when clicking on backdrop
+ * @param {Event} event - Click event
+ * @param {string} modalId - The ID of the modal to close
+ */
+function closeModalOnBackdrop(event, modalId) {
+    if (event.target.id === modalId) {
+        closeModal(modalId);
+    }
+}
+
+/**
  * Initialize modal event listeners
  */
 function initializeModals() {
@@ -211,7 +226,7 @@ function showToast(message, type = 'info', duration = 3000) {
     }, duration);
 }
 
-// Add toast animations to page
+// Add toast and modal animations to page
 if (!document.getElementById('toast-animations')) {
     const style = document.createElement('style');
     style.id = 'toast-animations';
@@ -223,6 +238,47 @@ if (!document.getElementById('toast-animations')) {
         @keyframes slideOutRight {
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(400px); opacity: 0; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        /* Modal button styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+        /* Modal overlay transition */
+        .modal {
+            transition: opacity 0.3s ease;
         }
     `;
     document.head.appendChild(style);
@@ -510,26 +566,39 @@ async function copyToClipboard(text) {
 // ============================================================================
 
 /**
- * Show a confirmation dialog
+ * Show a confirmation dialog (replaces window.confirm)
  * @param {string} message - Confirmation message
  * @param {string} title - Dialog title
+ * @param {Object} options - Dialog options { confirmText, cancelText, dangerMode }
  * @returns {Promise<boolean>}
  */
-async function confirmAction(message, title = 'Confirm Action') {
+async function confirmAction(message, title = 'Confirm Action', options = {}) {
     return new Promise((resolve) => {
+        const defaults = {
+            confirmText: 'Confirm',
+            cancelText: 'Cancel',
+            dangerMode: false
+        };
+        const opts = { ...defaults, ...options };
+
         // Create modal
+        const confirmBtnClass = opts.dangerMode ? 'btn-danger' : 'btn-primary';
+        const headerGradient = opts.dangerMode
+            ? 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)'
+            : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+
         const modalHtml = `
-            <div id="confirmModal" class="modal show">
-                <div class="modal-content" style="max-width: 400px;">
-                    <div class="modal-header">
-                        <h3>${escapeHtml(title)}</h3>
+            <div id="confirmModal" class="modal" style="display: flex; z-index: 99999;">
+                <div class="modal-content" style="max-width: 500px; animation: slideIn 0.3s ease;">
+                    <div class="modal-header" style="background: ${headerGradient}; color: white; border-radius: 12px 12px 0 0;">
+                        <h3 style="margin: 0;">${escapeHtml(title)}</h3>
                     </div>
-                    <div class="modal-body">
-                        <p>${escapeHtml(message)}</p>
+                    <div class="modal-body" style="padding: 2rem;">
+                        <p style="font-size: 1.1rem; line-height: 1.6; white-space: pre-line;">${escapeHtml(message)}</p>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" id="confirmYes">Yes</button>
-                        <button type="button" class="btn btn-secondary" id="confirmNo">No</button>
+                    <div class="modal-footer" style="padding: 1rem 2rem; display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid #eee;">
+                        <button type="button" class="btn btn-secondary" id="confirmNo">${escapeHtml(opts.cancelText)}</button>
+                        <button type="button" class="btn ${confirmBtnClass}" id="confirmYes">${escapeHtml(opts.confirmText)}</button>
                     </div>
                 </div>
             </div>
@@ -541,9 +610,15 @@ async function confirmAction(message, title = 'Confirm Action') {
         const yesBtn = document.getElementById('confirmYes');
         const noBtn = document.getElementById('confirmNo');
 
+        // Focus confirm button
+        setTimeout(() => yesBtn.focus(), 100);
+
         const cleanup = (result) => {
-            modal.remove();
-            resolve(result);
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.remove();
+                resolve(result);
+            }, 200);
         };
 
         yesBtn.addEventListener('click', () => cleanup(true));
@@ -551,6 +626,88 @@ async function confirmAction(message, title = 'Confirm Action') {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) cleanup(false);
         });
+
+        // ESC key to cancel
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                document.removeEventListener('keydown', escHandler);
+                cleanup(false);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
+    });
+}
+
+/**
+ * Simplified alert replacement with modal
+ * @param {string} message - Alert message
+ * @param {string} title - Alert title
+ * @param {string} type - Alert type: 'info', 'success', 'warning', 'error'
+ * @returns {Promise<void>}
+ */
+async function alertModal(message, title = 'Notice', type = 'info') {
+    return new Promise((resolve) => {
+        const gradients = {
+            info: 'linear-gradient(135deg, #3498db 0%, #2980b9 100%)',
+            success: 'linear-gradient(135deg, #27ae60 0%, #229954 100%)',
+            warning: 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)',
+            error: 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)'
+        };
+
+        const icons = {
+            info: 'ℹ️',
+            success: '✅',
+            warning: '⚠️',
+            error: '❌'
+        };
+
+        const headerGradient = gradients[type] || gradients.info;
+        const icon = icons[type] || icons.info;
+
+        const modalHtml = `
+            <div id="alertModal" class="modal" style="display: flex; z-index: 99999;">
+                <div class="modal-content" style="max-width: 500px; animation: slideIn 0.3s ease;">
+                    <div class="modal-header" style="background: ${headerGradient}; color: white; border-radius: 12px 12px 0 0;">
+                        <h3 style="margin: 0;">${icon} ${escapeHtml(title)}</h3>
+                    </div>
+                    <div class="modal-body" style="padding: 2rem;">
+                        <p style="font-size: 1.1rem; line-height: 1.6; white-space: pre-line;">${escapeHtml(message)}</p>
+                    </div>
+                    <div class="modal-footer" style="padding: 1rem 2rem; display: flex; justify-content: flex-end; border-top: 1px solid #eee;">
+                        <button type="button" class="btn btn-primary" id="alertOk">OK</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        const modal = document.getElementById('alertModal');
+        const okBtn = document.getElementById('alertOk');
+
+        setTimeout(() => okBtn.focus(), 100);
+
+        const cleanup = () => {
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.remove();
+                resolve();
+            }, 200);
+        };
+
+        okBtn.addEventListener('click', cleanup);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) cleanup();
+        });
+
+        // ESC key or Enter to dismiss
+        const keyHandler = (e) => {
+            if (e.key === 'Escape' || e.key === 'Enter') {
+                document.removeEventListener('keydown', keyHandler);
+                cleanup();
+            }
+        };
+        document.addEventListener('keydown', keyHandler);
     });
 }
 

@@ -4,11 +4,15 @@
  *
  * View and restore alliance data from automatic backups
  *
- * @version 3.0.0
- * @date 2025-10-16
+ * @version 3.1.0
+ * @date 2025-10-17
  * @changelog
  *   1.0.0 (2025-10-15) - Initial implementation
  *   3.0.0 (2025-10-16) - Renamed to security_backups.php for consistency
+ *   3.1.0 (2025-10-17) - Fixed modal popup issue on page load
+ *                       - Added DOMContentLoaded and pageshow event listeners to force modals closed
+ *                       - Added parameter validation to prevent accidental modal triggers
+ *                       - Prevents modals from appearing on browser back/forward navigation
  */
 
 // Require JWT authentication
@@ -323,6 +327,20 @@ include 'includes/header.php';
     <script>
         let pendingRestoreFilename = '';
 
+        // Ensure all modals are hidden on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        });
+
+        // Ensure modals stay hidden on page show (back/forward navigation)
+        window.addEventListener('pageshow', function(event) {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        });
+
         function createManualBackup() {
             document.getElementById('backup-reason').value = '';
             openModal('manual-backup-modal');
@@ -357,9 +375,15 @@ include 'includes/header.php';
         }
 
         function restoreBackup(filename, timestamp) {
+            // Validate parameters to prevent accidental triggers
+            if (!filename || filename === '' || filename === 'undefined') {
+                console.error('Invalid filename for restore:', filename);
+                return;
+            }
+
             pendingRestoreFilename = filename;
             document.getElementById('restore-filename').textContent = filename;
-            document.getElementById('restore-timestamp').textContent = timestamp;
+            document.getElementById('restore-timestamp').textContent = timestamp || 'N/A';
             document.getElementById('restore-confirm').value = '';
             openModal('restore-modal');
         }
@@ -398,6 +422,12 @@ include 'includes/header.php';
         }
 
         async function viewBackup(filename) {
+            // Validate parameters to prevent accidental triggers
+            if (!filename || filename === '' || filename === 'undefined') {
+                console.error('Invalid filename for preview:', filename);
+                return;
+            }
+
             const content = document.getElementById('preview-content');
             content.innerHTML = 'Loading backup preview...';
             openModal('preview-modal');

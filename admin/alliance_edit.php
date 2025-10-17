@@ -28,16 +28,21 @@ $tag = $_GET['tag'] ?? null;
 $show_all = !$tag; // Show all alliances if no specific tag provided
 
 if ($tag) {
-    // Check permission for specific alliance - must be R4 or higher
-    if (!is_r4_or_higher($user_token) && !has_alliance_access($user_token, $tag)) {
+    // Check permission for specific alliance
+    if (!has_alliance_access($user_token, $tag)) {
         http_response_code(403);
-        die('Access denied. R4+ privileges required.');
+        die('Access denied. You do not have permission to edit this alliance.');
     }
 } else {
-    // Check permission for viewing all alliances - must be R4 or higher
-    if (!is_r4_or_higher($user_token)) {
-        http_response_code(403);
-        die('Access denied. R4+ privileges required to view all alliances.');
+    // For viewing all alliances, only admins with * access should see everything
+    // R4/R5 users should only see their assigned alliances
+    if (!($user_token->aud === 'admin' && in_array('*', $user_token->alliances))) {
+        // Redirect R4/R5 users to their first alliance if they only have one
+        if (count($user_token->alliances) === 1 && $user_token->alliances[0] !== '*') {
+            header('Location: alliance_edit.php?tag=' . urlencode($user_token->alliances[0]));
+            exit();
+        }
+        // If they have multiple alliances, they can see the list (filtered below)
     }
 }
 
@@ -147,7 +152,7 @@ if ($show_all) {
         <div class="alliances-grid">
             <?php foreach ($alliances_array as $alliance_item): ?>
                 <?php 
-                $can_edit = is_r4_or_higher($user_token) || has_alliance_access($user_token, $alliance_item['tag'] ?? '');
+                $can_edit = has_alliance_access($user_token, $alliance_item['tag'] ?? '');
                 if (!$can_edit) continue; // Skip alliances user can't edit
                 
                 $alliance_tag = $alliance_item['tag'] ?? 'Unknown';
@@ -644,6 +649,12 @@ if ($show_all) {
         </div>
     </form>
 </div>
+
+<?php
+// Include and render alliance tags widget
+require_once 'includes/alliance_tags_widget.php';
+echo render_alliance_tags_widget($tag, $user_token);
+?>
 
 <script>
 function updateSignatureStatus() {

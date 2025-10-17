@@ -1,8 +1,19 @@
 <?php
 /**
  * Admin Dashboard
- * Version: 1.0.0
+ * Version: 1.1.0
  * Main admin panel overview
+ *
+ * Changelog:
+ * v1.1.0 (2025-10-17) - Made statistics dynamic and functional
+ *   - Added active users tracking (logged in within 30 days)
+ *   - Added user trend calculation (new users in last 7 days)
+ *   - Added alliance trend tracking (requires alliance-count-history.json)
+ *   - Enhanced security status assessment (good/warning/critical)
+ *   - Enhanced backup status tracking (recent/ok/old/none)
+ *   - Added sublabels showing additional context (total users, backup timestamp, status)
+ *   - Added status-based color coding for security and backup cards
+ * v1.0.0 (2025-10-15) - Initial dashboard with static stats
  */
 
 // Require JWT authentication
@@ -19,9 +30,14 @@ include 'includes/header.php';
 // Get system statistics
 $stats = [
     'total_users' => 0,
+    'active_users' => 0,
+    'users_trend' => 0,
     'total_alliances' => 0,
+    'alliances_trend' => 0,
     'security_events' => 0,
-    'last_backup' => 'Never'
+    'security_status' => 'good',
+    'last_backup' => 'Never',
+    'backup_status' => 'none'
 ];
 
 try {
@@ -29,37 +45,101 @@ try {
     $users_file = __DIR__ . '/users.json';
     if (file_exists($users_file)) {
         $users_data = json_decode(file_get_contents($users_file), true);
-        $stats['total_users'] = count($users_data['users'] ?? []);
+        $total = count($users_data['users'] ?? []);
+        $stats['total_users'] = $total;
+
+        // Count active users (logged in within last 30 days)
+        $active_count = 0;
+        $thirty_days_ago = time() - (30 * 86400);
+        foreach ($users_data['users'] ?? [] as $user_item) {
+            if (isset($user_item['lastLogin'])) {
+                $last_login = strtotime($user_item['lastLogin']);
+                if ($last_login > $thirty_days_ago) {
+                    $active_count++;
+                }
+            }
+        }
+        $stats['active_users'] = $active_count;
+
+        // Calculate trend (new users in last 7 days)
+        $week_ago = time() - (7 * 86400);
+        $new_users = 0;
+        foreach ($users_data['users'] ?? [] as $user_item) {
+            if (isset($user_item['createdAt'])) {
+                $created = strtotime($user_item['createdAt']);
+                if ($created > $week_ago) {
+                    $new_users++;
+                }
+            }
+        }
+        $stats['users_trend'] = $new_users;
     }
-    
+
     // Count alliances from alliances.json
     $alliances_file = __DIR__ . '/../data/alliances.json';
     if (file_exists($alliances_file)) {
         $alliances_data = json_decode(file_get_contents($alliances_file), true);
-        $stats['total_alliances'] = count($alliances_data ?? []);
+        $current_count = count($alliances_data ?? []);
+        $stats['total_alliances'] = $current_count;
+
+        // Try to get previous alliance count for trend
+        $history_file = __DIR__ . '/../data/alliance-count-history.json';
+        if (file_exists($history_file)) {
+            $history = json_decode(file_get_contents($history_file), true);
+            $last_week = $history['last_week'] ?? $current_count;
+            $stats['alliances_trend'] = $current_count - $last_week;
+        }
     }
-    
-    // Count recent audit events
+
+    // Count recent security events and assess status
     $audit_file = __DIR__ . '/audit_log.json';
     if (file_exists($audit_file)) {
         $audit_data = json_decode(file_get_contents($audit_file), true);
         $recent_events = 0;
+        $critical_events = 0;
         $yesterday = time() - 86400;
+
+        $critical_actions = ['failed_login', 'unauthorized_access', 'token_blacklisted', 'security_alert'];
+
         foreach ($audit_data as $event) {
             if (isset($event['timestamp']) && strtotime($event['timestamp']) > $yesterday) {
                 $recent_events++;
+                if (in_array($event['action'] ?? '', $critical_actions)) {
+                    $critical_events++;
+                }
             }
         }
+
         $stats['security_events'] = $recent_events;
+
+        // Determine security status
+        if ($critical_events > 3) {
+            $stats['security_status'] = 'critical';
+        } elseif ($critical_events > 0 || $recent_events > 10) {
+            $stats['security_status'] = 'warning';
+        } else {
+            $stats['security_status'] = 'good';
+        }
     }
-    
+
     // Check for recent backups
-    $backup_dir = __DIR__ . '/../backups';
+    $backup_dir = __DIR__ . '/backups';
     if (is_dir($backup_dir)) {
         $files = glob($backup_dir . '/alliances_*.json');
         if (!empty($files)) {
             $latest_backup = max(array_map('filemtime', $files));
+            $hours_ago = (time() - $latest_backup) / 3600;
+
             $stats['last_backup'] = date('M j, Y H:i', $latest_backup);
+
+            // Determine backup status
+            if ($hours_ago < 24) {
+                $stats['backup_status'] = 'recent';
+            } elseif ($hours_ago < 72) {
+                $stats['backup_status'] = 'ok';
+            } else {
+                $stats['backup_status'] = 'old';
+            }
         }
     }
 } catch (Exception $e) {
@@ -90,39 +170,67 @@ try {
         <div class="stat-card users">
             <div class="stat-header">
                 <div class="stat-icon">👥</div>
-                <div class="stat-trend positive">+2</div>
+                <div class="stat-trend <?php echo $stats['users_trend'] > 0 ? 'positive' : 'neutral'; ?>">
+                    <?php echo $stats['users_trend'] > 0 ? '+' . $stats['users_trend'] : '—'; ?>
+                </div>
             </div>
-            <div class="stat-number"><?php echo number_format($stats['total_users']); ?></div>
+            <div class="stat-number"><?php echo number_format($stats['active_users']); ?></div>
             <div class="stat-label">Active Users</div>
+            <div class="stat-sublabel"><?php echo number_format($stats['total_users']); ?> total</div>
         </div>
-        
+
         <div class="stat-card alliances">
             <div class="stat-header">
                 <div class="stat-icon">⚔️</div>
-                <div class="stat-trend neutral">—</div>
+                <div class="stat-trend <?php
+                    echo $stats['alliances_trend'] > 0 ? 'positive' :
+                        ($stats['alliances_trend'] < 0 ? 'negative' : 'neutral');
+                ?>">
+                    <?php
+                    if ($stats['alliances_trend'] > 0) echo '+' . $stats['alliances_trend'];
+                    elseif ($stats['alliances_trend'] < 0) echo $stats['alliances_trend'];
+                    else echo '—';
+                    ?>
+                </div>
             </div>
             <div class="stat-number"><?php echo number_format($stats['total_alliances']); ?></div>
             <div class="stat-label">Alliances</div>
         </div>
-        
-        <div class="stat-card security">
+
+        <div class="stat-card security <?php echo $stats['security_status']; ?>">
             <div class="stat-header">
                 <div class="stat-icon">🛡️</div>
-                <div class="stat-trend <?php echo $stats['security_events'] > 5 ? 'negative' : 'positive'; ?>">
-                    <?php echo $stats['security_events'] > 5 ? '⚠️' : '✓'; ?>
+                <div class="stat-trend <?php echo $stats['security_status'] === 'good' ? 'positive' :
+                    ($stats['security_status'] === 'critical' ? 'negative' : 'neutral'); ?>">
+                    <?php
+                    if ($stats['security_status'] === 'good') echo '✓';
+                    elseif ($stats['security_status'] === 'critical') echo '⚠️';
+                    else echo '⚠';
+                    ?>
                 </div>
             </div>
             <div class="stat-number"><?php echo number_format($stats['security_events']); ?></div>
             <div class="stat-label">Security Events (24h)</div>
+            <div class="stat-sublabel">Status: <?php echo ucfirst($stats['security_status']); ?></div>
         </div>
-        
-        <div class="stat-card backup">
+
+        <div class="stat-card backup <?php echo $stats['backup_status']; ?>">
             <div class="stat-header">
                 <div class="stat-icon">💾</div>
-                <div class="stat-trend positive">✓</div>
+                <div class="stat-trend <?php
+                    echo $stats['backup_status'] === 'recent' ? 'positive' :
+                        ($stats['backup_status'] === 'old' || $stats['backup_status'] === 'none' ? 'negative' : 'neutral');
+                ?>">
+                    <?php
+                    if ($stats['backup_status'] === 'recent') echo '✓';
+                    elseif ($stats['backup_status'] === 'old' || $stats['backup_status'] === 'none') echo '⚠️';
+                    else echo '—';
+                    ?>
+                </div>
             </div>
             <div class="stat-number"><?php echo $stats['last_backup'] === 'Never' ? '—' : '✓'; ?></div>
-            <div class="stat-label">Last: <?php echo $stats['last_backup']; ?></div>
+            <div class="stat-label">Last Backup</div>
+            <div class="stat-sublabel"><?php echo $stats['last_backup']; ?></div>
         </div>
     </div>
 </div>
@@ -546,6 +654,16 @@ try {
 .stat-card.security::before { background: linear-gradient(90deg, #f39c12, #e67e22); }
 .stat-card.backup::before { background: linear-gradient(90deg, #27ae60, #229954); }
 
+/* Status-specific card colors */
+.stat-card.security.good::before { background: linear-gradient(90deg, #27ae60, #229954); }
+.stat-card.security.warning::before { background: linear-gradient(90deg, #f39c12, #e67e22); }
+.stat-card.security.critical::before { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+
+.stat-card.backup.recent::before { background: linear-gradient(90deg, #27ae60, #229954); }
+.stat-card.backup.ok::before { background: linear-gradient(90deg, #3498db, #2980b9); }
+.stat-card.backup.old::before,
+.stat-card.backup.none::before { background: linear-gradient(90deg, #e67e22, #d35400); }
+
 .stat-header {
     display: flex;
     justify-content: space-between;
@@ -586,6 +704,13 @@ try {
     color: #6c757d;
     font-size: 0.9rem;
     font-weight: 500;
+}
+
+.stat-sublabel {
+    color: #95a5a6;
+    font-size: 0.75rem;
+    font-weight: 400;
+    margin-top: 0.25rem;
 }
 
 /* Dashboard Content */

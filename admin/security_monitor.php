@@ -5,9 +5,11 @@
  * Provides rate limiting, IP blocking, suspicious activity detection,
  * and real-time security monitoring. Central hub for all security tools.
  *
- * @version 3.0.0
+ * @version 3.1.0
  * @date 2025-10-16
  * @changelog
+ *   3.1.0 (2025-10-16) - Added Test Token Management section
+ *                       - View active test tokens, revoke functionality
  *   3.0.0 (2025-10-16) - Added Security Management section with links
  *                       - Part of security reorganization v3.0
  *   1.0.0 (2025-10-15) - Initial version
@@ -490,6 +492,21 @@ if ($user->aud !== 'admin') {
 // Set page title for header
 $page_title = "Security Monitor";
 
+// Handle test token revocation
+$revoke_message = null;
+if (isset($_POST['revoke_token'])) {
+    $jti_to_revoke = $_POST['jti'] ?? null;
+    if ($jti_to_revoke) {
+        // Blacklist the token (永久 revocation)
+        if (blacklist_token($jti_to_revoke, time() + (365 * 86400))) {
+            $revoke_message = "Test token revoked successfully.";
+            log_audit_event('revoke_test_token', $user->sub, ['jti' => $jti_to_revoke]);
+        } else {
+            $revoke_message = "Failed to revoke token.";
+        }
+    }
+}
+
 // Handle cleanup request
 if (isset($_POST['cleanup'])) {
     $cleanup_stats = cleanup_security_data();
@@ -506,6 +523,49 @@ $recent_events = array_slice($security_log['events'], 0, 50); // Last 50 events
 
 // Get current blacklist
 $blacklist = read_json_file(IP_BLACKLIST_FILE);
+
+// Get test tokens from audit log
+$audit_log = read_json_file(AUDIT_LOG_FILE);
+$test_tokens = [];
+$now = time();
+
+// Find all generate_test_token events
+foreach ($audit_log['logs'] ?? [] as $log) {
+    if ($log['action'] === 'generate_test_token') {
+        $jti = $log['details']['jti'] ?? null;
+        if ($jti) {
+            // Check if token is revoked (blacklisted)
+            $is_revoked = is_token_blacklisted($jti);
+
+            // Check if token is expired
+            $issued_at = strtotime($log['timestamp']);
+            $expiry_days = $log['details']['expiry_days'] ?? 30;
+            $expires_at = $issued_at + ($expiry_days * 86400);
+            $is_expired = $expires_at < $now;
+
+            // Only show non-revoked, non-expired tokens
+            if (!$is_revoked && !$is_expired) {
+                $test_tokens[] = [
+                    'jti' => $jti,
+                    'identifier' => $log['details']['test_identifier'] ?? ($log['details']['test_email'] ?? 'unknown'),
+                    'role' => $log['details']['role'] ?? 'unknown',
+                    'created_by' => $log['user'] ?? 'unknown',
+                    'created_at' => $log['timestamp'],
+                    'expires_at' => date('Y-m-d H:i:s', $expires_at),
+                    'expiry_timestamp' => $expires_at,
+                    'alliances' => $log['details']['alliances'] ?? [],
+                    'powereditor' => $log['details']['powereditor'] ?? false,
+                    'days_left' => ceil(($expires_at - $now) / 86400)
+                ];
+            }
+        }
+    }
+}
+
+// Sort by creation date (newest first)
+usort($test_tokens, function($a, $b) {
+    return strtotime($b['created_at']) - strtotime($a['created_at']);
+});
 
 // Include shared header
 include 'includes/header.php';
@@ -734,11 +794,41 @@ include 'includes/header.php';
             color: #155724;
             border: 1px solid #c3e6cb;
         }
+
+        .role-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .role-badge.role-admin {
+            background: #fee;
+            color: #c33;
+        }
+
+        .role-badge.role-r5 {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .role-badge.role-r4 {
+            background: #e2e3e5;
+            color: #6c757d;
+        }
     </style>
 
     <?php if (isset($cleanup_message)): ?>
         <div class="alert alert-success">
             <?= htmlspecialchars($cleanup_message) ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if (isset($revoke_message)): ?>
+        <div class="alert alert-success">
+            <?= htmlspecialchars($revoke_message) ?>
         </div>
     <?php endif; ?>
 
@@ -772,6 +862,63 @@ include 'includes/header.php';
                 <div class="card-action">Manage Backups →</div>
             </a>
         </div>
+    </div>
+
+    <!-- Test Token Management -->
+    <div class="section">
+        <h2 class="section-title">Test Token Management</h2>
+        <p class="section-description">
+            Active test tokens for API testing and automation.
+            <a href="generate_test_token.php" style="color: #667eea; font-weight: 600;">Generate new token →</a>
+        </p>
+        <?php if (empty($test_tokens)): ?>
+            <p>No active test tokens. <a href="generate_test_token.php">Generate one now</a>.</p>
+        <?php else: ?>
+            <table class="events-table">
+                <thead>
+                    <tr>
+                        <th>Identifier</th>
+                        <th>Role</th>
+                        <th>Created By</th>
+                        <th>Created</th>
+                        <th>Expires</th>
+                        <th>Days Left</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($test_tokens as $token): ?>
+                        <tr>
+                            <td>
+                                <code style="font-size: 0.85rem;"><?= htmlspecialchars($token['identifier']) ?></code>
+                            </td>
+                            <td>
+                                <span class="role-badge role-<?= htmlspecialchars($token['role']) ?>">
+                                    <?= strtoupper(htmlspecialchars($token['role'])) ?>
+                                </span>
+                            </td>
+                            <td><?= htmlspecialchars($token['created_by']) ?></td>
+                            <td><?= htmlspecialchars($token['created_at']) ?></td>
+                            <td><?= htmlspecialchars($token['expires_at']) ?></td>
+                            <td>
+                                <span style="color: <?= $token['days_left'] < 7 ? '#dc3545' : '#28a745' ?>;">
+                                    <?= $token['days_left'] ?> days
+                                </span>
+                            </td>
+                            <td>
+                                <form method="post" style="margin: 0;" onsubmit="return confirm('Revoke this test token? This action cannot be undone.');">
+                                    <input type="hidden" name="revoke_token" value="1">
+                                    <input type="hidden" name="jti" value="<?= htmlspecialchars($token['jti']) ?>">
+                                    <button type="submit" class="btn" style="padding: 0.25rem 0.75rem; font-size: 0.85rem; background: #dc3545;">
+                                        Revoke
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
     </div>
 
     <!-- Security Statistics -->

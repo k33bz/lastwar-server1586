@@ -155,12 +155,12 @@ function require_admin_session() {
  * @return bool True if user has access
  */
 function has_alliance_access($token, $alliance_tag) {
-    // Admin, R5, and R4 with * have access to all alliances
-    if ($token->aud === 'admin' || $token->aud === 'r5' || $token->aud === 'r4' || in_array('*', $token->alliances)) {
+    // Admin with * access or users with * in alliances have access to all alliances
+    if (($token->aud === 'admin' && in_array('*', $token->alliances)) || in_array('*', $token->alliances)) {
         return true;
     }
 
-    // Check if alliance is in user's allowed list
+    // Check if alliance is in user's allowed list (case-insensitive)
     return in_array(strtolower($alliance_tag), array_map('strtolower', $token->alliances));
 }
 

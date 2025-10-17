@@ -821,3 +821,327 @@ select:focus {
         border: 1px solid #ddd;
     }
 }
+
+/* ============================================================================
+   Breadcrumbs
+   ============================================================================ */
+
+.breadcrumbs {
+    background: #f8f9fa;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e9ecef;
+}
+
+.breadcrumb-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-link {
+    color: #667eea;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+.breadcrumb-current {
+    color: #495057;
+    font-weight: 600;
+}
+
+.breadcrumb-separator {
+    color: #6c757d;
+    margin: 0 0.5rem;
+    font-weight: 300;
+}
+
+/* ============================================================================
+   Help Tooltips
+   ============================================================================ */
+
+.help-tooltip {
+    position: relative;
+    display: inline-block;
+    margin-left: 0.25rem;
+    cursor: help;
+}
+
+.help-icon {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.help-tooltip:hover .help-icon {
+    opacity: 1;
+}
+
+.help-content {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    z-index: 100;
+    background: #2c3e50;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    width: 250px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+.help-tooltip[data-position="top"] .help-content {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 0.5rem;
+}
+
+.help-tooltip[data-position="right"] .help-content {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 0.5rem;
+}
+
+.help-tooltip[data-position="bottom"] .help-content {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 0.5rem;
+}
+
+.help-tooltip[data-position="left"] .help-content {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 0.5rem;
+}
+
+.help-tooltip:hover .help-content {
+    visibility: visible;
+    opacity: 1;
+}
+
+.help-content::after {
+    content: "";
+    position: absolute;
+    border: 6px solid transparent;
+}
+
+.help-tooltip[data-position="top"] .help-content::after {
+    top: 100%;
+    left: 50%;
+    margin-left: -6px;
+    border-top-color: #2c3e50;
+}
+
+.help-tooltip[data-position="right"] .help-content::after {
+    right: 100%;
+    top: 50%;
+    margin-top: -6px;
+    border-right-color: #2c3e50;
+}
+
+.help-tooltip[data-position="bottom"] .help-content::after {
+    bottom: 100%;
+    left: 50%;
+    margin-left: -6px;
+    border-bottom-color: #2c3e50;
+}
+
+.help-tooltip[data-position="left"] .help-content::after {
+    left: 100%;
+    top: 50%;
+    margin-top: -6px;
+    border-left-color: #2c3e50;
+}
+
+/* ============================================================================
+   Help Modals
+   ============================================================================ */
+
+.help-modal-trigger {
+    display: inline-block;
+    margin-left: 0.25rem;
+    cursor: pointer;
+}
+
+.help-modal-trigger .help-icon {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.help-modal-trigger:hover .help-icon {
+    opacity: 1;
+}
+
+.help-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    overflow: auto;
+    animation: fadeIn 0.3s ease;
+}
+
+.help-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.help-modal-content {
+    background-color: white;
+    padding: 0;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 90%;
+    animation: slideIn 0.3s ease;
+}
+
+.help-modal-header {
+    padding: 1.5rem;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.help-modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.help-modal-close {
+    background: none;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    color: white;
+    line-height: 1;
+    padding: 0;
+    transition: transform 0.2s ease;
+}
+
+.help-modal-close:hover {
+    transform: scale(1.1);
+}
+
+.help-modal-body {
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    line-height: 1.6;
+}
+
+.help-modal-body h4 {
+    color: #667eea;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.help-modal-body ul,
+.help-modal-body ol {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.help-modal-body code {
+    background: #f8f9fa;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.9em;
+    color: #e83e8c;
+}
+
+.help-modal-body pre {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+}
+
+.help-modal-body pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .breadcrumbs {
+        padding: 0.5rem 1rem;
+    }
+
+    .breadcrumb-list {
+        font-size: 0.8rem;
+    }
+
+    .help-content {
+        width: 200px;
+        font-size: 0.75rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .help-modal-content {
+        width: 95%;
+        max-width: none;
+    }
+
+    .help-modal-body {
+        max-height: 70vh;
+    }
+}

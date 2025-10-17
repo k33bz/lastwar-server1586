@@ -95,6 +95,12 @@ tests/
 *.test.js
 *.spec.js
 
+# Test Tokens - NEVER COMMIT
+test-*.txt
+test-token-*.txt
+admin/tests/test-results.json
+admin/test-*.txt
+
 # Coverage Reports
 coverage/
 *.coverage

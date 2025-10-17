@@ -133,6 +133,40 @@ if (!isset($user)) {
         </div>
     </div>
 
+    <!-- Session Expiration Warning Modal -->
+    <div id="sessionWarningModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white;">
+                <h3>⏰ Session Expiring Soon</h3>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 1.1rem; margin-bottom: 1rem;">Your session will expire in <strong>5 minutes</strong>.</p>
+                <p style="color: #6c757d; margin-bottom: 1.5rem;">Would you like to continue working? Your session will be automatically refreshed.</p>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button onclick="handleSessionExpiry(false)" class="btn btn-secondary">Log Out</button>
+                    <button onclick="handleSessionExpiry(true)" class="btn btn-primary">Continue Working</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Session Refresh Error Modal -->
+    <div id="sessionErrorModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white;">
+                <h3>❌ Session Refresh Failed</h3>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 1.1rem; margin-bottom: 1rem;">Unable to refresh your session automatically.</p>
+                <p style="color: #6c757d; margin-bottom: 1.5rem;">Please save your work and log in again to continue.</p>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button onclick="closeModal('sessionErrorModal')" class="btn btn-secondary">Dismiss</button>
+                    <button onclick="window.location.href='login.php'" class="btn btn-primary">Go to Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <style>
         .admin-footer {
             background: #2c3e50;
@@ -324,12 +358,46 @@ if (!isset($user)) {
             border-radius: 4px;
             border-left: 4px solid #27ae60;
         }
-        
+
+        /* Modal Button Styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+
         @media (max-width: 768px) {
             .footer-content {
                 grid-template-columns: 1fr;
             }
-            
+
             .footer-bottom {
                 flex-direction: column;
                 text-align: center;
@@ -381,37 +449,48 @@ if (!isset($user)) {
         <?php if (isset($user) && $user->aud !== 'guest'): ?>
         let sessionTimeout = 25 * 60 * 1000; // 25 minutes (5 min before 30 min expiry)
         let warningShown = false;
-        
-        setTimeout(function() {
+
+        function handleSessionExpiry(continueWorking) {
+            document.getElementById('sessionWarningModal').style.display = 'none';
+
+            if (continueWorking) {
+                fetch('refresh_session.php', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        warningShown = false;
+                        console.log('Session refreshed successfully');
+                        showToast('Session refreshed successfully', 'success');
+                        // Reset the timeout
+                        setTimeout(showSessionWarning, sessionTimeout);
+                    } else {
+                        document.getElementById('sessionErrorModal').style.display = 'flex';
+                    }
+                })
+                .catch(error => {
+                    console.error('Session refresh failed:', error);
+                    document.getElementById('sessionErrorModal').style.display = 'flex';
+                });
+            } else {
+                // User chose not to continue, redirect to login
+                window.location.href = 'login.php';
+            }
+        }
+
+        function showSessionWarning() {
             if (!warningShown && document.visibilityState === 'visible') {
                 warningShown = true;
-                if (confirm('Your session will expire in 5 minutes. Continue working?')) {
-                    fetch('refresh_session.php', {
-                        method: 'POST',
-                        credentials: 'same-origin',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            warningShown = false;
-                            console.log('Session refreshed successfully');
-                            // Reset the timeout
-                            setTimeout(arguments.callee, sessionTimeout);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Session refresh failed:', error);
-                        alert('Session refresh failed. Please save your work and log in again.');
-                    });
-                } else {
-                    // User chose not to continue, redirect to login
-                    window.location.href = 'login.php';
-                }
+                document.getElementById('sessionWarningModal').style.display = 'flex';
             }
-        }, sessionTimeout);
+        }
+
+        setTimeout(showSessionWarning, sessionTimeout);
         <?php endif; ?>
     </script>
 </body>

@@ -3,10 +3,10 @@
  * Alliance Power History
  *
  * Display power change history for user's assigned alliances
- * Uses alliance_history.json for detailed change log
+ * Uses alliance_history.json for detailed change log and power-history.csv for trends
  * R4/R5 see only their alliances, Admins/Power Editors see all
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @date 2025-10-16
  */
 
@@ -21,6 +21,10 @@ $page_title = "Alliance Power History";
 
 // Include shared header
 include 'includes/header.php';
+
+// Add Chart.js scripts
+echo '<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>';
+echo '<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>';
 
 // Get alliances data
 $alliances = AllianceHelper::loadAlliances();
@@ -93,6 +97,35 @@ foreach ($user_history as $record) {
         $total_decrease += abs($change);
     }
 }
+
+// Load power history CSV for chart data
+$power_history_csv = __DIR__ . '/../data/power-history.csv';
+$chart_data = [];
+if (file_exists($power_history_csv)) {
+    $csv_content = file_get_contents($power_history_csv);
+    $lines = explode("\n", trim($csv_content));
+    
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if (empty($line)) continue;
+        
+        $parts = str_getcsv($line, ',', '"', '\\');
+        if (count($parts) >= 3) {
+            $date = $parts[0];
+            $alliance = $parts[1];
+            $power = intval($parts[2]);
+            
+            // Only include alliances user has access to
+            if (in_array($alliance, $user_alliance_tags)) {
+                $chart_data[] = [
+                    'date' => $date,
+                    'alliance' => $alliance,
+                    'power' => $power
+                ];
+            }
+        }
+    }
+}
 ?>
 
 <div class="history-container">
@@ -140,6 +173,19 @@ foreach ($user_history as $record) {
             <div class="summary-label">Net Change</div>
         </div>
     </div>
+
+    <!-- Power Trends Chart -->
+    <?php if (!empty($chart_data)): ?>
+    <div class="chart-section">
+        <h2 class="section-title">
+            <span class="section-icon">📈</span>
+            Power Trends Over Time
+        </h2>
+        <div class="chart-container">
+            <canvas id="powerTrendsChart"></canvas>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <!-- Current Power -->
     <div class="current-power-section">
@@ -282,6 +328,25 @@ foreach ($user_history as $record) {
 .page-subtitle {
     font-size: 1.1rem;
     color: #6c757d;
+}
+
+/* Chart Section */
+.chart-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 3rem;
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    margin-top: 1rem;
+}
+
+#powerTrendsChart {
+    max-height: 400px;
 }
 
 /* Summary Stats */
@@ -576,5 +641,178 @@ foreach ($user_history as $record) {
     }
 }
 </style>
+
+<?php if (!empty($chart_data)): ?>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chartData = <?php echo json_encode($chart_data); ?>;
+    
+    if (chartData && chartData.length > 0) {
+        renderPowerTrendsChart(chartData);
+    }
+});
+
+function renderPowerTrendsChart(data) {
+    const ctx = document.getElementById('powerTrendsChart').getContext('2d');
+    
+    // Group data by alliance
+    const allianceData = {};
+    const allDates = new Set();
+    
+    data.forEach(entry => {
+        const alliance = entry.alliance;
+        const date = entry.date;
+        const power = entry.power;
+        
+        if (!allianceData[alliance]) {
+            allianceData[alliance] = {};
+        }
+        allianceData[alliance][date] = power;
+        allDates.add(date);
+    });
+    
+    // Sort dates
+    const sortedDates = Array.from(allDates).sort();
+    
+    // Create datasets for each alliance
+    const datasets = [];
+    const colors = [
+        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+        '#FF9F40', '#FF6384', '#C9CBCF', '#4BC0C0', '#FF6384',
+        '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+    ];
+    
+    let colorIndex = 0;
+    Object.keys(allianceData).forEach(alliance => {
+        const chartPoints = sortedDates.map(date => ({
+            x: date,
+            y: allianceData[alliance][date] || null
+        }));
+        
+        datasets.push({
+            label: alliance,
+            data: chartPoints,
+            borderColor: colors[colorIndex % colors.length],
+            backgroundColor: colors[colorIndex % colors.length] + '20',
+            borderWidth: 3,
+            fill: false,
+            tension: 0.1,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            pointBackgroundColor: colors[colorIndex % colors.length],
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2
+        });
+        colorIndex++;
+    });
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                title: {
+                    display: false
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: {
+                            size: 12,
+                            weight: '600'
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: '#667eea',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    displayColors: true,
+                    callbacks: {
+                        title: function(context) {
+                            return 'Date: ' + context[0].parsed.x;
+                        },
+                        label: function(context) {
+                            const alliance = context.dataset.label;
+                            const power = context.parsed.y;
+                            return alliance + ': ' + (power ? power.toLocaleString() : 'No data');
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        parser: 'YYYY-MM-DD',
+                        tooltipFormat: 'MMM DD, YYYY',
+                        displayFormats: {
+                            day: 'MMM DD',
+                            week: 'MMM DD',
+                            month: 'MMM YYYY'
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Date',
+                        font: {
+                            size: 14,
+                            weight: '600'
+                        }
+                    },
+                    grid: {
+                        display: true,
+                        color: 'rgba(0,0,0,0.1)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Alliance Power',
+                        font: {
+                            size: 14,
+                            weight: '600'
+                        }
+                    },
+                    grid: {
+                        display: true,
+                        color: 'rgba(0,0,0,0.1)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        },
+                        callback: function(value) {
+                            return value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+</script>
+<?php endif; ?>
 
 <?php include 'includes/footer.php'; ?>

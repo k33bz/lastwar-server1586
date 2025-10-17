@@ -9,6 +9,7 @@
 
 // Require JWT authentication
 require_once 'jwt.php';
+require_once 'audit_logger.php';
 
 $user = require_jwt_session();
 
@@ -52,9 +53,9 @@ function handle_alliance_update() {
     }
     
     // Check permission
-    if (!is_r4_or_higher($user_token) && !has_alliance_access($user_token, $tag)) {
+    if (!has_alliance_access($user_token, $tag)) {
         http_response_code(403);
-        echo json_encode(['error' => 'Access denied. R4+ privileges required.']);
+        echo json_encode(['error' => 'Access denied. You do not have permission to edit this alliance.']);
         return;
     }
     
@@ -135,7 +136,14 @@ function handle_alliance_update() {
         
         // Save using helper
         AllianceHelper::saveAlliances($alliances_array);
-        
+
+        // Log audit event
+        log_audit_event('alliance_updated', $user_token->sub, [
+            'alliance_tag' => $tag,
+            'fields_updated' => array_keys($_POST),
+            'is_r4_edit' => $is_r4_only
+        ]);
+
         echo json_encode(['success' => true, 'message' => 'Alliance updated successfully']);
         
     } catch (Exception $e) {
@@ -250,7 +258,14 @@ function handle_rules_signature() {
         
         // Save using helper
         AllianceHelper::saveAlliances($alliances_array);
-        
+
+        // Log audit event
+        log_audit_event('rules_signed', $user_token->sub, [
+            'alliance_tag' => $tag,
+            'version' => $version_to_sign,
+            'r5_name' => $r5_name
+        ]);
+
         echo json_encode(['success' => true, 'message' => 'Rules signed successfully']);
         
     } catch (Exception $e) {
