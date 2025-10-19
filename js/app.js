@@ -3,6 +3,13 @@
  *
  * Handles all dynamic rendering and user interactions for the homepage.
  *
+ * Documentation:
+ * - Development Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/CLAUDE.md
+ * - Alliance Data Schema: https://github.com/k33bz/lastwar-server1586/blob/mainline/data/ALLIANCE_SCHEMA.md
+ * - Full Changelog: https://github.com/k33bz/lastwar-server1586/blob/mainline/docs/CHANGELOG.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+ *
  * CHANGELOG:
  * v2.0.0 - 2025-10-14
  * - BREAKING: Removed rank fields from alliances.json

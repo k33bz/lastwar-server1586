@@ -2,6 +2,46 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Task Tracking & Documentation
+
+**IMPORTANT:** This project uses **GitHub Issues** for all task tracking. Do NOT use TODO comments in code or the TodoWrite tool.
+
+### Task Management
+- **GitHub Issues:** https://github.com/k33bz/lastwar-server1586/issues
+- **Milestones:** Used for versioning (v3.1.0, v3.2.0, v4.0.0, Cleanup & Maintenance)
+- **Labels:** Categorize issues (documentation, bug, enhancement, security, etc.)
+- **NO TODO comments:** Create GitHub Issues instead
+
+### Documentation Linking in Code
+All major code files should include GitHub documentation links in their headers. Use this pattern:
+
+```php
+/**
+ * File Name
+ * Version: X.Y.Z
+ * Brief description
+ *
+ * Documentation:
+ * - Relevant Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/path/to/doc.md
+ * - Related Feature: https://github.com/k33bz/lastwar-server1586/blob/mainline/path/to/doc2.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+ *
+ * Changelog:
+ * vX.Y.Z (DATE) - Description of changes
+ */
+```
+
+**Example:** See `admin/dashboard.php` lines 1-25 for the documentation header pattern.
+
+### Reporting Issues or Requesting Features
+1. Create a GitHub Issue with appropriate labels
+2. Assign to relevant milestone if applicable
+3. Link related issues using `#issue-number`
+4. Close issues via commit messages: `Closes #123` or `Fixes #123`
+
+---
+
 ## Project Overview
 
 Server 1586 is a static website for managing alliance rankings, rules, and council voting for a Last War game server. The site displays NAP15 (Non-Aggression Pact) member alliances, server rules with amendment tracking, and a rotating council voting system.
