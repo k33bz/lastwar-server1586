@@ -244,7 +244,7 @@ git commit -m "Your changes"
 git push origin mainline
 ```
 
-See [CICD-SETUP.md](CICD-SETUP.md) for complete CI/CD setup instructions.
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#github-actions-setup) for complete CI/CD setup instructions.
 
 ### Manual Deployment (Local)
 
@@ -424,7 +424,8 @@ Current versions:
 
 ## 📖 Additional Documentation
 
-- **[CICD-SETUP.md](CICD-SETUP.md)** - GitHub Actions CI/CD setup guide
+- **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** - Complete deployment guide (CI/CD + manual)
+- **[docs/CHANGELOG.md](docs/CHANGELOG.md)** - Version history and implementation summaries
 - **[CLAUDE.md](CLAUDE.md)** - Comprehensive developer documentation
 - **[scripts/README.md](scripts/README.md)** - Schedule generation documentation
 - **[scripts/DEPLOY-README.md](scripts/DEPLOY-README.md)** - Manual deployment guide

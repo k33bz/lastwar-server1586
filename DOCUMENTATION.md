@@ -38,9 +38,9 @@ This document serves as the master index for all documentation across the Server
 3. **User Guide:** See [admin/guide.md](admin/guide.md)
 
 ### For DevOps
-1. **Deployment Guide:** See [admin/DEPLOYMENT.md](admin/DEPLOYMENT.md)
-2. **CI/CD Setup:** See [CICD-SETUP.md](CICD-SETUP.md)
-3. **GitHub Actions:** See [GITHUB-SETUP.md](GITHUB-SETUP.md)
+1. **Deployment Guide:** See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
+2. **CI/CD Setup:** See [docs/DEPLOYMENT.md#github-actions-setup](docs/DEPLOYMENT.md#github-actions-setup)
+3. **Manual Deployment:** See [docs/DEPLOYMENT.md#manual-deployment](docs/DEPLOYMENT.md#manual-deployment)
 
 ---
 
@@ -71,9 +71,9 @@ Server1586-clean/
 ### Main Site
 - **Overview:** [README.md](README.md) - Static HTML/CSS/JS site
 - **Development:** [CLAUDE.md](CLAUDE.md) - Development guidelines for Claude Code
-- **Alliance Modal:** [ALLIANCE-MODAL-IMPLEMENTATION.md](ALLIANCE-MODAL-IMPLEMENTATION.md)
-- **Alliance Info Updates:** [ALLIANCE-INFO-UPDATE-SUMMARY.md](ALLIANCE-INFO-UPDATE-SUMMARY.md)
-- **R5 Signatures:** [R5-SIGNATURE-HISTORY-IMPLEMENTATION.md](R5-SIGNATURE-HISTORY-IMPLEMENTATION.md)
+- **Alliance Modal:** [docs/CHANGELOG.md#alliance-modal-implementation](docs/CHANGELOG.md#alliance-modal-implementation)
+- **Alliance Info Updates:** [docs/CHANGELOG.md#feature-implementation-summaries](docs/CHANGELOG.md#feature-implementation-summaries)
+- **R5 Signatures:** [docs/CHANGELOG.md#r5-signature-history-implementation](docs/CHANGELOG.md#r5-signature-history-implementation)
 
 ### Data Files
 Located in `data/`:
@@ -181,7 +181,7 @@ data/
 - **Scripts README:** [scripts/README.md](scripts/README.md)
 - **Deployment:** [scripts/DEPLOY-README.md](scripts/DEPLOY-README.md)
 - **Screenshot Processing:** [scripts/SCREENSHOT-PROCESSING-README.md](scripts/SCREENSHOT-PROCESSING-README.md)
-- **Screenshot Summary:** [SCREENSHOT-PROCESSING-SUMMARY.md](SCREENSHOT-PROCESSING-SUMMARY.md)
+- **Screenshot Summary:** [docs/CHANGELOG.md#screenshot-processing-system](docs/CHANGELOG.md#screenshot-processing-system)
 
 ### Available Scripts
 ```
