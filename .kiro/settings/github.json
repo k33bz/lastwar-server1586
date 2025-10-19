@@ -10,8 +10,9 @@
     }
   },
   "user": {
-    "username": "k33bz",
-    "email": "your-email@example.com"
+    "username": "kiro-ai-assistant",
+    "email": "kiro-ai@lastwar-server1586.dev",
+    "name": "Kiro AI Assistant"
   },
   "settings": {
     "autoApprove": ["push", "commit", "createBranch"],
