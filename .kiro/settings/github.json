@@ -1,0 +1,20 @@
+{
+  "repositories": {
+    "lastwar-server1586": {
+      "owner": "k33bz",
+      "repo": "lastwar-server1586",
+      "token": "${GITHUB_TOKEN}",
+      "defaultBranch": "main",
+      "autoCommit": true,
+      "autoSync": true
+    }
+  },
+  "user": {
+    "username": "k33bz",
+    "email": "your-email@example.com"
+  },
+  "settings": {
+    "autoApprove": ["push", "commit", "createBranch"],
+    "requireConfirmation": ["createPR", "merge", "delete"]
+  }
+}
