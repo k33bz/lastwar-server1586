@@ -2,6 +2,13 @@
 /**
  * Admin API - User management (admin and R5)
  *
+ * Documentation:
+ * - User Personas (Roles): https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/USER-PERSONAS.md
+ * - Admin Functionality: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ADMIN_FUNCTIONALITY.md
+ * - Alliance Management Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ALLIANCE_MANAGEMENT_GUIDE.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+ *
  * @version 1.6.0
  * @date 2025-10-15
  * @changelog

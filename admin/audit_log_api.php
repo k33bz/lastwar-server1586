@@ -4,6 +4,12 @@
  *
  * JSON API for fetching audit logs (used by real-time viewer)
  *
+ * Documentation:
+ * - Admin Functionality: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ADMIN_FUNCTIONALITY.md
+ * - Security Changelog: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/SECURITY_CHANGELOG.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+ *
  * @version 1.0.0
  * @date 2025-10-15
  * @changelog

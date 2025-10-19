@@ -2,6 +2,12 @@
 /**
  * Alliance API - Edit alliance data
  *
+ * Documentation:
+ * - Alliance Management Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ALLIANCE_MANAGEMENT_GUIDE.md
+ * - Alliance Data Schema: https://github.com/k33bz/lastwar-server1586/blob/mainline/data/ALLIANCE_SCHEMA.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+ *
  * @version 1.0.0
  * @date 2025-10-12
  */

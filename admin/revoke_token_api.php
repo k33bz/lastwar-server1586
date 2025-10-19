@@ -4,6 +4,13 @@
  *
  * Provides endpoints for revoking JWT tokens by user email
  *
+ * Documentation:
+ * - Admin Functionality: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ADMIN_FUNCTIONALITY.md
+ * - Security Changelog: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/SECURITY_CHANGELOG.md
+ * - Secret Key Rotation: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/SECRET_KEY_ROTATION_SETUP.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+ *
  * @version 1.0.0
  * @date 2025-10-13
  */

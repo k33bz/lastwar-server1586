@@ -2,6 +2,13 @@
 /**
  * User Management API
  * Handles AJAX requests for user CRUD operations
+ *
+ * Documentation:
+ * - User Personas (Roles): https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/USER-PERSONAS.md
+ * - Admin Functionality: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ADMIN_FUNCTIONALITY.md
+ * - Admin Panel Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/README.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
  */
 
 // Require JWT authentication

@@ -4,6 +4,12 @@
  *
  * API endpoint for deleting alliances from the system (admin-only)
  *
+ * Documentation:
+ * - Alliance Management Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ALLIANCE_MANAGEMENT_GUIDE.md
+ * - Alliance Data Schema: https://github.com/k33bz/lastwar-server1586/blob/mainline/data/ALLIANCE_SCHEMA.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+ *
  * Actions:
  * - delete_alliance: Delete alliance by tag from alliances.json
  *

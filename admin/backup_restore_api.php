@@ -4,6 +4,12 @@
  *
  * API endpoints for viewing and restoring alliance backups
  *
+ * Documentation:
+ * - Admin Functionality: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ADMIN_FUNCTIONALITY.md
+ * - Alliance Data Schema: https://github.com/k33bz/lastwar-server1586/blob/mainline/data/ALLIANCE_SCHEMA.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+ *
  * @version 1.0.0
  * @date 2025-10-15
  * @changelog

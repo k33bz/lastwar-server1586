@@ -5,6 +5,13 @@
  * CRUD operations for alliance power management
  * Admins only - edit tag, name, and power for all alliances
  *
+ * Documentation:
+ * - Alliance Management Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ALLIANCE_MANAGEMENT_GUIDE.md
+ * - Alliance Data Schema: https://github.com/k33bz/lastwar-server1586/blob/mainline/data/ALLIANCE_SCHEMA.md
+ * - User Personas (Roles): https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/USER-PERSONAS.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+ *
  * Actions:
  * - list: Get all alliances
  * - update: Update all alliances (bulk save)
