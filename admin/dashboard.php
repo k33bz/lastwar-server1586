@@ -4,6 +4,14 @@
  * Version: 1.1.0
  * Main admin panel overview
  *
+ * Documentation:
+ * - Admin Functionality: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ADMIN_FUNCTIONALITY.md
+ * - Admin Panel Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/README.md
+ * - User Personas (Roles): https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/USER-PERSONAS.md
+ * - Full Changelog: https://github.com/k33bz/lastwar-server1586/blob/mainline/docs/CHANGELOG.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+ *
  * Changelog:
  * v1.1.0 (2025-10-17) - Made statistics dynamic and functional
  *   - Added active users tracking (logged in within 30 days)
