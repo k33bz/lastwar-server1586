@@ -159,8 +159,7 @@ See [scripts/README.md](scripts/README.md) and [scripts/DEPLOY-README.md](script
 ## Data & Schemas
 
 ### Alliance Data
-- **Alliance Data Schema:** [data/ALLIANCE-DATA-SCHEMA.md](data/ALLIANCE-DATA-SCHEMA.md)
-- **Alliance Schema (Legacy):** [data/ALLIANCE_SCHEMA.md](data/ALLIANCE_SCHEMA.md)
+- **Alliance Data Schema:** [data/ALLIANCE_SCHEMA.md](data/ALLIANCE_SCHEMA.md)
 - **R5 Signature Schema:** [data/R5-SIGNATURE-SCHEMA.md](data/R5-SIGNATURE-SCHEMA.md)
 
 ### Data Files Structure
