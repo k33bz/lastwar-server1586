@@ -149,6 +149,33 @@ jobs:
 
           echo "✅ Composer dependencies installed successfully!"
 
+      - name: Rotate JWT keys (if major change)
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          # Check if commit message contains [rotate-keys] or [major]
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+
+          if [[ "$COMMIT_MSG" =~ \[rotate-keys\] ]] || [[ "$COMMIT_MSG" =~ \[major\] ]] || [[ "$COMMIT_MSG" =~ BREAKING.CHANGE ]]; then
+            echo "🔄 Key rotation requested in commit message"
+            echo "Running key rotation on production..."
+
+            # Run key rotation script via SSH
+            ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST "cd ~/${DEPLOY_PATH}/admin && php rotate_keys_cli.php"
+
+            echo "✅ Key rotation completed!"
+          else
+            echo "ℹ️  No key rotation requested"
+            echo "   To rotate keys, include one of these in commit message:"
+            echo "   - [rotate-keys]"
+            echo "   - [major]"
+            echo "   - BREAKING CHANGE:"
+          fi
+
       - name: Deployment summary
         if: success()
         env:

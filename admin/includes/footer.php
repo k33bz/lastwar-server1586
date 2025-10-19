@@ -9,6 +9,16 @@ if (!isset($user)) {
         $user = (object)['aud' => 'guest'];
     }
 }
+
+// Load version data from centralized version.json
+$version_file = __DIR__ . '/../../version.json';
+$version_data = null;
+if (file_exists($version_file)) {
+    $version_data = json_decode(file_get_contents($version_file), true);
+}
+$current_version = $version_data['version'] ?? '3.0.0';
+$release_date = $version_data['releaseDate'] ?? '2025-10-16';
+$last_updated = $version_data['lastUpdated'] ?? date('Y-m-d');
 ?>
     </main>
     
@@ -79,10 +89,10 @@ if (!isset($user)) {
                     <h4>System Info</h4>
                     <div class="system-info">
                         <div class="info-item">
-                            <strong>Version:</strong> v3.0.0
+                            <strong>Version:</strong> v<?php echo htmlspecialchars($current_version); ?>
                         </div>
                         <div class="info-item">
-                            <strong>Last Updated:</strong> Oct 16, 2025
+                            <strong>Released:</strong> <?php echo date('M j, Y', strtotime($release_date)); ?>
                         </div>
                         <div class="info-item">
                             <strong>Security Level:</strong> <span class="security-high">Enterprise</span>
@@ -96,6 +106,7 @@ if (!isset($user)) {
                     <p>&copy; <?php echo date('Y'); ?> <?php echo $_ENV['APP_NAME'] ?? 'Admin Panel'; ?>. All rights reserved.</p>
                 </div>
                 <div class="footer-links">
+                    <a href="changelog.php">📋 Changelog</a>
                     <a href="https://github.com/k33bz/lastwar-server1586" target="_blank">GitHub Repository</a>
                     <a href="https://github.com/k33bz/lastwar-server1586/issues" target="_blank">Report Issue</a>
                     <a href="#" onclick="showSecurityInfo()">Security Info</a>
@@ -413,14 +424,41 @@ if (!isset($user)) {
         function closeSecurityInfo() {
             document.getElementById('securityModal').style.display = 'none';
         }
-        
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('securityModal');
-            if (event.target === modal) {
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
                 modal.style.display = 'none';
             }
         }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            // Check all modals
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                // Only close if clicked directly on modal backdrop, not on content
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Close modals with ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                // Find and close any visible modals
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    if (modal.style.display === 'flex' || modal.style.display === 'block') {
+                        // Don't close session warning modal with ESC (important security notice)
+                        if (modal.id !== 'sessionWarningModal') {
+                            modal.style.display = 'none';
+                        }
+                    }
+                });
+            }
+        });
         
         // Auto-refresh status indicators every 60 seconds
         setInterval(function() {
@@ -484,13 +522,30 @@ if (!isset($user)) {
         }
 
         function showSessionWarning() {
-            if (!warningShown && document.visibilityState === 'visible') {
+            if (!warningShown) {
                 warningShown = true;
-                document.getElementById('sessionWarningModal').style.display = 'flex';
+                const modal = document.getElementById('sessionWarningModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    // Focus the modal for accessibility
+                    modal.focus();
+                }
             }
         }
 
+        // Start session timeout timer
         setTimeout(showSessionWarning, sessionTimeout);
+
+        // Also check on page visibility change (tab becomes active)
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible' && warningShown) {
+                // If warning was shown while tab was hidden, ensure modal is visible
+                const modal = document.getElementById('sessionWarningModal');
+                if (modal && modal.style.display !== 'flex') {
+                    modal.style.display = 'flex';
+                }
+            }
+        });
         <?php endif; ?>
     </script>
 </body>

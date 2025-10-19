@@ -128,26 +128,53 @@ Server1586/
 
 ## 📚 Documentation Index
 
-### Core Documentation
-- **[README.md](README.md)** - This file (main overview)
-- **[DOCUMENTATION.md](DOCUMENTATION.md)** - Complete documentation index
-- **[CLAUDE.md](CLAUDE.md)** - Developer guide and architecture
+> **📍 You are here:** README.md → Main project overview
 
-### Component Documentation
-- **[admin/README.md](admin/README.md)** - Admin panel (v3.0.0)
-- **[scripts/README.md](scripts/README.md)** - Automation scripts
-- **[ocr/README.md](ocr/README.md)** - OCR processing system
-- **[data/ALLIANCE_SCHEMA.md](data/ALLIANCE_SCHEMA.md)** - Data structure documentation
+### 🎯 Quick Navigation
 
-### Setup & Deployment
-- **[admin/DEPLOYMENT.md](admin/DEPLOYMENT.md)** - Production deployment guide
-- **[CICD-SETUP.md](CICD-SETUP.md)** - GitHub Actions setup
-- **[admin/setup-local-env.md](admin/setup-local-env.md)** - Local development setup
+**I want to...**
+- 👨‍💻 **Develop locally** → [admin/setup-local-env.md](admin/setup-local-env.md)
+- 🚀 **Deploy to production** → [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
+- 🔐 **Setup admin panel** → [admin/README.md](admin/README.md)
+- 📖 **Browse all docs** → [DOCUMENTATION.md](DOCUMENTATION.md)
+- 📋 **See what changed** → [docs/CHANGELOG.md](docs/CHANGELOG.md)
 
-### Specialized Guides
-- **[admin/ADMIN_FUNCTIONALITY.md](admin/ADMIN_FUNCTIONALITY.md)** - Admin panel features
-- **[admin/ALLIANCE_MANAGEMENT_GUIDE.md](admin/ALLIANCE_MANAGEMENT_GUIDE.md)** - Alliance management
-- **[admin/SECRET_KEY_ROTATION_SETUP.md](admin/SECRET_KEY_ROTATION_SETUP.md)** - Security setup
+### 📚 Core Documentation
+
+| Document | Description | Audience |
+|----------|-------------|----------|
+| **[README.md](README.md)** | This file - Project overview | Everyone |
+| **[DOCUMENTATION.md](DOCUMENTATION.md)** | Master index - All documentation | Everyone |
+| **[CLAUDE.md](CLAUDE.md)** | Developer guide & architecture | Developers |
+| **[docs/CHANGELOG.md](docs/CHANGELOG.md)** | Version history & changes | Everyone |
+| **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** | Deployment guide (CI/CD + manual) | DevOps |
+
+### 🔧 Component Documentation
+
+| Component | Documentation | Description |
+|-----------|---------------|-------------|
+| **Admin Panel** | [admin/README.md](admin/README.md) | Admin system overview |
+| **Automation Scripts** | [scripts/README.md](scripts/README.md) | Deployment & schedule scripts |
+| **OCR System** | [ocr/README.md](ocr/README.md) | Screenshot processing |
+| **Data Schemas** | [data/ALLIANCE_SCHEMA.md](data/ALLIANCE_SCHEMA.md) | Data structure docs |
+
+### 🛠️ Setup & Configuration
+
+| Task | Documentation | Quick Link |
+|------|---------------|------------|
+| **Local Development** | [admin/setup-local-env.md](admin/setup-local-env.md) | PHP + Composer setup |
+| **Environment Config** | [admin/ENV-CONFIG.md](admin/ENV-CONFIG.md) | `.env` variables |
+| **GitHub Actions** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#github-actions-setup) | CI/CD pipeline |
+| **Deployment** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | FTP + SSH deployment |
+
+### 🔐 Security & Admin Features
+
+| Feature | Documentation | Description |
+|---------|---------------|-------------|
+| **Admin Features** | [admin/ADMIN_FUNCTIONALITY.md](admin/ADMIN_FUNCTIONALITY.md) | Feature overview |
+| **Alliance Management** | [admin/ALLIANCE_MANAGEMENT_GUIDE.md](admin/ALLIANCE_MANAGEMENT_GUIDE.md) | CRUD operations |
+| **JWT Key Rotation** | [KEY_ROTATION_GUIDE.md](KEY_ROTATION_GUIDE.md) | Security key management |
+| **User Roles** | [admin/USER-PERSONAS.md](admin/USER-PERSONAS.md) | RBAC system |
 
 ---
 

@@ -4,9 +4,9 @@
     Server 1586 - Last War Alliance Homepage
     Main HTML Structure
 
-    Version: 2.0.0
-    Last Updated: 2025-10-14
+    Version: Loaded dynamically from version.json
     CI/CD: GitHub Actions automated deployment enabled
+    Changelog: See admin/changelog.php or docs/CHANGELOG.md
 
     CHANGELOG:
     v2.0.0 - 2025-10-14
@@ -64,8 +64,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="version" content="2.0.0">
-    <meta name="last-updated" content="2025-10-14">
+    <meta name="version" content="3.0.0">
+    <meta name="last-updated" content="2025-10-19">
 
     <!-- Cache Control Headers -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -244,5 +244,39 @@
 
     <!-- Load Main Application (loads JSON data asynchronously) -->
     <script src="js/app.js?v=1.5.0"></script>
+
+    <!-- Load and display version from centralized version.json -->
+    <script>
+        // Load version data and update page metadata
+        fetch('version.json')
+            .then(response => response.json())
+            .then(versionData => {
+                // Update meta tags
+                document.querySelector('meta[name="version"]').setAttribute('content', versionData.version);
+                document.querySelector('meta[name="last-updated"]').setAttribute('content', versionData.lastUpdated);
+
+                // Update CSS cache-busting version
+                const cssLink = document.querySelector('link[href*="styles.css"]');
+                if (cssLink) {
+                    cssLink.href = `css/styles.css?v=${versionData.components.frontend.css}`;
+                }
+
+                // Update script cache-busting versions
+                const councilScript = document.querySelector('script[src*="council.js"]');
+                if (councilScript) {
+                    councilScript.src = `data/council.js?v=${versionData.version}`;
+                }
+
+                const appScript = document.querySelector('script[src*="app.js"]');
+                if (appScript) {
+                    appScript.src = `js/app.js?v=${versionData.components.frontend.js}`;
+                }
+
+                console.log(`Server 1586 v${versionData.version} - Released ${versionData.releaseDate}`);
+            })
+            .catch(error => {
+                console.warn('Could not load version.json:', error);
+            });
+    </script>
 </body>
 </html>
