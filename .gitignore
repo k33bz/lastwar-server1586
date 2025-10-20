@@ -124,6 +124,9 @@ admin/security_events.json
 
 # Version tracking - production state
 admin/.installed_version
+
+# Deployment state - incremental FTP
+.deploy-state.json
 # Local settings
 .claude/settings.local.json
 admin/.claude/settings.local.json

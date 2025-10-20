@@ -104,13 +104,28 @@ jobs:
           APP_ENV=production
           EOF
 
-      - name: Deploy via FTP
+      - name: Restore deployment state cache
+        uses: actions/cache@v3
+        with:
+          path: .deploy-state.json
+          key: ftp-deploy-state-${{ github.sha }}
+          restore-keys: |
+            ftp-deploy-state-
+
+      - name: Deploy via FTP (Incremental)
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASS: ${{ secrets.FTP_PASS }}
           APP_URL: ${{ secrets.APP_URL }}
-        run: python scripts/deploy-ftp-ci.py
+        run: python scripts/deploy-ftp-incremental.py
+
+      - name: Save deployment state cache
+        if: success()
+        uses: actions/cache/save@v3
+        with:
+          path: .deploy-state.json
+          key: ftp-deploy-state-${{ github.sha }}
 
       - name: Install Composer dependencies via SSH
         env:
