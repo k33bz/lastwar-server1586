@@ -10,11 +10,12 @@
 
 1. [Overview](#overview)
 2. [Automated CI/CD Deployment](#automated-cicd-deployment)
-3. [Manual Deployment](#manual-deployment)
-4. [Deployment History](#deployment-history)
-5. [GitHub Actions Setup](#github-actions-setup)
-6. [Environment Configuration](#environment-configuration)
-7. [Troubleshooting](#troubleshooting)
+3. [Version Migration System](#version-migration-system) ⭐ **NEW**
+4. [Manual Deployment](#manual-deployment)
+5. [Deployment History](#deployment-history)
+6. [GitHub Actions Setup](#github-actions-setup)
+7. [Environment Configuration](#environment-configuration)
+8. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -81,6 +82,165 @@ BREAKING CHANGE: Old endpoints removed"
 ```
 
 See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for key rotation details.
+
+---
+
+## Version Migration System
+
+⭐ **NEW** (v3.1.0) - Automatic schema migrations for production deployments
+
+### Overview
+
+When deploying new code versions, data files (`.env`, JSON schemas) may need updates. The migration system automatically detects version mismatches and safely applies necessary upgrades.
+
+**Key Features:**
+- ✅ Automatic version mismatch detection
+- ✅ Visual warning banner on admin pages
+- ✅ Safe, incremental migrations with backups
+- ✅ CLI and web interface
+- ✅ Idempotent (safe to run multiple times)
+
+### How It Works
+
+**Version Tracking:**
+- **Code Version**: `version.json` (committed to git)
+- **Installed Version**: `admin/.installed_version` (production state, not in git)
+
+After deployment, if versions don't match:
+1. Admin page loads
+2. Orange warning banner appears: **"⬆️ Migration Required"**
+3. Admin clicks "Run Migration Now" or runs `php admin/migrate.php`
+4. Migrations execute in order (e.g., 3.0.0 → 3.1.0 → 3.2.0)
+5. `.installed_version` updated to match code version
+6. Warning disappears
+
+### Running Migrations
+
+**Option 1: Web Interface** (After Deployment)
+1. Log into admin panel
+2. See orange warning banner at top
+3. Click **"🔧 Run Migration Now"**
+4. Wait for completion message
+
+**Option 2: CLI** (Recommended for Production)
+```bash
+# SSH into production server
+ssh user@server
+
+# Navigate to admin directory
+cd /path/to/admin
+
+# Run migration
+php migrate.php
+```
+
+**Example Output:**
+```
+=== Version Migration System ===
+Code version: 3.2.0
+Installed version: 3.1.0
+
+🔄 Migration needed: 3.1.0 → 3.2.0
+
+🔧 Running migration: 3.2.0
+   - Setting up audit logging...
+   💾 Backup created: audit_log.json.bak.2025-10-19_143052
+   ✓ audit_log.json created
+   ✓ Completed: 3.2.0
+
+=== Migration Summary ===
+Migrations run: 1
+Errors: 0
+
+✅ Migration completed successfully!
+```
+
+### What Migrations Do
+
+Migrations can:
+- **Add fields to JSON files** (e.g., `r5History` to alliances.json)
+- **Create new data files** (e.g., `audit_log.json`)
+- **Initialize directories** (e.g., `backups/`)
+- **Validate .env variables** (warns if missing)
+- **Restructure data** (schema upgrades)
+
+**All changes are backed up** before modification:
+- `alliances.json.bak.2025-10-19_143052`
+- `users.json.bak.2025-10-19_151230`
+
+### Pre-built Migrations
+
+| Version | Description |
+|---------|-------------|
+| **v3.0.0** | JWT authentication setup, validate .env |
+| **v3.1.0** | Add r5History to alliances |
+| **v3.2.0** | Initialize audit logging system |
+| **v3.3.0** | Create backup directory with .htaccess |
+
+### Deployment Workflow with Migrations
+
+1. **Deploy code** (GitHub Actions or manual)
+   ```bash
+   git push origin mainline
+   # Deployment completes, version.json = 3.2.0
+   ```
+
+2. **Check for migration warning**
+   - Visit admin panel
+   - See orange banner if migration needed
+
+3. **Run migration**
+   ```bash
+   ssh user@server
+   php /path/to/admin/migrate.php
+   ```
+
+4. **Verify**
+   - Banner disappears
+   - New features work correctly
+   - Check logs for errors
+
+### Troubleshooting Migrations
+
+**Migration Warning Still Appears:**
+```bash
+# Check versions
+cat version.json          # Code version
+cat admin/.installed_version  # Installed version
+
+# Manually sync if needed
+echo "3.2.0" > admin/.installed_version
+```
+
+**Migration Failed Midway:**
+```bash
+# Restore from backup
+cp admin/alliances.json.bak.2025-10-19_143052 data/alliances.json
+
+# Fix issue, re-run migration
+php admin/migrate.php
+```
+
+**Missing .env Variables:**
+Migrations can't automatically add to `.env`. If migration logs show:
+```
+⚠️  Missing .env variables: NEW_FEATURE_ENABLED
+ℹ️  Add: NEW_FEATURE_ENABLED=true
+```
+
+Manually edit `admin/.env`:
+```bash
+echo "NEW_FEATURE_ENABLED=true" >> admin/.env
+```
+
+### Complete Documentation
+
+See **[admin/MIGRATION_SYSTEM.md](../admin/MIGRATION_SYSTEM.md)** for:
+- Writing custom migrations
+- Migration best practices
+- Rollback scenarios
+- Testing migrations
+- Auto-migration setup (optional)
 
 ---
 
@@ -367,9 +527,11 @@ See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for:
 
 1. ✅ Verify website loads: https://www.lastwar1586.online
 2. ✅ Check admin panel: https://www.lastwar1586.online/admin/
-3. ✅ Review deployment logs in GitHub Actions
-4. ✅ Test critical functionality (login, data updates)
-5. ✅ Monitor error logs if available
+3. ✅ **Check for migration warning banner** (if version changed)
+4. ✅ **Run migrations if needed**: `php admin/migrate.php` (see [Version Migration System](#version-migration-system))
+5. ✅ Review deployment logs in GitHub Actions
+6. ✅ Test critical functionality (login, data updates)
+7. ✅ Monitor error logs if available
 
 ### Security
 
@@ -386,6 +548,7 @@ See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for:
 | Task | Command |
 |------|---------|
 | **Deploy to production** | `git push origin mainline` |
+| **Run migrations** | `php admin/migrate.php` ⭐ |
 | **Manual deploy** | `python scripts/deploy-ftp-ci.py` |
 | **Run tests** | `python scripts/run-tests.py` |
 | **Validate JSON** | `python -m json.tool data/alliances.json` |
@@ -398,6 +561,7 @@ See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for:
 ## Related Documentation
 
 - **[README.md](../README.md)** - Project overview
+- **[admin/MIGRATION_SYSTEM.md](../admin/MIGRATION_SYSTEM.md)** - Version migration system ⭐
 - **[KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md)** - JWT key rotation
 - **[admin/DEPLOYMENT.md](../admin/DEPLOYMENT.md)** - Admin panel deployment
 - **[admin/ENV-CONFIG.md](../admin/ENV-CONFIG.md)** - Environment variables
