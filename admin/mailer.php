@@ -4,6 +4,13 @@
  *
  * Handles email delivery for magic links and notifications
  *
+ * Documentation:
+ * - DKIM Setup: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/DKIM-SETUP.md
+ * - Environment Configuration: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ENV-CONFIG.md
+ * - Admin Functionality: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ADMIN_FUNCTIONALITY.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+ *
  * @version 1.3.0
  * @date 2025-10-13
  * @changelog

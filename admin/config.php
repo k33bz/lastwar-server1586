@@ -5,6 +5,13 @@
  * Loads environment variables and defines application constants
  * Centralizes configuration for JWT, SMTP, file paths, and security settings
  *
+ * Documentation:
+ * - Environment Configuration: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/ENV-CONFIG.md
+ * - Setup Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/setup-local-env.md
+ * - Admin Panel Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/README.md
+ *
+ * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+ *
  * @version 1.0.0
  * @date 2025-10-12
  * @changelog
