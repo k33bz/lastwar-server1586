@@ -525,6 +525,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <script src="includes/scripts.js"></script>
 </head>
 <body>
+    <?php
+    // Display migration warning if version mismatch detected
+    if (isset($GLOBALS['version_info'])) {
+        display_migration_warning($GLOBALS['version_info']);
+    }
+    ?>
+
     <header class="admin-header">
         <div class="header-container">
             <div class="admin-logo">

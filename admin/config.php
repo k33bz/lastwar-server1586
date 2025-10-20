@@ -151,4 +151,14 @@ function initialize_data_files() {
 
 // Initialize data files on first load
 initialize_data_files();
+
+// Version check and migration system
+// Automatically checks if code version differs from installed version
+require_once __DIR__ . '/version_check.php';
+
+// Note: Auto-migration is disabled by default for safety
+// To enable auto-migration, uncomment the line below (use with caution!)
+// auto_migrate_if_needed(true);
+
+// Migration warning will be displayed on admin pages if version mismatch detected
 ?>
