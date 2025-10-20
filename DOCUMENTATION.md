@@ -99,10 +99,11 @@ Located in `data/`:
 - **Composer Installation:** [admin/COMPOSER-INSTALL.md](admin/COMPOSER-INSTALL.md)
 - **DKIM Email Setup:** [admin/DKIM-SETUP.md](admin/DKIM-SETUP.md)
 
-### Security
+### Security & Maintenance
 - **Secret Key Rotation:** [admin/SECRET_KEY_ROTATION_SETUP.md](admin/SECRET_KEY_ROTATION_SETUP.md)
 - **Security Changelog:** [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md)
 - **Version Summary:** [admin/VERSION_SUMMARY.md](admin/VERSION_SUMMARY.md)
+- **Version Migration System:** [admin/MIGRATION_SYSTEM.md](admin/MIGRATION_SYSTEM.md) ⭐ **NEW**
 
 ### Shared Components
 - **Includes Documentation:** [admin/includes/README.md](admin/includes/README.md)
@@ -138,10 +139,29 @@ Located in `data/`:
   - Deployment history
   - Troubleshooting guide
 
+### 🔄 Version Migration System (NEW)
+- **[admin/MIGRATION_SYSTEM.md](admin/MIGRATION_SYSTEM.md)** - Automatic schema migration
+  - Automatic detection of version mismatches
+  - Safe, incremental migrations with backups
+  - JSON and .env schema updates
+  - CLI and web interface
+  - Pre-built migrations for v3.0.0 through v3.3.0
+  - **See Issue #26** for documentation updates
+
+**Quick Start:**
+```bash
+# After deployment, check for migration warning banner
+# Run migration via CLI (recommended):
+php admin/migrate.php
+
+# Or click "Run Migration Now" in web interface
+```
+
 ### Quick Links
 - **Automated Deployment:** [docs/DEPLOYMENT.md#automated-cicd-deployment](docs/DEPLOYMENT.md#automated-cicd-deployment)
 - **GitHub Actions Setup:** [docs/DEPLOYMENT.md#github-actions-setup](docs/DEPLOYMENT.md#github-actions-setup)
 - **Manual Deployment:** [docs/DEPLOYMENT.md#manual-deployment](docs/DEPLOYMENT.md#manual-deployment)
+- **Version Migration:** [admin/MIGRATION_SYSTEM.md](admin/MIGRATION_SYSTEM.md)
 - **Troubleshooting:** [docs/DEPLOYMENT.md#troubleshooting](docs/DEPLOYMENT.md#troubleshooting)
 
 ### GitHub Actions Workflows
@@ -390,6 +410,11 @@ Use GitHub Issues with:
 
 ---
 
-**Last Updated:** October 16, 2025
+**Last Updated:** October 19, 2025
 **Maintained By:** k33bz
 **Repository:** https://github.com/k33bz/lastwar-server1586
+
+**Latest Additions:**
+- Version Migration System (Issue #26)
+- Production Deployment File Audit
+- Automatic schema upgrade system

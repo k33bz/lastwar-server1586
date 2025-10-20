@@ -1,6 +1,6 @@
 {
-  "version": "3.0.0",
-  "releaseDate": "2025-10-16",
+  "version": "3.1.0",
+  "releaseDate": "2025-10-19",
   "components": {
     "frontend": {
       "version": "3.0.0",
@@ -9,14 +9,32 @@
       "css": "1.3.2"
     },
     "admin": {
-      "version": "3.0.0",
-      "php": "3.0.0"
+      "version": "3.1.0",
+      "php": "3.1.0",
+      "migration_system": "1.0.0"
     },
     "scripts": {
       "rotation": "2.2.0",
       "ocr": "3.0.0"
     }
   },
+  "features": {
+    "migration_system": {
+      "version": "1.0.0",
+      "date": "2025-10-19",
+      "description": "Automatic version migration and schema upgrade system",
+      "files": [
+        "admin/migrate.php",
+        "admin/version_check.php"
+      ]
+    },
+    "production_optimization": {
+      "version": "1.0.0",
+      "date": "2025-10-19",
+      "description": "Production deployment file exclusions (.ftpignore updates)"
+    }
+  },
   "changelog": "docs/CHANGELOG.md",
+  "migration_docs": "admin/MIGRATION_SYSTEM.md",
   "lastUpdated": "2025-10-19"
 }

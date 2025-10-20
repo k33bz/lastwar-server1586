@@ -121,6 +121,9 @@ admin/secret_keys.json
 admin/ip_blacklist.json
 admin/rate_limits.json
 admin/security_events.json
+
+# Version tracking - production state
+admin/.installed_version
 # Local settings
 .claude/settings.local.json
 admin/.claude/settings.local.json
