@@ -1,11 +1,16 @@
 # FTP Deployment Ignore File
 # Files and directories listed here will NOT be uploaded to the FTP server
 
-# Development and Documentation (root level only)
+# Development and Documentation
 /README.md
 /CLAUDE.md
 /LICENSE
 /*.md
+/CONTRIBUTORS.md
+/KIRO-GITHUB-TEST.md
+/test-coauthor.md
+/ISSUE_COMPLETION_SUMMARY.md
+/setup-kiro-git.bat
 !index.html
 
 # Scripts and Tools (deployment scripts not needed on server)
@@ -37,6 +42,8 @@ admin/compare_emails.php
 admin/debug_email_content.php
 admin/*.backup
 admin/backups/
+admin/*.md
+admin/dashboard_with_rotation.php
 
 # Test Tokens - NEVER DEPLOY
 test-*.txt

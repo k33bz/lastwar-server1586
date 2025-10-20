@@ -134,3 +134,7 @@ admin/test-smtp.php
 admin/test-smtp.py
 # Backup files
 *.backup
+
+# Kiro Settings - Keep environment files secure
+.kiro/.env
+.kiro/settings/github-token.json
