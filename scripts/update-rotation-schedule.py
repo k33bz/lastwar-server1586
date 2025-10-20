@@ -2,6 +2,13 @@
 """
 Update Council Rotation Schedule
 
+Documentation:
+- Development Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/CLAUDE.md#council-rotation-schedule-management
+- Scripts README: https://github.com/k33bz/lastwar-server1586/blob/mainline/scripts/README.md
+- Alliance Data Schema: https://github.com/k33bz/lastwar-server1586/blob/mainline/data/ALLIANCE_SCHEMA.md
+
+GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
+
 Version: 2.2.0
 Last Updated: 2025-10-08
 

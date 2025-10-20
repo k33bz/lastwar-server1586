@@ -2,6 +2,12 @@
 """
 Unit Test Runner
 Runs all unit tests for Server 1586 website
+
+Documentation:
+- Scripts README: https://github.com/k33bz/lastwar-server1586/blob/mainline/scripts/README.md
+- Deployment Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/docs/DEPLOYMENT.md
+
+GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
 """
 
 import sys

@@ -2,6 +2,13 @@
 """
 FTP Deployment Script for CI/CD (GitHub Actions)
 Reads FTP credentials from environment variables instead of Windows Credential Manager
+
+Documentation:
+- Deployment Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/docs/DEPLOYMENT.md
+- Scripts README: https://github.com/k33bz/lastwar-server1586/blob/mainline/scripts/README.md
+- Deployment Scripts README: https://github.com/k33bz/lastwar-server1586/blob/mainline/scripts/DEPLOY-README.md
+
+GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
 """
 
 import ftplib
