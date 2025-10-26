@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 CSV Validation Script
 Validates power-history.csv format and data integrity
 """
 
 import sys
+import io
 from pathlib import Path
+
+# Fix Windows console encoding issues
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 # Get project root
 PROJECT_ROOT = Path(__file__).parent.parent

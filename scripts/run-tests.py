@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Unit Test Runner
 Runs all unit tests for Server 1586 website
@@ -11,7 +12,13 @@ GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
 """
 
 import sys
+import io
 from pathlib import Path
+
+# Fix Windows console encoding issues
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 # Get project root
 PROJECT_ROOT = Path(__file__).parent.parent
