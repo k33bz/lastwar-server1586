@@ -169,7 +169,45 @@ jobs:
 
           echo "Composer dependencies installed successfully!"
 
-      - name: Rotate JWT keys (if major change)
+      - name: Check version for key rotation
+        id: check_version
+        run: |
+          # Get current version from version.json
+          CURRENT_VERSION=$(python -c "import json; print(json.load(open('version.json'))['version'])")
+          echo "Current version: $CURRENT_VERSION"
+
+          # Get previous version from git history
+          git fetch origin mainline --depth=2
+          PREV_VERSION=$(git show HEAD~1:version.json 2>/dev/null | python -c "import json, sys; print(json.load(sys.stdin)['version'])" || echo "0.0.0")
+          echo "Previous version: $PREV_VERSION"
+
+          # Extract major.minor from versions
+          CURRENT_MINOR=$(echo $CURRENT_VERSION | cut -d. -f1,2)
+          PREV_MINOR=$(echo $PREV_VERSION | cut -d. -f1,2)
+
+          echo "Current major.minor: $CURRENT_MINOR"
+          echo "Previous major.minor: $PREV_MINOR"
+
+          # Check if minor version changed
+          SHOULD_ROTATE="false"
+          if [ "$CURRENT_MINOR" != "$PREV_MINOR" ]; then
+            echo "Minor version changed! Key rotation will be triggered."
+            SHOULD_ROTATE="true"
+          else
+            echo "Minor version unchanged. No automatic rotation."
+          fi
+
+          # Also check commit message for manual triggers
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          if [[ "$COMMIT_MSG" =~ \[rotate-keys\] ]] || [[ "$COMMIT_MSG" =~ \[major\] ]] || [[ "$COMMIT_MSG" =~ BREAKING.CHANGE ]]; then
+            echo "Manual key rotation requested in commit message"
+            SHOULD_ROTATE="true"
+          fi
+
+          echo "should_rotate=$SHOULD_ROTATE" >> $GITHUB_OUTPUT
+
+      - name: Rotate JWT keys (if needed)
+        if: steps.check_version.outputs.should_rotate == 'true'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
@@ -177,24 +215,13 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          # Check if commit message contains [rotate-keys] or [major]
-          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          echo "Running key rotation on production..."
 
-          if [[ "$COMMIT_MSG" =~ \[rotate-keys\] ]] || [[ "$COMMIT_MSG" =~ \[major\] ]] || [[ "$COMMIT_MSG" =~ BREAKING.CHANGE ]]; then
-            echo "Key rotation requested in commit message"
-            echo "Running key rotation on production..."
+          # Run key rotation script via SSH
+          ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST "cd ~/${DEPLOY_PATH}/admin && php rotate_keys_cli.php"
 
-            # Run key rotation script via SSH
-            ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST "cd ~/${DEPLOY_PATH}/admin && php rotate_keys_cli.php"
-
-            echo "Key rotation completed!"
-          else
-            echo "No key rotation requested"
-            echo "To rotate keys, include one of these in commit message:"
-            echo "  - [rotate-keys]"
-            echo "  - [major]"
-            echo "  - BREAKING CHANGE:"
-          fi
+          echo "Key rotation completed!"
+          echo "All users will need to log in again for security."
 
       - name: Deployment summary
         if: success()
