@@ -55,9 +55,9 @@ jobs:
       - name: Test summary
         if: success()
         run: |
-          echo "✅ All tests passed!"
-          echo "✅ All JSON files validated"
-          echo "✅ CSV files validated"
+          echo "All tests passed!"
+          echo "All JSON files validated"
+          echo "CSV files validated"
           echo "Ready for deployment"
 
   deploy:
@@ -167,7 +167,7 @@ jobs:
           echo "Verifying vendor directory..."
           ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST "ls -la ~/${DEPLOY_PATH}/admin/vendor/autoload.php"
 
-          echo "✅ Composer dependencies installed successfully!"
+          echo "Composer dependencies installed successfully!"
 
       - name: Rotate JWT keys (if major change)
         env:
@@ -181,19 +181,19 @@ jobs:
           COMMIT_MSG="${{ github.event.head_commit.message }}"
 
           if [[ "$COMMIT_MSG" =~ \[rotate-keys\] ]] || [[ "$COMMIT_MSG" =~ \[major\] ]] || [[ "$COMMIT_MSG" =~ BREAKING.CHANGE ]]; then
-            echo "🔄 Key rotation requested in commit message"
+            echo "Key rotation requested in commit message"
             echo "Running key rotation on production..."
 
             # Run key rotation script via SSH
             ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST "cd ~/${DEPLOY_PATH}/admin && php rotate_keys_cli.php"
 
-            echo "✅ Key rotation completed!"
+            echo "Key rotation completed!"
           else
-            echo "ℹ️  No key rotation requested"
-            echo "   To rotate keys, include one of these in commit message:"
-            echo "   - [rotate-keys]"
-            echo "   - [major]"
-            echo "   - BREAKING CHANGE:"
+            echo "No key rotation requested"
+            echo "To rotate keys, include one of these in commit message:"
+            echo "  - [rotate-keys]"
+            echo "  - [major]"
+            echo "  - BREAKING CHANGE:"
           fi
 
       - name: Deployment summary
@@ -201,16 +201,16 @@ jobs:
         env:
           APP_URL: ${{ secrets.APP_URL }}
         run: |
-          echo "✅ Deployment successful!"
-          echo "🌐 Website: ${APP_URL}"
-          echo "🔧 Admin Dashboard: ${APP_URL}/admin/dashboard.php"
-          echo "📦 Deployed from commit: ${{ github.sha }}"
-          echo "👤 Deployed by: ${{ github.actor }}"
-          echo "✅ Composer dependencies installed via SSH"
+          echo "Deployment successful!"
+          echo "Website: ${APP_URL}"
+          echo "Admin Dashboard: ${APP_URL}/admin/dashboard.php"
+          echo "Deployed from commit: ${{ github.sha }}"
+          echo "Deployed by: ${{ github.actor }}"
+          echo "Composer dependencies installed via SSH"
 
       - name: Deployment failed
         if: failure()
         run: |
-          echo "❌ Deployment failed!"
+          echo "Deployment failed!"
           echo "Check logs above for details"
           exit 1
