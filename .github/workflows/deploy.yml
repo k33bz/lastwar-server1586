@@ -27,27 +27,27 @@ jobs:
         run: |
           echo "Validating alliances.json..."
           python -m json.tool data/alliances.json > /dev/null
-          echo "✓ alliances.json is valid"
+          echo "alliances.json is valid"
 
           echo "Validating rules.json..."
           python -m json.tool data/rules.json > /dev/null
-          echo "✓ rules.json is valid"
+          echo "rules.json is valid"
 
           echo "Validating amendments.json..."
           python -m json.tool data/amendments.json > /dev/null
-          echo "✓ amendments.json is valid"
+          echo "amendments.json is valid"
 
           echo "Validating rotation-schedule.json..."
           python -m json.tool data/rotation-schedule.json > /dev/null
-          echo "✓ rotation-schedule.json is valid"
+          echo "rotation-schedule.json is valid"
 
           echo "Validating server-info.json..."
           python -m json.tool data/server-info.json > /dev/null
-          echo "✓ server-info.json is valid"
+          echo "server-info.json is valid"
 
           echo "Validating signature-history.json..."
           python -m json.tool data/signature-history.json > /dev/null
-          echo "✓ signature-history.json is valid"
+          echo "signature-history.json is valid"
 
       - name: Validate CSV files
         run: python scripts/validate-csv.py
