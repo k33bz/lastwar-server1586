@@ -36,14 +36,15 @@ def validate_csv():
 
         # Validate header
         header = lines[0].strip().split(',')
-        if header[0] != 'date':
-            print(f"❌ Error: First column must be 'date', found '{header[0]}'")
+        if header[0] not in ['date', 'datetime']:
+            print(f"❌ Error: First column must be 'date' or 'datetime', found '{header[0]}'")
             return False
 
         num_columns = len(header)
         alliance_count = num_columns - 1  # Subtract date column
+        date_format = 'datetime' if header[0] == 'datetime' else 'date'
 
-        print(f"   ✓ Header valid: {alliance_count} alliances")
+        print(f"   ✓ Header valid: {alliance_count} alliances ({date_format} format)")
 
         # Validate data rows
         data_rows = 0
@@ -56,11 +57,18 @@ def validate_csv():
                 print(f"❌ Error: Line {i} has {len(values)} columns, expected {num_columns}")
                 return False
 
-            # Validate date format (YYYY-MM-DD)
-            date = values[0].strip()
-            if len(date) != 10 or date[4] != '-' or date[7] != '-':
-                print(f"❌ Error: Line {i} has invalid date format '{date}' (expected YYYY-MM-DD)")
-                return False
+            # Validate date/datetime format (YYYY-MM-DD or YYYY-MM-DD HH:mm:ss)
+            datetime_str = values[0].strip()
+            if date_format == 'datetime':
+                # Validate YYYY-MM-DD HH:mm:ss format (19 characters)
+                if len(datetime_str) != 19 or datetime_str[4] != '-' or datetime_str[7] != '-' or datetime_str[10] != ' ' or datetime_str[13] != ':' or datetime_str[16] != ':':
+                    print(f"❌ Error: Line {i} has invalid datetime format '{datetime_str}' (expected YYYY-MM-DD HH:mm:ss)")
+                    return False
+            else:
+                # Validate YYYY-MM-DD format (10 characters)
+                if len(datetime_str) != 10 or datetime_str[4] != '-' or datetime_str[7] != '-':
+                    print(f"❌ Error: Line {i} has invalid date format '{datetime_str}' (expected YYYY-MM-DD)")
+                    return False
 
             # Validate power values are numeric
             for j, value in enumerate(values[1:], start=1):
