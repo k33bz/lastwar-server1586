@@ -1655,7 +1655,7 @@
       ============================================ */
 
    // Version for cache-busting (update this when deploying changes)
-   var APP_VERSION = '1.9.4';
+   var APP_VERSION = '1.9.5';
 
    /**
     * Load all data from JSON files with cache-busting
