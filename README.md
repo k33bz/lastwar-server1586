@@ -90,18 +90,14 @@ Server1586/
 │   └── composer.json       # PHP dependencies
 ├── scripts/
 │   ├── deploy-ftp.py       # FTP deployment script
+│   ├── deploy-public-only.py  # Public site deployment (static only)
 │   ├── update-rotation-schedule.py  # Schedule generator (v2.2.0)
 │   ├── run-tests.py        # Unit test runner
 │   └── README.md           # Scripts documentation
-├── ocr/                    # OCR training and processing
-│   ├── process-screenshots-v3.py  # Screenshot processor (v3.0.0)
-│   ├── training_data/      # OCR training datasets
-│   └── README.md           # OCR documentation
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml      # GitHub Actions CI/CD workflow
 ├── images/                 # Static assets and logos
-├── .kiro/steering/         # AI assistant guidance files
 ├── .ftpignore             # FTP deployment exclusions
 ├── .gitignore             # Git exclusions
 └── README.md              # This file
@@ -155,7 +151,6 @@ Server1586/
 |-----------|---------------|-------------|
 | **Admin Panel** | [admin/README.md](admin/README.md) | Admin system overview |
 | **Automation Scripts** | [scripts/README.md](scripts/README.md) | Deployment & schedule scripts |
-| **OCR System** | [ocr/README.md](ocr/README.md) | Screenshot processing |
 | **Data Schemas** | [data/ALLIANCE_SCHEMA.md](data/ALLIANCE_SCHEMA.md) | Data structure docs |
 
 ### 🛠️ Setup & Configuration
@@ -423,7 +418,6 @@ Current versions:
 - CSS: **1.3.2**
 - Council: **2.0.0**
 - Schedule Script: **2.2.0**
-- OCR Processor: **3.0.0**
 
 ### Key Technologies
 

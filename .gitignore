@@ -142,9 +142,12 @@ admin/test-smtp.py
 # Backup files
 *.backup
 
-# Kiro Settings - Keep environment files secure
-.kiro/.env
-.kiro/settings/github-token.json
+# Kiro IDE - Entire directory (moved out of repo)
+.kiro/
+
+# OCR System - Moved to separate repository (see OCR_EXTRACTION_GUIDE.md)
+ocr/
+tesseract_training/
 
 # One-time helper scripts (contain FTP credentials, not for production)
 /*_*.py
