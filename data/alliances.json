@@ -8,7 +8,7 @@
             "discordId": null
         },
         "signed": false,
-        "power": 7044519755,
+        "power": 7842552554,
         "discord": {
             "serverName": "Omega Force Official",
             "inviteUrl": null,
@@ -50,7 +50,7 @@
             ]
         },
         "metadata": {
-            "lastUpdated": "2025-10-10T12:26:44Z",
+            "lastUpdated": "2025-10-28T13:36:11Z",
             "verified": false,
             "featured": true
         },
@@ -70,15 +70,15 @@
         "tag": "UvvU",
         "name": "veni vidi vici",
         "r5": {
-            "name": "\ucfe0\uce58\ub098 \u14da\u160f\u15e2",
+            "name": "쿠치나 ᓚᘏᗢ",
             "gameId": null,
             "discordId": null
         },
         "signed": false,
-        "power": 6467618745,
+        "power": 7154204298,
         "r5History": [
             {
-                "r5Name": "\ucfe0\uce58\ub098 \u14da\u160f\u15e2",
+                "r5Name": "쿠치나 ᓚᘏᗢ",
                 "gameId": null,
                 "discordId": null,
                 "startDate": "2025-05-19T00:00:00Z",
@@ -108,18 +108,18 @@
             }
         },
         "metadata": {
-            "lastUpdated": "2025-10-16T23:54:43Z"
+            "lastUpdated": "2025-10-28T13:36:11Z"
         }
     },
     {
         "tag": "nkot",
         "name": "korea one team",
-        "r5": "\uc794\uc778\ud55c\ub178\ub2c8 Noni",
+        "r5": "잔인한노니 Noni",
         "signed": false,
-        "power": 5053417714,
+        "power": 5487634013,
         "r5History": [
             {
-                "r5Name": "\uc794\uc778\ud55c\ub178\ub2c8 Noni",
+                "r5Name": "잔인한노니 Noni",
                 "gameId": null,
                 "discordId": null,
                 "startDate": "2025-05-19T00:00:00Z",
@@ -127,17 +127,20 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "STR8",
         "name": "STR8 SAVAGE",
-        "r5": "ULoveGuccii\u10e6",
+        "r5": "ULoveGucciiღ",
         "signed": false,
-        "power": 4998393046,
+        "power": 6068306651,
         "r5History": [
             {
-                "r5Name": "ULoveGuccii\u10e6",
+                "r5Name": "ULoveGucciiღ",
                 "gameId": null,
                 "discordId": null,
                 "startDate": "2025-05-19T00:00:00Z",
@@ -145,14 +148,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "EPIC",
         "name": "KarmaKings",
         "r5": "MastaGinger",
         "signed": false,
-        "power": 4997451656,
+        "power": 5315160489,
         "r5History": [
             {
                 "r5Name": "MastaGinger",
@@ -163,14 +169,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "404a",
         "name": "Not Found",
         "r5": "DjNinja17",
         "signed": false,
-        "power": 4982528656,
+        "power": 5243383601,
         "r5History": [
             {
                 "r5Name": "DjNinja17",
@@ -181,14 +190,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "LE4L",
-        "name": "Legi\u00e3o del Alba",
+        "name": "Legião del Alba",
         "r5": "Alessaurem",
         "signed": false,
-        "power": 4980439054,
+        "power": 0,
         "r5History": [
             {
                 "r5Name": "Alessaurem",
@@ -199,14 +211,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "FLM",
         "name": "Fortis Legio Magna",
         "r5": "KiluaZoldic",
         "signed": false,
-        "power": 4505121909,
+        "power": 5182307694,
         "r5History": [
             {
                 "r5Name": "KiluaZoldic",
@@ -217,14 +232,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "NYPR",
         "name": "NY Bats",
         "r5": "Batman100x35PR",
         "signed": false,
-        "power": 3709979466,
+        "power": 4255446020,
         "r5History": [
             {
                 "r5Name": "Batman100x35PR",
@@ -235,14 +253,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "SWBA",
         "name": "SinnersWillBeAshed",
         "r5": "Don123123",
         "signed": false,
-        "power": 3681939035,
+        "power": 4293645575,
         "r5History": [
             {
                 "r5Name": "Don123123",
@@ -253,17 +274,20 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "86KO",
         "name": "??",
-        "r5": "\u029a\u1d38\u1d58\u1db0\u1d43\u025e",
+        "r5": "ʚᴸᵘᶰᵃɞ",
         "signed": false,
-        "power": 2655249702,
+        "power": 2323922491,
         "r5History": [
             {
-                "r5Name": "\u029a\u1d38\u1d58\u1db0\u1d43\u025e",
+                "r5Name": "ʚᴸᵘᶰᵃɞ",
                 "gameId": null,
                 "discordId": null,
                 "startDate": "2025-05-19T00:00:00Z",
@@ -271,14 +295,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "FNXS",
-        "name": "F \u00e9 n i x",
+        "name": "F é n i x",
         "r5": "Gera D Vc",
         "signed": false,
-        "power": 2618735693,
+        "power": 3147619067,
         "r5History": [
             {
                 "r5Name": "Gera D Vc",
@@ -289,7 +316,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "MTOP",
@@ -300,7 +330,7 @@
             "discordId": null
         },
         "signed": false,
-        "power": 1835412238,
+        "power": 446450739,
         "r5History": [
             {
                 "r5Name": "MTOP test",
@@ -333,7 +363,7 @@
             }
         },
         "metadata": {
-            "lastUpdated": "2025-10-13T00:09:45Z"
+            "lastUpdated": "2025-10-28T13:36:11Z"
         }
     },
     {
@@ -341,7 +371,7 @@
         "name": "NIKII",
         "r5": "NakappaFenomeno",
         "signed": false,
-        "power": 1647083009,
+        "power": 4427463487,
         "r5History": [
             {
                 "r5Name": "NakappaFenomeno",
@@ -352,14 +382,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "MZKU",
         "name": "Mazoku",
         "r5": "Grand Puba Daddio",
         "signed": false,
-        "power": 1257819990,
+        "power": 1802116122,
         "r5History": [
             {
                 "r5Name": "Grand Puba Daddio",
@@ -370,14 +403,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "bfp8",
         "name": "Zxrll",
         "r5": "Fr3lancr",
         "signed": false,
-        "power": 1055412234,
+        "power": 1410839850,
         "r5History": [
             {
                 "r5Name": "Fr3lancr",
@@ -388,14 +424,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "UUSN",
         "name": "Kantinny",
         "r5": "KingKlik TC",
         "signed": false,
-        "power": 911283464,
+        "power": 1047866924,
         "r5History": [
             {
                 "r5Name": "KingKlik TC",
@@ -406,7 +445,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "LSKJ",
@@ -447,12 +489,12 @@
     {
         "tag": "1985",
         "name": "1985",
-        "r5": "\ucd5c\uc0ac\ub839 \uad00",
+        "r5": "최사령 관",
         "signed": false,
-        "power": 549297786,
+        "power": 616601128,
         "r5History": [
             {
-                "r5Name": "\ucd5c\uc0ac\ub839 \uad00",
+                "r5Name": "최사령 관",
                 "gameId": null,
                 "discordId": null,
                 "startDate": "2025-05-19T00:00:00Z",
@@ -460,14 +502,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "C4B",
         "name": "United Fight",
         "r5": "Capboaventura",
         "signed": false,
-        "power": 549297786,
+        "power": 713583309,
         "r5History": [
             {
                 "r5Name": "Capboaventura",
@@ -478,14 +523,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "z5fa",
         "name": "lustig store",
         "r5": "yuridn",
         "signed": false,
-        "power": 477221632,
+        "power": 401927650,
         "r5History": [
             {
                 "r5Name": "yuridn",
@@ -496,14 +544,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "w1l0",
         "name": "MountainDew",
         "r5": "T Brown",
         "signed": false,
-        "power": 438532321,
+        "power": 529152473,
         "r5History": [
             {
                 "r5Name": "T Brown",
@@ -514,14 +565,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "BOS7",
         "name": "Born of sin",
         "r5": "Commander 1c8ef1586",
         "signed": false,
-        "power": 324608782,
+        "power": 351061164,
         "r5History": [
             {
                 "r5Name": "Commander 1c8ef1586",
@@ -532,14 +586,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "NMMN",
         "name": "VictoryOrExtinction",
         "r5": "Nolergd",
         "signed": false,
-        "power": 321887969,
+        "power": 372458551,
         "r5History": [
             {
                 "r5Name": "Nolergd",
@@ -550,7 +607,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "SLTR",
@@ -575,7 +635,7 @@
         "name": "Red",
         "r5": "R5 of Redr",
         "signed": false,
-        "power": 252892825,
+        "power": 297729360,
         "r5History": [
             {
                 "r5Name": "R5 of Redr",
@@ -586,11 +646,14 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "SLMA",
-        "name": "astanh\u00e3o",
+        "name": "astanhão",
         "r5": "R5 of SLMA",
         "signed": false,
         "power": 252890829,
@@ -629,7 +692,7 @@
         "name": "The Nerds",
         "r5": "R5 of NRDS",
         "signed": false,
-        "power": 204160429,
+        "power": 222396161,
         "r5History": [
             {
                 "r5Name": "R5 of NRDS",
@@ -640,14 +703,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "RDCS",
         "name": "Reino do Caos",
         "r5": "R5 of RDCS",
         "signed": false,
-        "power": 188450283,
+        "power": 198566055,
         "r5History": [
             {
                 "r5Name": "R5 of RDCS",
@@ -658,7 +724,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "CHVL",
@@ -683,7 +752,7 @@
         "name": "GettinxZooted",
         "r5": "R5 of NFLA",
         "signed": false,
-        "power": 184087890,
+        "power": 192857580,
         "r5History": [
             {
                 "r5Name": "R5 of NFLA",
@@ -694,11 +763,14 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "Lbdu",
-        "name": "La\u00ebla",
+        "name": "Laëla",
         "r5": "R5 of Lbdu",
         "signed": false,
         "power": 140078397,
@@ -719,7 +791,7 @@
         "name": "nicolinha",
         "r5": "R5 of nic1",
         "signed": false,
-        "power": 139478018,
+        "power": 139521315,
         "r5History": [
             {
                 "r5Name": "R5 of nic1",
@@ -730,11 +802,14 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "LsBJ",
-        "name": "astanh\u00e3o",
+        "name": "astanhão",
         "r5": "R5 of LsBJ",
         "signed": false,
         "power": 129478918,
@@ -755,7 +830,7 @@
         "name": "LeGa",
         "r5": "R5 of LeGA",
         "signed": false,
-        "power": 120091397,
+        "power": 116028848,
         "r5History": [
             {
                 "r5Name": "R5 of LeGA",
@@ -766,14 +841,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "Lepa",
         "name": "Lucasloco",
         "r5": "R5 of Lepa",
         "signed": false,
-        "power": 115426661,
+        "power": 131170948,
         "r5History": [
             {
                 "r5Name": "R5 of Lepa",
@@ -784,7 +862,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "Bbr1",
@@ -809,7 +890,7 @@
         "name": "Rur",
         "r5": "R5 of RU66",
         "signed": false,
-        "power": 103949160,
+        "power": 120752997,
         "r5History": [
             {
                 "r5Name": "R5 of RU66",
@@ -820,7 +901,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "LsN0",
@@ -842,10 +926,10 @@
     },
     {
         "tag": "L4TM",
-        "name": "La \u00daltima Orden",
+        "name": "La Última Orden",
         "r5": "R5 of L4TM",
         "signed": false,
-        "power": 94596408,
+        "power": 185684530,
         "r5History": [
             {
                 "r5Name": "R5 of L4TM",
@@ -856,11 +940,14 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "SHDW",
-        "name": "La \u00daltima Orden",
+        "name": "La Última Orden",
         "r5": "R5 of SHDW",
         "signed": false,
         "power": 94539668,
@@ -899,7 +986,7 @@
         "name": "brassssiiiiillllll",
         "r5": "R5 of rico",
         "signed": false,
-        "power": 92051825,
+        "power": 91493792,
         "r5History": [
             {
                 "r5Name": "R5 of rico",
@@ -910,7 +997,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "MAnD",
@@ -935,7 +1025,7 @@
         "name": "Gwc",
         "r5": "R5 of Gwc",
         "signed": false,
-        "power": 72528066,
+        "power": 73146200,
         "r5History": [
             {
                 "r5Name": "R5 of Gwc",
@@ -946,14 +1036,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "nand",
         "name": "NATIVOS BRR",
         "r5": "R5 of nand",
         "signed": false,
-        "power": 71317372,
+        "power": 89153991,
         "r5History": [
             {
                 "r5Name": "R5 of nand",
@@ -964,7 +1057,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "MbSt",
@@ -989,7 +1085,7 @@
         "name": "Turbo Jews",
         "r5": "R5 of JEWS",
         "signed": false,
-        "power": 67256832,
+        "power": 54573308,
         "r5History": [
             {
                 "r5Name": "R5 of JEWS",
@@ -1000,7 +1096,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "FYPE",
@@ -1025,7 +1124,7 @@
         "name": "zombiehitter",
         "r5": "R5 of tzh",
         "signed": false,
-        "power": 63542075,
+        "power": 76050562,
         "r5History": [
             {
                 "r5Name": "R5 of tzh",
@@ -1036,7 +1135,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "BSoG",
@@ -1097,7 +1199,7 @@
         "name": "jea4",
         "r5": "R5 of jea4",
         "signed": false,
-        "power": 61517008,
+        "power": 0,
         "r5History": [
             {
                 "r5Name": "R5 of jea4",
@@ -1108,11 +1210,14 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "TmpL",
-        "name": "\ubb34\uc801\uae38\ub4dc\uad70",
+        "name": "무적길드군",
         "r5": "R5 of TmpL",
         "signed": false,
         "power": 61317088,
@@ -1151,7 +1256,7 @@
         "name": "Evil Walks Eternity",
         "r5": "R5 of EWE1",
         "signed": false,
-        "power": 54734256,
+        "power": 48649990,
         "r5History": [
             {
                 "r5Name": "R5 of EWE1",
@@ -1162,14 +1267,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "SGE2",
         "name": "SavagesGataEat2",
         "r5": "R5 of SGE2",
         "signed": false,
-        "power": 54498456,
+        "power": 65059501,
         "r5History": [
             {
                 "r5Name": "R5 of SGE2",
@@ -1180,11 +1288,14 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "LGLW",
-        "name": "Sanguin\u00e1rio451",
+        "name": "Sanguinário451",
         "r5": "R5 of LGLW",
         "signed": false,
         "power": 54458458,
@@ -1223,7 +1334,7 @@
         "name": "qpdl",
         "r5": "R5 of qpdl",
         "signed": false,
-        "power": 50077549,
+        "power": 70140458,
         "r5History": [
             {
                 "r5Name": "R5 of qpdl",
@@ -1234,7 +1345,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "ArtW",
@@ -1259,7 +1373,7 @@
         "name": "jein",
         "r5": "R5 of jein",
         "signed": false,
-        "power": 48571871,
+        "power": 57407624,
         "r5History": [
             {
                 "r5Name": "R5 of jein",
@@ -1270,14 +1384,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "RSTE",
-        "name": "Resistanc\u00eb",
+        "name": "Resistancë",
         "r5": "R5 of RSTE",
         "signed": false,
-        "power": 46628136,
+        "power": 56809255,
         "r5History": [
             {
                 "r5Name": "R5 of RSTE",
@@ -1288,7 +1405,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "MT7",
@@ -1313,7 +1433,7 @@
         "name": "Blackk666",
         "r5": "R5 of poci",
         "signed": false,
-        "power": 44193914,
+        "power": 58637210,
         "r5History": [
             {
                 "r5Name": "R5 of poci",
@@ -1324,7 +1444,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "EvLB",
@@ -1403,7 +1526,7 @@
         "name": "TEMPLAR",
         "r5": "R5 of 7kr",
         "signed": false,
-        "power": 43558006,
+        "power": 56774369,
         "r5History": [
             {
                 "r5Name": "R5 of 7kr",
@@ -1414,14 +1537,17 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "lpe",
         "name": "love peace",
         "r5": "R5 of lpe",
         "signed": false,
-        "power": 37519173,
+        "power": 35980883,
         "r5History": [
             {
                 "r5Name": "R5 of lpe",
@@ -1432,7 +1558,10 @@
                 "current": true,
                 "signatures": []
             }
-        ]
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
     },
     {
         "tag": "joumH",
