@@ -4,9 +4,10 @@
  *
  * Functions to update power-history.csv with datetime stamps
  *
- * @version 1.2.0
- * @date 2025-10-27
+ * @version 1.2.1
+ * @date 2025-10-28
  * @changelog
+ *   1.2.1 (2025-10-28) - Deployment fix: Force re-upload to production
  *   1.2.0 (2025-10-27) - Updated to ISO 8601 datetime format (YYYY-MM-DD HH:mm:ss)
  *                       - Better sorting and international standard compliance
  *   1.1.0 (2025-10-27) - Updated to M/d/yyyy HH:mm datetime format
