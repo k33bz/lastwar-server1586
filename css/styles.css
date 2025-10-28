@@ -997,6 +997,73 @@ h1 {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.chart-controls {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slider-labels {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    margin-top: 8px;
+}
+
+.slider-labels span {
+    position: absolute;
+    transform: translateX(-50%);
+    font-size: 0.85em;
+    color: #888;
+    user-select: none;
+}
+
+.chart-controls input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: linear-gradient(to right, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.6));
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+.chart-controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #ffd700;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    transition: all 0.2s ease;
+}
+
+.chart-controls input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+}
+
+.chart-controls input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #ffd700;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    transition: all 0.2s ease;
+}
+
+.chart-controls input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+}
+
 .chart-info {
     display: flex;
     justify-content: space-around;

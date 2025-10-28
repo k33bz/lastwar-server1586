@@ -4,9 +4,14 @@
  *
  * Functions to update power-history.csv with datetime stamps
  *
- * @version 1.0.0
- * @date 2025-10-15
+ * @version 1.2.0
+ * @date 2025-10-27
  * @changelog
+ *   1.2.0 (2025-10-27) - Updated to ISO 8601 datetime format (YYYY-MM-DD HH:mm:ss)
+ *                       - Better sorting and international standard compliance
+ *   1.1.0 (2025-10-27) - Updated to M/d/yyyy HH:mm datetime format
+ *                       - Deduplication: keeps latest entry per day
+ *                       - Changed header from 'date' to 'datetime'
  *   1.0.0 (2025-10-15) - Initial implementation
  *                       - DateTime stamps for tracking multiple edits per day
  *                       - Support for -1 (deleted) and 0 (display as empty)
@@ -43,11 +48,11 @@ function append_power_snapshot($alliances) {
         $header = fgetcsv($file);
         fclose($file);
 
-        if (!$header || $header[0] !== 'date') {
+        if (!$header || ($header[0] !== 'datetime' && $header[0] !== 'date')) {
             throw new Exception("Invalid CSV format: missing or incorrect header");
         }
 
-        // Remove 'date' column from header to get alliance tags in order
+        // Remove 'datetime' column from header to get alliance tags in order
         array_shift($header);
         $alliance_tags = $header;
 
@@ -59,8 +64,8 @@ function append_power_snapshot($alliances) {
             $power_map[$tag] = $power;
         }
 
-        // Build new row with datetime timestamp
-        $datetime = gmdate('Y-m-d H:i:s');  // Use datetime instead of just date
+        // Build new row with datetime timestamp in ISO 8601 format
+        $datetime = gmdate('Y-m-d H:i:s');  // Format: 2025-10-27 14:30:00
         $row = [$datetime];
 
         // Add power values in the order of CSV header
@@ -132,7 +137,8 @@ function get_latest_power_snapshots($limit = 30) {
             if (empty($row[0])) continue;
 
             $datetime = $row[0];
-            $date = substr($datetime, 0, 10);  // Extract YYYY-MM-DD
+            // Extract date portion from "YYYY-MM-DD HH:mm:ss" format
+            $date = explode(' ', $datetime)[0];
 
             // Keep only the latest datetime for each date
             if (!isset($by_date[$date]) || $datetime > $by_date[$date]['datetime']) {
@@ -197,10 +203,10 @@ function update_csv_header($alliances) {
         fclose($file);
 
         // Build new header
-        $new_header = array_merge(['date'], $new_tags);
+        $new_header = array_merge(['datetime'], $new_tags);
 
         // Map old columns to new columns
-        $old_tags = array_slice($old_header, 1);  // Remove 'date'
+        $old_tags = array_slice($old_header, 1);  // Remove 'datetime'/'date'
         $column_map = [];
         foreach ($old_tags as $index => $tag) {
             $new_index = array_search($tag, $new_tags);

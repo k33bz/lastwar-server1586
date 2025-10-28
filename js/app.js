@@ -11,6 +11,69 @@
  * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
  *
  * CHANGELOG:
+ * v1.9.4 - 2025-10-27
+ * - Fixed tooltip to show correct hovered alliance first
+ * - Changed interaction mode to 'nearest' with 'xy' axis for accurate detection
+ * - Tooltip now sorted: hovered alliance first (gold with ►), then others by power
+ * - activeElements used to determine which line is actually under cursor
+ * - Data now matches the actual point being hovered
+ *
+ * v1.9.3 - 2025-10-27
+ * - Fixed tooltip highlighting - now properly shows ► indicator and gold color
+ * - Improved legend text readability (changed from #E0E0E0 to #FFFFFF)
+ * - Legend alliance names now bright white and clearly visible
+ * - Simplified tooltip logic to use hoveredDatasetIndex directly
+ *
+ * v1.9.2 - 2025-10-27
+ * - Fixed tooltip highlighting to show correct alliance being hovered
+ * - Tooltip now highlights the closest/primary alliance at cursor position
+ * - Improved axis label readability (changed from #A0A0A0 to #E0E0E0)
+ * - Date and power value labels now much more visible
+ *
+ * v1.9.1 - 2025-10-27
+ * - Enhanced tooltip to highlight selected alliance
+ * - Adds ► indicator prefix to hovered alliance in tooltip
+ * - Hovered alliance shown in gold (#FFD700), others dimmed (#A0A0A0)
+ * - Visual distinction makes it easy to identify which line you're hovering
+ *
+ * v1.9.0 - 2025-10-27
+ * - Added interactive hover highlighting for alliance lines and legend
+ * - Alliance name in legend becomes bold when hovering over its line/points
+ * - Hovered line thickness increases from 2px to 4px
+ * - Real-time visual feedback without animation for smooth interaction
+ * - Hover state resets when moving slider or re-rendering chart
+ *
+ * v1.8.1 - 2025-10-27
+ * - Fixed slider label alignment to match slider stops precisely
+ * - Labels now use absolute positioning with proper centering
+ *
+ * v1.8.0 - 2025-10-27
+ * - Added interactive slider to control number of alliances displayed (3, 5, 10, 15, 25, 50)
+ * - Default view shows top 5 alliances
+ * - Enhanced color generation to support up to 50 alliances using HSL
+ * - Slider with visual labels and smooth gold styling
+ * - Chart updates in real-time when slider changes
+ *
+ * v1.7.0 - 2025-10-27
+ * - BREAKING: Changed datetime format to ISO 8601 (YYYY-MM-DD HH:mm:ss)
+ * - Reduced chart to top 5 alliances for cleaner visualization
+ * - ISO format provides better sorting and international standard compliance
+ * - Chart.js parser updated to yyyy-MM-dd HH:mm:ss format
+ * - Tooltip now shows 24-hour time format (HH:mm)
+ *
+ * v1.6.1 - 2025-10-27
+ * - Fixed chart rendering to filter out alliances with zero power
+ * - Null values used for 0 power entries to prevent lines starting from bottom
+ * - Chart now only shows top 10 alliances with actual power data
+ * - Added spanGaps: false to prevent connecting across missing data
+ *
+ * v1.6.0 - 2025-10-27
+ * - Updated power-history.csv format from date to datetime (M/d/yyyy HH:mm)
+ * - Added deduplication logic to keep only latest entry per day
+ * - Updated Chart.js time parser to handle datetime format
+ * - Chart tooltips now show time of day
+ * - Supports multiple power updates per day (only latest displayed)
+ *
  * v2.0.0 - 2025-10-14
  * - BREAKING: Removed rank fields from alliances.json
  * - Added calculateRanks() function to compute ranks dynamically based on power
@@ -121,6 +184,8 @@
    let countdownInterval = null;
    let powerChart = null;
    let powerHistory = null;
+   let chartAllianceCount = 5; // Default to showing top 5 alliances
+   let hoveredDatasetIndex = null; // Track which alliance is being hovered
    let serverInfo = null;
    let signatureHistory = null;
 
@@ -851,6 +916,24 @@
        }
    }
 
+   /**
+    * Update alliance count for power chart
+    * Maps slider values (0-5) to alliance counts (3, 5, 10, 15, 25, 50)
+    * @param {number} sliderValue - Value from slider (0-5)
+    */
+   function updateAllianceCount(sliderValue) {
+       var counts = [3, 5, 10, 15, 25, 50];
+       chartAllianceCount = counts[parseInt(sliderValue)];
+
+       // Update display
+       document.getElementById('allianceCountValue').textContent = chartAllianceCount;
+
+       // Re-render chart with new count
+       if (powerHistory) {
+           renderPowerChart();
+       }
+   }
+
    /* ============================================
       ALLIANCE DETAIL MODAL
       ============================================ */
@@ -1184,10 +1267,51 @@
 
        // Parse header row (alliance tags)
        var headers = lines[0].split(',').map(function(h) { return h.trim(); });
-       var dateIndex = 0;
-       var allianceTags = headers.slice(1); // Skip 'date' column
+       var allianceTags = headers.slice(1); // Skip 'datetime' column
 
-       // Parse data rows
+       // Parse all data rows with datetime
+       var allEntries = [];
+       for (var j = 1; j < lines.length; j++) {
+           var values = lines[j].split(',').map(function(v) { return v.trim(); });
+           if (values.length !== headers.length) {
+               console.warn('Power history CSV line', j, 'has incorrect column count');
+               continue;
+           }
+
+           var datetime = values[0];
+           var dateOnly = datetime.split(' ')[0]; // Extract date portion (YYYY-MM-DD)
+
+           var powerValues = {};
+           for (var k = 1; k < values.length; k++) {
+               var tag = headers[k];
+               powerValues[tag] = parseInt(values[k]) || 0;
+           }
+
+           allEntries.push({
+               datetime: datetime,
+               date: dateOnly,
+               power: powerValues
+           });
+       }
+
+       // Group by date and keep only the latest entry per day
+       var dateMap = {};
+       for (var i = 0; i < allEntries.length; i++) {
+           var entry = allEntries[i];
+           var existingEntry = dateMap[entry.date];
+
+           // If no entry for this date yet, or this entry is later in the day, keep it
+           if (!existingEntry || entry.datetime > existingEntry.datetime) {
+               dateMap[entry.date] = entry;
+           }
+       }
+
+       // Convert deduplicated map to arrays sorted by datetime
+       var uniqueEntries = Object.values(dateMap).sort(function(a, b) {
+           return a.datetime.localeCompare(b.datetime);
+       });
+
+       // Build final dates and datasets arrays
        var dates = [];
        var datasets = {};
 
@@ -1196,25 +1320,16 @@
            datasets[allianceTags[i]] = [];
        }
 
-       // Parse each data row
-       for (var j = 1; j < lines.length; j++) {
-           var values = lines[j].split(',').map(function(v) { return v.trim(); });
-           if (values.length !== headers.length) {
-               console.warn('Power history CSV line', j, 'has incorrect column count');
-               continue;
-           }
-
-           dates.push(values[0]);
-
-           // Add power value for each alliance
-           for (var k = 1; k < values.length; k++) {
-               var tag = headers[k];
-               var power = parseInt(values[k]) || 0;
-               datasets[tag].push(power);
+       // Populate with deduplicated data
+       for (var i = 0; i < uniqueEntries.length; i++) {
+           dates.push(uniqueEntries[i].datetime);
+           for (var t = 0; t < allianceTags.length; t++) {
+               var tag = allianceTags[t];
+               datasets[tag].push(uniqueEntries[i].power[tag]);
            }
        }
 
-       console.log('Power history loaded:', allianceTags.length, 'alliances,', dates.length, 'data points');
+       console.log('Power history loaded:', allianceTags.length, 'alliances,', dates.length, 'data points (deduplicated by day)');
 
        return {
            dates: dates,
@@ -1229,7 +1344,7 @@
     * @returns {Array} Array of color strings
     */
    function generateChartColors(count) {
-       var colors = [
+       var predefinedColors = [
            '#FFD700', // Gold (Rank 1)
            '#C0C0C0', // Silver (Rank 2)
            '#CD7F32', // Bronze (Rank 3)
@@ -1240,14 +1355,28 @@
            '#9370DB', // Medium Purple
            '#20B2AA', // Light Sea Green
            '#FF1493', // Deep Pink
-           '#FFD700', // Gold
            '#00CED1', // Dark Turquoise
            '#FF6347', // Tomato
            '#9400D3', // Dark Violet
-           '#00FA9A'  // Medium Spring Green
+           '#00FA9A', // Medium Spring Green
+           '#FF69B4'  // Hot Pink
        ];
 
-       return colors.slice(0, count);
+       // If we need more colors than predefined, generate additional ones using HSL
+       var colors = predefinedColors.slice(0, Math.min(count, predefinedColors.length));
+
+       if (count > predefinedColors.length) {
+           var remaining = count - predefinedColors.length;
+           for (var i = 0; i < remaining; i++) {
+               // Generate colors with evenly spaced hues
+               var hue = (i * 360 / remaining + 180) % 360; // Offset by 180 to avoid predefined colors
+               var saturation = 60 + (i % 3) * 15; // Vary saturation: 60%, 75%, 90%
+               var lightness = 50 + (i % 2) * 10; // Vary lightness: 50%, 60%
+               colors.push('hsl(' + hue + ', ' + saturation + '%, ' + lightness + '%)');
+           }
+       }
+
+       return colors;
    }
 
    /**
@@ -1272,39 +1401,49 @@
            powerChart.destroy();
        }
 
+       // Reset hover state
+       hoveredDatasetIndex = null;
+
        console.log('Rendering power chart with', powerHistory.alliances.length, 'alliances');
 
-       // Sort alliances by most recent power level and take top 10
-       var alliancesWithLatestPower = powerHistory.alliances.map(function(tag) {
-           var powerData = powerHistory.datasets[tag];
-           var latestPower = powerData[powerData.length - 1] || 0;
-           return { tag: tag, latestPower: latestPower };
-       });
+       // Filter and sort alliances by most recent power level
+       var alliancesWithLatestPower = powerHistory.alliances
+           .map(function(tag) {
+               var powerData = powerHistory.datasets[tag];
+               var latestPower = powerData[powerData.length - 1] || 0;
+               return { tag: tag, latestPower: latestPower };
+           })
+           .filter(function(item) {
+               // Only include alliances with non-zero latest power
+               return item.latestPower > 0;
+           });
 
-       // Sort by latest power (descending) and take top 10
+       // Sort by latest power (descending) and take top N
        alliancesWithLatestPower.sort(function(a, b) {
            return b.latestPower - a.latestPower;
        });
-       var top10Tags = alliancesWithLatestPower.slice(0, 10).map(function(item) {
+       var topTags = alliancesWithLatestPower.slice(0, chartAllianceCount).map(function(item) {
            return item.tag;
        });
 
-       var alliancesToShow = top10Tags.length;
+       var alliancesToShow = topTags.length;
        var colors = generateChartColors(alliancesToShow);
 
-       // Build datasets for Chart.js (top 10 by latest power) with time-based X coordinates
+       // Build datasets for Chart.js (top N by latest power) with time-based X coordinates
        var chartDatasets = [];
        for (var i = 0; i < alliancesToShow; i++) {
-           var tag = top10Tags[i];
+           var tag = topTags[i];
            var powerData = powerHistory.datasets[tag];
            var color = colors[i];
 
            // Convert to x,y format where x is date for proper time spacing
+           // Use null for 0 values so lines don't start from bottom
            var dataPoints = [];
            for (var j = 0; j < powerHistory.dates.length; j++) {
+               var power = powerData[j];
                dataPoints.push({
                    x: powerHistory.dates[j],
-                   y: powerData[j]
+                   y: power > 0 ? power : null
                });
            }
 
@@ -1317,7 +1456,8 @@
                pointRadius: 4,
                pointHoverRadius: 6,
                tension: 0.2,
-               fill: false
+               fill: false,
+               spanGaps: false  // Don't connect points across null values
            });
        }
 
@@ -1345,32 +1485,72 @@
                        display: true,
                        position: 'bottom',
                        labels: {
-                           color: '#E0E0E0',
+                           color: '#FFFFFF',
                            padding: 15,
                            font: {
                                size: 12
                            },
-                           usePointStyle: true
+                           usePointStyle: true,
+                           generateLabels: function(chart) {
+                               return chart.data.datasets.map(function(dataset, i) {
+                                   var isHovered = hoveredDatasetIndex === i;
+                                   return {
+                                       text: dataset.label,
+                                       fillStyle: dataset.borderColor,
+                                       strokeStyle: dataset.borderColor,
+                                       lineWidth: isHovered ? 3 : 2,
+                                       hidden: !chart.isDatasetVisible(i),
+                                       index: i,
+                                       datasetIndex: i,
+                                       fontColor: isHovered ? '#FFD700' : '#FFFFFF',
+                                       fontStyle: isHovered ? 'bold' : 'normal'
+                                   };
+                               });
+                           }
                        }
                    },
                    tooltip: {
                        mode: 'index',
                        intersect: false,
-                       backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                       backgroundColor: 'rgba(0, 0, 0, 0.9)',
                        titleColor: '#FFD700',
                        bodyColor: '#E0E0E0',
                        borderColor: '#FFD700',
                        borderWidth: 1,
                        padding: 12,
                        displayColors: true,
+                       bodyFont: {
+                           size: 13
+                       },
+                       filter: function(tooltipItem) {
+                           // Only show items with non-null values
+                           return tooltipItem.parsed.y !== null;
+                       },
+                       itemSort: function(a, b) {
+                           // Sort so the hovered one comes first, then by power
+                           if (a.datasetIndex === hoveredDatasetIndex) return -1;
+                           if (b.datasetIndex === hoveredDatasetIndex) return 1;
+                           // Otherwise sort by power descending
+                           return b.parsed.y - a.parsed.y;
+                       },
                        callbacks: {
                            label: function(context) {
                                var label = context.dataset.label || '';
+
+                               // Highlight the hovered dataset
+                               if (context.datasetIndex === hoveredDatasetIndex) {
+                                   label = '► ' + label;
+                               }
+
                                if (label) {
                                    label += ': ';
                                }
                                label += context.parsed.y.toLocaleString();
                                return label;
+                           },
+                           labelTextColor: function(context) {
+                               // Gold for hovered dataset, gray for others
+                               return context.datasetIndex === hoveredDatasetIndex ? '#FFD700' : '#A0A0A0';
                            }
                        }
                    }
@@ -1379,14 +1559,14 @@
                    x: {
                        type: 'time',
                        time: {
-                           parser: 'yyyy-MM-dd',
+                           parser: 'yyyy-MM-dd HH:mm:ss',
                            unit: 'day',
                            displayFormats: {
                                day: 'MMM d',
                                week: 'MMM d',
                                month: 'MMM yyyy'
                            },
-                           tooltipFormat: 'MMM d, yyyy'
+                           tooltipFormat: 'MMM d, yyyy HH:mm'
                        },
                        display: true,
                        title: {
@@ -1399,7 +1579,7 @@
                            }
                        },
                        ticks: {
-                           color: '#A0A0A0',
+                           color: '#E0E0E0',
                            maxRotation: 45,
                            minRotation: 45,
                            autoSkip: true,
@@ -1421,7 +1601,7 @@
                            }
                        },
                        ticks: {
-                           color: '#A0A0A0',
+                           color: '#E0E0E0',
                            callback: function(value) {
                                return value.toLocaleString();
                            }
@@ -1433,8 +1613,34 @@
                },
                interaction: {
                    mode: 'nearest',
-                   axis: 'x',
+                   axis: 'xy',
                    intersect: false
+               },
+               onHover: function(event, activeElements, chart) {
+                   var newHoveredIndex = null;
+
+                   // Use activeElements to find which specific element is being hovered
+                   if (activeElements.length > 0) {
+                       // The first active element is the one directly under the cursor
+                       newHoveredIndex = activeElements[0].datasetIndex;
+                   }
+
+                   // Update if changed
+                   if (hoveredDatasetIndex !== newHoveredIndex) {
+                       // Reset previous hovered dataset
+                       if (hoveredDatasetIndex !== null && powerChart.data.datasets[hoveredDatasetIndex]) {
+                           powerChart.data.datasets[hoveredDatasetIndex].borderWidth = 2;
+                       }
+
+                       hoveredDatasetIndex = newHoveredIndex;
+
+                       // Increase border width for hovered dataset
+                       if (hoveredDatasetIndex !== null && powerChart.data.datasets[hoveredDatasetIndex]) {
+                           powerChart.data.datasets[hoveredDatasetIndex].borderWidth = 4;
+                       }
+
+                       powerChart.update('none'); // Update without animation
+                   }
                }
            }
        });
@@ -1449,7 +1655,7 @@
       ============================================ */
 
    // Version for cache-busting (update this when deploying changes)
-   var APP_VERSION = '1.5.1';
+   var APP_VERSION = '1.9.4';
 
    /**
     * Load all data from JSON files with cache-busting

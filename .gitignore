@@ -145,3 +145,23 @@ admin/test-smtp.py
 # Kiro Settings - Keep environment files secure
 .kiro/.env
 .kiro/settings/github-token.json
+
+# One-time helper scripts (contain FTP credentials, not for production)
+/*_*.py
+/check_*.py
+/fix_*.py
+/sync_*.py
+/cleanup_*.py
+/enable_*.py
+/emergency_*.py
+/restore_*.py
+/upload_*.py
+/download_*.py
+/update_*.py
+/*.sh
+/test_*.php
+/verify_*.php
+/cron_*.php
+/*_GUIDE.md
+/*_STATUS_REPORT.md
+/*_FIX.md

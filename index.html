@@ -211,6 +211,24 @@
                     <div class="chart-container">
                         <canvas id="powerChart"></canvas>
                     </div>
+                    <div class="chart-controls">
+                        <label for="allianceCountSlider" style="color: #ffd700; font-weight: bold; margin-bottom: 10px; display: block;">
+                            Show Top <span id="allianceCountValue">5</span> Alliances
+                        </label>
+                        <div style="position: relative; width: 300px; margin: 0 auto;">
+                            <input type="range" id="allianceCountSlider" min="0" max="5" value="1" step="1"
+                                   style="width: 100%;"
+                                   oninput="updateAllianceCount(this.value)">
+                            <div class="slider-labels">
+                                <span style="left: 0%;">3</span>
+                                <span style="left: 20%;">5</span>
+                                <span style="left: 40%;">10</span>
+                                <span style="left: 60%;">15</span>
+                                <span style="left: 80%;">25</span>
+                                <span style="left: 100%;">50</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="chart-info">
                         <p><strong>Last Updated:</strong> <span id="lastDataUpdate">Loading...</span></p>
                         <p><strong>Data Points:</strong> <span id="dataPointCount">Loading...</span></p>
