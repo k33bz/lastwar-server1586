@@ -1,7 +1,7 @@
 # Deployment Guide - Server 1586
 
-**Version:** 3.0.0
-**Last Updated:** 2025-10-19
+**Version:** 3.2.0
+**Last Updated:** 2025-10-28
 **Status:** ✅ Production Deployment Active
 
 ---
@@ -49,12 +49,13 @@ git push origin mainline
 
 1. **Test Phase:**
    - Runs unit tests (`scripts/run-tests.py`)
-   - Validates JSON files (alliances, rules, amendments, rotation schedule, server info, signatures)
+   - Validates JSON files (version.json, alliances, rules, amendments, rotation schedule, server info, signatures)
    - Validates CSV files (power-history.csv)
 
 2. **Deploy Phase:**
    - Creates production `.env` file from GitHub Secrets
    - Deploys files via FTP using `scripts/deploy-ftp-ci.py`
+   - Verifies deployment (checks version.json accessibility and version match)
    - Installs Composer dependencies via SSH
    - Optionally rotates JWT keys (on `[major]`, `[rotate-keys]`, or `BREAKING CHANGE`)
 
@@ -82,6 +83,38 @@ BREAKING CHANGE: Old endpoints removed"
 ```
 
 See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for key rotation details.
+
+### Version.json Deployment Verification
+
+The deployment workflow includes automatic verification that `version.json` is deployed correctly:
+
+**Automated Verification Steps:**
+1. ✅ Pre-deployment: Validates JSON syntax in test phase
+2. ✅ Post-deployment: Verifies HTTP 200 response from production
+3. ✅ Version Match: Confirms deployed version matches local version
+4. ✅ Parse Test: Ensures JSON is valid and contains expected structure
+
+**Manual Verification:**
+```bash
+# Check version.json is accessible
+curl https://www.lastwar1586.online/version.json
+
+# Expected output:
+{
+  "version": "3.2.0",
+  "releaseDate": "2025-10-28",
+  "components": { ... },
+  "features": { ... }
+}
+```
+
+**What's Verified:**
+- File is accessible (HTTP 200)
+- JSON is valid and parseable
+- Version number matches git commit
+- All expected fields are present
+
+If verification fails, the deployment is marked as failed and requires investigation.
 
 ---
 
@@ -526,12 +559,13 @@ See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for:
 ### After Deployment
 
 1. ✅ Verify website loads: https://www.lastwar1586.online
-2. ✅ Check admin panel: https://www.lastwar1586.online/admin/
-3. ✅ **Check for migration warning banner** (if version changed)
-4. ✅ **Run migrations if needed**: `php admin/migrate.php` (see [Version Migration System](#version-migration-system))
-5. ✅ Review deployment logs in GitHub Actions
-6. ✅ Test critical functionality (login, data updates)
-7. ✅ Monitor error logs if available
+2. ✅ **Verify version.json is accessible**: `curl https://www.lastwar1586.online/version.json`
+3. ✅ Check admin panel: https://www.lastwar1586.online/admin/
+4. ✅ **Check for migration warning banner** (if version changed)
+5. ✅ **Run migrations if needed**: `php admin/migrate.php` (see [Version Migration System](#version-migration-system))
+6. ✅ Review deployment logs in GitHub Actions
+7. ✅ Test critical functionality (login, data updates)
+8. ✅ Monitor error logs if available
 
 ### Security
 
@@ -569,6 +603,6 @@ See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for:
 
 ---
 
-**Last Updated:** 2025-10-19
+**Last Updated:** 2025-10-28
 **Maintained By:** k33bz
 **Production URL:** https://www.lastwar1586.online

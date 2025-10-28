@@ -25,6 +25,10 @@ jobs:
 
       - name: Validate JSON files
         run: |
+          echo "Validating version.json..."
+          python -m json.tool version.json > /dev/null
+          echo "version.json is valid"
+
           echo "Validating alliances.json..."
           python -m json.tool data/alliances.json > /dev/null
           echo "alliances.json is valid"
@@ -131,6 +135,44 @@ jobs:
         with:
           path: .deploy-state.json
           key: ftp-deploy-state-${{ github.sha }}
+
+      - name: Verify deployment
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+        run: |
+          echo "Verifying deployment..."
+
+          # Wait for FTP sync to complete
+          echo "Waiting 10 seconds for FTP sync..."
+          sleep 10
+
+          # Verify version.json is accessible
+          echo "Checking version.json accessibility..."
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" ${APP_URL}/version.json)
+
+          if [ "$RESPONSE" = "200" ]; then
+            echo "version.json is accessible (HTTP $RESPONSE)"
+
+            # Fetch and display version
+            VERSION_DATA=$(curl -s ${APP_URL}/version.json)
+            VERSION=$(echo $VERSION_DATA | python -c "import json, sys; print(json.load(sys.stdin)['version'])")
+            echo "Deployed version: $VERSION"
+
+            # Verify it matches local version
+            LOCAL_VERSION=$(python -c "import json; print(json.load(open('version.json'))['version'])")
+            if [ "$VERSION" = "$LOCAL_VERSION" ]; then
+              echo "Version match confirmed!"
+            else
+              echo "Warning: Version mismatch! Local: $LOCAL_VERSION, Remote: $VERSION"
+              exit 1
+            fi
+          else
+            echo "Error: version.json returned HTTP $RESPONSE"
+            echo "Deployment verification failed!"
+            exit 1
+          fi
+
+          echo "Deployment verification successful!"
 
       - name: Install Composer dependencies via SSH
         env:
