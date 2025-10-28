@@ -197,14 +197,15 @@ jobs:
             echo "Minor version unchanged. No automatic rotation."
           fi
 
-          # Also check commit message for manual triggers
-          COMMIT_MSG="${{ github.event.head_commit.message }}"
-          if [[ "$COMMIT_MSG" =~ \[rotate-keys\] ]] || [[ "$COMMIT_MSG" =~ \[major\] ]] || [[ "$COMMIT_MSG" =~ BREAKING.CHANGE ]]; then
+          # Also check commit message for manual triggers (using environment variable to avoid quote issues)
+          if echo "$COMMIT_MESSAGE" | grep -qE '\[rotate-keys\]|\[major\]|BREAKING.CHANGE'; then
             echo "Manual key rotation requested in commit message"
             SHOULD_ROTATE="true"
           fi
 
           echo "should_rotate=$SHOULD_ROTATE" >> $GITHUB_OUTPUT
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
       - name: Rotate JWT keys (if needed)
         if: steps.check_version.outputs.should_rotate == 'true'
