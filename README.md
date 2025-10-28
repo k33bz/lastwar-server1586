@@ -165,7 +165,8 @@ Server1586/
 | **Local Development** | [admin/setup-local-env.md](admin/setup-local-env.md) | PHP + Composer setup |
 | **Environment Config** | [admin/ENV-CONFIG.md](admin/ENV-CONFIG.md) | `.env` variables |
 | **GitHub Actions** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#github-actions-setup) | CI/CD pipeline |
-| **Deployment** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | FTP + SSH deployment |
+| **Public Site Deployment** | [docs/PUBLIC_SITE_DEPLOYMENT.md](docs/PUBLIC_SITE_DEPLOYMENT.md) | Static frontend only |
+| **Full Site Deployment** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | FTP + SSH + Admin |
 
 ### 🔐 Security & Admin Features
 
@@ -229,6 +230,28 @@ cd admin && composer install
 
 ## 🌐 Deployment
 
+### Quick Deployment Options
+
+**Option 1: Public Site Only (Static Frontend)**
+```bash
+python scripts/deploy-public-only.py
+```
+Deploys only the static website (no admin panel). Perfect for hosting on any static file server.
+
+📘 **[Public Site Deployment Guide](docs/PUBLIC_SITE_DEPLOYMENT.md)** - Static frontend deployment only
+
+**Option 2: Full Site with Admin Panel**
+```bash
+git push origin mainline  # Automated CI/CD
+# OR
+python scripts/deploy-ftp.py  # Manual deployment
+```
+Deploys complete site including admin panel backend.
+
+📘 **[Full Deployment Guide](docs/DEPLOYMENT.md)** - CI/CD + Admin panel deployment
+
+---
+
 ### Automated CI/CD Deployment (Recommended)
 
 The website uses **GitHub Actions** for automated deployment. Every push to `mainline` triggers:
@@ -246,13 +269,22 @@ git push origin mainline
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#github-actions-setup) for complete CI/CD setup instructions.
 
-### Manual Deployment (Local)
+### Manual Deployment
 
-For emergency deployments or local testing:
+**Public Site Only (170 KB):**
+```bash
+python scripts/deploy-public-only.py
+```
+- Deploys: HTML, CSS, JS, and data files
+- No dependencies required
+- Works on any static host (Netlify, GitHub Pages, S3, etc.)
 
+**Full Site with Admin:**
 ```bash
 python scripts/deploy-ftp.py
 ```
+- Deploys: Public site + admin panel + backend
+- Requires: PHP server, Composer, database
 
 The deployment script automatically:
 - ✅ Retrieves credentials from Windows Credential Manager (local) or environment variables (CI)
@@ -260,7 +292,7 @@ The deployment script automatically:
 - ✅ Creates remote directories as needed
 - ✅ Shows deployment summary
 
-See [scripts/DEPLOY-README.md](scripts/DEPLOY-README.md) for detailed manual deployment instructions.
+See [docs/PUBLIC_SITE_DEPLOYMENT.md](docs/PUBLIC_SITE_DEPLOYMENT.md) for static site hosting options.
 
 ---
 

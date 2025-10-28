@@ -1,0 +1,56 @@
+# FTP Ignore File - PUBLIC SITE ONLY
+# Use this file to deploy ONLY the public-facing static website
+# (excludes admin panel and all backend files)
+
+# Usage:
+#   python scripts/deploy-public-only.py
+# Or with git-ftp:
+#   git ftp push --syncroot ./ --exclude-from .ftpignore-public
+
+# Exclude everything by default, then whitelist what we need
+*
+
+# Required Files - PUBLIC SITE ONLY
+!index.html
+!version.json
+!.htaccess
+
+# CSS
+!css/
+!css/styles.css
+
+# JavaScript
+!js/
+!js/app.js
+
+# Data Files (JSON and CSV only)
+!data/
+!data/council.js
+!data/alliances.json
+!data/rules.json
+!data/amendments.json
+!data/rotation-schedule.json
+!data/server-info.json
+!data/signature-history.json
+!data/power-history.csv
+
+# Images (if present)
+!images/
+!images/**
+
+# Exclude everything else
+admin/
+scripts/
+.git/
+.github/
+docs/
+ocr/
+tesseract_training/
+node_modules/
+vendor/
+*.md
+.env*
+*.backup
+*.bak
+*.del
+test-*
