@@ -110,6 +110,10 @@ coverage/
 dist/
 build/
 
+# Release artifacts
+*.zip
+server1586-public-*.zip
+
 # Sensitive user data
 admin/users.json
 admin/token_blacklist.json

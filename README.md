@@ -162,6 +162,7 @@ Server1586/
 | **GitHub Actions** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#github-actions-setup) | CI/CD pipeline |
 | **Public Site Deployment** | [docs/PUBLIC_SITE_DEPLOYMENT.md](docs/PUBLIC_SITE_DEPLOYMENT.md) | Static frontend only |
 | **Full Site Deployment** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | FTP + SSH + Admin |
+| **GitHub Releases** | [docs/GITHUB_RELEASES.md](docs/GITHUB_RELEASES.md) | Release management |
 
 ### 🔐 Security & Admin Features
 
@@ -227,7 +228,14 @@ cd admin && composer install
 
 ### Quick Deployment Options
 
-**Option 1: Public Site Only (Static Frontend)**
+**Option 1: Download Release (Easiest)**
+```bash
+# Download the latest public site ZIP from GitHub Releases
+# Extract and upload to your web server
+```
+📥 **[Download Latest Release](https://github.com/k33bz/lastwar-server1586/releases/latest)** - Pre-packaged ZIP (~80 KB)
+
+**Option 2: Deploy from Repository**
 ```bash
 python scripts/deploy-public-only.py
 ```
@@ -235,7 +243,7 @@ Deploys only the static website (no admin panel). Perfect for hosting on any sta
 
 📘 **[Public Site Deployment Guide](docs/PUBLIC_SITE_DEPLOYMENT.md)** - Static frontend deployment only
 
-**Option 2: Full Site with Admin Panel**
+**Option 3: Full Site with Admin Panel**
 ```bash
 git push origin mainline  # Automated CI/CD
 # OR
