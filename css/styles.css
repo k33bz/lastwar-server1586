@@ -1807,3 +1807,342 @@ h1 {
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================
+   NAVIGATION MENU
+   ============================================ */
+
+/* Hamburger Menu Button */
+.hamburger-menu {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: rgba(255, 215, 0, 0.1);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: all 0.3s ease;
+}
+
+.hamburger-menu:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: rgba(255, 215, 0, 0.5);
+    transform: scale(1.05);
+}
+
+.hamburger-menu span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #ffd700;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Side Navigation Panel */
+.side-nav {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, rgba(20, 20, 30, 0.98), rgba(10, 10, 20, 0.98));
+    border-right: 2px solid rgba(255, 215, 0, 0.3);
+    z-index: 1001;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.side-nav.active {
+    left: 0;
+}
+
+.side-nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.side-nav-header h3 {
+    margin: 0;
+    color: #ffd700;
+    font-size: 1.4em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.close-nav {
+    background: transparent;
+    border: none;
+    color: #ffd700;
+    font-size: 2em;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.close-nav:hover {
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.side-nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.side-nav-links li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.side-nav-links a {
+    display: block;
+    padding: 15px 20px;
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+}
+
+.side-nav-links a:hover {
+    background: rgba(255, 215, 0, 0.1);
+    color: #ffd700;
+    padding-left: 30px;
+}
+
+.side-nav-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    border-top: 2px solid rgba(255, 215, 0, 0.2);
+    background: rgba(255, 215, 0, 0.05);
+    text-align: center;
+}
+
+.side-nav-footer p {
+    margin: 5px 0;
+    color: #aaa;
+    font-size: 0.9em;
+}
+
+.side-nav-footer .version-text {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+/* Navigation Overlay */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.site-footer {
+    background: linear-gradient(135deg, rgba(20, 20, 30, 0.95), rgba(10, 10, 20, 0.95));
+    border-top: 2px solid rgba(255, 215, 0, 0.3);
+    padding: 40px 20px 20px;
+    margin-top: 60px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-section h4 {
+    color: #ffd700;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-section p {
+    color: #aaa;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    color: #e0e0e0;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+    color: #ffd700;
+}
+
+.footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 20px;
+    text-align: center;
+    color: #888;
+    font-size: 0.9em;
+}
+
+.footer-bottom p {
+    margin: 5px 0;
+}
+
+.footer-bottom a {
+    color: #ffd700;
+    text-decoration: none;
+}
+
+.footer-bottom a:hover {
+    text-decoration: underline;
+}
+
+.footer-version {
+    font-size: 0.85em;
+    color: #666;
+}
+
+/* ============================================
+   FLOATING ACTION BUTTONS
+   ============================================ */
+
+.floating-button {
+    position: fixed;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    background: rgba(20, 20, 30, 0.9);
+    color: #ffd700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 998;
+    text-decoration: none;
+}
+
+.floating-button:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: #ffd700;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+}
+
+.floating-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Back to Top Button */
+.back-to-top {
+    bottom: 100px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Admin Login Button */
+.admin-login {
+    bottom: 30px;
+    opacity: 0.6;
+}
+
+.admin-login:hover {
+    opacity: 1;
+}
+
+/* Mobile Responsiveness for Navigation and Footer */
+@media (max-width: 768px) {
+    .hamburger-menu {
+        top: 15px;
+        left: 15px;
+        padding: 8px;
+    }
+
+    .hamburger-menu span {
+        width: 20px;
+        height: 2px;
+    }
+
+    .side-nav {
+        width: 250px;
+        left: -250px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .floating-button {
+        right: 20px;
+        width: 45px;
+        height: 45px;
+    }
+
+    .back-to-top {
+        bottom: 85px;
+    }
+
+    .admin-login {
+        bottom: 25px;
+    }
+}

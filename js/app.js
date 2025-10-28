@@ -498,7 +498,7 @@
     * Uses pre-calculated ranks (alliances already sorted by power)
     */
    function renderPodium() {
-       var podium = document.getElementById('podium');
+       var podium = document.getElementById('podiumContent');
 
        // Take top 3 alliances (already sorted by power with calculated ranks)
        var top3 = alliances.slice(0, 3);

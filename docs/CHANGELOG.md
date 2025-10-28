@@ -7,6 +7,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.2.0] - 2025-10-28
+
+### Added - Navigation & Power Trends Features
+
+#### Navigation System (v1.0.0)
+- **Hamburger Navigation Menu** - Fixed-position top-left menu with slide-in navigation
+  - Quick links to all major sections (Home, Alliances, Council, Rules, Power Trends)
+  - Dark overlay when open with smooth transitions
+  - Version display at bottom of nav panel
+  - Mobile-responsive with adjusted sizing
+- **Site Footer** - Professional three-column footer with:
+  - Server information and description
+  - Quick links (Discord, GitHub, Issues, Documentation)
+  - Resource links (internal navigation)
+  - Dynamic version number and last updated date
+  - Copyright with Claude Code attribution
+- **Floating Action Buttons** - Two subtle buttons bottom-right:
+  - Back to Top: Appears after 300px scroll, smooth scroll animation
+  - Admin Login: Semi-transparent lock icon linking to dashboard
+- **Enhanced Section Navigation** - Added IDs to all major sections for anchor linking
+
+#### Power Trends Enhancements (v1.9.5)
+- **Interactive Power Chart** with alliance count slider (3, 5, 10, 15, 25, 50 alliances)
+- **Hover Highlighting System** - Bold legend, thicker lines, gold tooltip indicators
+- **ISO 8601 DateTime Format** - YYYY-MM-DD HH:mm:ss for better sorting
+- **Alliance Column Sorting** - Columns ordered by latest power descending
+- **Accurate Tooltips** - Hovered alliance shown first with visual indicator
+
+### Changed
+- **Rules Version Display** - Updated from v1.0 to v1.2 to reflect current amendments
+- **Documentation Link** - Footer now links to README.md instead of CLAUDE.md
+- **CSS Version** - Bumped to v1.5.0 (~340 lines added for navigation/footer)
+- **HTML Version** - Bumped to v1.4.0 for navigation structure changes
+- **JS Version** - Bumped to v2.0.1 (fixed podium ID reference)
+
+### Fixed
+- **CSV DateTime Format** - Converted all dates from EDT to GMT, standardized to ISO 8601
+- **CSV Validation** - Updated script to accept both 'date' and 'datetime' headers
+- **Power-History Data** - Sorted rows chronologically, columns by power descending
+- **Alliance Power Values** - Updated 46 alliances with latest 2025-10-26 data
+- **Podium ID Conflict** - Renamed podium content div to avoid duplicate IDs
+
+### Technical Details
+- **Frontend Version**: 3.0.0 → 3.1.0
+- **Files Modified**: index.html, css/styles.css, js/app.js, version.json
+- **GitHub Issue**: [#33](https://github.com/k33bz/lastwar-server1586/issues/33) - Navigation system
+- **Accessibility**: ARIA labels, semantic HTML, keyboard navigation support
+
+---
+
 ## [3.0.0] - 2025-10-16
 
 ### Added - Admin Panel Major Release
