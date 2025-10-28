@@ -45,13 +45,16 @@ switch ($action) {
 
 function handle_alliance_update() {
     global $user_token;
-    
+
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         http_response_code(405);
         echo json_encode(['error' => 'Method not allowed']);
         return;
     }
-    
+
+    // CSRF Protection
+    requireCsrfToken();
+
     $tag = $_POST['tag'] ?? '';
     if (!$tag) {
         http_response_code(400);
@@ -161,13 +164,16 @@ function handle_alliance_update() {
 
 function handle_rules_signature() {
     global $user_token;
-    
+
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         http_response_code(405);
         echo json_encode(['error' => 'Method not allowed']);
         return;
     }
-    
+
+    // CSRF Protection
+    requireCsrfToken();
+
     $tag = $_POST['tag'] ?? '';
     if (!$tag) {
         http_response_code(400);

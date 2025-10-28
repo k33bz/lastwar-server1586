@@ -152,6 +152,9 @@ function initialize_data_files() {
 // Initialize data files on first load
 initialize_data_files();
 
+// Load CSRF protection functions
+require_once __DIR__ . '/includes/csrf.php';
+
 // Version check and migration system
 // Automatically checks if code version differs from installed version
 require_once __DIR__ . '/version_check.php';

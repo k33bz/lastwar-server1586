@@ -39,6 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+// CSRF Protection
+requireCsrfToken();
+
 // Get action from POST data
 $action = $_POST['action'] ?? '';
 

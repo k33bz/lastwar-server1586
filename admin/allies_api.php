@@ -74,6 +74,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['tag']))
 
     // Handle form submission
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // CSRF Protection
+        requireCsrfToken();
+
         // Update alliance data
         $alliances_array[$index]['r5'] = set_r5_name($alliance['r5'], $_POST['r5'] ?? '');
         $alliances_array[$index]['name'] = $_POST['name'] ?? $alliance['name'];

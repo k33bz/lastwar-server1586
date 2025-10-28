@@ -3,9 +3,13 @@
  *
  * Common JavaScript functions used across admin pages
  *
- * @version 1.2.0
- * @date 2025-10-16
+ * @version 1.3.0
+ * @date 2025-10-28
  * @changelog
+ *   1.3.0 (2025-10-28) - Added CSRF protection to API requests (Issue #21)
+ *                       - getCsrfToken() extracts token from meta tag
+ *                       - apiRequest() automatically includes X-CSRF-Token header for POST/PUT/DELETE/PATCH
+ *                       - Timing-attack-safe validation on server side
  *   1.2.0 (2025-10-16) - Enhanced confirmAction() and added alertModal() to replace alert() and confirm()
  *                       - Added danger mode, custom button text, animations
  *                       - Added keyboard support (ESC, Enter)
@@ -343,19 +347,41 @@ function resetForm(form) {
 // ============================================================================
 
 /**
- * Make an API request with error handling
+ * Get CSRF token from meta tag
+ * @returns {string|null}
+ */
+function getCsrfToken() {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta ? meta.getAttribute('content') : null;
+}
+
+/**
+ * Make an API request with error handling and CSRF protection
  * @param {string} url - API endpoint URL
  * @param {Object} options - Fetch options
  * @returns {Promise}
  */
 async function apiRequest(url, options = {}) {
     try {
+        // Get CSRF token for state-changing requests
+        const csrfToken = getCsrfToken();
+        const method = (options.method || 'GET').toUpperCase();
+        const needsCsrf = ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method);
+
+        // Build headers
+        const headers = {
+            'Content-Type': 'application/json',
+            ...options.headers
+        };
+
+        // Add CSRF token header for state-changing requests
+        if (needsCsrf && csrfToken) {
+            headers['X-CSRF-Token'] = csrfToken;
+        }
+
         const response = await fetch(url, {
             ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            }
+            headers
         });
 
         if (!response.ok) {

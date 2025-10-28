@@ -26,8 +26,11 @@ $message = '';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // CSRF Protection
+    requireCsrfToken();
+
     $action = $_POST['action'] ?? '';
-    
+
     switch ($action) {
         case 'rotate_key':
             $reason = trim($_POST['reason'] ?? 'Manual rotation via ' . ($_ENV['APP_NAME'] ?? 'admin panel'));

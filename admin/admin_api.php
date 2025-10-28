@@ -65,6 +65,9 @@ $available_alliances = is_array($alliances_data) && isset($alliances_data[0]) ? 
 // Handle add user
 if (isset($_GET['action']) && $_GET['action'] === 'add') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // CSRF Protection
+        requireCsrfToken();
+
         $email = strtolower(trim($_POST['email']));
 
         // Get selected alliances from checkboxes
@@ -305,6 +308,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // CSRF Protection
+        requireCsrfToken();
+
         if (isset($_POST['delete'])) {
             // R5 validation: cannot delete admin users
             if ($is_r5 && $user_data['role'] === 'admin') {

@@ -30,6 +30,9 @@ try {
         throw new Exception('Only POST requests allowed');
     }
 
+    // CSRF Protection
+    requireCsrfToken();
+
     $action = $_POST['action'] ?? '';
 
     switch ($action) {

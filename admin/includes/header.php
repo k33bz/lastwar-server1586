@@ -39,11 +39,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title><?php echo isset($page_title) ? $page_title . ' - ' : ''; ?><?php echo $_ENV['APP_NAME'] ?? 'Admin Panel'; ?></title>
-    
+
     <!-- Security Headers -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+    <!-- CSRF Token -->
+    <?php echo csrfMetaTag(); ?>
 
     <!-- Shared Styles -->
     <link rel="stylesheet" href="includes/styles.css">
