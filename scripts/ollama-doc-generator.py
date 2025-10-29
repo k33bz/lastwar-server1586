@@ -41,6 +41,14 @@ from typing import Dict, List, Optional, Tuple
 import urllib.request
 import urllib.error
 
+# Fix Windows console encoding for emojis
+if sys.platform == 'win32':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        pass  # Fallback if reconfigure not available
+
 # Configuration
 SCRIPT_DIR = Path(__file__).parent
 CONFIG_FILE = SCRIPT_DIR / 'ollama-config.json'
