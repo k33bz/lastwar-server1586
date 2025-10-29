@@ -7,6 +7,7 @@
 config.json
 credentials.json
 secrets.json
+.project-info.json
 
 # Python
 __pycache__/

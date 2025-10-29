@@ -1,6 +1,8 @@
 # Server 1586 - Last War Alliance Website
 
-[![Deploy to Production](https://github.com/username/your-repo/actions/workflows/deploy.yml/badge.svg)](https://github.com/username/your-repo/actions/workflows/deploy.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/k33bz/lastwar-server1586)](https://github.com/k33bz/lastwar-server1586/releases)
+[![Deploy Status](https://github.com/k33bz/lastwar-server1586/actions/workflows/deploy.yml/badge.svg)](https://github.com/k33bz/lastwar-server1586/actions/workflows/deploy.yml)
+[![License](https://img.shields.io/badge/license-Private-red)](LICENSE)
 
 Official website for Server 1586 alliance management, council voting, and server rules.
 
