@@ -11,6 +11,7 @@
 /test-coauthor.md
 /ISSUE_COMPLETION_SUMMARY.md
 /setup-kiro-git.bat
+/docs/
 !index.html
 
 # Scripts and Tools (deployment scripts not needed on server)
