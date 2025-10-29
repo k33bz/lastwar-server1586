@@ -1,0 +1,15 @@
+#!/bin/bash
+# Git Post-Commit Hook for Ollama Documentation Automation
+#
+# Installation:
+#   cp scripts/post-commit.example .git/hooks/post-commit
+#   chmod +x .git/hooks/post-commit
+#
+# To skip automation for a specific commit:
+#   SKIP_OLLAMA=1 git commit -m "message"
+
+# Run the Ollama documentation generator
+php scripts/ollama-doc-generator.php post-commit
+
+# Exit with success (don't block commit even if script fails)
+exit 0

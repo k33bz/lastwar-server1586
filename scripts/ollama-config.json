@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "model": "qwen2.5-coder:14b",
+  "ollama_url": "http://localhost:11434",
+  "temperature": 0.3,
+  "max_tokens": 500,
+  "auto_commit": false,
+  "update_changelog": true,
+  "update_code_docs": false,
+  "changelog_path": "../docs/CHANGELOG.md",
+  "version_path": "../version.json"
+}
