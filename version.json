@@ -1,6 +1,6 @@
 {
-  "version": "3.2.0",
-  "releaseDate": "2025-10-28",
+  "version": "3.3.0",
+  "releaseDate": "2025-10-29",
   "components": {
     "frontend": {
       "version": "3.1.0",
@@ -48,9 +48,30 @@
       "version": "1.9.5",
       "date": "2025-10-28",
       "description": "Interactive power trends chart with alliance slider and hover highlighting"
+    },
+    "public_api": {
+      "version": "1.0.0",
+      "date": "2025-10-29",
+      "description": "Read-only REST API with control/data plane separation",
+      "endpoints": [
+        "/api/alliances.php",
+        "/api/rules.php",
+        "/api/amendments.php",
+        "/api/council.php",
+        "/api/council/schedule.php",
+        "/api/version.php",
+        "/api/server-info.php"
+      ],
+      "features": [
+        "CORS enabled",
+        "ETag support",
+        "HTTP caching",
+        "File locking",
+        "Interactive documentation"
+      ]
     }
   },
   "changelog": "docs/CHANGELOG.md",
   "migration_docs": "admin/MIGRATION_SYSTEM.md",
-  "lastUpdated": "2025-10-28"
+  "lastUpdated": "2025-10-29"
 }

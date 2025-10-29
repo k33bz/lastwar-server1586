@@ -505,4 +505,4 @@ This project is private and intended for Server 1586 alliance management only.
 
 ---
 
-**Version**: 3.0.0 | **Last Updated**: October 16, 2025 | **Maintained by**: Server 1586 Council
+**Version**: 3.3.0 | **Last Updated**: October 29, 2025 | **Maintained by**: Server 1586 Council

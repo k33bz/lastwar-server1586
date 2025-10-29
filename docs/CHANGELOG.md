@@ -7,6 +7,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.3.0] - 2025-10-29
+
+### Added - Public API & Architecture Improvements
+
+#### Public Read-Only API (v1.0.0)
+- **Control/Data Plane Separation** - Clear architectural boundary between admin writes and public reads
+- **7 REST API Endpoints** - Read-only public data access
+  - `GET /api/alliances.php` - Alliance rankings (cache: 60s)
+  - `GET /api/rules.php` - Server rules (cache: 300s)
+  - `GET /api/amendments.php` - Rule amendments (cache: 300s)
+  - `GET /api/council.php` - Current council members (cache: 60s)
+  - `GET /api/council/schedule.php` - Rotation schedule (cache: 300s)
+  - `GET /api/version.php` - Version information (cache: 300s)
+  - `GET /api/server-info.php` - Server metadata (cache: 3600s)
+- **Interactive API Documentation** - `/api/` serves testing interface with live endpoint testing
+- **CORS Support** - Cross-origin resource sharing enabled for external consumption
+- **ETag Caching** - Efficient conditional requests with 304 Not Modified responses
+- **HTTP Cache Headers** - Cache-Control and Expires headers for optimal performance
+- **File Locking** - LOCK_SH for reads, LOCK_EX for writes to prevent race conditions
+- **Standard JSON Responses** - Consistent response format with success/error handling
+- **Security Headers** - X-Content-Type-Options, X-Frame-Options for API security
+
+#### Documentation & Configuration
+- **GitHub Badges** - Release version, deploy status, and license badges in README
+- **API Documentation** - Comprehensive docs/PUBLIC_API.md with examples and usage
+- **Configuration Templates** - Created server-info.json.example and .project-info.json
+- **Documentation Sanitization** - All .md files use example values (example.com, discord.gg/your-invite)
+- **Prod/Dev Separation** - Clear separation between documentation (examples) and functional files (real values)
+
+### Changed
+- **Version**: 3.2.0 → 3.3.0
+- **File Locking**: Admin panel already had file locking (verified in json_helpers.php)
+- **Deployment Exclusions**: Added docs/ directory to .ftpignore
+
+### Fixed
+- **Issue #5**: Exclude docs/ directory from FTP deployment
+- **Issue #12**: Add GitHub badges to README.md
+- **API Directory Browsing**: Added .htaccess to serve index.php and disable directory listing
+
+### Security
+- **No PII in Documentation** - All real URLs, Discord invites, and SMTP hosts replaced with examples
+- **Git Security** - .project-info.json (with real values) excluded via .gitignore
+- **Deployment Security** - Documentation files excluded from production via .ftpignore
+- **Read-Only API** - Public API has no write access to data files
+- **CORS Configuration** - Safe cross-origin access for public data only
+
+### Technical Details
+- **Architecture**: File-based control/data plane separation (no AWS required)
+- **API Files**: 9 new PHP files + comprehensive documentation
+- **Caching Strategy**: Variable cache durations (60s-3600s) based on data volatility
+- **Response Format**: JSON with success flag, timestamp, and data payload
+- **Production Tested**: All endpoints verified live and operational
+- **Backward Compatible**: Direct JSON file access still works
+
+---
+
 ## [3.2.0] - 2025-10-28
 
 ### Added - Navigation & Power Trends Features
@@ -448,5 +504,5 @@ const alliances = [...]
 
 ---
 
-**Last Updated:** 2025-10-19
-**Current Version:** 3.0.0
+**Last Updated:** 2025-10-29
+**Current Version:** 3.3.0
