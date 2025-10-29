@@ -150,7 +150,7 @@ Deployment Summary:
 ======================================================================
 
 [SUCCESS] Incremental deployment completed successfully!
-          Website: https://www.lastwar1586.online
+          Website: https://www.example.com
 ```
 
 ### Example: First Deploy (Full Upload)

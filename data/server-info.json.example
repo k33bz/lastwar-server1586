@@ -1,17 +1,17 @@
 {
-  "serverId": 1586,
-  "name": "Last War Server 1586",
+  "serverId": 1234,
+  "name": "Last War Server XXXX",
   "region": "Global",
-  "openDate": "2025-05-19",
+  "openDate": "2025-01-01",
 
   "discord": {
-    "serverName": "Last War Server 1586",
-    "inviteUrl": "https://discord.gg/e53v2Dnp",
+    "serverName": "Your Server Discord Name",
+    "inviteUrl": "https://discord.gg/your-invite-code",
     "logoUrl": "images/server-logo.png",
-    "description": "Official Discord server for Last War Server 1586",
+    "description": "Official Discord server description",
     "memberCount": null,
     "features": [
-      "NAP15 Coordination",
+      "NAP Coordination",
       "Event Planning",
       "Alliance Diplomacy",
       "Server News & Updates"
@@ -20,9 +20,9 @@
 
   "nap15": {
     "active": true,
-    "startDate": "2025-05-19",
+    "startDate": "2025-01-01",
     "memberCount": 15,
-    "version": "1.2"
+    "version": "1.0"
   },
 
   "council": {
@@ -34,13 +34,13 @@
   },
 
   "contact": {
-    "admin": "Server Admin",
-    "discordAdmin": "Contact via Discord",
-    "website": "https://www.lastwar1586.online"
+    "admin": "Server Admin Name",
+    "discordAdmin": "admin#0000",
+    "website": "https://www.example.com"
   },
 
   "metadata": {
-    "lastUpdated": "2025-10-29T12:00:00Z",
+    "lastUpdated": "2025-01-01T12:00:00Z",
     "version": "1.0"
   }
 }

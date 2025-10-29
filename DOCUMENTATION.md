@@ -360,15 +360,15 @@ See [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md) for detailed secu
 ### Environment Variables
 Key variables (see [admin/ENV-CONFIG.md](admin/ENV-CONFIG.md)):
 ```
-APP_NAME=Last War 1586
+APP_NAME=Your Server Name
 APP_ENV=production
-APP_URL=https://www.lastwar1586.online
+APP_URL=https://www.example.com
 SECRET_KEY=[generated_key]
-SMTP_HOST=mail.privateemail.com
+SMTP_HOST=smtp.example.com
 SMTP_USERNAME=[email]
 SMTP_PASSWORD=[password]
 SMTP_FROM_EMAIL=[email]
-SMTP_FROM_NAME=Last War 1586 Admin
+SMTP_FROM_NAME=Your Server Admin
 ```
 
 ### GitHub Secrets

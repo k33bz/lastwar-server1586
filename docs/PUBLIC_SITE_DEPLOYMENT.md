@@ -10,7 +10,7 @@
 
 This guide covers deploying **only the public-facing website** without the admin panel. The public site is a fully static HTML/CSS/JavaScript application with no backend dependencies.
 
-**Public Site URL:** https://www.lastwar1586.online
+**Public Site URL:** https://www.example.com
 **Deployment Method:** FTP, SFTP, or any static file hosting
 
 ---
@@ -594,5 +594,5 @@ All provide automatic deployments from Git repos.
 
 **Last Updated:** 2025-10-28
 **Maintained By:** k33bz
-**Public Site:** https://www.lastwar1586.online
+**Public Site:** https://www.example.com
 **Support:** https://github.com/k33bz/lastwar-server1586/issues

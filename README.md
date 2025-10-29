@@ -494,7 +494,7 @@ For questions or issues, contact the server administrators.
 
 For questions, issues, or contributions:
 - **GitHub Issues**: [Report bugs or request features](https://github.com/username/your-repo/issues)
-- **Server Discord**: [Join Server 1586 Discord](https://discord.gg/e53v2Dnp)
+- **Server Discord**: [Join your server Discord](https://discord.gg/your-invite)
 - **Admin Contact**: Contact server administrators
 
 ---

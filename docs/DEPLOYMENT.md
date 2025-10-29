@@ -28,8 +28,8 @@ The Server 1586 website uses automated GitHub Actions for continuous deployment.
 3. ✅ **Composer Install** - Backend dependencies installed via SSH
 4. ✅ **Key Rotation** (conditional) - JWT keys rotated on major changes
 
-**Production URL:** https://www.lastwar1586.online
-**Admin Panel:** https://www.lastwar1586.online/admin/dashboard.php
+**Production URL:** https://www.example.com
+**Admin Panel:** https://www.example.com/admin/dashboard.php
 
 ---
 
@@ -97,7 +97,7 @@ The deployment workflow includes automatic verification that `version.json` is d
 **Manual Verification:**
 ```bash
 # Check version.json is accessible
-curl https://www.lastwar1586.online/version.json
+curl https://www.example.com/version.json
 
 # Expected output:
 {
@@ -383,10 +383,10 @@ Navigate to **Settings → Secrets and variables → Actions**:
 | `SSH_PORT` | SSH port | `22` or `2222` |
 | `SSH_USER` | SSH username | `sshuser` |
 | `SSH_PRIVATE_KEY` | SSH private key (ED25519) | `-----BEGIN OPENSSH PRIVATE KEY-----` |
-| `DEPLOY_PATH` | Server directory | `public_html` or `lastwar1586.online` |
-| `APP_URL` | Production URL | `https://www.lastwar1586.online` |
+| `DEPLOY_PATH` | Server directory | `public_html` or `yourdomain.com` |
+| `APP_URL` | Production URL | `https://www.example.com` |
 | `JWT_SECRET_KEY` | JWT signing key | `[base64_encoded_key]` |
-| `SMTP_HOST` | SMTP server | `mail.privateemail.com` |
+| `SMTP_HOST` | SMTP server | `smtp.example.com` |
 | `SMTP_PORT` | SMTP port | `587` |
 | `SMTP_USER` | SMTP username | `admin@example.com` |
 | `SMTP_PASS` | SMTP password | `[secure_password]` |
@@ -558,9 +558,9 @@ See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for:
 
 ### After Deployment
 
-1. ✅ Verify website loads: https://www.lastwar1586.online
-2. ✅ **Verify version.json is accessible**: `curl https://www.lastwar1586.online/version.json`
-3. ✅ Check admin panel: https://www.lastwar1586.online/admin/
+1. ✅ Verify website loads: https://www.example.com
+2. ✅ **Verify version.json is accessible**: `curl https://www.example.com/version.json`
+3. ✅ Check admin panel: https://www.example.com/admin/
 4. ✅ **Check for migration warning banner** (if version changed)
 5. ✅ **Run migrations if needed**: `php admin/migrate.php` (see [Version Migration System](#version-migration-system))
 6. ✅ Review deployment logs in GitHub Actions
@@ -588,7 +588,7 @@ See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for:
 | **Validate JSON** | `python -m json.tool data/alliances.json` |
 | **Update rotation** | `python scripts/update-rotation-schedule.py` |
 | **View workflow** | GitHub → Actions tab |
-| **Check deployment** | https://www.lastwar1586.online |
+| **Check deployment** | https://www.example.com |
 
 ---
 
@@ -605,4 +605,4 @@ See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for:
 
 **Last Updated:** 2025-10-28
 **Maintained By:** k33bz
-**Production URL:** https://www.lastwar1586.online
+**Production URL:** https://www.example.com

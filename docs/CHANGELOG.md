@@ -443,7 +443,7 @@ const alliances = [...]
 ## Links
 
 - **Repository:** https://github.com/k33bz/lastwar-server1586
-- **Production:** https://www.lastwar1586.online
+- **Production:** https://www.example.com
 - **Documentation:** [DOCUMENTATION.md](DOCUMENTATION.md)
 
 ---
