@@ -4,9 +4,12 @@
  *
  * Functions to update power-history.csv with datetime stamps
  *
- * @version 1.2.1
+ * @version 1.3.0
  * @date 2025-10-28
  * @changelog
+ *   1.3.0 (2025-10-28) - Added support for custom timestamp parameter
+ *                       - append_power_snapshot() now accepts optional timestamp
+ *                       - Enables accurate historical data entry (Issue #32)
  *   1.2.1 (2025-10-28) - Deployment fix: Force re-upload to production
  *   1.2.0 (2025-10-27) - Updated to ISO 8601 datetime format (YYYY-MM-DD HH:mm:ss)
  *                       - Better sorting and international standard compliance
@@ -29,9 +32,11 @@ define('POWER_HISTORY_CSV', __DIR__ . '/../data/power-history.csv');
  * Append power snapshot to CSV
  *
  * @param array $alliances Array of alliance data from alliances.json
+ * @param string|null $timestamp Optional ISO 8601 timestamp (e.g., 2025-10-28T14:30:00.000Z)
+ *                                If not provided, uses current UTC time
  * @return bool Success status
  */
-function append_power_snapshot($alliances) {
+function append_power_snapshot($alliances, $timestamp = null) {
     try {
         $csv_path = POWER_HISTORY_CSV;
 
@@ -66,7 +71,14 @@ function append_power_snapshot($alliances) {
         }
 
         // Build new row with datetime timestamp in ISO 8601 format
-        $datetime = gmdate('Y-m-d H:i:s');  // Format: 2025-10-27 14:30:00
+        if ($timestamp) {
+            // Convert ISO 8601 timestamp to Y-m-d H:i:s format
+            $dt = new DateTime($timestamp);
+            $datetime = $dt->format('Y-m-d H:i:s');
+        } else {
+            // Use current UTC time
+            $datetime = gmdate('Y-m-d H:i:s');  // Format: 2025-10-27 14:30:00
+        }
         $row = [$datetime];
 
         // Add power values in the order of CSV header

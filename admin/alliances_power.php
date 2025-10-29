@@ -5,9 +5,14 @@
  * Admin-only interface for bulk editing alliance power values
  * Displays all alliances in a single editable table
  *
- * @version 2.0.0
- * @date 2025-10-15
+ * @version 2.1.0
+ * @date 2025-10-28
  * @changelog
+ *   2.1.0 (2025-10-28) - Added datetime picker for accurate power history (Issue #32)
+ *                       - HTML5 datetime-local input with "Use Current Time" button
+ *                       - Timestamp selector shows when data was collected
+ *                       - Enables backdating power entries from screenshots
+ *                       - Sends timestamp to API for accurate CSV power-history.csv
  *   2.0.0 (2025-10-15) - Added powereditor role support
  *                       - Admins and power editors can now access page
  *                       - Only admins can delete alliances (power editors edit-only)
@@ -113,6 +118,87 @@ include 'includes/header.php';
         
         .email-toggle-btn:hover svg {
             fill: #333;
+        }
+
+        /* Timestamp Selector */
+        .timestamp-selector {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .timestamp-header {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .timestamp-header label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timestamp-icon {
+            font-size: 1.5rem;
+        }
+
+        .timestamp-help {
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .timestamp-inputs {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .datetime-picker {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .datetime-picker:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-sm {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .timestamp-display {
+            margin-top: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: white;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: #495057;
+            border-left: 4px solid #667eea;
+        }
+
+        .timestamp-display span {
+            font-weight: 600;
+            color: #2c3e50;
         }
 
         .actions {
@@ -372,6 +458,30 @@ include 'includes/header.php';
             </div>
         </div>
 
+        <!-- Data Source Timestamp -->
+        <div class="timestamp-selector">
+            <div class="timestamp-header">
+                <label for="dataTimestamp">
+                    <span class="timestamp-icon">📅</span>
+                    Data Source Date/Time
+                </label>
+                <span class="timestamp-help">When was this data collected? (for accurate power history)</span>
+            </div>
+            <div class="timestamp-inputs">
+                <input type="datetime-local"
+                       id="dataTimestamp"
+                       name="dataTimestamp"
+                       class="datetime-picker"
+                       step="60">
+                <button type="button" class="btn btn-sm btn-secondary" onclick="setCurrentTime()">
+                    🕐 Use Current Time
+                </button>
+            </div>
+            <div class="timestamp-display">
+                Selected: <span id="timestampDisplay">Not set (will use current time)</span>
+            </div>
+        </div>
+
         <div class="actions">
             <button class="btn btn-success" onclick="saveAlliances()">💾 Save All Changes</button>
             <button class="btn btn-primary" onclick="addNewAlliance()">➕ Add New Alliance</button>
@@ -403,6 +513,50 @@ include 'includes/header.php';
     </div>
 
     <script>
+        // DateTime Picker Functions
+        function setCurrentTime() {
+            const now = new Date();
+            // Format as YYYY-MM-DDTHH:MM for datetime-local input
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+
+            const datetimeString = `${year}-${month}-${day}T${hours}:${minutes}`;
+            document.getElementById('dataTimestamp').value = datetimeString;
+            updateTimestampDisplay();
+        }
+
+        function updateTimestampDisplay() {
+            const input = document.getElementById('dataTimestamp');
+            const display = document.getElementById('timestampDisplay');
+
+            if (input.value) {
+                const date = new Date(input.value);
+                const options = {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                };
+                display.textContent = date.toLocaleString('en-US', options);
+            } else {
+                display.textContent = 'Not set (will use current time)';
+            }
+        }
+
+        function getDataTimestamp() {
+            const input = document.getElementById('dataTimestamp');
+            if (input.value) {
+                // Convert to ISO string for API
+                return new Date(input.value).toISOString();
+            }
+            return null; // API will use current time
+        }
+
         // Email toggle function
         function toggleSingleEmail(button) {
             var emailSpan = button.previousElementSibling;
@@ -431,6 +585,10 @@ include 'includes/header.php';
         // Load alliances on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadAlliances();
+
+            // Initialize datetime picker
+            const datetimePicker = document.getElementById('dataTimestamp');
+            datetimePicker.addEventListener('change', updateTimestampDisplay);
 
             // Warn before leaving with unsaved changes
             window.addEventListener('beforeunload', function(e) {
@@ -633,10 +791,16 @@ include 'includes/header.php';
         }
 
         function saveUpdates(updates) {
+            const timestamp = getDataTimestamp();
+            const requestBody = { alliances: updates };
+            if (timestamp) {
+                requestBody.timestamp = timestamp;
+            }
+
             return fetch('alliances_power_api.php?action=update', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ alliances: updates })
+                body: JSON.stringify(requestBody)
             })
             .then(response => response.json())
             .then(data => {
@@ -655,11 +819,18 @@ include 'includes/header.php';
                 return;
             }
 
+            const timestamp = getDataTimestamp();
+
             const promises = newAlliances.map(alliance => {
+                const requestBody = { ...alliance };
+                if (timestamp) {
+                    requestBody.timestamp = timestamp;
+                }
+
                 return fetch('alliances_power_api.php?action=add', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(alliance)
+                    body: JSON.stringify(requestBody)
                 }).then(r => r.json());
             });
 

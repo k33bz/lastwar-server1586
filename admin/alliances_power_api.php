@@ -18,9 +18,13 @@
  * - add: Add new alliance
  * - delete: Remove alliance
  *
- * @version 2.2.0
- * @date 2025-10-15
+ * @version 2.3.0
+ * @date 2025-10-28
  * @changelog
+ *   2.3.0 (2025-10-28) - Added datetime picker support (Issue #32)
+ *                       - Accept optional timestamp parameter in update action
+ *                       - Pass timestamp to CSV helpers for accurate historical data
+ *                       - Frontend datetime picker allows backdating power entries
  *   2.2.0 (2025-10-15) - Added CSV power history with datetime stamps
  *                       - Auto-appends to CSV on power edits
  *                       - Updates CSV header when alliances added/deleted
@@ -101,6 +105,9 @@ try {
             exit;
         }
 
+        // Get optional timestamp for accurate power history
+        $timestamp = $input['timestamp'] ?? null;
+
         // Load current alliances
         $alliances = json_read($alliances_file);
 
@@ -157,13 +164,17 @@ try {
         // Save updated alliances
         json_write($alliances_file, $alliances);
 
-        // Update CSV using helper (more comprehensive than append_power_snapshot)
+        // Update CSV using helper (creates alliances.csv)
         AllianceHelper::updateAllianceCSV($alliances);
+
+        // Append power snapshot to power-history.csv with provided timestamp
+        append_power_snapshot($alliances, $timestamp);
 
         // Log audit event with changes
         log_audit_event('edit_alliance_power', $user->sub, [
             'alliances_modified' => count($changes),
-            'changes' => $changes
+            'changes' => $changes,
+            'timestamp_used' => $timestamp ?? 'current_time'
         ]);
 
         echo json_encode(['success' => true, 'message' => 'Alliances updated successfully']);
