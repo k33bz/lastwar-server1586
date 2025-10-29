@@ -1,0 +1,9 @@
+# Council API Subdirectory Configuration
+
+# Disable directory browsing
+Options -Indexes
+
+# Enable PHP processing
+<FilesMatch "\.php$">
+    SetHandler application/x-httpd-php
+</FilesMatch>

@@ -1,0 +1,25 @@
+# API Directory Configuration
+# Serves index.php as default directory index
+
+# Set directory index
+DirectoryIndex index.php
+
+# Disable directory browsing
+Options -Indexes
+
+# Enable PHP processing
+<FilesMatch "\.php$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
+
+# CORS Headers (already set in PHP, but as backup)
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
+
+# Cache control for API endpoints
+<FilesMatch "\.(php)$">
+    Header set Cache-Control "public, max-age=60"
+</FilesMatch>
