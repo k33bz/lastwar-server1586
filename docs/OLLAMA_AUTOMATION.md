@@ -83,7 +83,7 @@ This is the sweet spot for:
                │
                ▼
 ┌─────────────────────────────────────────────┐
-│    scripts/ollama-doc-generator.php         │
+│    scripts/ollama-doc-generator.py          │
 │                                             │
 │    - Connects to Ollama (localhost:11434)   │
 │    - Sends code diff + context              │
@@ -158,7 +158,7 @@ curl http://localhost:11434/api/generate -d '{
 
 ### 3. Create Documentation Generator Script
 
-Location: `scripts/ollama-doc-generator.php`
+Location: `scripts/ollama-doc-generator.py`
 
 Features:
 - Reads git diff
@@ -208,7 +208,7 @@ Keep it professional, concise, and user-focused. Use markdown formatting.
 ### Code Documentation Prompt
 
 ```
-You are a PHP/JavaScript documentation expert. Generate PHPDoc/JSDoc comments for this code.
+You are a Python/PHP/JavaScript documentation expert. Generate docstrings/PHPDoc/JSDoc comments for this code.
 
 **Code:**
 {code_snippet}
@@ -276,7 +276,7 @@ Keep subject under 50 chars, body wrapped at 72 chars.
 #!/bin/bash
 # Auto-generate documentation using Ollama
 
-php scripts/ollama-doc-generator.php post-commit
+python scripts/ollama-doc-generator.py post-commit
 ```
 
 ### `scripts/ollama-config.json`
@@ -301,7 +301,7 @@ php scripts/ollama-doc-generator.php post-commit
 
 1. **Dry Run Mode**
    - Preview changes before applying
-   - `php ollama-doc-generator.php --dry-run`
+   - `python ollama-doc-generator.py --dry-run`
 
 2. **Skip Option**
    - Environment variable to bypass

@@ -41,14 +41,14 @@ Utility scripts for managing Server 1586 rotation schedule, deployment, and docu
    **Or for Windows**, create `.git/hooks/post-commit` (no extension):
    ```batch
    @echo off
-   php scripts\ollama-doc-generator.php post-commit
+   python scripts\ollama-doc-generator.py post-commit
    exit /b 0
    ```
 
 4. **Test it**:
    ```bash
    # Dry run (preview without writing)
-   php scripts/ollama-doc-generator.php post-commit --dry-run
+   python scripts/ollama-doc-generator.py post-commit --dry-run
 
    # Skip for specific commit
    SKIP_OLLAMA=1 git commit -m "message"
@@ -67,21 +67,21 @@ Utility scripts for managing Server 1586 rotation schedule, deployment, and docu
 
 ```bash
 # Post-commit (default) - analyze last commit
-php scripts/ollama-doc-generator.php post-commit
+python scripts/ollama-doc-generator.py post-commit
 
 # Preview mode - don't write files
-php scripts/ollama-doc-generator.php post-commit --dry-run
+python scripts/ollama-doc-generator.py post-commit --dry-run
 
 # Manual changelog generation
-php scripts/ollama-doc-generator.php changelog
+python scripts/ollama-doc-generator.py changelog
 
 # Help and documentation
-php scripts/ollama-doc-generator.php --help
+python scripts/ollama-doc-generator.py --help
 ```
 
 ### Requirements
 
-- PHP 7.4+ with cURL extension
+- Python 3.7+ (standard library only, no extra packages needed)
 - Ollama installed and running (`ollama serve`)
 - Recommended model: `qwen2.5-coder:14b` (~8GB VRAM)
 
@@ -105,8 +105,8 @@ Edit `scripts/ollama-config.json` to customize:
 ### How It Works
 
 1. Git commit triggers `.git/hooks/post-commit`
-2. Hook runs `ollama-doc-generator.php`
-3. Script extracts commit message, diff, and changed files
+2. Hook runs `ollama-doc-generator.py`
+3. Script extracts commit message, diff, and changed files using `git` commands
 4. Sends context to local Ollama LLM with structured prompt
 5. LLM generates changelog entry in markdown format
 6. Script updates `docs/CHANGELOG.md` with new entry

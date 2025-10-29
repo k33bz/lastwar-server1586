@@ -9,7 +9,7 @@ REM To skip automation for a specific commit:
 REM   set SKIP_OLLAMA=1 && git commit -m "message"
 
 REM Run the Ollama documentation generator
-php scripts\ollama-doc-generator.php post-commit
+python scripts\ollama-doc-generator.py post-commit
 
 REM Exit with success (don't block commit even if script fails)
 exit /b 0
