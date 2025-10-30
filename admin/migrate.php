@@ -342,12 +342,22 @@ class MigrationManager {
 
 // Run migration
 $manager = new MigrationManager();
+
+// For web mode, buffer output to prevent header issues
+if (php_sapi_name() !== 'cli') {
+    ob_start();
+}
+
 $result = $manager->migrate();
 
 // Output result
 if (php_sapi_name() === 'cli') {
     exit($result['success'] ? 0 : 1);
 } else {
+    // Clear buffered output (migration logs)
+    ob_end_clean();
+
+    // Send JSON response
     header('Content-Type: application/json');
     echo json_encode($result, JSON_PRETTY_PRINT);
 }

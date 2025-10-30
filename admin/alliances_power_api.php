@@ -59,9 +59,6 @@ try {
     exit;
 }
 
-// CSRF Protection (must come before any state-changing operations)
-requireCsrfToken();
-
 // Require admin or power editor authentication
 $user = require_jwt_session();
 
@@ -77,6 +74,11 @@ $can_delete = can_delete_alliances($user);
 header('Content-Type: application/json');
 
 $action = $_GET['action'] ?? $_POST['action'] ?? 'list';
+
+// CSRF Protection for state-changing operations only (not GET/list)
+if ($action !== 'list') {
+    requireCsrfToken();
+}
 
 // Path to alliances.json (parent directory)
 $alliances_file = __DIR__ . '/../data/alliances.json';
