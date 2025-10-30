@@ -87,9 +87,9 @@ python scripts/ollama-doc-generator.py --help
   - Ollama: Alternative model `qwen2.5-coder:14b` (~8GB VRAM)
 - At least one backend must be running for automation to work
 
-### Configuration File
+### Configuration
 
-Edit `scripts/ollama-config.json` to customize:
+Edit `scripts/ollama-config.json` to customize behavior:
 
 ```json
 {
