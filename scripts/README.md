@@ -82,8 +82,10 @@ python scripts/ollama-doc-generator.py --help
 ### Requirements
 
 - Python 3.7+ (standard library only, no extra packages needed)
-- Ollama installed and running (`ollama serve`)
-- Recommended model: `qwen2.5-coder:14b` (~8GB VRAM)
+- **LM Studio** (recommended) OR **Ollama**
+  - LM Studio: Recommended model `qwen/qwen3-coder-30b` (~18GB, 85% faster)
+  - Ollama: Alternative model `qwen2.5-coder:14b` (~8GB VRAM)
+- At least one backend must be running for automation to work
 
 ### Configuration File
 
