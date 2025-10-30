@@ -31,12 +31,16 @@ try {
     require_once 'jwt.php';
     require_once 'json_helpers.php';
     require_once 'audit_logger.php';
+    require_once 'includes/csrf.php';
 } catch (Exception $e) {
     http_response_code(500);
     header('Content-Type: application/json');
     echo json_encode(['error' => 'Failed to load dependencies: ' . $e->getMessage()]);
     exit;
 }
+
+// CSRF Protection (must come before any state-changing operations)
+requireCsrfToken();
 
 // Require admin authentication (only admins can delete)
 $user = require_admin_session();

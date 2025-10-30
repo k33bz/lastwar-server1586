@@ -20,6 +20,10 @@ define('ADMIN_INIT', true);
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/jwt.php';
 require_once __DIR__ . '/audit_logger.php';
+require_once __DIR__ . '/includes/csrf.php';
+
+// CSRF Protection (must come before any state-changing operations)
+requireCsrfToken();
 
 // Require admin session
 $user = require_admin_session();

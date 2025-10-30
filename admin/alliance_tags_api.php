@@ -15,6 +15,11 @@
 
 // Require JWT authentication
 require_once 'jwt.php';
+require_once 'includes/csrf.php';
+
+// CSRF Protection (must come before any state-changing operations)
+requireCsrfToken();
+
 $user = require_jwt_session();
 
 // Include helper functions
