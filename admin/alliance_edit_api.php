@@ -17,6 +17,7 @@
 // Require JWT authentication
 require_once 'jwt.php';
 require_once 'audit_logger.php';
+require_once 'includes/input_validator.php';
 
 $user = require_jwt_session();
 
@@ -61,7 +62,16 @@ function handle_alliance_update() {
         echo json_encode(['error' => 'Alliance tag required']);
         return;
     }
-    
+
+    // Validate and sanitize tag
+    $tag_validation = validate_alliance_tag($tag, false); // Not strict - may have already been created
+    if (!$tag_validation['valid']) {
+        http_response_code(400);
+        echo json_encode(['error' => $tag_validation['error']]);
+        return;
+    }
+    $tag = $tag_validation['sanitized'];
+
     // Check permission
     if (!has_alliance_access($user_token, $tag)) {
         http_response_code(403);
@@ -93,50 +103,150 @@ function handle_alliance_update() {
     try {
         // Basic fields - R4 cannot change alliance name
         if (!$is_r4_only && isset($_POST['name'])) {
-            $alliances_array[$index]['name'] = $_POST['name'];
+            $name_validation = validate_alliance_name($_POST['name']);
+            if (!$name_validation['valid']) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Alliance name: ' . $name_validation['error']]);
+                return;
+            }
+            $alliances_array[$index]['name'] = $name_validation['sanitized'];
         }
-        
+
         // R5 info - R4 cannot change R5 name
         if (!$is_r4_only) {
+            $r5_name_validation = validate_r5_name($_POST['r5_name'] ?? $alliance['r5']);
+            if (!$r5_name_validation['valid']) {
+                http_response_code(400);
+                echo json_encode(['error' => 'R5 name: ' . $r5_name_validation['error']]);
+                return;
+            }
             $alliances_array[$index]['r5'] = set_r5_data(
                 $alliance['r5'],
-                $_POST['r5_name'] ?? '',
+                $r5_name_validation['sanitized'],
                 $_POST['r5_game_id'] ?: null,
                 $_POST['r5_discord_id'] ?: null
             );
         }
-        
+
         // Discord info
         if (!isset($alliances_array[$index]['discord'])) {
             $alliances_array[$index]['discord'] = [];
         }
-        $alliances_array[$index]['discord']['serverName'] = $_POST['discord_server'] ?: null;
-        $alliances_array[$index]['discord']['inviteUrl'] = $_POST['discord_invite'] ?: null;
-        $alliances_array[$index]['discord']['logoUrl'] = $_POST['discord_logo'] ?: null;
-        
+
+        // Validate Discord server name
+        $discord_server_validation = validate_text_field($_POST['discord_server'] ?? '', 0, 100);
+        if (!$discord_server_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Discord server: ' . $discord_server_validation['error']]);
+            return;
+        }
+        $alliances_array[$index]['discord']['serverName'] = $discord_server_validation['sanitized'] ?: null;
+
+        // Validate Discord invite URL
+        $discord_invite_validation = validate_url($_POST['discord_invite'] ?? '');
+        if (!$discord_invite_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Discord invite URL: ' . $discord_invite_validation['error']]);
+            return;
+        }
+        $alliances_array[$index]['discord']['inviteUrl'] = $discord_invite_validation['sanitized'] ?: null;
+
+        // Validate Discord logo URL
+        $discord_logo_validation = validate_url($_POST['discord_logo'] ?? '');
+        if (!$discord_logo_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Discord logo URL: ' . $discord_logo_validation['error']]);
+            return;
+        }
+        $alliances_array[$index]['discord']['logoUrl'] = $discord_logo_validation['sanitized'] ?: null;
+
         // Contact info
         if (!isset($alliances_array[$index]['contact'])) {
             $alliances_array[$index]['contact'] = [];
         }
-        $alliances_array[$index]['contact']['recruitmentContact'] = $_POST['recruitment_contact'] ?: null;
-        $alliances_array[$index]['contact']['discordRecruitment'] = $_POST['discord_recruitment'] ?: null;
-        
+
+        // Validate recruitment contact
+        $recruitment_contact_validation = validate_text_field($_POST['recruitment_contact'] ?? '', 0, 100);
+        if (!$recruitment_contact_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Recruitment contact: ' . $recruitment_contact_validation['error']]);
+            return;
+        }
+        $alliances_array[$index]['contact']['recruitmentContact'] = $recruitment_contact_validation['sanitized'] ?: null;
+
+        // Validate Discord recruitment
+        $discord_recruitment_validation = validate_text_field($_POST['discord_recruitment'] ?? '', 0, 100);
+        if (!$discord_recruitment_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Discord recruitment: ' . $discord_recruitment_validation['error']]);
+            return;
+        }
+        $alliances_array[$index]['contact']['discordRecruitment'] = $discord_recruitment_validation['sanitized'] ?: null;
+
         // Alliance info
         if (!isset($alliances_array[$index]['info'])) {
             $alliances_array[$index]['info'] = [];
         }
-        $alliances_array[$index]['info']['description'] = $_POST['description'] ?: null;
-        $alliances_array[$index]['info']['timezone'] = $_POST['timezone'] ?: null;
+
+        // Validate description (max 500 chars)
+        $description_validation = validate_text_field($_POST['description'] ?? '', 0, 500);
+        if (!$description_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Description: ' . $description_validation['error']]);
+            return;
+        }
+        $alliances_array[$index]['info']['description'] = $description_validation['sanitized'] ?: null;
+
+        // Validate timezone (max 50 chars)
+        $timezone_validation = validate_text_field($_POST['timezone'] ?? '', 0, 50);
+        if (!$timezone_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Timezone: ' . $timezone_validation['error']]);
+            return;
+        }
+        $alliances_array[$index]['info']['timezone'] = $timezone_validation['sanitized'] ?: null;
         $alliances_array[$index]['info']['recruiting'] = isset($_POST['recruiting']);
-        
+
         // Requirements
         if (!isset($alliances_array[$index]['info']['requirements'])) {
             $alliances_array[$index]['info']['requirements'] = [];
         }
-        $alliances_array[$index]['info']['requirements']['minPower'] = $_POST['min_power'] ? (int)$_POST['min_power'] : null;
-        $alliances_array[$index]['info']['requirements']['minLevel'] = $_POST['min_level'] ? (int)$_POST['min_level'] : null;
-        $alliances_array[$index]['info']['requirements']['activity'] = $_POST['activity'] ?: null;
-        $alliances_array[$index]['info']['requirements']['notes'] = $_POST['requirements_notes'] ?: null;
+
+        // Validate min power (0 to 10 trillion)
+        $min_power_validation = validate_numeric_field($_POST['min_power'] ?? null, 0, 10000000000000);
+        if (!$min_power_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Minimum power: ' . $min_power_validation['error']]);
+            return;
+        }
+        $alliances_array[$index]['info']['requirements']['minPower'] = $min_power_validation['sanitized'];
+
+        // Validate min level (0 to 100)
+        $min_level_validation = validate_numeric_field($_POST['min_level'] ?? null, 0, 100);
+        if (!$min_level_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Minimum level: ' . $min_level_validation['error']]);
+            return;
+        }
+        $alliances_array[$index]['info']['requirements']['minLevel'] = $min_level_validation['sanitized'];
+
+        // Validate activity (max 100 chars)
+        $activity_validation = validate_text_field($_POST['activity'] ?? '', 0, 100);
+        if (!$activity_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Activity: ' . $activity_validation['error']]);
+            return;
+        }
+        $alliances_array[$index]['info']['requirements']['activity'] = $activity_validation['sanitized'] ?: null;
+
+        // Validate requirements notes (max 500 chars)
+        $requirements_notes_validation = validate_text_field($_POST['requirements_notes'] ?? '', 0, 500);
+        if (!$requirements_notes_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Requirements notes: ' . $requirements_notes_validation['error']]);
+            return;
+        }
+        $alliances_array[$index]['info']['requirements']['notes'] = $requirements_notes_validation['sanitized'] ?: null;
         
         // Update timestamp
         if (!isset($alliances_array[$index]['metadata'])) {
