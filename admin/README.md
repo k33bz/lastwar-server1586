@@ -1,6 +1,6 @@
-# Server1586 Admin System v3.0.0
+# Server1586 Admin System v3.3.1
 
-Enterprise-grade secure JWT-based authentication system with advanced security features for alliance and admin management.
+Enterprise-grade secure JWT-based authentication system with advanced security features, comprehensive testing, and pre-push validation.
 
 ## 📍 Navigation
 - **← Back to Main**: [../README.md](../README.md)
@@ -26,14 +26,16 @@ Enterprise-grade secure JWT-based authentication system with advanced security f
 - **📱 Responsive Design**: Charts adapt to all screen sizes
 - **📋 Data Export**: View both chart and tabular data formats
 
-### Advanced Security (v3.0.0)
-- **🔄 JWT Key Rotation**: Automatic 30-day key rotation with emergency rotation
+### Advanced Security (v3.3.1)
+- **🔄 JWT Key Rotation**: Automatic 90-day key rotation with emergency rotation
+- **🛡️ CSRF Protection**: Cross-site request forgery prevention for all state-changing operations
 - **🛡️ Multi-Factor Authentication**: TOTP support with backup codes and hardware keys
 - **📊 Security Monitoring**: Real-time threat detection and IP blocking
 - **🔍 Audit Logging**: Comprehensive security event tracking with real-time viewer
 - **⚡ Real-time Protection**: Automatic blocking of suspicious activity
 - **💾 Backup & Restore**: Automatic backups with point-in-time recovery
 - **🔒 Email Masking**: PII protection for user data
+- **✅ Testing Infrastructure**: 40 automated tests with pre-push git hooks
 
 ### Security Metrics
 - **Authentication Strength**: 100/100

@@ -1,6 +1,6 @@
 {
-  "version": "3.3.0",
-  "releaseDate": "2025-10-29",
+  "version": "3.3.1",
+  "releaseDate": "2025-10-30",
   "components": {
     "frontend": {
       "version": "3.1.0",
@@ -73,5 +73,5 @@
   },
   "changelog": "docs/CHANGELOG.md",
   "migration_docs": "admin/MIGRATION_SYSTEM.md",
-  "lastUpdated": "2025-10-29"
+  "lastUpdated": "2025-10-30"
 }

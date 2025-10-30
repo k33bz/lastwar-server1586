@@ -1,7 +1,7 @@
 # Server 1586 - Complete Documentation Index
 
-**Version:** 3.0.0
-**Last Updated:** October 16, 2025
+**Version:** 3.3.1
+**Last Updated:** October 30, 2025
 **Repository:** [lastwar-server1586](https://github.com/k33bz/lastwar-server1586)
 
 This document serves as the master index for all documentation across the Server 1586 project.

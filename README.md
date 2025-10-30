@@ -9,8 +9,8 @@ Official website for Server 1586 alliance management, council voting, and server
 **Live Website**: [https://www.example.com](https://www.example.com)
 **GitHub Repository**: [https://github.com/username/your-repo](https://github.com/username/your-repo)
 
-**Version**: 3.0.0
-**Last Updated**: October 16, 2025
+**Version**: 3.3.1
+**Last Updated**: October 30, 2025
 
 > **Note**: The website automatically redirects HTTP to HTTPS and adds www. prefix for security and consistency.
 
@@ -43,16 +43,18 @@ Official website for Server 1586 alliance management, council voting, and server
 - **Power Trends Chart**: Time-based alliance power visualization with accurate date spacing
 - **Alliance Data Schema**: Comprehensive documentation for expandable alliance profiles
 
-### Admin Panel (v3.0.0)
+### Admin Panel (v3.3.1)
 - **JWT Authentication**: Passwordless magic link login system
 - **Role-Based Access**: Admin, R5, R4, and Power Editor (APE) roles
 - **Multi-Factor Authentication**: TOTP support with backup codes
-- **Secret Key Rotation**: Automatic 30-day JWT key rotation with emergency rotation
+- **Secret Key Rotation**: Automatic 90-day JWT key rotation with emergency rotation
+- **CSRF Protection**: Cross-site request forgery protection for all API endpoints
 - **Security Monitoring**: Real-time threat detection and IP blocking
 - **Audit Logging**: Comprehensive security event tracking with real-time viewer
 - **Backup & Restore**: Automatic backups with point-in-time recovery
 - **Email Masking**: PII protection for user data
 - **Alliance Management**: Full CRUD operations for alliance data
+- **Testing Infrastructure**: 40 automated tests with pre-push validation
 
 ---
 
@@ -78,7 +80,7 @@ Server1586/
 │   ├── server-info.json    # Server Discord and metadata
 │   ├── signature-history.json  # R5 leadership tracking
 │   └── ALLIANCE_SCHEMA.md  # Alliance data structure documentation
-├── admin/                  # PHP Admin Panel (v3.0.0)
+├── admin/                  # PHP Admin Panel (v3.3.1)
 │   ├── config.php          # Environment and dependency loading
 │   ├── jwt.php             # JWT token management
 │   ├── mailer.php          # Email functionality
@@ -87,6 +89,7 @@ Server1586/
 │   ├── *_api.php           # API endpoints for data management
 │   ├── users.json          # User permissions and roles
 │   ├── includes/           # Shared PHP components
+│   ├── tests/              # Unit test suite (40 tests)
 │   ├── vendor/             # Composer dependencies
 │   ├── .env                # Environment configuration (NOT in git)
 │   └── composer.json       # PHP dependencies
