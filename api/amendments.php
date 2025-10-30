@@ -9,7 +9,7 @@
  * Cache: 300 seconds (5 minutes)
  *
  * Documentation:
- * - Amendment System: https://github.com/k33bz/lastwar-server1586/blob/mainline/CLAUDE.md
+ * - Amendment System: https://github.com/k33bz/lastwar-server1586/blob/mainline/docs/CLAUDE.md
  *
  * @version 1.0.0
  * @date 2025-10-29

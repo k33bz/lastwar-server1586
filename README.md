@@ -116,11 +116,11 @@ Server1586/
 ### For Developers
 - **Frontend Setup**: See [Setup & Installation](#setup--installation) below
 - **Admin Panel Setup**: See [admin/README.md](admin/README.md)
-- **Deployment Guide**: See [DEPLOYMENT.md](admin/DEPLOYMENT.md)
+- **Deployment Guide**: See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
 
 ### For Contributors
-- **Development Guide**: See [CLAUDE.md](CLAUDE.md)
-- **Complete Documentation**: See [DOCUMENTATION.md](DOCUMENTATION.md)
+- **Development Guide**: See [docs/CLAUDE.md](docs/CLAUDE.md)
+- **Complete Documentation**: See [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md)
 
 ---
 
@@ -134,7 +134,7 @@ Server1586/
 - 👨‍💻 **Develop locally** → [admin/setup-local-env.md](admin/setup-local-env.md)
 - 🚀 **Deploy to production** → [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
 - 🔐 **Setup admin panel** → [admin/README.md](admin/README.md)
-- 📖 **Browse all docs** → [DOCUMENTATION.md](DOCUMENTATION.md)
+- 📖 **Browse all docs** → [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md)
 - 📋 **See what changed** → [docs/CHANGELOG.md](docs/CHANGELOG.md)
 
 ### 📚 Core Documentation
@@ -142,8 +142,8 @@ Server1586/
 | Document | Description | Audience |
 |----------|-------------|----------|
 | **[README.md](README.md)** | This file - Project overview | Everyone |
-| **[DOCUMENTATION.md](DOCUMENTATION.md)** | Master index - All documentation | Everyone |
-| **[CLAUDE.md](CLAUDE.md)** | Developer guide & architecture | Developers |
+| **[docs/DOCUMENTATION.md](docs/DOCUMENTATION.md)** | Master index - All documentation | Everyone |
+| **[docs/CLAUDE.md](docs/CLAUDE.md)** | Developer guide & architecture | Developers |
 | **[docs/CHANGELOG.md](docs/CHANGELOG.md)** | Version history & changes | Everyone |
 | **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** | Deployment guide (CI/CD + manual) | DevOps |
 
@@ -172,7 +172,7 @@ Server1586/
 |---------|---------------|-------------|
 | **Admin Features** | [admin/ADMIN_FUNCTIONALITY.md](admin/ADMIN_FUNCTIONALITY.md) | Feature overview |
 | **Alliance Management** | [admin/ALLIANCE_MANAGEMENT_GUIDE.md](admin/ALLIANCE_MANAGEMENT_GUIDE.md) | CRUD operations |
-| **JWT Key Rotation** | [KEY_ROTATION_GUIDE.md](KEY_ROTATION_GUIDE.md) | Security key management |
+| **JWT Key Rotation** | [documentation-archive/KEY_ROTATION_GUIDE.md](documentation-archive/KEY_ROTATION_GUIDE.md) | Security key management |
 | **User Roles** | [admin/USER-PERSONAS.md](admin/USER-PERSONAS.md) | RBAC system |
 
 ---
@@ -462,7 +462,7 @@ Current versions:
 
 - **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** - Complete deployment guide (CI/CD + manual)
 - **[docs/CHANGELOG.md](docs/CHANGELOG.md)** - Version history and implementation summaries
-- **[CLAUDE.md](CLAUDE.md)** - Comprehensive developer documentation
+- **[docs/CLAUDE.md](docs/CLAUDE.md)** - Comprehensive developer documentation
 - **[scripts/README.md](scripts/README.md)** - Schedule generation documentation
 - **[scripts/DEPLOY-README.md](scripts/DEPLOY-README.md)** - Manual deployment guide
 

@@ -17,6 +17,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** f0836b5 - chore: Move remaining markdown files to docs/ folder
+
+### Changed
+- Moved CONTRIBUTORS.md and DOCUMENTATION.md files to docs/ folder for better organization and clarity.
+
+---
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** 11d3818 - chore: Reorganize repository structure and cleanup temp files
+
+### Changed
+- Reorganized repository structure to improve file management and cleanup of temporary files
+- Updated `.gitignore` to better categorize helper scripts and temporary files in `scripts/` and `temp/` directories
+- Moved documentation files into `documentation-archive/` directory for better organization
+
+### Fixed
+- Resolved issues related to repository cleanup and file tracking by reorganizing file structure and updating `.gitignore` entries
+
+---
+
 ## [3.3.1] - 2025-10-30
 
 **Commit:** 08d8dba - docs: Document repo-review.py log monitoring capability (Closes #50)

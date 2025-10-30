@@ -28,25 +28,25 @@ This document serves as the master index for all documentation across the Server
 ## Quick Start
 
 ### For Developers
-1. **Frontend Setup:** See [README.md](README.md)
-2. **Admin Panel Setup:** See [admin/README.md](admin/README.md)
-3. **Local Development:** See [admin/setup-local-env.md](admin/setup-local-env.md)
+1. **Frontend Setup:** See [README.md](../README.md)
+2. **Admin Panel Setup:** See [admin/README.md](../admin/README.md)
+3. **Local Development:** See [admin/setup-local-env.md](../admin/setup-local-env.md)
 
 ### For Admins
-1. **Admin Functionality:** See [admin/ADMIN_FUNCTIONALITY.md](admin/ADMIN_FUNCTIONALITY.md)
-2. **Alliance Management:** See [admin/ALLIANCE_MANAGEMENT_GUIDE.md](admin/ALLIANCE_MANAGEMENT_GUIDE.md)
-3. **User Guide:** See [admin/guide.md](admin/guide.md)
+1. **Admin Functionality:** See [admin/ADMIN_FUNCTIONALITY.md](../admin/ADMIN_FUNCTIONALITY.md)
+2. **Alliance Management:** See [admin/ALLIANCE_MANAGEMENT_GUIDE.md](../admin/ALLIANCE_MANAGEMENT_GUIDE.md)
+3. **User Guide:** See [admin/guide.md](../admin/guide.md)
 
 ### For DevOps
-1. **Deployment Guide:** See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
-2. **CI/CD Setup:** See [docs/DEPLOYMENT.md#github-actions-setup](docs/DEPLOYMENT.md#github-actions-setup)
-3. **Manual Deployment:** See [docs/DEPLOYMENT.md#manual-deployment](docs/DEPLOYMENT.md#manual-deployment)
+1. **Deployment Guide:** See [DEPLOYMENT.md](DEPLOYMENT.md)
+2. **CI/CD Setup:** See [DEPLOYMENT.md#github-actions-setup](DEPLOYMENT.md#github-actions-setup)
+3. **Manual Deployment:** See [DEPLOYMENT.md#manual-deployment](DEPLOYMENT.md#manual-deployment)
 
 ---
 
 ## Project Overview
 
-**Main README:** [README.md](README.md)
+**Main README:** [README.md](../README.md)
 - Project description and architecture
 - Static website for Last War Server 1586
 - NAP15 alliance rankings and council voting system
@@ -69,11 +69,11 @@ Server1586-clean/
 ## Frontend Documentation
 
 ### Main Site
-- **Overview:** [README.md](README.md) - Static HTML/CSS/JS site
+- **Overview:** [README.md](../README.md) - Static HTML/CSS/JS site
 - **Development:** [CLAUDE.md](CLAUDE.md) - Development guidelines for Claude Code
-- **Alliance Modal:** [docs/CHANGELOG.md#alliance-modal-implementation](docs/CHANGELOG.md#alliance-modal-implementation)
-- **Alliance Info Updates:** [docs/CHANGELOG.md#feature-implementation-summaries](docs/CHANGELOG.md#feature-implementation-summaries)
-- **R5 Signatures:** [docs/CHANGELOG.md#r5-signature-history-implementation](docs/CHANGELOG.md#r5-signature-history-implementation)
+- **Alliance Modal:** [CHANGELOG.md#alliance-modal-implementation](CHANGELOG.md#alliance-modal-implementation)
+- **Alliance Info Updates:** [CHANGELOG.md#feature-implementation-summaries](CHANGELOG.md#feature-implementation-summaries)
+- **R5 Signatures:** [CHANGELOG.md#r5-signature-history-implementation](CHANGELOG.md#r5-signature-history-implementation)
 
 ### Data Files
 Located in `data/`:
@@ -88,25 +88,25 @@ Located in `data/`:
 ## Admin Panel Documentation
 
 ### Getting Started
-- **Main Admin README:** [admin/README.md](admin/README.md)
-- **Functionality Overview:** [admin/ADMIN_FUNCTIONALITY.md](admin/ADMIN_FUNCTIONALITY.md)
-- **Alliance Management Guide:** [admin/ALLIANCE_MANAGEMENT_GUIDE.md](admin/ALLIANCE_MANAGEMENT_GUIDE.md)
-- **User Guide:** [admin/guide.md](admin/guide.md)
+- **Main Admin README:** [admin/README.md](../admin/README.md)
+- **Functionality Overview:** [admin/ADMIN_FUNCTIONALITY.md](../admin/ADMIN_FUNCTIONALITY.md)
+- **Alliance Management Guide:** [admin/ALLIANCE_MANAGEMENT_GUIDE.md](../admin/ALLIANCE_MANAGEMENT_GUIDE.md)
+- **User Guide:** [admin/guide.md](../admin/guide.md)
 
 ### Setup & Configuration
-- **Local Environment Setup:** [admin/setup-local-env.md](admin/setup-local-env.md)
-- **Environment Configuration:** [admin/ENV-CONFIG.md](admin/ENV-CONFIG.md)
-- **Composer Installation:** [admin/COMPOSER-INSTALL.md](admin/COMPOSER-INSTALL.md)
-- **DKIM Email Setup:** [admin/DKIM-SETUP.md](admin/DKIM-SETUP.md)
+- **Local Environment Setup:** [admin/setup-local-env.md](../admin/setup-local-env.md)
+- **Environment Configuration:** [admin/ENV-CONFIG.md](../admin/ENV-CONFIG.md)
+- **Composer Installation:** [admin/COMPOSER-INSTALL.md](../admin/COMPOSER-INSTALL.md)
+- **DKIM Email Setup:** [admin/DKIM-SETUP.md](../admin/DKIM-SETUP.md)
 
 ### Security & Maintenance
-- **Secret Key Rotation:** [admin/SECRET_KEY_ROTATION_SETUP.md](admin/SECRET_KEY_ROTATION_SETUP.md)
-- **Security Changelog:** [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md)
-- **Version Summary:** [admin/VERSION_SUMMARY.md](admin/VERSION_SUMMARY.md)
-- **Version Migration System:** [admin/MIGRATION_SYSTEM.md](admin/MIGRATION_SYSTEM.md) ⭐ **NEW**
+- **Secret Key Rotation:** [admin/SECRET_KEY_ROTATION_SETUP.md](../admin/SECRET_KEY_ROTATION_SETUP.md)
+- **Security Changelog:** [admin/SECURITY_CHANGELOG.md](../admin/SECURITY_CHANGELOG.md)
+- **Version Summary:** [admin/VERSION_SUMMARY.md](../admin/VERSION_SUMMARY.md)
+- **Version Migration System:** [admin/MIGRATION_SYSTEM.md](../admin/MIGRATION_SYSTEM.md) ⭐ **NEW**
 
 ### Shared Components
-- **Includes Documentation:** [admin/includes/README.md](admin/includes/README.md)
+- **Includes Documentation:** [admin/includes/README.md](../admin/includes/README.md)
   - `header.php` - Shared header with navigation
   - `footer.php` - Shared footer with system status
   - `email_utils.php` - Email masking utilities
@@ -128,10 +128,10 @@ Located in `data/`:
 
 ## Deployment & CI/CD
 
-⭐ **NEW:** All deployment documentation consolidated into `docs/DEPLOYMENT.md`
+⭐ **NEW:** All deployment documentation consolidated into `DEPLOYMENT.md`
 
 ### 📘 Complete Deployment Guide
-- **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** - Complete deployment documentation
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete deployment documentation
   - Automated CI/CD deployment
   - Manual deployment instructions
   - GitHub Actions setup
@@ -140,7 +140,7 @@ Located in `data/`:
   - Troubleshooting guide
 
 ### 🔄 Version Migration System (NEW)
-- **[admin/MIGRATION_SYSTEM.md](admin/MIGRATION_SYSTEM.md)** - Automatic schema migration
+- **[admin/MIGRATION_SYSTEM.md](../admin/MIGRATION_SYSTEM.md)** - Automatic schema migration
   - Automatic detection of version mismatches
   - Safe, incremental migrations with backups
   - JSON and .env schema updates
@@ -158,11 +158,11 @@ php admin/migrate.php
 ```
 
 ### Quick Links
-- **Automated Deployment:** [docs/DEPLOYMENT.md#automated-cicd-deployment](docs/DEPLOYMENT.md#automated-cicd-deployment)
-- **GitHub Actions Setup:** [docs/DEPLOYMENT.md#github-actions-setup](docs/DEPLOYMENT.md#github-actions-setup)
-- **Manual Deployment:** [docs/DEPLOYMENT.md#manual-deployment](docs/DEPLOYMENT.md#manual-deployment)
-- **Version Migration:** [admin/MIGRATION_SYSTEM.md](admin/MIGRATION_SYSTEM.md)
-- **Troubleshooting:** [docs/DEPLOYMENT.md#troubleshooting](docs/DEPLOYMENT.md#troubleshooting)
+- **Automated Deployment:** [DEPLOYMENT.md#automated-cicd-deployment](DEPLOYMENT.md#automated-cicd-deployment)
+- **GitHub Actions Setup:** [DEPLOYMENT.md#github-actions-setup](DEPLOYMENT.md#github-actions-setup)
+- **Manual Deployment:** [DEPLOYMENT.md#manual-deployment](DEPLOYMENT.md#manual-deployment)
+- **Version Migration:** [admin/MIGRATION_SYSTEM.md](../admin/MIGRATION_SYSTEM.md)
+- **Troubleshooting:** [DEPLOYMENT.md#troubleshooting](DEPLOYMENT.md#troubleshooting)
 
 ### GitHub Actions Workflows
 Located in `.github/workflows/`:
@@ -200,7 +200,7 @@ data/
 - **Scripts README:** [scripts/README.md](scripts/README.md)
 - **Deployment:** [scripts/DEPLOY-README.md](scripts/DEPLOY-README.md)
 - **Screenshot Processing:** [scripts/SCREENSHOT-PROCESSING-README.md](scripts/SCREENSHOT-PROCESSING-README.md)
-- **Screenshot Summary:** [docs/CHANGELOG.md#screenshot-processing-system](docs/CHANGELOG.md#screenshot-processing-system)
+- **Screenshot Summary:** [CHANGELOG.md#screenshot-processing-system](CHANGELOG.md#screenshot-processing-system)
 
 ### Available Scripts
 ```
@@ -230,7 +230,7 @@ scripts/
 - **Token Blacklisting**: Revoked tokens stored in blacklist.json
 
 ### Secret Key Rotation
-- **Documentation:** [admin/SECRET_KEY_ROTATION_SETUP.md](admin/SECRET_KEY_ROTATION_SETUP.md)
+- **Documentation:** [admin/SECRET_KEY_ROTATION_SETUP.md](../admin/SECRET_KEY_ROTATION_SETUP.md)
 - **Grace Period**: 5-minute overlap for smooth transitions
 - **Emergency Rotation**: Immediate invalidation of all tokens
 - **Automatic Rotation**: Scheduled 30-day cycle
@@ -268,7 +268,7 @@ Located at `admin/generate_test_token.php`:
 - **Testing**: Use `admin/test_token_auth.php` to verify token validity
 
 ### Security Changelog
-See [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md) for detailed security updates.
+See [admin/SECURITY_CHANGELOG.md](../admin/SECURITY_CHANGELOG.md) for detailed security updates.
 
 ---
 
@@ -285,16 +285,16 @@ See [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md) for detailed secu
 
 ### Development Setup
 1. **Local Development:**
-   - See [admin/setup-local-env.md](admin/setup-local-env.md)
+   - See [admin/setup-local-env.md](../admin/setup-local-env.md)
    - Requires PHP 7.4+, Composer
    - Local web server (Python, Node.js, PHP built-in, or Live Server)
 
 2. **Environment Configuration:**
    - Copy `.env.example` to `.env`
-   - See [admin/ENV-CONFIG.md](admin/ENV-CONFIG.md) for variables
+   - See [admin/ENV-CONFIG.md](../admin/ENV-CONFIG.md) for variables
 
 3. **Composer Dependencies:**
-   - See [admin/COMPOSER-INSTALL.md](admin/COMPOSER-INSTALL.md)
+   - See [admin/COMPOSER-INSTALL.md](../admin/COMPOSER-INSTALL.md)
    - PHPMailer, Firebase JWT, vlucas/phpdotenv
 
 ### Coding Standards
@@ -304,7 +304,7 @@ See [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md) for detailed secu
 - **File Comments**: Include version, date, changelog
 
 ### API Development
-- **API Helpers:** [admin/includes/api_helpers.php](admin/includes/api_helpers.php)
+- **API Helpers:** [admin/includes/api_helpers.php](../admin/includes/api_helpers.php)
 - Standardized JSON responses
 - Error handling utilities
 - Validation functions
@@ -314,24 +314,24 @@ See [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md) for detailed secu
 
 ## Changelog & History
 
-⭐ **NEW:** All version history and implementation summaries consolidated into `docs/CHANGELOG.md`
+⭐ **NEW:** All version history and implementation summaries consolidated into `CHANGELOG.md`
 
 ### 📘 Complete Changelog
-- **[docs/CHANGELOG.md](docs/CHANGELOG.md)** - Complete version history
+- **[CHANGELOG.md](CHANGELOG.md)** - Complete version history
   - All releases (v1.0.0 → v3.0.0)
   - Feature implementation summaries
   - Breaking changes and migrations
   - Deprecations and roadmap
 
 ### Quick Links
-- **Latest Release (v3.0.0):** [docs/CHANGELOG.md#300---2025-10-16](docs/CHANGELOG.md#300---2025-10-16)
-- **Migration Guides:** [docs/CHANGELOG.md#migration-guides](docs/CHANGELOG.md#migration-guides)
-- **Roadmap:** [docs/CHANGELOG.md#roadmap](docs/CHANGELOG.md#roadmap)
-- **Known Issues:** [docs/CHANGELOG.md#known-issues](docs/CHANGELOG.md#known-issues)
+- **Latest Release (v3.0.0):** [CHANGELOG.md#300---2025-10-16](CHANGELOG.md#300---2025-10-16)
+- **Migration Guides:** [CHANGELOG.md#migration-guides](CHANGELOG.md#migration-guides)
+- **Roadmap:** [CHANGELOG.md#roadmap](CHANGELOG.md#roadmap)
+- **Known Issues:** [CHANGELOG.md#known-issues](CHANGELOG.md#known-issues)
 
 ### Component-Specific Version History
-- **Security Changelog:** [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md)
-- **Version Summary:** [admin/VERSION_SUMMARY.md](admin/VERSION_SUMMARY.md)
+- **Security Changelog:** [admin/SECURITY_CHANGELOG.md](../admin/SECURITY_CHANGELOG.md)
+- **Version Summary:** [admin/VERSION_SUMMARY.md](../admin/VERSION_SUMMARY.md)
 
 ### Current Version: 3.0.0 (2025-10-16)
 **Major Features:**
@@ -348,7 +348,7 @@ See [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md) for detailed secu
 - Security management dashboard
 - Shared components (header, footer, styles, scripts)
 
-**See full details:** [docs/CHANGELOG.md#300---2025-10-16](docs/CHANGELOG.md#300---2025-10-16)
+**See full details:** [CHANGELOG.md#300---2025-10-16](CHANGELOG.md#300---2025-10-16)
 
 ---
 
@@ -358,7 +358,7 @@ See [admin/SECURITY_CHANGELOG.md](admin/SECURITY_CHANGELOG.md) for detailed secu
 - **Discord Logo:** [images/HOW-TO-ADD-DISCORD-LOGO.md](images/HOW-TO-ADD-DISCORD-LOGO.md)
 
 ### Environment Variables
-Key variables (see [admin/ENV-CONFIG.md](admin/ENV-CONFIG.md)):
+Key variables (see [admin/ENV-CONFIG.md](../admin/ENV-CONFIG.md)):
 ```
 APP_NAME=Your Server Name
 APP_ENV=production
@@ -385,7 +385,7 @@ Required for CI/CD:
 
 ### Getting Help
 1. Check relevant documentation above
-2. Review [admin/guide.md](admin/guide.md)
+2. Review [admin/guide.md](../admin/guide.md)
 3. Check GitHub Issues
 
 ### Contributing

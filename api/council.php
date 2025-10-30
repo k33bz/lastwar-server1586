@@ -9,7 +9,7 @@
  * Cache: 60 seconds
  *
  * Documentation:
- * - Council System: https://github.com/k33bz/lastwar-server1586/blob/mainline/CLAUDE.md
+ * - Council System: https://github.com/k33bz/lastwar-server1586/blob/mainline/docs/CLAUDE.md
  *
  * @version 1.0.0
  * @date 2025-10-29

@@ -4,7 +4,7 @@
  * Handles all dynamic rendering and user interactions for the homepage.
  *
  * Documentation:
- * - Development Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/CLAUDE.md
+ * - Development Guide: https://github.com/k33bz/lastwar-server1586/blob/mainline/docs/CLAUDE.md
  * - Alliance Data Schema: https://github.com/k33bz/lastwar-server1586/blob/mainline/data/ALLIANCE_SCHEMA.md
  * - Full Changelog: https://github.com/k33bz/lastwar-server1586/blob/mainline/docs/CHANGELOG.md
  *
