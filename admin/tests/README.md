@@ -18,12 +18,14 @@ Comprehensive unit test suite for role-based access control (RBAC) across all fi
 
 ```
 admin/tests/
-├── README.md               # This file
-├── RoleBasedTest.php       # Main test suite
-├── run-tests.php           # Test runner script
-├── run-tests.sh            # Unix test runner
-├── run-tests.bat           # Windows test runner
-└── test-results.json       # Generated test results
+├── README.md                      # This file
+├── RoleBasedTest.php              # Role-based access control tests (29 tests)
+├── UtilityFunctionsTest.php       # Shared utility function tests (11 tests)
+├── run-tests.php                  # Test runner script
+├── run-tests.sh                   # Unix test runner
+├── run-tests.bat                  # Windows test runner
+├── test-results.json              # Generated RBAC test results
+└── utility-test-results.json      # Generated utility test results
 ```
 
 ---
@@ -43,7 +45,15 @@ admin/tests/
 
 ```bash
 # From admin/tests/ directory
+
+# Run RBAC tests (29 tests)
 php RoleBasedTest.php
+
+# Run utility function tests (11 tests)
+php UtilityFunctionsTest.php
+
+# Run all tests
+php RoleBasedTest.php && php UtilityFunctionsTest.php
 ```
 
 ### Method 2: Test Runner Script
@@ -135,6 +145,61 @@ echo $tester->generateReport();
 - `is_power_editor($token)`
 - `can_delete_alliances($token)`
 - `is_r4_or_higher($token)`
+
+---
+
+### 4. Utility Function Tests
+
+**Purpose:** Verify shared utility functions work correctly across the admin panel
+
+**Test File:** `UtilityFunctionsTest.php` (11 tests)
+
+**Categories:**
+
+#### 4.1 CSRF Token Tests (4 tests)
+- Token generation (64-character secure random)
+- Token validation (accepts valid, rejects invalid)
+- Token persistence (same token across calls)
+- Token invalidation (rejects wrong tokens)
+
+**Functions Tested:**
+- `generateCsrfToken()`
+- `validateCsrfToken($token)`
+- `getCsrfToken()`
+
+#### 4.2 Input Validation Tests (4 tests)
+- Alliance tag validation (2-10 chars, alphanumeric)
+- Alliance name validation (3-100 chars)
+- Power value validation (non-negative, max 10 trillion)
+- Input sanitization (trim, uppercase, escaping)
+
+**Functions Tested:**
+- `validate_alliance_tag($tag)`
+- `validate_alliance_name($name)`
+- `validate_alliance_power($power)`
+
+#### 4.3 IP Detection Tests (3 tests)
+- Basic IP detection (REMOTE_ADDR)
+- Proxy header support (Cloudflare, X-Forwarded-For)
+- IP validation (filters invalid IPs)
+
+**Functions Tested:**
+- `get_client_ip()`
+
+**Running Utility Tests:**
+```bash
+cd admin/tests
+php UtilityFunctionsTest.php
+```
+
+**Expected Output:**
+```
+=== Utility Functions Unit Tests ===
+Total Tests: 11
+Passed: 11
+Failed: 0
+Pass Rate: 100%
+```
 
 ---
 
