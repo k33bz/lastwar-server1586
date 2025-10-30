@@ -51,6 +51,7 @@ try {
     require_once 'csv_helpers.php';
     require_once 'includes/alliance_helper.php';
     require_once 'includes/csrf.php';
+    require_once 'includes/input_validator.php';
 } catch (Exception $e) {
     http_response_code(500);
     header('Content-Type: application/json');
@@ -134,29 +135,50 @@ try {
 
             // Track and update tag
             if (isset($update['tag']) && $update['tag'] !== $alliances[$index]['tag']) {
+                $tag_validation = validate_alliance_tag($update['tag']);
+                if (!$tag_validation['valid']) {
+                    http_response_code(400);
+                    echo json_encode(['error' => "Alliance at index {$index}: {$tag_validation['error']}"]);
+                    exit;
+                }
+
                 $alliance_changes['tag'] = [
                     'old' => $alliances[$index]['tag'],
-                    'new' => trim($update['tag'])
+                    'new' => $tag_validation['sanitized']
                 ];
-                $alliances[$index]['tag'] = trim($update['tag']);
+                $alliances[$index]['tag'] = $tag_validation['sanitized'];
             }
 
             // Track and update name
             if (isset($update['name']) && $update['name'] !== $alliances[$index]['name']) {
+                $name_validation = validate_alliance_name($update['name']);
+                if (!$name_validation['valid']) {
+                    http_response_code(400);
+                    echo json_encode(['error' => "Alliance at index {$index}: {$name_validation['error']}"]);
+                    exit;
+                }
+
                 $alliance_changes['name'] = [
                     'old' => $alliances[$index]['name'],
-                    'new' => trim($update['name'])
+                    'new' => $name_validation['sanitized']
                 ];
-                $alliances[$index]['name'] = trim($update['name']);
+                $alliances[$index]['name'] = $name_validation['sanitized'];
             }
 
             // Track and update power
             if (isset($update['power']) && (int)$update['power'] !== $alliances[$index]['power']) {
+                $power_validation = validate_alliance_power($update['power']);
+                if (!$power_validation['valid']) {
+                    http_response_code(400);
+                    echo json_encode(['error' => "Alliance at index {$index}: {$power_validation['error']}"]);
+                    exit;
+                }
+
                 $alliance_changes['power'] = [
                     'old' => $alliances[$index]['power'],
-                    'new' => (int)$update['power']
+                    'new' => $power_validation['sanitized']
                 ];
-                $alliances[$index]['power'] = (int)$update['power'];
+                $alliances[$index]['power'] = $power_validation['sanitized'];
             }
 
             // Add to changes log if anything changed
@@ -194,11 +216,44 @@ try {
             exit;
         }
 
+        // Validate tag
+        $tag_validation = validate_alliance_tag($input['tag']);
+        if (!$tag_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => $tag_validation['error']]);
+            exit;
+        }
+
+        // Validate name
+        $name_validation = validate_alliance_name($input['name']);
+        if (!$name_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => $name_validation['error']]);
+            exit;
+        }
+
+        // Validate power if provided
+        $power_validation = validate_alliance_power($input['power'] ?? 0);
+        if (!$power_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => $power_validation['error']]);
+            exit;
+        }
+
+        // Validate R5 name if provided
+        $r5_name = $input['r5'] ?? 'R5 of ' . $tag_validation['sanitized'];
+        $r5_validation = validate_r5_name($r5_name);
+        if (!$r5_validation['valid']) {
+            http_response_code(400);
+            echo json_encode(['error' => 'R5 name: ' . $r5_validation['error']]);
+            exit;
+        }
+
         $alliances = json_read($alliances_file);
 
-        // Check if tag already exists
+        // Check if tag already exists (case-insensitive)
         foreach ($alliances as $alliance) {
-            if ($alliance['tag'] === $input['tag']) {
+            if (strtoupper($alliance['tag']) === $tag_validation['sanitized']) {
                 http_response_code(400);
                 echo json_encode(['error' => 'Alliance tag already exists']);
                 exit;
@@ -208,16 +263,16 @@ try {
         // Create backup before adding
         backup_alliances($alliances, $user->sub, 'add_alliance');
 
-        // Create new alliance with minimal structure
+        // Create new alliance with minimal structure using validated data
         $newAlliance = [
-            'tag' => trim($input['tag']),
-            'name' => trim($input['name']),
-            'r5' => $input['r5'] ?? 'R5 of ' . trim($input['tag']),
+            'tag' => $tag_validation['sanitized'],
+            'name' => $name_validation['sanitized'],
+            'r5' => $r5_validation['sanitized'],
             'signed' => false,
-            'power' => (int)($input['power'] ?? 0),
+            'power' => $power_validation['sanitized'],
             'r5History' => [
                 [
-                    'r5Name' => $input['r5'] ?? 'R5 of ' . trim($input['tag']),
+                    'r5Name' => $r5_validation['sanitized'],
                     'gameId' => null,
                     'discordId' => null,
                     'startDate' => date('Y-m-d\TH:i:s\Z'),
