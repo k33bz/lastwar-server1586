@@ -216,6 +216,205 @@ jobs:
         run: cd admin && vendor/bin/phpunit tests/
 ```
 
+---
+
+## Repository Review with Log Monitoring (v3.0.0+)
+
+### Overview
+
+The `repo-review.py` script now includes intelligent **LM Studio log monitoring** for comprehensive repository analysis. This monitors `~/.lmstudio/server-logs/` in real-time to detect request completion even after HTTP timeouts.
+
+### Key Features
+
+- ✅ **Real-time log monitoring** of LM Studio server logs
+- ✅ **Request lifecycle tracking**: Received → BeginProcessing → FinishedProcessing → Generated
+- ✅ **Performance stats extraction**: tokens/sec, eval time, generation duration
+- ✅ **Completion detection** even after HTTP client timeout
+- ✅ **Intelligent polling** with exponential backoff (5s → 30s)
+- ✅ **Auto-save results** with no interactive prompts
+- ✅ **Parallel-safe**: Multiple reviews can run simultaneously
+
+### Usage
+
+```bash
+# Run a single review mode
+python scripts/repo-review.py overview
+python scripts/repo-review.py security
+python scripts/repo-review.py quality
+python scripts/repo-review.py docs
+python scripts/repo-review.py improvements
+
+# Run all reviews in parallel (recommended)
+python scripts/repo-review.py overview &
+python scripts/repo-review.py security &
+python scripts/repo-review.py quality &
+python scripts/repo-review.py docs &
+python scripts/repo-review.py improvements &
+```
+
+### How Log Monitoring Works
+
+1. **Log File Location**: `~/.lmstudio/server-logs/YYYY-MM/YYYY-MM-DD.1.log`
+
+2. **Events Tracked**:
+   - `Received request: POST to /v1/chat/completions` - Request queued
+   - `BeginProcessingPrompt` - Model started processing
+   - `FinishedProcessingPrompt. Progress: 100` - Prompt processing complete
+   - `Generated prediction` - Response ready
+   - `eval time = XX ms / YY runs` - Performance stats
+
+3. **Smart Detection**:
+   - Counts events after request start time
+   - Determines `in_progress` (processing) vs `completed` status
+   - Extracts performance metrics from log entries
+
+### Example Output
+
+```
+================================================================================
+  ⚡ Querying LM Studio
+================================================================================
+
+   >> Sending request to LM Studio...
+   [Attempt 1] Waiting up to 40s... (elapsed: 0s)
+   [TIMEOUT] After 40s - monitoring logs, waiting 5s...
+   [LOG DETECT] LM Studio still processing (events: 1 began, 0 completed)
+   [Attempt 2] Waiting up to 50s... (elapsed: 47s)
+   [LOG DETECT] LM Studio completed processing! Retrieving result...
+   [TIMEOUT] After 50s - monitoring logs, waiting 8s...
+   [LOG MONITOR] Still processing... (90s elapsed)
+   [LOG DETECT] Generation complete! Attempting to retrieve...
+   [STATS] Total: 59.4s @ 15.6 tok/s
+   [SUCCESS] Retrieved result after 179.9s total
+
+================================================================================
+  📊 Review Results (241.2s)
+================================================================================
+```
+
+### Configuration
+
+Located in `scripts/repo-review.py`:
+
+```python
+# Configuration
+LMSTUDIO_URL = 'http://localhost:1234/v1'
+LMSTUDIO_MODEL = 'qwen/qwen3-coder-30b'
+TEMPERATURE = 0.3
+MAX_TOKENS = 4000
+
+# Polling configuration
+INITIAL_TIMEOUT = 30          # Initial HTTP timeout (seconds)
+MAX_POLL_TIME = 600           # Maximum total wait (10 minutes)
+POLL_INTERVAL_START = 5       # Initial retry delay
+POLL_INTERVAL_MAX = 30        # Maximum retry delay
+
+# Log monitoring
+LMSTUDIO_LOG_DIR = Path.home() / '.lmstudio' / 'server-logs'
+```
+
+### Review Modes
+
+**1. Overview** (`overview`)
+- Architecture and structure assessment
+- Technology stack analysis
+- Code organization review
+- Key strengths and weaknesses
+- Priority improvements
+
+**2. Security** (`security`)
+- Authentication/authorization audit
+- Input validation review
+- XSS/CSRF/SQL injection checks
+- Data protection analysis
+- Configuration security
+- Access control review
+
+**3. Quality** (`quality`)
+- Code organization and naming
+- Coding standards compliance
+- Error handling patterns
+- Testing coverage
+- Performance considerations
+- Maintainability analysis
+
+**4. Documentation** (`docs`)
+- README completeness
+- API documentation
+- Code comments quality
+- Architecture documentation
+- Developer guides
+- Changelog review
+
+**5. Improvements** (`improvements`)
+- Architecture refactoring opportunities
+- Technology upgrades
+- Performance optimizations
+- Developer experience improvements
+- Automation opportunities
+
+### Output
+
+Results are automatically saved to timestamped files:
+
+```
+review-overview-20251030-083942.md       (12KB)
+review-security-20251030-084000.md       (9.3KB)
+review-quality-20251030-084018.md        (timed out)
+review-docs-20251030-085951.md           (5.0KB)
+review-improvements-20251030-084031.md   (timed out)
+```
+
+### Benefits
+
+1. **Never loses work**: Results retrieved even after HTTP timeout
+2. **Better visibility**: Real-time progress with log monitoring
+3. **Queue awareness**: Knows when LM Studio is busy vs processing
+4. **Performance insights**: Actual processing metrics (tokens/sec)
+5. **Parallel execution**: Run multiple reviews simultaneously
+6. **Unattended operation**: Auto-saves results, no user input needed
+
+### Troubleshooting
+
+**Issue**: Log monitoring reports "Log file not found"
+- **Solution**: Ensure LM Studio server is running and has created today's log file
+
+**Issue**: Reviews timeout after 10 minutes
+- **Solution**: Increase `MAX_POLL_TIME` in `scripts/repo-review.py` or break into smaller reviews
+
+**Issue**: Multiple reviews interfere with each other
+- **Solution**: They shouldn't! Log monitoring tracks events by timestamp. Each review monitors only events after its own start time.
+
+**Issue**: Performance stats not showing
+- **Solution**: Stats only appear after successful generation. Check that LM Studio completed the request.
+
+### Technical Details
+
+The log monitoring implementation:
+
+```python
+def monitor_lmstudio_logs(start_time: float) -> dict:
+    """
+    Monitor LM Studio logs to detect request completion.
+
+    Returns:
+        dict with keys:
+        - completed (bool): Generation finished
+        - in_progress (bool): Model currently processing
+        - stats (dict): Performance metrics
+        - events (dict): Event counts
+    """
+    # Read last 50KB of today's log file
+    # Parse events after start_time
+    # Count: received, begin_processing, finished_processing, generated
+    # Extract: eval_time_ms, eval_runs, tokens_per_sec
+    # Return status and metrics
+```
+
+Log monitoring runs automatically when HTTP requests timeout, providing seamless fallback for long-running analysis tasks.
+
+---
+
 ## Best Practices
 
 1. **Review Generated Tests**: LM Studio generates good tests, but always review them
