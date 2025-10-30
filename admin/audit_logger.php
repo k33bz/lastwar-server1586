@@ -134,6 +134,8 @@ function backup_alliances($data, $user_email, $reason = 'edit') {
         ];
 
         if (file_put_contents($backup_path, json_encode($backup_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES))) {
+            // Set restrictive permissions (only owner can read/write)
+            @chmod($backup_path, 0600);
             return $backup_path;
         }
 

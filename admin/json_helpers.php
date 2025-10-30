@@ -139,6 +139,12 @@ function update_json_file($path, $callback) {
         flock($handle, LOCK_UN);
         fclose($handle);
 
+        // Set restrictive permissions for sensitive files (audit logs, etc.)
+        // Only apply to files in admin directory (not public data files)
+        if (strpos($path, '/admin/') !== false || strpos($path, '\\admin\\') !== false) {
+            @chmod($path, 0600);
+        }
+
         return $result;
     } else {
         fclose($handle);
