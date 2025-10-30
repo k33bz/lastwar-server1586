@@ -302,6 +302,177 @@ EOT;
 }
 
 /**
+ * Send role change notification email
+ *
+ * @param string $to User email address
+ * @param array $changes Array of changes (old_role, new_role, old_alliances, new_alliances, old_powereditor, new_powereditor)
+ * @param string $changed_by Admin who made the change
+ * @return bool Success status
+ */
+function send_role_change_email($to, $changes, $changed_by) {
+    $username = explode('@', $to)[0];
+    $app_name = $_ENV['APP_NAME'] ?? 'Last War 1586 Admin';
+    $subject = $app_name . ' - Your Access Has Been Updated';
+
+    // Build change summary
+    $change_items = [];
+
+    if (isset($changes['role'])) {
+        $old_role = strtoupper($changes['role']['old']);
+        $new_role = strtoupper($changes['role']['new']);
+        $change_items[] = "<strong>Role:</strong> {$old_role} → {$new_role}";
+    }
+
+    if (isset($changes['powereditor'])) {
+        $old_pe = $changes['powereditor']['old'] ? 'Yes' : 'No';
+        $new_pe = $changes['powereditor']['new'] ? 'Yes' : 'No';
+        $change_items[] = "<strong>Power Editor:</strong> {$old_pe} → {$new_pe}";
+    }
+
+    if (isset($changes['alliances'])) {
+        $old_alliances = implode(', ', $changes['alliances']['old']);
+        $new_alliances = implode(', ', $changes['alliances']['new']);
+        if (empty($old_alliances)) $old_alliances = '(none)';
+        if (empty($new_alliances)) $new_alliances = '(none)';
+        $change_items[] = "<strong>Alliance Access:</strong> {$old_alliances} → {$new_alliances}";
+    }
+
+    $changes_html = implode('<br>', $change_items);
+
+    $html_body = <<<EOT
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+        }
+        .header h1 {
+            color: #667eea;
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .header-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+        .content {
+            margin-bottom: 25px;
+        }
+        .content p {
+            margin: 15px 0;
+            font-size: 15px;
+        }
+        .changes-box {
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .changes-box h3 {
+            margin: 0 0 15px 0;
+            color: #856404;
+            font-size: 16px;
+        }
+        .changes-box p {
+            margin: 10px 0;
+            color: #856404;
+            line-height: 1.8;
+        }
+        .info-box {
+            background-color: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .info-box p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #0c5da5;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            text-align: center;
+            color: #6c757d;
+            font-size: 13px;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{$app_name}</h1>
+            <span class="header-badge">ACCESS UPDATE</span>
+        </div>
+
+        <div class="content">
+            <p>Hello <strong>{$username}</strong>,</p>
+
+            <p>An administrator has updated your access permissions for the {$app_name} admin panel.</p>
+
+            <div class="changes-box">
+                <h3>What Changed:</h3>
+                <p>{$changes_html}</p>
+            </div>
+
+            <div class="info-box">
+                <p><strong>Changed by:</strong> {$changed_by}</p>
+                <p><strong>Date:</strong> {date('F j, Y \a\t g:i A T')}</p>
+            </div>
+
+            <p>These changes are effective immediately. If you have any questions or believe this change was made in error, please contact an administrator.</p>
+
+            <p>To access the admin panel, request a magic link at the login page or contact an admin to send you a login link.</p>
+        </div>
+
+        <div class="footer">
+            <p>This is an automated notification from {$app_name}</p>
+            <p>If you did not expect this change, please contact your alliance administrator immediately</p>
+        </div>
+    </div>
+</body>
+</html>
+EOT;
+
+    return send_email($to, $subject, $html_body, true);
+}
+
+/**
  * Send test email (for debugging)
  *
  * @param string $to Recipient email address

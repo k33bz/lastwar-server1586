@@ -109,17 +109,64 @@ try {
                 $powereditor = false;
             }
 
+            // Get old user data to detect changes
+            $old_user = get_user_by_email($email);
+            if (!$old_user) {
+                throw new Exception('User not found');
+            }
+
+            // Detect changes
+            $changes = [];
+
+            if ($old_user['role'] !== $role) {
+                $changes['role'] = [
+                    'old' => $old_user['role'],
+                    'new' => $role
+                ];
+            }
+
+            if (($old_user['powereditor'] ?? false) !== $powereditor) {
+                $changes['powereditor'] = [
+                    'old' => $old_user['powereditor'] ?? false,
+                    'new' => $powereditor
+                ];
+            }
+
+            // Compare alliances (arrays)
+            $old_alliances = $old_user['alliances'] ?? [];
+            sort($old_alliances);
+            sort($alliances);
+            if ($old_alliances !== $alliances) {
+                $changes['alliances'] = [
+                    'old' => $old_user['alliances'] ?? [],
+                    'new' => $alliances
+                ];
+            }
+
             // Update user
             $success = update_user($email, $alliances, $role, $powereditor);
-            
+
             if ($success) {
                 log_audit_event('user_updated', $user->sub, [
                     'target_email' => $email,
                     'role' => $role,
                     'powereditor' => $powereditor,
-                    'alliances' => $alliances
+                    'alliances' => $alliances,
+                    'changes_detected' => !empty($changes)
                 ]);
-                
+
+                // Send email notification if anything changed
+                if (!empty($changes)) {
+                    try {
+                        require_once 'mailer.php';
+                        send_role_change_email($email, $changes, $user->sub);
+                        error_log("Role change notification sent to: $email");
+                    } catch (Exception $e) {
+                        error_log("Failed to send role change email to $email: " . $e->getMessage());
+                        // Don't fail the update if email fails
+                    }
+                }
+
                 echo json_encode(['success' => true, 'message' => 'User updated successfully']);
             } else {
                 throw new Exception('Failed to update user');
