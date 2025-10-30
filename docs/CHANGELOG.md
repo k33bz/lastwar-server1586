@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** 0bad8af - docs: Fix all broken documentation links after repository reorganization
+
+### Fixed
+- Updated documentation links in README.md to reflect repository reorganization, ensuring all references point to correct locations within the docs directory.
+
+---
+
 ## [3.3.1] - 2025-10-30
 
 **Commit:** f0836b5 - chore: Move remaining markdown files to docs/ folder

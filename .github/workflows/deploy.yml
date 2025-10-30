@@ -56,12 +56,51 @@ jobs:
       - name: Validate CSV files
         run: python scripts/validate-csv.py
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: curl, json
+
+      - name: Install Composer dependencies
+        run: |
+          cd admin
+          composer install --no-dev --optimize-autoloader
+
+      - name: Start PHP development server
+        run: |
+          php -S localhost:8080 > /dev/null 2>&1 &
+          echo $! > php-server.pid
+          sleep 3
+        working-directory: ${{ github.workspace }}
+
+      - name: Run PHP unit tests
+        run: php RoleBasedTest.php
+        working-directory: admin/tests
+
+      - name: Stop PHP development server
+        if: always()
+        run: |
+          if [ -f php-server.pid ]; then
+            kill $(cat php-server.pid) || true
+            rm php-server.pid
+          fi
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-test-results
+          path: admin/tests/test-results.json
+          if-no-files-found: warn
+
       - name: Test summary
         if: success()
         run: |
           echo "All tests passed!"
           echo "All JSON files validated"
           echo "CSV files validated"
+          echo "PHP unit tests passed"
           echo "Ready for deployment"
 
   deploy:
