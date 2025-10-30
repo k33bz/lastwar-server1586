@@ -154,22 +154,29 @@ admin/test-smtp.py
 ocr/
 tesseract_training/
 
-# One-time helper scripts (contain FTP credentials, not for production)
-/*_*.py
-/check_*.py
-/fix_*.py
-/sync_*.py
-/cleanup_*.py
-/enable_*.py
-/emergency_*.py
-/restore_*.py
-/upload_*.py
-/download_*.py
-/update_*.py
-/*.sh
-/test_*.php
-/verify_*.php
-/cron_*.php
-/*_GUIDE.md
-/*_STATUS_REPORT.md
-/*_FIX.md
+# One-time helper scripts - Now organized in scripts/ folder but not tracked
+# (These contain FTP credentials, production-specific fixes, not for version control)
+scripts/check_*.py
+scripts/fix_*.py
+scripts/sync_*.py
+scripts/cleanup_*.py
+scripts/enable_*.py
+scripts/emergency_*.py
+scripts/restore_*.py
+scripts/upload_*.py
+scripts/download_*.py
+scripts/update_*.py
+scripts/setup_*.sh
+scripts/test_*.php
+scripts/verify_*.php
+scripts/cron_*.php
+
+# Temporary Files and Folders
+temp/
+*.tmp
+nul
+admin/nul
+
+# Kiro Settings - Keep environment files secure
+.kiro/.env
+.kiro/settings/github-token.json

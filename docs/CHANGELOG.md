@@ -7,6 +7,158 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+
+
+
+
+
+
+
+
+
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** 08d8dba - docs: Document repo-review.py log monitoring capability (Closes #50)
+
+### Added
+- Added intelligent LM Studio log monitoring capability to `repo-review.py` script for comprehensive repository analysis
+- New documentation in `docs/LM-STUDIO-TESTING.md` describing log monitoring features and usage
+
+### Changed
+- Updated `repo-review.py` script with enhanced log monitoring functionality including real-time tracking, performance stats extraction, and completion detection after HTTP timeouts
+- Enhanced documentation in `docs/LM-STUDIO-TESTING.md` to include detailed usage instructions and log monitoring workflow explanation
+
+### Fixed
+- Resolved issue #50 by implementing log monitoring capabilities for repository review process
+
+---
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** 7a3a44a - feat: Add automatic email notifications for role and permission changes
+
+### Added
+- New feature to send automatic email notifications when role or permission changes are made to users
+
+### Changed
+- Updated `mailer.php` to include new function `send_role_change_email` for handling role change notifications
+- Enhanced user management API in `user_management_api.php` to support the new email notification functionality
+
+### Fixed
+- No fixes required for this commit
+
+---
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** 9f985df - docs: Add LM Studio unit test generation capability
+
+### Added
+- Added documentation for using LM Studio to generate unit tests for the admin panel
+- Introduced script for generating PHPUnit test cases from source code
+- Included scripts for analyzing edge cases and reviewing test coverage
+
+### Changed
+- Updated test generation process to leverage LM Studio's capabilities for testability and edge case discovery
+
+### Fixed
+- None
+
+---
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** b9e7291 - feat: Add comprehensive input validation for alliance editor (High priority)
+
+### Added
+- Input validation for alliance tag, name, R5 name, and Discord server name in alliance editor API
+
+### Changed
+- Updated alliance update logic to include sanitized input validation before processing
+
+### Fixed
+- Improved error handling for invalid input data in alliance editor API
+
+---
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** f1ae981 - feat: Add comprehensive input validation for power editor (Critical fix)
+
+### Added
+- Input validation logic for alliance tag, name, and power in `admin/alliances_power_api.php`
+
+### Fixed
+- Critical input validation bug fixes for power editor functionality, ensuring proper sanitization and error handling for alliance data updates
+
+---
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** c089cca - feat: Implement restrictive file permissions for sensitive data (Fixes #38)
+
+### Changed
+- Implemented restrictive file permissions for sensitive data files to enhance security
+- Added permission settings for audit log files and JSON helper files in admin directory
+
+### Fixed
+- Resolved issue #38 related to sensitive data access control
+
+---
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** 56913a2 - feat: Implement comprehensive XSS protection across admin panel (Fixes #37)
+
+### Changed
+- Implemented comprehensive XSS protection in admin panel for alliance-related functions
+- Updated HTML attribute escaping to prevent cross-site scripting vulnerabilities
+
+### Fixed
+- Resolved potential XSS security issue in admin panel (Fixes #37)
+
+---
+
+## [3.3.1] - 2025-10-29
+
+**Commit:** b021ffd - feat: Implement CSRF protection across all admin API endpoints (Fixes #36)
+
+### Added
+- CSRF protection implemented across all admin API endpoints to prevent cross-site request forgery attacks
+
+### Fixed
+- Resolved security vulnerability related to missing CSRF token validation in admin API endpoints (Fixes #36)
+
+---
+
+## [3.3.1] - 2025-10-29
+
+**Commit:** 72138f4 - security: Implement rate limiting to prevent brute force attacks (Issue #35)
+
+### Added
+- Added rate limiting middleware to prevent brute force attacks and DDoS
+- Implemented API rate limiting with 20 requests per minute for admin API endpoints
+- Added login rate limiting with 5 attempts per 60 seconds for admin login
+
+### Changed
+- Updated admin/login.php and admin/send_magic_link.php to include rate limiting checks
+- Enhanced security measures to protect against unauthorized access attempts
+
+### Fixed
+- Resolved potential security vulnerability related to brute force attacks (Issue #35)
+
+---
+
+## [3.3.1] - 2025-10-29
+
+**Commit:** 6366ea4 - docs: Minor wording improvement in configuration section
+
+### Changed
+- Updated wording in configuration section to improve clarity and user understanding
+
+---
+
 ## [3.3.0] - 2025-10-29
 
 ### Added - Public API & Architecture Improvements
