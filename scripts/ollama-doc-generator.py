@@ -53,18 +53,24 @@ if sys.platform == 'win32':
 SCRIPT_DIR = Path(__file__).parent
 CONFIG_FILE = SCRIPT_DIR / 'ollama-config.json'
 OLLAMA_URL = 'http://localhost:11434'
-DEFAULT_MODEL = 'qwen2.5-coder:14b'
+LMSTUDIO_URL = 'http://localhost:1234/v1'
+DEFAULT_BACKEND = 'lmstudio'
+DEFAULT_OLLAMA_MODEL = 'qwen2.5-coder:14b'
+DEFAULT_LMSTUDIO_MODEL = 'qwen/qwen3-coder-30b'
 CHANGELOG_PATH = SCRIPT_DIR.parent / 'docs' / 'CHANGELOG.md'
 VERSION_PATH = SCRIPT_DIR.parent / 'version.json'
-TIMEOUT = 30  # seconds
+TIMEOUT = 60  # seconds
 
 
 def load_config() -> Dict:
     """Load configuration from file or use defaults"""
     defaults = {
         'enabled': True,
-        'model': DEFAULT_MODEL,
+        'backend': DEFAULT_BACKEND,
         'ollama_url': OLLAMA_URL,
+        'ollama_model': DEFAULT_OLLAMA_MODEL,
+        'lmstudio_url': LMSTUDIO_URL,
+        'lmstudio_model': DEFAULT_LMSTUDIO_MODEL,
         'temperature': 0.3,
         'max_tokens': 500,
         'auto_commit': False,
@@ -73,9 +79,16 @@ def load_config() -> Dict:
     }
 
     if CONFIG_FILE.exists():
-        with open(CONFIG_FILE, 'r') as f:
+        with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
             config = json.load(f)
-            return {**defaults, **config}
+            merged = {**defaults, **config}
+
+            # Backward compatibility: if "model" exists but no backend specified
+            if 'model' in config and 'backend' not in config:
+                merged['ollama_model'] = config['model']
+                merged['backend'] = 'ollama'
+
+            return merged
 
     return defaults
 
@@ -84,6 +97,16 @@ def check_ollama_running(url: str) -> bool:
     """Check if Ollama is running"""
     try:
         req = urllib.request.Request(f"{url}/api/tags")
+        with urllib.request.urlopen(req, timeout=2) as response:
+            return response.status == 200
+    except (urllib.error.URLError, Exception):
+        return False
+
+
+def check_lmstudio_running(url: str) -> bool:
+    """Check if LM Studio is running"""
+    try:
+        req = urllib.request.Request(f"{url}/models")
         with urllib.request.urlopen(req, timeout=2) as response:
             return response.status == 200
     except (urllib.error.URLError, Exception):
@@ -123,6 +146,105 @@ def query_ollama(url: str, model: str, prompt: str, temperature: float, max_toke
         raise Exception(f"Failed to connect to Ollama: {e}")
     except Exception as e:
         raise Exception(f"Ollama request failed: {e}")
+
+
+def query_lmstudio(url: str, model: str, prompt: str, temperature: float, max_tokens: int) -> str:
+    """Send prompt to LM Studio (OpenAI-compatible API) and get response"""
+    data = {
+        'model': model,
+        'messages': [
+            {
+                'role': 'user',
+                'content': prompt
+            }
+        ],
+        'temperature': temperature,
+        'max_tokens': max_tokens,
+        'stream': False
+    }
+
+    try:
+        req = urllib.request.Request(
+            f"{url}/chat/completions",
+            data=json.dumps(data).encode('utf-8'),
+            headers={'Content-Type': 'application/json'}
+        )
+
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as response:
+            if response.status != 200:
+                raise Exception(f"LM Studio request failed with HTTP {response.status}")
+
+            result = json.loads(response.read().decode('utf-8'))
+            if 'choices' not in result or len(result['choices']) == 0:
+                raise Exception("Invalid LM Studio response")
+
+            return result['choices'][0]['message']['content']
+
+    except urllib.error.URLError as e:
+        raise Exception(f"Failed to connect to LM Studio: {e}")
+    except Exception as e:
+        raise Exception(f"LM Studio request failed: {e}")
+
+
+def query_llm(config: Dict, prompt: str) -> str:
+    """Query the configured LLM backend (with fallback)"""
+    backend = config.get('backend', 'lmstudio').lower()
+
+    # Try primary backend
+    if backend == 'lmstudio':
+        if check_lmstudio_running(config['lmstudio_url']):
+            try:
+                return query_lmstudio(
+                    config['lmstudio_url'],
+                    config['lmstudio_model'],
+                    prompt,
+                    config['temperature'],
+                    config['max_tokens']
+                )
+            except Exception as e:
+                print(f"   ⚠️  LM Studio failed: {e}")
+                print(f"   🔄 Falling back to Ollama...")
+
+        # Fallback to Ollama
+        if check_ollama_running(config['ollama_url']):
+            return query_ollama(
+                config['ollama_url'],
+                config['ollama_model'],
+                prompt,
+                config['temperature'],
+                config['max_tokens']
+            )
+        else:
+            raise Exception("Neither LM Studio nor Ollama is running")
+
+    elif backend == 'ollama':
+        if check_ollama_running(config['ollama_url']):
+            try:
+                return query_ollama(
+                    config['ollama_url'],
+                    config['ollama_model'],
+                    prompt,
+                    config['temperature'],
+                    config['max_tokens']
+                )
+            except Exception as e:
+                print(f"   ⚠️  Ollama failed: {e}")
+                print(f"   🔄 Falling back to LM Studio...")
+
+        # Fallback to LM Studio
+        if check_lmstudio_running(config['lmstudio_url']):
+            return query_lmstudio(
+                config['lmstudio_url'],
+                config['lmstudio_model'],
+                prompt,
+                config['temperature'],
+                config['max_tokens']
+            )
+        else:
+            raise Exception("Neither Ollama nor LM Studio is running")
+
+    else:
+        raise Exception(f"Unknown backend: {backend}. Use 'ollama' or 'lmstudio'")
 
 
 def get_last_commit() -> Dict:
@@ -199,17 +321,13 @@ def generate_changelog_from_commit(config: Dict, commit: Dict, dry_run: bool) ->
 Keep it concise, professional, and user-focused. Only include sections that apply.
 Respond with ONLY the markdown changelog entry, no extra text."""
 
-    print(f"   Querying Ollama ({config['model']})...")
+    backend = config.get('backend', 'lmstudio')
+    model = config[f'{backend}_model']
+    print(f"   Querying {backend.upper()} ({model})...")
     start_time = datetime.now()
 
     try:
-        entry = query_ollama(
-            config['ollama_url'],
-            config['model'],
-            prompt,
-            config['temperature'],
-            config['max_tokens']
-        )
+        entry = query_llm(config, prompt)
 
         duration = (datetime.now() - start_time).total_seconds()
         print(f"   ✓ Generated in {duration:.2f}s\n")
@@ -378,17 +496,31 @@ def main():
 
     # Main execution
     try:
-        print("🤖 Ollama Documentation Generator")
-        print(f"   Model: {config['model']}")
+        backend = config.get('backend', 'lmstudio')
+        model = config[f'{backend}_model']
+
+        print("🤖 LLM Documentation Generator")
+        print(f"   Backend: {backend.upper()}")
+        print(f"   Model: {model}")
         print(f"   Mode: {mode}")
         if dry_run:
             print("   Dry run: Yes")
         print()
 
-        # Check Ollama is running
-        if not check_ollama_running(config['ollama_url']):
-            print("❌ Ollama is not running. Start with: ollama serve")
+        # Check if at least one backend is running
+        lmstudio_running = check_lmstudio_running(config['lmstudio_url'])
+        ollama_running = check_ollama_running(config['ollama_url'])
+
+        if not lmstudio_running and not ollama_running:
+            print("❌ Neither LM Studio nor Ollama is running.")
+            print("   Start LM Studio: Open LM Studio and start the local server")
+            print("   OR start Ollama: ollama serve")
             sys.exit(0)  # Don't block git operations
+
+        if backend == 'lmstudio' and not lmstudio_running:
+            print(f"⚠️  LM Studio is not running, will use Ollama as fallback")
+        elif backend == 'ollama' and not ollama_running:
+            print(f"⚠️  Ollama is not running, will use LM Studio as fallback")
 
         # Execute based on mode
         if mode == 'post-commit':

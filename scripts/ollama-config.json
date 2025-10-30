@@ -1,7 +1,10 @@
 {
   "enabled": true,
-  "model": "qwen2.5-coder:14b",
+  "backend": "lmstudio",
   "ollama_url": "http://localhost:11434",
+  "ollama_model": "qwen2.5-coder:14b",
+  "lmstudio_url": "http://localhost:1234/v1",
+  "lmstudio_model": "qwen/qwen3-coder-30b",
   "temperature": 0.3,
   "max_tokens": 500,
   "auto_commit": false,
