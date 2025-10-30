@@ -62,6 +62,26 @@ jobs:
           php-version: '8.1'
           extensions: curl, json
 
+      - name: Check PHP syntax
+        run: |
+          echo "Checking PHP syntax for all files..."
+          ERRORS=0
+          for file in $(find admin -name "*.php" -type f); do
+            if ! php -l "$file" > /dev/null 2>&1; then
+              echo "❌ Syntax error in: $file"
+              php -l "$file"
+              ERRORS=$((ERRORS + 1))
+            fi
+          done
+
+          if [ $ERRORS -gt 0 ]; then
+            echo ""
+            echo "❌ Found $ERRORS file(s) with syntax errors"
+            exit 1
+          fi
+
+          echo "✅ All PHP files have valid syntax"
+
       - name: Install Composer dependencies
         run: |
           cd admin

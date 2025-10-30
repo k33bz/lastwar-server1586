@@ -20,6 +20,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** 8d178bd - fix: Add admin/tests directory to repository (was gitignored)
+
+### Added
+- Admin panel unit test suite with comprehensive role-based access control testing
+- Test runner scripts for Windows (run-tests.bat) and Unix (run-tests.sh)
+- README documentation for test setup and execution instructions
+
+### Changed
+- Updated test structure to include new test files and documentation
+
+### Fixed
+- Resolved gitignore issue preventing admin/tests directory from being included in repository
+
+---
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** 937f0f1 - feat: Add PHP unit tests to CI/CD pipeline (Closes #51)
+
+### Added
+- PHP unit tests integrated into CI/CD pipeline, including setup, execution, and results upload steps
+
+### Changed
+- Updated deployment workflow to include PHP testing and validation steps
+- Enhanced test summary output to include PHP unit test status
+
+### Fixed
+- Updated documentation links in README.md to reflect repository reorganization, ensuring all references point to correct locations within the docs directory
+
+---
+
 ## [3.3.1] - 2025-10-30
 
 **Commit:** 0bad8af - docs: Fix all broken documentation links after repository reorganization

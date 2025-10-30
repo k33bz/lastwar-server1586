@@ -20,6 +20,7 @@ if (!defined('ADMIN_INIT')) {
 }
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/json_helpers.php';
+require_once __DIR__ . '/includes/rate_limiter.php';
 
 // Audit log file path
 define('AUDIT_LOG_FILE', __DIR__ . '/audit_log.json');
@@ -74,25 +75,6 @@ function log_audit_event($action, $user_email, $details = [], $ip_address = null
         error_log("Audit logging failed: " . $e->getMessage());
         return false;
     }
-}
-
-/**
- * Get client IP address
- *
- * @return string Client IP address
- */
-function get_client_ip() {
-    $ip = 'unknown';
-
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-        $ip = $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
-        $ip = $_SERVER['REMOTE_ADDR'];
-    }
-
-    return $ip;
 }
 
 /**

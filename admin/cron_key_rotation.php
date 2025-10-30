@@ -115,7 +115,7 @@ Users will need to log in again.
 This is an automated security measure.
 No action is required unless you notice any issues.
 
-<?php echo $_ENV['APP_NAME'] ?? 'Admin Panel'; ?>: " . APP_URL . "/admin/key_rotation_admin_panel.php
+Admin Panel: " . (defined('APP_URL') ? APP_URL : '') . "/admin/key_rotation_admin_panel.php
         ";
         
         foreach ($admin_emails as $email) {

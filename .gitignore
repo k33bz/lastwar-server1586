@@ -92,7 +92,9 @@ tesseract_training/data/*.tr
 
 # Test Files
 test/
-tests/
+# NOTE: admin/tests/ IS tracked - it contains the PHP unit test suite
+# Only ignore root-level tests/ directory
+/tests/
 *.test.js
 *.spec.js
 
