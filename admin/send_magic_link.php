@@ -4,9 +4,13 @@
  *
  * Validates email, generates magic link token, and sends email
  *
- * @version 1.0.0
- * @date 2025-10-12
+ * Documentation:
+ * - Security Issue: https://github.com/k33bz/lastwar-server1586/issues/35
+ *
+ * @version 1.1.0
+ * @date 2025-10-29
  * @changelog
+ *   1.1.0 (2025-10-29) - Added rate limiting (5 requests/minute per IP)
  *   1.0.0 (2025-10-12) - Initial complete implementation
  */
 
@@ -15,12 +19,16 @@ require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/jwt.php';
 require_once __DIR__ . '/mailer.php';
 require_once __DIR__ . '/json_helpers.php';
+require_once __DIR__ . '/includes/rate_limiter.php';
 
 // Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: login.php');
     exit;
 }
+
+// Rate limiting: 5 attempts per minute
+rate_limit_check('login', 5, 60);
 
 // Validate email input
 if (!isset($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {

@@ -13,9 +13,12 @@
 define('ADMIN_INIT', true);
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/jwt.php';
+require_once __DIR__ . '/includes/rate_limiter.php';
 
 // Handle magic link authentication
 if (isset($_GET['magic'])) {
+    // Rate limiting: 10 attempts per minute (more lenient for link clicks)
+    rate_limit_check('magic_link', 10, 60);
     $magic_token = $_GET['magic'];
     $magic_links_file = __DIR__ . '/magic_links.json';
     
