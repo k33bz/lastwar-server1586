@@ -688,7 +688,7 @@ include 'includes/header.php';
                         ${alliance.isNew
                             ? `<button class="btn btn-danger" onclick="cancelNewAlliance(${alliance.index})">Cancel</button>`
                             : (CAN_DELETE_ALLIANCES
-                                ? `<button class="btn btn-danger" onclick="deleteAlliance(${alliance.index}, '${escapeHtml(alliance.tag)}')">Delete</button>`
+                                ? `<button class="btn btn-danger" onclick="deleteAlliance(${alliance.index}, '${escapeAttr(alliance.tag)}')">Delete</button>`
                                 : '<span style="color: #999; font-size: 12px;">Edit only</span>')
                         }
                     </td>
@@ -927,6 +927,17 @@ include 'includes/header.php';
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        // Escape for use in HTML attributes (including single and double quotes)
+        function escapeAttr(text) {
+            if (text === null || text === undefined) return '';
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#x27;');
         }
     </script>
 </div>

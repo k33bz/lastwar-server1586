@@ -681,7 +681,7 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
             const tag = allTags.find(t => t.id === tagId);
             if (!tag) return '';
 
-            return `<div class="tag-chip category-${tag.category}">${escapeHtml(tag.name)}</div>`;
+            return `<div class="tag-chip category-${escapeAttr(tag.category)}">${escapeHtml(tag.name)}</div>`;
         }).filter(Boolean).join('');
 
         container.innerHTML = tagsHtml || '<div class="loading-state">No tags selected</div>';
@@ -738,8 +738,8 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
 
         container.innerHTML = categories.map(cat => `
             <div class="category-tab ${currentCategoryFilter === cat.id ? 'active' : ''}"
-                 onclick="filterTagsByCategory('${cat.id}')">
-                <span class="category-icon">${cat.icon}</span>
+                 onclick="filterTagsByCategory('${escapeAttr(cat.id)}')">
+                <span class="category-icon">${escapeHtml(cat.icon)}</span>
                 <span>${escapeHtml(cat.name)}</span>
             </div>
         `).join('');
@@ -767,12 +767,12 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
             <div class="tag-grid">
                 ${filtered.map(tag => `
                     <div class="tag-option ${selectedTags.includes(tag.id) ? 'selected' : ''}"
-                         onclick="toggleTag('${tag.id}')">
+                         onclick="toggleTag('${escapeAttr(tag.id)}')">
                         <input type="checkbox"
-                               id="tag-${tag.id}"
+                               id="tag-${escapeAttr(tag.id)}"
                                ${selectedTags.includes(tag.id) ? 'checked' : ''}
-                               onchange="toggleTag('${tag.id}')">
-                        <label class="tag-option-label" for="tag-${tag.id}">${escapeHtml(tag.name)}</label>
+                               onchange="toggleTag('${escapeAttr(tag.id)}')">
+                        <label class="tag-option-label" for="tag-${escapeAttr(tag.id)}">${escapeHtml(tag.name)}</label>
                     </div>
                 `).join('')}
             </div>
@@ -854,7 +854,7 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
                 const select = document.getElementById('suggest-tag-category');
                 select.innerHTML = '<option value="">Select a category...</option>' +
                     data.categories.map(cat =>
-                        `<option value="${cat.id}">${escapeHtml(cat.icon)} ${escapeHtml(cat.name)}</option>`
+                        `<option value="${escapeAttr(cat.id)}">${escapeHtml(cat.icon)} ${escapeHtml(cat.name)}</option>`
                     ).join('');
             }
         } catch (error) {
@@ -894,6 +894,17 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    // Escape for use in HTML attributes (including single and double quotes)
+    function escapeAttr(text) {
+        if (text === null || text === undefined) return '';
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#x27;');
     }
 
     // Close modals on backdrop click
