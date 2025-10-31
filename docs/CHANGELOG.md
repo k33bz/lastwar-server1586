@@ -26,6 +26,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+## [3.3.2] - 2025-10-31
+
+**Commit:** d466361 - fix: CRITICAL - Prevent deployment from overwriting production .env with rotated keys
+
+### Fixed
+- Prevented deployment process from overwriting production .env file with rotated keys
+- Updated .ftpignore to exclude production admin files (.env, key_rotation.json, blacklisted_tokens.json, users.json) from deployment
+- Revised deploy workflow to remove automatic creation of production .env file and emphasize manual setup requirement for production server
+- Updated documentation to reflect new production environment setup process and key rotation system management
+
+---
+
 ## [3.3.2] - 2025-10-30
 
 **Commit:** 41274b8 - docs: Update documentation to version 3.3.1
