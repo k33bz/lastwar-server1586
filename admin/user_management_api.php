@@ -159,9 +159,37 @@ try {
                 if (!empty($changes)) {
                     try {
                         require_once 'mailer.php';
-                        send_role_change_email($email, $changes, $user->sub);
-                        error_log("Role change notification sent to: $email");
+                        $email_sent = send_role_change_email($email, $changes, $user->sub);
+
+                        if ($email_sent) {
+                            // Log successful email notification to audit log
+                            log_audit_event('email_sent_role_change', $user->sub, [
+                                'type' => 'role_change_notification',
+                                'recipient' => $email,
+                                'changes' => $changes,
+                                'status' => 'success'
+                            ]);
+                            error_log("Role change notification sent to: $email");
+                        } else {
+                            // Log failed email to audit log
+                            log_audit_event('email_failed_role_change', $user->sub, [
+                                'type' => 'role_change_notification',
+                                'recipient' => $email,
+                                'changes' => $changes,
+                                'status' => 'failed',
+                                'reason' => 'Email send returned false'
+                            ]);
+                            error_log("Failed to send role change email to $email: send_email returned false");
+                        }
                     } catch (Exception $e) {
+                        // Log failed email to audit log
+                        log_audit_event('email_failed_role_change', $user->sub, [
+                            'type' => 'role_change_notification',
+                            'recipient' => $email,
+                            'changes' => $changes,
+                            'status' => 'failed',
+                            'reason' => $e->getMessage()
+                        ]);
                         error_log("Failed to send role change email to $email: " . $e->getMessage());
                         // Don't fail the update if email fails
                     }
@@ -296,18 +324,27 @@ try {
 
             // Send the magic link email
             $email_sent = send_magic_link_email($email, $magic_link, $username);
-            
+
             if ($email_sent) {
-                log_audit_event('magic_link_emailed', $user->sub, [
-                    'target_email' => $email,
-                    'magic_link_url' => $magic_link
+                log_audit_event('email_sent_magic_link', $user->sub, [
+                    'type' => 'magic_link_email',
+                    'recipient' => $email,
+                    'magic_link_url' => $magic_link,
+                    'status' => 'success'
                 ]);
-                
+
                 echo json_encode([
-                    'success' => true, 
+                    'success' => true,
                     'message' => 'Magic link email sent successfully'
                 ]);
             } else {
+                // Log failed email to audit log
+                log_audit_event('email_failed_magic_link', $user->sub, [
+                    'type' => 'magic_link_email',
+                    'recipient' => $email,
+                    'status' => 'failed',
+                    'reason' => 'Email send returned false'
+                ]);
                 throw new Exception('Failed to send email. Please check SMTP configuration.');
             }
             break;
