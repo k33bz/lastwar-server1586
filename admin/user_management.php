@@ -879,7 +879,8 @@ function saveUser() {
     formData.append('email', email);
     formData.append('role', role);
     formData.append('powereditor', powerEditor ? '1' : '0');
-    
+    formData.append('csrf_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+
     // Get selected alliances
     const alliances = [];
     if (document.getElementById('editAllianceAll').checked) {
@@ -921,7 +922,8 @@ function deleteUser(email) {
     const formData = new FormData();
     formData.append('action', 'delete');
     formData.append('email', email);
-    
+    formData.append('csrf_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+
     fetch('user_management_api.php', {
         method: 'POST',
         body: formData
@@ -1007,7 +1009,8 @@ function addUser() {
     formData.append('email', email);
     formData.append('role', role);
     formData.append('powereditor', powerEditor ? '1' : '0');
-    
+    formData.append('csrf_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+
     // Get selected alliances
     const alliances = [];
     if (document.getElementById('addAllianceAll').checked) {
@@ -1066,7 +1069,8 @@ function generateMagicLink(email) {
     const formData = new FormData();
     formData.append('action', 'generate_magic_link');
     formData.append('email', email);
-    
+    formData.append('csrf_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+
     fetch('user_management_api.php', {
         method: 'POST',
         body: formData
@@ -1199,7 +1203,8 @@ function emailMagicLinkFromModal(email, magicLink) {
     formData.append('action', 'email_magic_link');
     formData.append('email', email);
     formData.append('magic_link', magicLink);
-    
+    formData.append('csrf_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+
     fetch('user_management_api.php', {
         method: 'POST',
         body: formData
