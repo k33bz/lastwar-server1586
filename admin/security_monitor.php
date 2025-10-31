@@ -388,25 +388,25 @@ function get_security_stats() {
         $day_ago = $now - 86400;
         
         // Count recent events
-        $recent_events = array_filter($security_log['events'], function($event) use ($hour_ago) {
+        $recent_events = array_filter($security_log['events'] ?? [], function($event) use ($hour_ago) {
             return $event['timestamp'] > $hour_ago;
         });
-        
-        $daily_events = array_filter($security_log['events'], function($event) use ($day_ago) {
+
+        $daily_events = array_filter($security_log['events'] ?? [], function($event) use ($day_ago) {
             return $event['timestamp'] > $day_ago;
         });
-        
+
         // Count active blocks
-        $active_blocks = array_filter($blacklist['auto_blocks'], function($block) use ($now) {
+        $active_blocks = array_filter($blacklist['auto_blocks'] ?? [], function($block) use ($now) {
             return $block['expires'] > $now;
         });
-        
+
         return [
             'events_last_hour' => count($recent_events),
             'events_last_24h' => count($daily_events),
-            'permanent_blocks' => count($blacklist['ips']),
+            'permanent_blocks' => count($blacklist['ips'] ?? []),
             'active_temp_blocks' => count($active_blocks),
-            'total_rate_limit_keys' => count($rate_limits['limits']),
+            'total_rate_limit_keys' => count($rate_limits['limits'] ?? []),
             'last_updated' => $now
         ];
     } catch (Exception $e) {
