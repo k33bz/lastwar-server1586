@@ -26,6 +26,9 @@ if (!isset($user)) {
     exit();
 }
 
+// Include CSRF protection
+require_once __DIR__ . '/csrf.php';
+
 // Include email utilities
 require_once __DIR__ . '/email_utils.php';
 
