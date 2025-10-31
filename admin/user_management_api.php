@@ -52,7 +52,7 @@ try {
             }
 
             // Validate role
-            if (!in_array($role, ['admin', 'r5', 'r4'])) {
+            if (!in_array($role, ['admin', 'r5', 'r4', 'none', 'disabled'])) {
                 throw new Exception('Invalid role');
             }
 
@@ -61,8 +61,8 @@ try {
                 throw new Exception('At least one alliance must be selected');
             }
 
-            // Admins cannot have powereditor flag (they automatically have access)
-            if ($role === 'admin') {
+            // Admin, none, and disabled cannot have powereditor flag
+            if (in_array($role, ['admin', 'none', 'disabled'])) {
                 $powereditor = false;
             }
 
@@ -100,12 +100,12 @@ try {
             }
 
             // Validate role
-            if (!in_array($role, ['admin', 'r5', 'r4'])) {
+            if (!in_array($role, ['admin', 'r5', 'r4', 'none', 'disabled'])) {
                 throw new Exception('Invalid role');
             }
 
-            // Admins cannot have powereditor flag (they automatically have access)
-            if ($role === 'admin') {
+            // Admin, none, and disabled cannot have powereditor flag
+            if (in_array($role, ['admin', 'none', 'disabled'])) {
                 $powereditor = false;
             }
 
@@ -218,6 +218,11 @@ try {
             $target_user = get_user_by_email($email);
             if (!$target_user) {
                 throw new Exception('User not found');
+            }
+
+            // Check if user is disabled
+            if (isset($target_user['role']) && $target_user['role'] === 'disabled') {
+                throw new Exception('Cannot generate magic link for disabled user');
             }
 
             // Generate magic link token

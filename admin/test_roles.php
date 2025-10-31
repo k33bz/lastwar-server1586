@@ -40,6 +40,18 @@ if (isset($_GET['role'])) {
             $_SESSION['username'] = 'R5 Power Editor';
             $_SESSION['powereditor'] = true;
             break;
+        case 'none':
+            $_SESSION['user_id'] = 6;
+            $_SESSION['role'] = 'none';
+            $_SESSION['username'] = 'Read-Only User';
+            $_SESSION['powereditor'] = false;
+            break;
+        case 'disabled':
+            $_SESSION['user_id'] = 7;
+            $_SESSION['role'] = 'disabled';
+            $_SESSION['username'] = 'Disabled User';
+            $_SESSION['powereditor'] = false;
+            break;
     }
     header('Location: dashboard.php');
     exit();
@@ -267,6 +279,35 @@ include 'includes/header.php';
                 </ul>
             </div>
             <a href="?role=r5_power" class="btn btn-primary">Switch to R5 Power Editor</a>
+        </div>
+
+        <div class="role-card <?php echo ($_SESSION['role'] ?? '') === 'none' ? 'current' : ''; ?>">
+            <div class="role-icon">👁️</div>
+            <div class="role-title">None (Read-Only)</div>
+            <div class="role-description">Can view but cannot edit anything</div>
+            <div class="role-permissions">
+                <h4>Permissions:</h4>
+                <ul>
+                    <li>View assigned alliances</li>
+                    <li>View statistics (read-only)</li>
+                </ul>
+            </div>
+            <a href="?role=none" class="btn btn-primary">Switch to None</a>
+        </div>
+
+        <div class="role-card <?php echo ($_SESSION['role'] ?? '') === 'disabled' ? 'current' : ''; ?>">
+            <div class="role-icon">🚫</div>
+            <div class="role-title">Disabled</div>
+            <div class="role-description">Account suspended - cannot log in</div>
+            <div class="role-permissions">
+                <h4>Permissions:</h4>
+                <ul style="color: #dc3545;">
+                    <li style="color: #dc3545;">❌ No access</li>
+                    <li style="color: #dc3545;">❌ Cannot request magic links</li>
+                    <li style="color: #dc3545;">❌ Account suspended</li>
+                </ul>
+            </div>
+            <a href="?role=disabled" class="btn btn-primary">Switch to Disabled</a>
         </div>
     </div>
 

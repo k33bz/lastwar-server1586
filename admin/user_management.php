@@ -258,6 +258,17 @@ function isUserTokenActive($email) {
             background: #007bff;
             color: white;
         }
+
+        .role-none {
+            background: #6c757d;
+            color: white;
+        }
+
+        .role-disabled {
+            background: #343a40;
+            color: white;
+            text-decoration: line-through;
+        }
         
         .ape-badge {
             background: #ffc107;
@@ -438,6 +449,8 @@ function isUserTokenActive($email) {
                 <option value="admin">Admin</option>
                 <option value="r5">R5 Leaders</option>
                 <option value="r4">R4 Officers</option>
+                <option value="none">None (Read-only)</option>
+                <option value="disabled">Disabled</option>
                 <option value="ape">Power Editors (APE)</option>
             </select>
             <select id="statusFilter" onchange="filterUsers()">
@@ -540,9 +553,11 @@ function isUserTokenActive($email) {
                 <div class="form-group">
                     <label>Role:</label>
                     <select id="editRole" name="role" onchange="updatePowerEditorVisibility()">
+                        <option value="none">None (Read-only access)</option>
                         <option value="r4">R4 (Can edit all alliance data)</option>
                         <option value="r5">R5 (Can edit + sign rules)</option>
                         <option value="admin">Admin (Full access)</option>
+                        <option value="disabled">Disabled (Cannot log in)</option>
                     </select>
                 </div>
                 
@@ -598,9 +613,11 @@ function isUserTokenActive($email) {
                 <div class="form-group">
                     <label>Role:</label>
                     <select id="addRole" name="role" onchange="updateAddPowerEditorVisibility()">
+                        <option value="none">None (Read-only access)</option>
                         <option value="r4">R4 (Can edit all alliance data)</option>
                         <option value="r5">R5 (Can edit + sign rules)</option>
                         <option value="admin">Admin (Full access)</option>
+                        <option value="disabled">Disabled (Cannot log in)</option>
                     </select>
                 </div>
                 
@@ -860,8 +877,9 @@ function updatePowerEditorVisibility() {
     const roleSelect = document.getElementById('editRole');
     const powerEditorGroup = document.getElementById('powerEditorGroup');
     const powerEditorCheckbox = document.getElementById('editPowerEditor');
-    
-    if (roleSelect.value === 'admin') {
+
+    // Hide power editor for admin (has access by default), none (read-only), and disabled (no access)
+    if (['admin', 'none', 'disabled'].includes(roleSelect.value)) {
         powerEditorGroup.style.display = 'none';
         powerEditorCheckbox.checked = false;
     } else {
@@ -978,8 +996,9 @@ function updateAddPowerEditorVisibility() {
     const roleSelect = document.getElementById('addRole');
     const powerEditorGroup = document.getElementById('addPowerEditorGroup');
     const powerEditorCheckbox = document.getElementById('addPowerEditor');
-    
-    if (roleSelect.value === 'admin') {
+
+    // Hide power editor for admin (has access by default), none (read-only), and disabled (no access)
+    if (['admin', 'none', 'disabled'].includes(roleSelect.value)) {
         powerEditorGroup.style.display = 'none';
         powerEditorCheckbox.checked = false;
     } else {
