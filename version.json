@@ -1,6 +1,6 @@
 {
-  "version": "3.3.1",
-  "releaseDate": "2025-10-30",
+  "version": "3.3.2",
+  "releaseDate": "2025-10-31",
   "components": {
     "frontend": {
       "version": "3.1.0",
@@ -69,9 +69,22 @@
         "File locking",
         "Interactive documentation"
       ]
+    },
+    "deployment_protection": {
+      "version": "1.0.0",
+      "date": "2025-10-31",
+      "description": "CRITICAL FIX: Prevents deployment from overwriting production .env with rotated JWT keys",
+      "issue": "#52",
+      "changes": [
+        "Excluded admin/.env from deployment (.ftpignore)",
+        "Excluded production state files (secret_keys.json, blacklisted_tokens.json, users.json)",
+        "Removed .env generation from GitHub Actions workflow",
+        "Created production .env management guide (docs/PRODUCTION-ENV-SETUP.md)"
+      ],
+      "impact": "Eliminates mass user logouts caused by key rotation overwrites during deployment"
     }
   },
   "changelog": "docs/CHANGELOG.md",
   "migration_docs": "admin/MIGRATION_SYSTEM.md",
-  "lastUpdated": "2025-10-30"
+  "lastUpdated": "2025-10-31"
 }
