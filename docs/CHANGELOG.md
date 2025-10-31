@@ -27,6 +27,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+
+## [3.3.3] - 2025-10-31
+
+**Commit:** 85eeecd - chore: Bump version to 3.3.2
+
+### Changed
+- Updated version.json to bump version to 3.3.2 and adjust release dates
+- Modified deployment_protection component to include new version 1.0.0 with updated date and description
+
+### Fixed
+- Resolved issue #52 regarding deployment overwriting production .env with rotated JWT keys
+- Implemented exclusion of admin/.env from deployment (.ftpignore)
+- Excluded production state files (secret_keys.json, blacklisted_tokens.json, users.json) from deployment
+- Removed .env generation from GitHub Actions workflow
+- Created production .env management guide (docs/PRODUCTION-ENV-SETUP.md)
+- Eliminated mass user logouts caused by key rotation overwrites during deployment
+
+---
+
+## [3.3.2] - 2025-10-31
+
+**Commit:** e41cf99 - docs: Auto-update CHANGELOG.md for v3.3.2
+
+### Fixed
+- Prevented deployment process from overwriting production .env file with rotated keys
+- Updated .ftpignore to exclude production admin files (.env, key_rotation.json, blacklisted_tokens.json, users.json) from deployment
+- Revised deploy workflow to remove automatic creation of production .env file and emphasize manual setup requirement for production server
+- Updated documentation to reflect new production environment setup process and key rotation system management
+
+---
+
 ## [3.3.2] - 2025-10-31
 
 **Commit:** d466361 - fix: CRITICAL - Prevent deployment from overwriting production .env with rotated keys
