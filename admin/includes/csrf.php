@@ -77,8 +77,8 @@ function validateCsrfToken($provided_token = null) {
 
     // If token not provided, try to get it from request
     if ($provided_token === null) {
-        // Check POST data
-        $provided_token = $_POST['_csrf_token'] ?? null;
+        // Check POST data (both with and without underscore prefix)
+        $provided_token = $_POST['_csrf_token'] ?? $_POST['csrf_token'] ?? null;
 
         // Check headers
         if (!$provided_token && isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
