@@ -141,36 +141,11 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Create production .env file
-        run: |
-          cat > admin/.env << 'EOF'
-          # JWT Secret Key
-          SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
-
-          # SMTP Configuration - cPanel Email
-          SMTP_HOST=${{ secrets.SMTP_HOST }}
-          SMTP_PORT=${{ secrets.SMTP_PORT }}
-          SMTP_USER=${{ secrets.SMTP_USER }}
-          SMTP_PASS=${{ secrets.SMTP_PASS }}
-          SMTP_FROM=${{ secrets.SMTP_FROM }}
-          SMTP_FROM_NAME="${{ secrets.SMTP_FROM_NAME }}"
-
-          # Application Configuration
-          APP_URL=${{ secrets.APP_URL }}
-          ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}
-
-          # Token Expiry (in seconds)
-          MAGIC_LINK_EXPIRY=600        # 10 minutes
-          SESSION_TOKEN_EXPIRY=3600    # 1 hour
-
-          # JWT Secret Key Rotation Configuration
-          AUTO_KEY_ROTATION_ENABLED=true     # Enabled - automatic rotation every 90 days
-          KEY_ROTATION_INTERVAL_DAYS=90      # Rotate keys every 90 days
-          KEY_ROTATION_GRACE_PERIOD=300      # 5 minutes grace period for seamless rotation
-
-          # Environment
-          APP_ENV=production
-          EOF
+      # REMOVED: Create production .env file step
+      # CRITICAL: admin/.env is now production-only and managed by key rotation system
+      # Never overwrite production .env as it contains rotated SECRET_KEY and PREVIOUS_SECRET_KEY
+      # Initial .env setup must be done manually on production server
+      # See: docs/DEPLOYMENT.md for initial .env setup instructions
 
       - name: Restore deployment state cache
         uses: actions/cache@v3

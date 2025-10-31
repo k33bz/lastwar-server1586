@@ -22,6 +22,71 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+
+
+
+## [3.3.2] - 2025-10-30
+
+**Commit:** 41274b8 - docs: Update documentation to version 3.3.1
+
+### Changed
+- Updated documentation to version 3.3.1
+- Modified version and last updated date in README.md
+- Adjusted admin panel description in README.md
+- Updated admin panel description in admin/README.md
+- Revised secret key rotation period from 30 days to 90 days
+- Added CSRF protection for API endpoints
+- Enhanced testing infrastructure with 40 automated tests
+- Updated last updated date in version.json
+
+### Fixed
+- Corrected version information in index.html
+- Updated documentation in DOCUMENTATION.md
+
+---
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** db13ca4 - test: Add comprehensive unit tests for shared utility functions
+
+### Added
+- New unit test file `UtilityFunctionsTest.php` with 11 tests for shared utility functions
+- New test result file `utility-test-results.json` to track utility function test results
+
+### Changed
+- Updated `admin/tests/README.md` to include documentation for new utility function tests
+- Modified `.gitignore` to include new test result file path
+
+### Fixed
+- Updated test runner instructions in `admin/tests/README.md` to reference new utility function tests
+- Added proper test execution commands for utility functions in README documentation
+
+---
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** 2226926 - fix: Fix CSRF blocking GET requests in alliances_power_api (Issue #43)
+
+### Fixed
+- Resolved CSRF issue that was blocking GET requests in `alliances_power_api.php`
+- Fixed header output issues in `migrate.php` by adding output buffering for web mode
+
+---
+
+## [3.3.1] - 2025-10-30
+
+**Commit:** e38b45f - fix: Fix critical PHP errors breaking admin site login
+
+### Fixed
+- Resolved critical PHP syntax errors in admin scripts that were preventing site login
+- Fixed issue with `audit_logger.php` missing required rate limiter include
+- Corrected variable reference in `cron_key_rotation.php` to properly display admin panel URL
+- Implemented PHP syntax checking in deployment workflow to prevent future syntax errors
+- Updated `.gitignore` to properly track `admin/tests/` directory while ignoring root-level `tests/` directory
+
+---
+
 ## [3.3.1] - 2025-10-30
 
 **Commit:** 8d178bd - fix: Add admin/tests directory to repository (was gitignored)

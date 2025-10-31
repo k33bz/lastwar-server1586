@@ -34,8 +34,12 @@
 /CICD-SETUP.md
 
 # Admin System - Exclude development/test files only
-# Note: admin/.env is generated during deployment from GitHub Secrets and MUST be deployed
-!admin/.env
+# CRITICAL: These files contain production state and MUST NOT be deployed
+# They are managed by the production system only
+admin/.env
+admin/key_rotation.json
+admin/blacklisted_tokens.json
+admin/users.json
 admin/.claude/
 admin/.vscode/
 admin/test*.php
