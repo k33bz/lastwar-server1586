@@ -29,6 +29,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+
+## [3.3.3] - 2025-10-31
+
+**Commit:** bf7bf3d - fix: Add null coalescing to prevent count() errors in security_monitor.php
+
+### Fixed
+- Added null coalescing operators to prevent count() errors in security_monitor.php when handling empty arrays for security log events, blacklists, and rate limits data structures.
+
+---
+
+## [3.3.3] - 2025-10-31
+
+**Commit:** ee005f1 - docs: Auto-update CHANGELOG.md for v3.3.3
+
+### Fixed
+- Resolved issue #52 regarding deployment overwriting production .env with rotated JWT keys
+- Implemented exclusion of admin/.env from deployment (.ftpignore)
+- Excluded production state files (secret_keys.json, blacklisted_tokens.json, users.json) from deployment
+- Removed .env generation from GitHub Actions workflow
+- Created production .env management guide (docs/PRODUCTION-ENV-SETUP.md)
+- Eliminated mass user logouts caused by key rotation overwrites during deployment
+
+---
+
 ## [3.3.3] - 2025-10-31
 
 **Commit:** 85eeecd - chore: Bump version to 3.3.2
