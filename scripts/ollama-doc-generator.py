@@ -113,6 +113,20 @@ def check_lmstudio_running(url: str) -> bool:
         return False
 
 
+def get_lmstudio_loaded_model(url: str) -> str:
+    """Get the currently loaded model in LM Studio"""
+    try:
+        req = urllib.request.Request(f"{url}/models")
+        with urllib.request.urlopen(req, timeout=2) as response:
+            data = json.loads(response.read().decode('utf-8'))
+            # LM Studio returns {"data": [{"id": "model-name", ...}]}
+            if 'data' in data and len(data['data']) > 0:
+                return data['data'][0].get('id', 'unknown')
+    except (urllib.error.URLError, Exception):
+        pass
+    return None
+
+
 def query_ollama(url: str, model: str, prompt: str, temperature: float, max_tokens: int) -> str:
     """Send prompt to Ollama and get response"""
     data = {
@@ -521,6 +535,17 @@ def main():
             print(f"⚠️  LM Studio is not running, will use Ollama as fallback")
         elif backend == 'ollama' and not ollama_running:
             print(f"⚠️  Ollama is not running, will use LM Studio as fallback")
+
+        # Verify loaded model matches configuration
+        if backend == 'lmstudio' and lmstudio_running:
+            loaded_model = get_lmstudio_loaded_model(config['lmstudio_url'])
+            expected_model = config['lmstudio_model']
+            if loaded_model and loaded_model != expected_model:
+                print(f"⚠️  WARNING: Wrong model loaded in LM Studio!")
+                print(f"   Expected: {expected_model}")
+                print(f"   Loaded:   {loaded_model}")
+                print(f"   Please load the correct model in LM Studio for best results.")
+                print()
 
         # Execute based on mode
         if mode == 'post-commit':
