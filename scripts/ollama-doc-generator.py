@@ -194,6 +194,14 @@ def query_lmstudio(url: str, model: str, prompt: str, temperature: float, max_to
 
             return result['choices'][0]['message']['content']
 
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode('utf-8') if hasattr(e, 'read') else str(e)
+        if 'model' in error_body.lower() or e.code == 404:
+            raise Exception(
+                f"LM Studio model error: Model '{model}' may not be loaded.\n"
+                f"   Please open LM Studio and load the '{model}' model, then try again."
+            )
+        raise Exception(f"LM Studio HTTP error ({e.code}): {error_body}")
     except urllib.error.URLError as e:
         raise Exception(f"Failed to connect to LM Studio: {e}")
     except Exception as e:
@@ -544,7 +552,9 @@ def main():
                 print(f"⚠️  WARNING: Wrong model loaded in LM Studio!")
                 print(f"   Expected: {expected_model}")
                 print(f"   Loaded:   {loaded_model}")
-                print(f"   Please load the correct model in LM Studio for best results.")
+                print(f"   Attempting to use {expected_model} anyway...")
+                print(f"   (Note: LM Studio doesn't support automatic model switching)")
+                print(f"   If this fails, please manually load {expected_model} in LM Studio")
                 print()
 
         # Execute based on mode
