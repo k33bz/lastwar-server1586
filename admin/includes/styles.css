@@ -428,6 +428,21 @@ select:focus {
     color: white;
 }
 
+.role-ape {
+    background: #ffc107;
+    color: #212529;
+}
+
+.role-none {
+    background: #6c757d;
+    color: white;
+}
+
+.role-disabled {
+    background: #343a40;
+    color: white;
+}
+
 .ape-badge {
     background: #ffc107;
     color: #212529;

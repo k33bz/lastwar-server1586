@@ -22,6 +22,10 @@
 
 define('ADMIN_INIT', true);
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/audit_logger.php';
+
+// Get user email for audit logging
+$admin_email = 'cli_user';
 
 // CLI mode doesn't need JWT, web mode does
 if (php_sapi_name() !== 'cli') {
@@ -33,6 +37,8 @@ if (php_sapi_name() !== 'cli') {
         http_response_code(403);
         die(json_encode(['error' => 'Admin access required for migrations']));
     }
+
+    $admin_email = $user->sub;
 }
 
 class MigrationManager {
@@ -41,11 +47,13 @@ class MigrationManager {
     private $admin_dir;
     private $migrations_run = [];
     private $errors = [];
+    private $admin_email;
 
-    public function __construct() {
+    public function __construct($admin_email = 'system') {
         $this->version_file = __DIR__ . '/../version.json';
         $this->data_dir = __DIR__ . '/../data/';
         $this->admin_dir = __DIR__ . '/';
+        $this->admin_email = $admin_email;
     }
 
     /**
@@ -112,11 +120,24 @@ class MigrationManager {
         if ($comparison < 0) {
             $this->log("⚠️  WARNING: Code version is OLDER than installed version!");
             $this->log("    This might indicate a rollback. Proceed with caution.");
-            // Continue anyway - might need to revert schema changes
+
+            // Log rollback detection
+            log_audit_event('migration_rollback_detected', $this->admin_email, [
+                'from_version' => $current_version,
+                'to_version' => $installed_version,
+                'direction' => 'downgrade'
+            ]);
         }
 
         $this->log("🔄 Migration needed: {$installed_version} → {$current_version}");
         $this->log("");
+
+        // Log migration start
+        log_audit_event('migration_started', $this->admin_email, [
+            'from_version' => $installed_version,
+            'to_version' => $current_version,
+            'mode' => php_sapi_name() === 'cli' ? 'CLI' : 'Web'
+        ]);
 
         // Run migrations in order
         $this->runMigrations($installed_version, $current_version);
@@ -135,11 +156,29 @@ class MigrationManager {
             foreach ($this->errors as $error) {
                 $this->log("  - {$error}");
             }
+
+            // Log migration failure
+            log_audit_event('migration_failed', $this->admin_email, [
+                'from_version' => $installed_version,
+                'to_version' => $current_version,
+                'migrations_run' => $this->migrations_run,
+                'error_count' => count($this->errors),
+                'errors' => $this->errors
+            ]);
+
             return ['success' => false, 'migrations' => $this->migrations_run, 'errors' => $this->errors];
         }
 
         $this->log("");
         $this->log("✅ Migration completed successfully!");
+
+        // Log migration completion
+        log_audit_event('migration_completed', $this->admin_email, [
+            'from_version' => $installed_version,
+            'to_version' => $current_version,
+            'migrations_run' => $this->migrations_run,
+            'migration_count' => count($this->migrations_run)
+        ]);
 
         return ['success' => true, 'migrations' => $this->migrations_run];
     }
@@ -156,6 +195,7 @@ class MigrationManager {
             '3.1.0' => 'migrateToV3_1',    // Add alliance tags, R5 history
             '3.2.0' => 'migrateToV3_2',    // Add audit logging
             '3.3.0' => 'migrateToV3_3',    // Add backup/restore support
+            '3.4.0' => 'migrateToV3_4',    // Multi-role system (roles array)
             // Add future migrations here
         ];
 
@@ -167,13 +207,32 @@ class MigrationManager {
                 $this->log("🔧 Running migration: {$version}");
 
                 try {
+                    // Log individual migration start
+                    log_audit_event('migration_step_started', $this->admin_email, [
+                        'migration_version' => $version,
+                        'migration_name' => $method
+                    ]);
+
                     $this->$method();
                     $this->migrations_run[] = $version;
                     $this->log("   ✅ Completed: {$version}");
+
+                    // Log individual migration completion
+                    log_audit_event('migration_step_completed', $this->admin_email, [
+                        'migration_version' => $version,
+                        'migration_name' => $method
+                    ]);
                 } catch (Exception $e) {
                     $error = "Migration {$version} failed: " . $e->getMessage();
                     $this->errors[] = $error;
                     $this->log("   ❌ Failed: {$error}");
+
+                    // Log individual migration failure
+                    log_audit_event('migration_step_failed', $this->admin_email, [
+                        'migration_version' => $version,
+                        'migration_name' => $method,
+                        'error' => $e->getMessage()
+                    ]);
                 }
 
                 $this->log("");
@@ -311,6 +370,82 @@ class MigrationManager {
     }
 
     /**
+     * Migration: v3.4.0 - Multi-Role System
+     */
+    private function migrateToV3_4() {
+        $this->log("   - Migrating users to multi-role system...");
+
+        require_once $this->admin_dir . 'json_helpers.php';
+
+        $users_file = $this->admin_dir . 'users.json';
+        if (!file_exists($users_file)) {
+            throw new Exception("users.json not found");
+        }
+
+        // Read current users
+        $users_data = json_decode(file_get_contents($users_file), true);
+
+        if (!isset($users_data['users']) || !is_array($users_data['users'])) {
+            throw new Exception("Invalid users.json format");
+        }
+
+        $total_users = count($users_data['users']);
+        $migrated_count = 0;
+        $skipped_count = 0;
+
+        $this->log("   - Found {$total_users} user(s)");
+
+        // Create backup before migration
+        $this->backupFile($users_file);
+
+        foreach ($users_data['users'] as $index => &$user) {
+            $email = $user['email'] ?? 'unknown';
+
+            // Check if already migrated (has roles array)
+            if (isset($user['roles']) && is_array($user['roles'])) {
+                $skipped_count++;
+                continue;
+            }
+
+            // Check if has old format fields
+            if (!isset($user['role'])) {
+                $this->log("   ⚠️  {$email} - Missing role field, skipping");
+                continue;
+            }
+
+            // Convert old format to new format
+            $old_role = $user['role'];
+            $old_powereditor = $user['powereditor'] ?? false;
+
+            // Build roles array
+            $new_roles = [$old_role];
+            if ($old_powereditor === true) {
+                $new_roles[] = 'ape';
+            }
+
+            // Update user record
+            $user['roles'] = $new_roles;
+
+            // Remove old format fields
+            unset($user['role']);
+            unset($user['powereditor']);
+
+            $migrated_count++;
+        }
+        unset($user); // Break reference
+
+        // Save updated data
+        file_put_contents($users_file, json_encode($users_data, JSON_PRETTY_PRINT));
+
+        $this->log("   ✓ Migrated {$migrated_count} user(s) to multi-role format");
+        if ($skipped_count > 0) {
+            $this->log("   ℹ️  Skipped {$skipped_count} user(s) (already migrated)");
+        }
+        $this->log("   ✓ Users can now have multiple simultaneous roles");
+        $this->log("   ✓ APE role can be assigned independently");
+    }
+
+    /**
      * Backup a file before modification
      */
     private function backupFile($file_path) {
@@ -341,7 +476,7 @@ class MigrationManager {
 }
 
 // Run migration
-$manager = new MigrationManager();
+$manager = new MigrationManager($admin_email);
 
 // For web mode, buffer output to prevent header issues
 if (php_sapi_name() !== 'cli') {
