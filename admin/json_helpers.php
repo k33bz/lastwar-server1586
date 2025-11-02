@@ -5,9 +5,12 @@
  * Provides secure read/write operations for JSON files with proper
  * file locking to prevent race conditions during concurrent access
  *
- * @version 1.1.0
- * @date 2025-10-15
+ * @version 1.2.0
+ * @date 2025-10-31
  * @changelog
+ *   1.2.0 (2025-10-31) - Added add_user_multi_role() and update_user_multi_role()
+ *                       - Support for storing multiple roles as array (e.g., ['r5', 'ape'])
+ *                       - Replaces old single role + powereditor flag structure
  *   1.1.0 (2025-10-15) - Added powereditor parameter to add_user() and update_user()
  *                       - powereditor stored as boolean in users.json
  *   1.0.0 (2025-10-12) - Initial implementation with flock support
@@ -245,6 +248,81 @@ function update_user($email, $alliances, $role, $powereditor = false) {
         });
     } catch (Exception $e) {
         error_log("Error updating user: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Add user to users.json with multi-role support
+ *
+ * @param string $email User email
+ * @param array $alliances Alliance tags user can access
+ * @param array $roles Array of roles (e.g., ['r5', 'ape'])
+ * @return bool Success status
+ */
+function add_user_multi_role($email, $alliances, $roles) {
+    try {
+        return update_json_file(USERS_FILE, function(&$data) use ($email, $alliances, $roles) {
+            $email = strtolower(trim($email));
+
+            // Check if user already exists
+            foreach ($data['users'] as $user) {
+                if (strtolower($user['email']) === $email) {
+                    throw new Exception("User already exists: $email");
+                }
+            }
+
+            // Add new user with roles array
+            $data['users'][] = [
+                'email' => $email,
+                'alliances' => $alliances,
+                'roles' => $roles
+            ];
+
+            return true;
+        });
+    } catch (Exception $e) {
+        error_log("Error adding user (multi-role): " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Update user in users.json with multi-role support
+ *
+ * @param string $email User email
+ * @param array $alliances New alliance tags
+ * @param array $roles Array of roles (e.g., ['r5', 'ape'])
+ * @return bool Success status
+ */
+function update_user_multi_role($email, $alliances, $roles) {
+    try {
+        return update_json_file(USERS_FILE, function(&$data) use ($email, $alliances, $roles) {
+            $email = strtolower(trim($email));
+            $found = false;
+
+            foreach ($data['users'] as &$user) {
+                if (strtolower($user['email']) === $email) {
+                    $user['alliances'] = $alliances;
+                    $user['roles'] = $roles;
+
+                    // Remove old format fields if they exist
+                    unset($user['role']);
+                    unset($user['powereditor']);
+
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                throw new Exception("User not found: $email");
+            }
+
+            return true;
+        });
+    } catch (Exception $e) {
+        error_log("Error updating user (multi-role): " . $e->getMessage());
         return false;
     }
 }

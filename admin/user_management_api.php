@@ -38,12 +38,11 @@ try {
     switch ($action) {
         case 'add':
             $email = strtolower(trim($_POST['email'] ?? ''));
-            $role = $_POST['role'] ?? '';
-            $powereditor = ($_POST['powereditor'] ?? '0') === '1';
+            $roles_json = $_POST['roles'] ?? '';
             $alliances = $_POST['alliances'] ?? [];
 
-            if (empty($email) || empty($role)) {
-                throw new Exception('Email and role are required');
+            if (empty($email)) {
+                throw new Exception('Email is required');
             }
 
             // Basic email validation
@@ -51,19 +50,24 @@ try {
                 throw new Exception('Invalid email address');
             }
 
-            // Validate role
-            if (!in_array($role, ['admin', 'r5', 'r4', 'none', 'disabled'])) {
-                throw new Exception('Invalid role');
+            // Parse roles JSON
+            $roles = json_decode($roles_json, true);
+            if (!is_array($roles) || empty($roles)) {
+                throw new Exception('At least one role must be selected');
             }
 
-            // Validate alliances
-            if (empty($alliances)) {
-                throw new Exception('At least one alliance must be selected');
+            // Validate each role
+            $valid_roles = ['admin', 'r5', 'r4', 'ape', 'none', 'disabled'];
+            foreach ($roles as $role) {
+                if (!in_array($role, $valid_roles)) {
+                    throw new Exception("Invalid role: $role");
+                }
             }
 
-            // Admin, none, and disabled cannot have powereditor flag
-            if (in_array($role, ['admin', 'none', 'disabled'])) {
-                $powereditor = false;
+            // Validate alliances (allow empty for APE-only or disabled users)
+            $requires_alliance = !in_array('disabled', $roles) && !in_array('ape', $roles);
+            if ($requires_alliance && empty($alliances)) {
+                throw new Exception('At least one alliance must be selected for this role combination');
             }
 
             // Check if user already exists
@@ -72,17 +76,16 @@ try {
                 throw new Exception('User with this email already exists');
             }
 
-            // Add user
-            $success = add_user($email, $alliances, $role, $powereditor);
-            
+            // Add user with new roles format
+            $success = add_user_multi_role($email, $alliances, $roles);
+
             if ($success) {
                 log_audit_event('user_added', $user->sub, [
                     'target_email' => $email,
-                    'role' => $role,
-                    'powereditor' => $powereditor,
+                    'roles' => $roles,
                     'alliances' => $alliances
                 ]);
-                
+
                 echo json_encode(['success' => true, 'message' => 'User added successfully']);
             } else {
                 throw new Exception('Failed to add user');
@@ -91,22 +94,31 @@ try {
 
         case 'update':
             $email = strtolower(trim($_POST['email'] ?? ''));
-            $role = $_POST['role'] ?? '';
-            $powereditor = ($_POST['powereditor'] ?? '0') === '1';
+            $roles_json = $_POST['roles'] ?? '';
             $alliances = $_POST['alliances'] ?? [];
 
-            if (empty($email) || empty($role)) {
-                throw new Exception('Email and role are required');
+            if (empty($email)) {
+                throw new Exception('Email is required');
             }
 
-            // Validate role
-            if (!in_array($role, ['admin', 'r5', 'r4', 'none', 'disabled'])) {
-                throw new Exception('Invalid role');
+            // Parse roles JSON
+            $roles = json_decode($roles_json, true);
+            if (!is_array($roles) || empty($roles)) {
+                throw new Exception('At least one role must be selected');
             }
 
-            // Admin, none, and disabled cannot have powereditor flag
-            if (in_array($role, ['admin', 'none', 'disabled'])) {
-                $powereditor = false;
+            // Validate each role
+            $valid_roles = ['admin', 'r5', 'r4', 'ape', 'none', 'disabled'];
+            foreach ($roles as $role) {
+                if (!in_array($role, $valid_roles)) {
+                    throw new Exception("Invalid role: $role");
+                }
+            }
+
+            // Validate alliances (allow empty for APE-only or disabled users)
+            $requires_alliance = !in_array('disabled', $roles) && !in_array('ape', $roles);
+            if ($requires_alliance && empty($alliances)) {
+                throw new Exception('At least one alliance must be selected for this role combination');
             }
 
             // Get old user data to detect changes
@@ -118,17 +130,22 @@ try {
             // Detect changes
             $changes = [];
 
-            if ($old_user['role'] !== $role) {
-                $changes['role'] = [
-                    'old' => $old_user['role'],
-                    'new' => $role
-                ];
+            // Compare roles (convert old format if needed)
+            $old_roles = [];
+            if (isset($old_user['roles']) && is_array($old_user['roles'])) {
+                $old_roles = $old_user['roles'];
+            } else {
+                // Backward compatibility
+                if (isset($old_user['role'])) $old_roles[] = $old_user['role'];
+                if (isset($old_user['powereditor']) && $old_user['powereditor']) $old_roles[] = 'ape';
             }
 
-            if (($old_user['powereditor'] ?? false) !== $powereditor) {
-                $changes['powereditor'] = [
-                    'old' => $old_user['powereditor'] ?? false,
-                    'new' => $powereditor
+            sort($old_roles);
+            sort($roles);
+            if ($old_roles !== $roles) {
+                $changes['roles'] = [
+                    'old' => $old_roles,
+                    'new' => $roles
                 ];
             }
 
@@ -144,13 +161,12 @@ try {
             }
 
             // Update user
-            $success = update_user($email, $alliances, $role, $powereditor);
+            $success = update_user_multi_role($email, $alliances, $roles);
 
             if ($success) {
                 log_audit_event('user_updated', $user->sub, [
                     'target_email' => $email,
-                    'role' => $role,
-                    'powereditor' => $powereditor,
+                    'roles' => $roles,
                     'alliances' => $alliances,
                     'changes_detected' => !empty($changes)
                 ]);

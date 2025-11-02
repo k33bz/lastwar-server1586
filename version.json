@@ -1,5 +1,5 @@
 {
-  "version": "3.3.2",
+  "version": "3.4.0",
   "releaseDate": "2025-10-31",
   "components": {
     "frontend": {
@@ -9,9 +9,10 @@
       "css": "1.5.0"
     },
     "admin": {
-      "version": "3.1.0",
-      "php": "3.1.0",
-      "migration_system": "1.0.0"
+      "version": "3.4.0",
+      "php": "3.4.0",
+      "migration_system": "1.0.0",
+      "user_management": "2.0.0"
     },
     "scripts": {
       "rotation": "2.2.0",
@@ -19,6 +20,26 @@
     }
   },
   "features": {
+    "multi_role_system": {
+      "version": "1.0.0",
+      "date": "2025-10-31",
+      "description": "Multiple simultaneous roles per user with APE as independent role",
+      "database_schema": "v3",
+      "migration": "3.4.0",
+      "changes": [
+        "Users can have multiple roles: admin, r5, r4, ape, none, disabled",
+        "APE role can be assigned independently without R4/R5",
+        "No alliance requirement for APE-only users",
+        "Automatic migration converts role+powereditor to roles array",
+        "Full backward compatibility maintained"
+      ],
+      "files": [
+        "admin/user_management.php",
+        "admin/user_management_api.php",
+        "admin/json_helpers.php",
+        "admin/jwt.php"
+      ]
+    },
     "migration_system": {
       "version": "1.0.0",
       "date": "2025-10-19",

@@ -31,6 +31,170 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+## [3.4.1] - 2025-11-02
+
+**Commit:** 00917f0 - docs(mcp): Add Claude Desktop MCP setup and LM Studio recent changes review
+
+### Added
+- New documentation for setting up MCP servers with Claude Desktop, including configuration steps and usage examples
+- Script for reviewing recent LM Studio changes
+
+### Changed
+- Updated documentation to reflect current MCP server capabilities and setup process for Claude Desktop
+- Enhanced file system and Git access capabilities in the documentation
+
+### Fixed
+- Clarified GitHub token setup instructions for MCP server configuration
+- Improved documentation on how to verify MCP server functionality with Claude Desktop
+
+---
+
+## [3.4.1] - 2025-10-31
+
+**Commit:** 8849c70 - docs(git-hooks): Add comprehensive git hooks with LM Studio integration
+
+### Added
+- Introduced comprehensive git hooks documentation (`docs/GIT_HOOKS.md`) detailing pre-commit and commit-msg hooks
+- Added script for testing git hooks (`scripts/test-git-hooks.sh`)
+- Created test configuration file (`test.json`) to support hook testing
+
+### Changed
+- Updated `docs/GIT_HOOKS.md` to include detailed integration instructions with LM Studio for security scanning and message quality review
+- Enhanced pre-commit hook functionality to include LM Studio security scan capability
+- Improved commit-msg hook to provide LM Studio-based message quality assessment
+
+### Fixed
+- Resolved issues related to protected file detection in pre-commit hooks
+- Fixed sensitive data detection in pre-commit hooks
+- Addressed PHP syntax validation in pre-commit hooks
+- Corrected TODO/FIXME detection and debug statement removal in pre-commit hooks
+
+---
+
+## [3.4.1] - 2025-10-31
+
+**Commit:** 03b1e9d - fix: Complete migration audit logging and add missing role badge styles
+
+### Fixed
+- Enhanced migration audit logging to include rollback detection and migration start/failure events
+- Added missing role badge styles for `ape`, `none`, and `disabled` roles in admin interface
+
+---
+
+## [3.3.3] - 2025-10-31
+
+**Commit:** 5016650 - feat: Attempt to use correct model even if wrong one is loaded
+
+### Changed
+- Updated LM Studio model error handling to attempt using the correct model even if the wrong one is loaded, improving user experience by reducing manual intervention required.
+
+---
+
+## [3.3.3] - 2025-10-31
+
+**Commit:** 0b772c8 - feat: Add model verification to LM Studio documentation generator
+
+### Added
+- Added model verification functionality to LM Studio documentation generator to ensure correct model is loaded
+
+### Changed
+- Updated documentation generator to check for model consistency when using LM Studio backend
+
+### Fixed
+- Resolved potential mismatch between configured and loaded model in LM Studio environment
+
+---
+
+## [3.3.3] - 2025-10-31
+
+**Commit:** fe1181d - feat: Add CloudTrail-style audit logging for all email notifications
+
+### Added
+- Added CloudTrail-style audit logging for email notifications related to role changes and magic link emails
+
+### Changed
+- Enhanced email notification logic in `user_management_api.php` to log successful and failed email events to audit log
+- Updated error handling to include detailed audit logging for failed email attempts
+
+### Fixed
+- Improved error logging for failed email notifications to include reason for failure (e.g., return value or exception message)
+
+---
+
+## [3.3.3] - 2025-10-31
+
+**Commit:** 98b47f9 - fix: Accept both csrf_token and _csrf_token in POST validation
+
+### Fixed
+- Updated CSRF token validation to accept both `csrf_token` and `_csrf_token` parameters in POST requests, improving compatibility with different client implementations
+
+---
+
+## [3.3.3] - 2025-10-31
+
+**Commit:** 9f0ccd6 - fix: Include csrf.php in header to enable CSRF meta tag generation
+
+### Fixed
+- Added CSRF protection by including csrf.php in header to enable CSRF meta tag generation
+
+---
+
+## [3.3.3] - 2025-10-31
+
+**Commit:** d8cee3f - feat: Add 'none' and 'disabled' user roles (Issue #54)
+
+### Added
+- Added 'none' and 'disabled' user roles with corresponding UI elements and permission displays
+- New role cards for Read-Only User and Disabled User with visual indicators and permission descriptions
+
+### Changed
+- Updated user management interface to include new role options and corresponding styling for 'none' and 'disabled' roles
+- Enhanced test_roles.php to handle new role cases with appropriate session variables and redirect logic
+
+### Fixed
+- Implemented proper handling of 'none' and 'disabled' roles in user management system
+- Added visual indicators (👁️ and 🚫) and permission descriptions for new user roles
+- Updated role display logic to correctly show current role status for 'none' and 'disabled' users
+
+---
+
+## [3.3.3] - 2025-10-31
+
+**Commit:** 6003a91 - fix: Add CSRF tokens to all user management API calls (Issue #53)
+
+### Fixed
+- Added CSRF tokens to all user management API calls to prevent cross-site request forgery vulnerabilities
+- Implemented CSRF token validation in user management functions including saveUser, deleteUser, addUser, generateMagicLink, and emailMagicLinkFromModal
+- Enhanced security by ensuring all user management API requests include proper CSRF token verification
+
+---
+
+## [3.3.3] - 2025-10-31
+
+**Commit:** b01a804 - docs: Auto-update CHANGELOG.md for v3.3.3
+
+### Fixed
+- Added null coalescing operators to prevent count() errors in security_monitor.php when handling empty arrays for security log events, blacklists, and rate limits data structures.
+- Resolved issue #52 regarding deployment overwriting production .env with rotated JWT keys
+- Implemented exclusion of admin/.env from deployment (.ftpignore)
+- Excluded production state files (secret_keys.json, blacklisted_tokens.json, users.json) from deployment
+- Removed .env generation from GitHub Actions workflow
+- Created production .env management guide (docs/PRODUCTION-ENV-SETUP.md)
+- Eliminated mass user logouts caused by key rotation overwrites during deployment
+
+---
+
 ## [3.3.3] - 2025-10-31
 
 **Commit:** bf7bf3d - fix: Add null coalescing to prevent count() errors in security_monitor.php

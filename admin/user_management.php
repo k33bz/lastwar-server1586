@@ -242,6 +242,8 @@ function isUserTokenActive($email) {
             font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
+            margin-right: 0.25rem;
+            margin-bottom: 0.25rem;
         }
         
         .role-admin {
@@ -419,16 +421,52 @@ function isUserTokenActive($email) {
             <div class="stat-label">Total Users</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number"><?php echo count(array_filter($users, function($u) { return $u['role'] === 'admin'; })); ?></div>
+            <div class="stat-number"><?php
+                echo count(array_filter($users, function($u) {
+                    // Support both old and new formats
+                    if (isset($u['roles']) && is_array($u['roles'])) {
+                        return in_array('admin', $u['roles']);
+                    }
+                    return isset($u['role']) && $u['role'] === 'admin';
+                }));
+            ?></div>
             <div class="stat-label">Admins</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number"><?php echo count(array_filter($users, function($u) { return $u['role'] === 'r5'; })); ?></div>
+            <div class="stat-number"><?php
+                echo count(array_filter($users, function($u) {
+                    // Support both old and new formats
+                    if (isset($u['roles']) && is_array($u['roles'])) {
+                        return in_array('r5', $u['roles']);
+                    }
+                    return isset($u['role']) && $u['role'] === 'r5';
+                }));
+            ?></div>
             <div class="stat-label">R5 Leaders</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number"><?php echo count(array_filter($users, function($u) { return $u['role'] === 'r4'; })); ?></div>
+            <div class="stat-number"><?php
+                echo count(array_filter($users, function($u) {
+                    // Support both old and new formats
+                    if (isset($u['roles']) && is_array($u['roles'])) {
+                        return in_array('r4', $u['roles']);
+                    }
+                    return isset($u['role']) && $u['role'] === 'r4';
+                }));
+            ?></div>
             <div class="stat-label">R4 Officers</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number"><?php
+                echo count(array_filter($users, function($u) {
+                    // Support both old and new formats
+                    if (isset($u['roles']) && is_array($u['roles'])) {
+                        return in_array('ape', $u['roles']);
+                    }
+                    return isset($u['powereditor']) && $u['powereditor'];
+                }));
+            ?></div>
+            <div class="stat-label">Power Editors (APE)</div>
         </div>
     </div>
 
@@ -495,12 +533,25 @@ function isUserTokenActive($email) {
                             <?php echo emailDisplay($user['email'], true); ?>
                         </td>
                         <td>
-                            <span class="role-badge role-<?php echo htmlspecialchars($user['role']); ?>">
-                                <?php echo htmlspecialchars(strtoupper($user['role'])); ?>
-                                <?php if (($user['role'] === 'r4' || $user['role'] === 'r5') && isset($user['powereditor']) && $user['powereditor']): ?>
-                                    <span class="ape-badge">+APE</span>
-                                <?php endif; ?>
-                            </span>
+                            <?php
+                            // Support both old format (role + powereditor) and new format (roles array)
+                            if (isset($user['roles']) && is_array($user['roles'])) {
+                                // New multi-role format
+                                foreach ($user['roles'] as $role) {
+                                    echo '<span class="role-badge role-' . htmlspecialchars($role) . '">';
+                                    echo htmlspecialchars(strtoupper($role));
+                                    echo '</span> ';
+                                }
+                            } else {
+                                // Old format (backward compatibility)
+                                echo '<span class="role-badge role-' . htmlspecialchars($user['role']) . '">';
+                                echo htmlspecialchars(strtoupper($user['role']));
+                                if (($user['role'] === 'r4' || $user['role'] === 'r5') && isset($user['powereditor']) && $user['powereditor']) {
+                                    echo '<span class="ape-badge">+APE</span>';
+                                }
+                                echo '</span>';
+                            }
+                            ?>
                         </td>
                         <td>
                             <div class="alliance-tags">
@@ -551,21 +602,33 @@ function isUserTokenActive($email) {
                 </div>
                 
                 <div class="form-group">
-                    <label>Role:</label>
-                    <select id="editRole" name="role" onchange="updatePowerEditorVisibility()">
-                        <option value="none">None (Read-only access)</option>
-                        <option value="r4">R4 (Can edit all alliance data)</option>
-                        <option value="r5">R5 (Can edit + sign rules)</option>
-                        <option value="admin">Admin (Full access)</option>
-                        <option value="disabled">Disabled (Cannot log in)</option>
-                    </select>
-                </div>
-                
-                <div class="form-group" id="powerEditorGroup">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="editPowerEditor" name="powereditor" value="1">
-                        <strong>Power Editor</strong> - Can edit all alliance power values
-                    </label>
+                    <label>Roles (select all that apply):</label>
+                    <div class="role-checkboxes">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="roles[]" value="admin" id="editRoleAdmin">
+                            <strong>Admin</strong> - Full system access
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="roles[]" value="r5" id="editRoleR5">
+                            <strong>R5</strong> - Alliance leader (can edit + sign rules)
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="roles[]" value="r4" id="editRoleR4">
+                            <strong>R4</strong> - Alliance officer (can edit alliance data)
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="roles[]" value="ape" id="editRoleAPE">
+                            <strong>APE</strong> - Alliance Power Editor (can edit all power values)
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="roles[]" value="none" id="editRoleNone">
+                            <strong>None</strong> - Read-only access
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="roles[]" value="disabled" id="editRoleDisabled">
+                            <strong>Disabled</strong> - Account suspended (cannot log in)
+                        </label>
+                    </div>
                 </div>
                 
                 <div class="form-group">
@@ -611,21 +674,33 @@ function isUserTokenActive($email) {
                 </div>
                 
                 <div class="form-group">
-                    <label>Role:</label>
-                    <select id="addRole" name="role" onchange="updateAddPowerEditorVisibility()">
-                        <option value="none">None (Read-only access)</option>
-                        <option value="r4">R4 (Can edit all alliance data)</option>
-                        <option value="r5">R5 (Can edit + sign rules)</option>
-                        <option value="admin">Admin (Full access)</option>
-                        <option value="disabled">Disabled (Cannot log in)</option>
-                    </select>
-                </div>
-                
-                <div class="form-group" id="addPowerEditorGroup">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="addPowerEditor" name="powereditor" value="1">
-                        <strong>Power Editor</strong> - Can edit all alliance power values
-                    </label>
+                    <label>Roles (select all that apply):</label>
+                    <div class="role-checkboxes">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="add_roles[]" value="admin" id="addRoleAdmin">
+                            <strong>Admin</strong> - Full system access
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="add_roles[]" value="r5" id="addRoleR5">
+                            <strong>R5</strong> - Alliance leader (can edit + sign rules)
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="add_roles[]" value="r4" id="addRoleR4">
+                            <strong>R4</strong> - Alliance officer (can edit alliance data)
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="add_roles[]" value="ape" id="addRoleAPE">
+                            <strong>APE</strong> - Alliance Power Editor (can edit all power values)
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="add_roles[]" value="none" id="addRoleNone">
+                            <strong>None</strong> - Read-only access
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="add_roles[]" value="disabled" id="addRoleDisabled">
+                            <strong>Disabled</strong> - Account suspended (cannot log in)
+                        </label>
+                    </div>
                 </div>
                 
                 <div class="form-group">
@@ -837,25 +912,43 @@ const usersData = <?php echo json_encode($users); ?>;
 function openEditModal(email) {
     const user = usersData.find(u => u.email === email);
     if (!user) return;
-    
+
     // Populate form fields
     document.getElementById('editEmail').value = user.email;
     document.getElementById('displayEmail').value = user.email;
-    document.getElementById('editRole').value = user.role;
-    document.getElementById('editPowerEditor').checked = user.powereditor || false;
-    
+
+    // Convert old single-role format to array if needed
+    let userRoles = [];
+    if (Array.isArray(user.roles)) {
+        userRoles = user.roles;
+    } else {
+        // Backward compatibility: convert old format
+        if (user.role) userRoles.push(user.role);
+        if (user.powereditor) userRoles.push('ape');
+    }
+
+    // Uncheck all role checkboxes first
+    document.querySelectorAll('input[name="roles[]"]').forEach(cb => {
+        cb.checked = false;
+    });
+
+    // Check the appropriate role checkboxes
+    userRoles.forEach(role => {
+        const checkbox = document.querySelector(`input[name="roles[]"][value="${role}"]`);
+        if (checkbox) checkbox.checked = true;
+    });
+
     // Handle alliances
     const hasAllAlliances = user.alliances.includes('*');
     document.getElementById('editAllianceAll').checked = hasAllAlliances;
-    
+
     // Set individual alliance checkboxes
     const allianceCheckboxes = document.querySelectorAll('input[name="alliances[]"]');
     allianceCheckboxes.forEach(cb => {
         cb.checked = user.alliances.includes(cb.value);
         cb.disabled = hasAllAlliances;
     });
-    
-    updatePowerEditorVisibility();
+
     document.getElementById('editModal').classList.add('show');
 }
 
@@ -890,13 +983,16 @@ function updatePowerEditorVisibility() {
 function saveUser() {
     const formData = new FormData();
     const email = document.getElementById('editEmail').value;
-    const role = document.getElementById('editRole').value;
-    const powerEditor = document.getElementById('editPowerEditor').checked;
-    
+
+    // Collect all checked roles
+    const roles = [];
+    document.querySelectorAll('input[name="roles[]"]:checked').forEach(checkbox => {
+        roles.push(checkbox.value);
+    });
+
     formData.append('action', 'update');
     formData.append('email', email);
-    formData.append('role', role);
-    formData.append('powereditor', powerEditor ? '1' : '0');
+    formData.append('roles', JSON.stringify(roles));
     formData.append('csrf_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
 
     // Get selected alliances
@@ -1008,26 +1104,34 @@ function updateAddPowerEditorVisibility() {
 
 function addUser() {
     const email = document.getElementById('addEmail').value.trim();
-    const role = document.getElementById('addRole').value;
-    const powerEditor = document.getElementById('addPowerEditor').checked;
-    
+
     if (!email) {
         alert('Please enter an email address');
         return;
     }
-    
+
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         alert('Please enter a valid email address');
         return;
     }
-    
+
+    // Collect all checked roles
+    const roles = [];
+    document.querySelectorAll('input[name="add_roles[]"]:checked').forEach(checkbox => {
+        roles.push(checkbox.value);
+    });
+
+    if (roles.length === 0) {
+        alert('Please select at least one role');
+        return;
+    }
+
     const formData = new FormData();
     formData.append('action', 'add');
     formData.append('email', email);
-    formData.append('role', role);
-    formData.append('powereditor', powerEditor ? '1' : '0');
+    formData.append('roles', JSON.stringify(roles));
     formData.append('csrf_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
 
     // Get selected alliances
@@ -1267,36 +1371,33 @@ function filterUsers() {
         const allianceCell = row.cells[2];
         const statusCell = row.cells[3];
         
-        // Extract role from badge
-        const roleBadge = roleCell.querySelector('.role-badge');
-        const role = roleBadge ? roleBadge.textContent.toLowerCase().replace('+ape', '').trim() : '';
-        
+        // Extract roles from badges (support multiple role badges)
+        const roleBadges = roleCell.querySelectorAll('.role-badge');
+        const roles = Array.from(roleBadges).map(badge => {
+            // Remove +APE suffix for backward compatibility
+            return badge.textContent.toLowerCase().replace('+ape', '').trim();
+        });
+
         // Extract status
         const statusDot = statusCell.querySelector('.status-dot');
         const status = statusDot ? (statusDot.classList.contains('active') ? 'active' : 'inactive') : '';
-        
+
         // Extract alliances
         const allianceTags = allianceCell.querySelectorAll('.alliance-tag');
         const alliances = Array.from(allianceTags).map(tag => tag.textContent.trim());
         const hasAllAlliances = alliances.includes('ALL');
-        
+
         // Apply filters
         let show = true;
-        
+
         // Search filter
         if (searchTerm && !email.includes(searchTerm)) {
             show = false;
         }
-        
-        // Role filter
+
+        // Role filter - check if user has ANY matching role
         if (roleFilter) {
-            if (roleFilter === 'ape') {
-                // Check if user has APE badge
-                const apeBadge = roleCell.querySelector('.ape-badge');
-                if (!apeBadge) {
-                    show = false;
-                }
-            } else if (role !== roleFilter) {
+            if (!roles.includes(roleFilter)) {
                 show = false;
             }
         }
@@ -1407,9 +1508,11 @@ function getCellValue(row, columnIndex) {
     switch (columnIndex) {
         case 0: // Email
             return cell.textContent.trim().toLowerCase();
-        case 1: // Role
-            const roleBadge = cell.querySelector('.role-badge');
-            return roleBadge ? roleBadge.textContent.toLowerCase().replace('+ape', '').trim() : '';
+        case 1: // Role - support multiple role badges
+            const roleBadges = cell.querySelectorAll('.role-badge');
+            return Array.from(roleBadges).map(badge =>
+                badge.textContent.toLowerCase().replace('+ape', '').trim()
+            ).join(', ');
         case 2: // Alliances
             const allianceTags = cell.querySelectorAll('.alliance-tag');
             return Array.from(allianceTags).map(tag => tag.textContent.trim()).join(', ');

@@ -12,9 +12,15 @@
  *
  * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
  *
- * @version 2.1.0
- * @date 2025-10-15
+ * @version 2.2.0
+ * @date 2025-10-31
  * @changelog
+ *   2.2.0 (2025-10-31) - Added multi-role system support (Database schema v3)
+ *                       - Added has_role(), get_user_roles(), get_primary_role() helpers
+ *                       - Updated create_magic_link_token() to support roles array
+ *                       - Maintains backward compatibility with old role + powereditor format
+ *                       - JWT tokens now include 'roles' array for new users
+ *                       - Migration handled by migrate.php v3.4.0
  *   2.1.0 (2025-10-15) - Added JWT key rotation support
  *                       - Enhanced decode_jwt() with rotation fallback
  *                       - Added conditional key rotation loading
@@ -223,6 +229,75 @@ function can_delete_alliances($token) {
 }
 
 /**
+ * Check if user has a specific role (supports multi-role)
+ *
+ * @param object $token Decoded JWT token
+ * @param string $role Role to check for ('admin', 'r5', 'r4', 'ape', etc.)
+ * @return bool True if user has the role
+ */
+function has_role($token, $role) {
+    // Check new multi-role format first
+    if (isset($token->roles) && is_array($token->roles)) {
+        return in_array($role, $token->roles);
+    }
+
+    // Backward compatibility: check old format
+    if ($token->aud === $role) {
+        return true;
+    }
+
+    // Check old powereditor flag for APE role
+    if ($role === 'ape' && isset($token->powereditor) && $token->powereditor) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Get all roles for a user (supports multi-role)
+ *
+ * @param object $token Decoded JWT token
+ * @return array Array of roles
+ */
+function get_user_roles($token) {
+    // Check new multi-role format first
+    if (isset($token->roles) && is_array($token->roles)) {
+        return $token->roles;
+    }
+
+    // Backward compatibility: convert old format
+    $roles = [];
+    if (isset($token->aud)) {
+        $roles[] = $token->aud;
+    }
+    if (isset($token->powereditor) && $token->powereditor) {
+        $roles[] = 'ape';
+    }
+
+    return $roles;
+}
+
+/**
+ * Get primary role for backward compatibility
+ *
+ * @param array $roles Array of roles
+ * @return string Primary role (for aud claim)
+ */
+function get_primary_role($roles) {
+    // Priority order: admin > r5 > r4 > ape > none > disabled
+    $priority = ['admin', 'r5', 'r4', 'ape', 'none', 'disabled'];
+
+    foreach ($priority as $role) {
+        if (in_array($role, $roles)) {
+            return $role;
+        }
+    }
+
+    return $roles[0] ?? 'none';
+}
+
+/**
  * Create magic link token
  *
  * @param string $email User email
@@ -230,14 +305,28 @@ function can_delete_alliances($token) {
  * @return string Magic link JWT token
  */
 function create_magic_link_token($email, $user) {
-    $payload = [
-        'sub' => $email,
-        'aud' => $user['role'],
-        'alliances' => $user['alliances'],
-        'powereditor' => $user['powereditor'] ?? false,
-        'jti' => bin2hex(random_bytes(16)),
-        'magic' => true
-    ];
+    // Support both old format (role + powereditor) and new format (roles array)
+    if (isset($user['roles']) && is_array($user['roles'])) {
+        // New multi-role format
+        $payload = [
+            'sub' => $email,
+            'aud' => get_primary_role($user['roles']), // Backward compatibility
+            'roles' => $user['roles'],
+            'alliances' => $user['alliances'],
+            'jti' => bin2hex(random_bytes(16)),
+            'magic' => true
+        ];
+    } else {
+        // Old format (backward compatibility)
+        $payload = [
+            'sub' => $email,
+            'aud' => $user['role'],
+            'alliances' => $user['alliances'],
+            'powereditor' => $user['powereditor'] ?? false,
+            'jti' => bin2hex(random_bytes(16)),
+            'magic' => true
+        ];
+    }
 
     return encode_jwt($payload, MAGIC_LINK_EXPIRY);
 }
