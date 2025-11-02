@@ -60,7 +60,6 @@ Server1586-clean/
 ├── data/                   # Alliance data and rules
 ├── admin/                  # Admin panel (PHP)
 ├── scripts/                # Automation scripts
-├── ocr/                    # OCR training for screenshots
 └── .github/workflows/      # CI/CD pipelines
 ```
 
@@ -207,17 +206,8 @@ data/
 scripts/
 ├── generate-rotation-schedule.js   # Initial schedule generation (Node.js)
 ├── update-rotation-schedule.py     # Smart schedule updater (Python)
-├── deploy-ftp-ci.py                # FTP deployment script
-└── screenshot_processor.py         # OCR screenshot processing
+└── deploy-ftp-ci.py                # FTP deployment script
 ```
-
-### OCR & Training
-- **OCR README:** [ocr/README.md](ocr/README.md)
-- **Training Phases:** [ocr/OCR_TRAINING_PHASES.md](ocr/OCR_TRAINING_PHASES.md)
-- **Phase 1 Summary:** [ocr/PHASE1_SUMMARY.md](ocr/PHASE1_SUMMARY.md)
-- **Training Setup:** [ocr/TRAINING_SETUP.md](ocr/TRAINING_SETUP.md)
-- **Training Data:** [ocr/training_data/README.md](ocr/training_data/README.md)
-- **Tesseract Training:** [tesseract_training/TRAINING_INSTRUCTIONS.md](tesseract_training/TRAINING_INSTRUCTIONS.md)
 
 ---
 

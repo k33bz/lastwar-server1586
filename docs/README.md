@@ -120,7 +120,6 @@ Script documentation in **[docs/scripts/](scripts/)** and **[../scripts/README.m
 | Document | Description |
 |----------|-------------|
 | **[scripts/README.md](../scripts/README.md)** | Scripts overview |
-| **[scripts/SCREENSHOT-PROCESSING-README.md](scripts/SCREENSHOT-PROCESSING-README.md)** | OCR screenshot processing |
 
 ---
 

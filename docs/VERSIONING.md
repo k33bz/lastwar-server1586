@@ -27,28 +27,56 @@ The Server 1586 project now uses a **centralized versioning system** with a sing
 
 ```json
 {
-  "version": "3.0.0",
-  "releaseDate": "2025-10-16",
+  "version": "3.4.0",
+  "releaseDate": "2025-10-31",
   "components": {
     "frontend": {
-      "version": "3.0.0",
-      "html": "1.3.2",
-      "js": "2.0.0",
-      "css": "1.3.2"
+      "version": "3.1.0",
+      "html": "1.4.0",
+      "js": "2.0.1",
+      "css": "1.5.0"
     },
     "admin": {
-      "version": "3.0.0",
-      "php": "3.0.0"
+      "version": "3.4.0",
+      "php": "3.4.0",
+      "migration_system": "1.0.0",
+      "user_management": "2.0.0"
     },
     "scripts": {
-      "rotation": "2.2.0",
-      "ocr": "3.0.0"
+      "rotation": "2.2.0"
+    }
+  },
+  "features": {
+    "multi_role_system": {
+      "version": "1.0.0",
+      "date": "2025-10-31",
+      "description": "Multiple simultaneous roles per user"
+    },
+    "migration_system": {
+      "version": "1.0.0",
+      "date": "2025-10-19",
+      "description": "Automatic version migration and schema upgrades"
+    },
+    "public_api": {
+      "version": "1.0.0",
+      "date": "2025-10-29",
+      "description": "Read-only REST API with CORS support"
     }
   },
   "changelog": "docs/CHANGELOG.md",
-  "lastUpdated": "2025-10-19"
+  "migration_docs": "admin/MIGRATION_SYSTEM.md",
+  "lastUpdated": "2025-10-31"
 }
 ```
+
+**Structure Overview:**
+- **version**: Global project version (semantic versioning)
+- **releaseDate**: Date of current release
+- **components**: Individual component versions (frontend, admin, scripts)
+- **features**: Feature-specific versions with dates and descriptions
+- **changelog**: Path to main changelog file
+- **migration_docs**: Path to migration documentation
+- **lastUpdated**: Last modification date
 
 ### How It Works
 
@@ -179,7 +207,6 @@ The `version.json` file tracks versions for individual components:
 
 ### Scripts
 - **Rotation:** Changes to rotation schedule script
-- **OCR:** Changes to screenshot processing
 
 ### When to Update Component Versions
 
@@ -198,6 +225,123 @@ The `version.json` file tracks versions for individual components:
     }
   }
 }
+```
+
+---
+
+## Feature Versioning
+
+**As of v3.4.0**, `version.json` includes a `features` section to track major features independently of component versions. This provides granular version history for significant functionality.
+
+### Feature Structure
+
+Each feature entry includes:
+- **version**: Feature version (semantic versioning)
+- **date**: Implementation date
+- **description**: Brief feature description
+- **Additional metadata**: Files, changes, database schema, etc.
+
+**Example:**
+```json
+{
+  "features": {
+    "multi_role_system": {
+      "version": "1.0.0",
+      "date": "2025-10-31",
+      "description": "Multiple simultaneous roles per user with APE as independent role",
+      "database_schema": "v3",
+      "migration": "3.4.0",
+      "changes": [
+        "Users can have multiple roles: admin, r5, r4, ape, none, disabled",
+        "APE role can be assigned independently without R4/R5",
+        "No alliance requirement for APE-only users"
+      ],
+      "files": [
+        "admin/user_management.php",
+        "admin/user_management_api.php"
+      ]
+    }
+  }
+}
+```
+
+### When to Add Feature Entries
+
+Add feature entries for:
+- ✅ Major new functionality (migration system, API, authentication)
+- ✅ Breaking changes requiring migration
+- ✅ Features requiring documentation
+- ✅ Features with database schema changes
+- ❌ Minor bug fixes or tweaks (use component versioning only)
+
+---
+
+## Changelog Synchronization
+
+The changelog is now **fully synchronized** with `version.json`, tracking both global versions and component/feature versions.
+
+### Synchronization Model
+
+**1. Global Version Releases**
+```markdown
+## [3.4.0] - 2025-10-31
+
+### Added
+- Multi-role system (v1.0.0)
+- User management enhancements
+
+### Changed
+- Database schema upgraded to v3
+```
+
+**2. Component Version Changes**
+```markdown
+### Component Updates
+- **Frontend:** v3.1.0
+  - HTML: v1.4.0 (navigation improvements)
+  - JS: v2.0.1 (bug fixes)
+  - CSS: v1.5.0 (responsive design)
+- **Admin:** v3.4.0
+  - PHP: v3.4.0 (multi-role system)
+  - Migration System: v1.0.0 (initial release)
+```
+
+**3. Feature Version Entries**
+```markdown
+### Features
+
+#### Multi-Role System (v1.0.0)
+**Implemented:** 2025-10-31
+
+- Users can have multiple simultaneous roles
+- APE role can be assigned independently
+- Automatic migration from v2 schema
+```
+
+### Keeping Versions in Sync
+
+**Process:**
+1. Update `version.json` with new version numbers
+2. Update `docs/CHANGELOG.md` with matching version entry
+3. Include component versions in changelog if updated
+4. Document features with their specific versions
+5. Commit both files together
+
+**Example commit:**
+```bash
+git add version.json docs/CHANGELOG.md
+git commit -m "Release v3.4.0: Multi-role system
+
+- Added multi-role system (v1.0.0)
+- Updated admin panel (v3.4.0)
+- Database schema v3 with automatic migration
+
+Component versions:
+- admin.php: 3.4.0
+- user_management: 2.0.0
+- migration_system: 1.0.0
+
+See docs/CHANGELOG.md for full details"
 ```
 
 ---

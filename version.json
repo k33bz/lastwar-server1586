@@ -15,8 +15,7 @@
       "user_management": "2.0.0"
     },
     "scripts": {
-      "rotation": "2.2.0",
-      "ocr": "3.0.0"
+      "rotation": "2.2.0"
     }
   },
   "features": {

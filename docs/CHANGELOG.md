@@ -819,17 +819,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.3.2] - 2025-10-06
+## [1.3.2] - 2025-10-06 [DEPRECATED]
 
-### Added
-- **Screenshot Processing System (v3.0.0)** - Automated OCR for alliance screenshots
-- **Tesseract Training** - Custom training data for better OCR accuracy
-- **Batch Processing** - Process multiple screenshots automatically
-- **Validation System** - Verify OCR results against expected formats
-
-### Fixed
-- **Power Number Recognition** - Improved accuracy for large numbers with K/M/B suffixes
-- **Alliance Tag Detection** - Better handling of special characters
+**Note:** OCR/Tesseract screenshot processing system has been removed from the project (October 2025). This version entry is retained for historical reference only.
 
 ---
 
@@ -924,29 +916,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ]
 }
 ```
-
----
-
-### Screenshot Processing System (v3.0.0)
-
-**Implemented:** 2025-10-06
-
-**Features:**
-- OCR-based screenshot processing
-- Automatic alliance data extraction
-- Tesseract custom training for improved accuracy
-- Batch processing capability
-- Validation and error reporting
-
-**Components:**
-- `ocr/process-screenshots-v3.py` - Main processor
-- `ocr/training_data/` - Custom training datasets
-- `tesseract_training/` - Tesseract model training
-
-**Accuracy:**
-- Alliance tags: ~95%
-- Power numbers: ~90%
-- Overall: ~92% with validation
 
 ---
 
