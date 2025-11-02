@@ -44,6 +44,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+## [3.4.1] - 2025-11-02
+
+**Commit:** 71fbd70 - docs: Final CHANGELOG update for post-commit hook entries
+
+### Added
+- Multi-role system implementation allowing users to have multiple roles simultaneously
+- Independent APE role support, enabling APE access without requiring R4 or R5 roles
+- Automatic migration system for seamless version upgrades
+
+### Changed
+- Updated user management interface to support multi-role selection via checkboxes
+- Modified JWT and JSON helper functions to handle multi-role data structures
+- Enhanced user management API endpoints to accommodate role arrays instead of single roles
+
+### Fixed
+- Resolved issues with audit logging for new multi-role format
+- Fixed alliance requirement handling in user management API
+- Updated display logic to show multiple role badges and support multi-role filters
+
+---
+
 ## [3.4.1] - 2025-11-02
 
 **Commit:** 0a5725b - docs: Update CHANGELOG for v3.4.0 multi-role system
