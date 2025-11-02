@@ -324,3 +324,4 @@ For issues, questions, or feature requests:
 **Maintained By:** k33bz
 **Last Updated:** 2025-11-02
 **Documentation Version:** 3.4.0
+# Git Hooks Documentation
