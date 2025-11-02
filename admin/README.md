@@ -4,9 +4,10 @@ Enterprise-grade secure JWT-based authentication system with advanced security f
 
 ## 📍 Navigation
 - **← Back to Main**: [../README.md](../README.md)
-- **📚 Full Documentation**: [../DOCUMENTATION.md](../DOCUMENTATION.md)
-- **🚀 Deployment Guide**: [DEPLOYMENT.md](DEPLOYMENT.md)
-- **⚙️ Local Setup**: [setup-local-env.md](setup-local-env.md)
+- **📚 Full Documentation**: [../docs/README.md](../docs/README.md)
+- **📖 Admin Documentation**: [../docs/admin/](../docs/admin/)
+- **🚀 Deployment Guide**: [../docs/DEPLOYMENT.md](../docs/DEPLOYMENT.md)
+- **⚙️ Local Setup**: [../docs/admin/setup-local-env.md](../docs/admin/setup-local-env.md)
 
 ## 🔐 Security Features
 
@@ -124,19 +125,21 @@ admin/
 │   ├── .gitignore              # Git ignore rules
 │   └── .htaccess               # Apache configuration
 │
-├── Documentation
-│   ├── README.md               # This file
-│   ├── ADMIN_FUNCTIONALITY.md  # Feature documentation
-│   ├── ALLIANCE_MANAGEMENT_GUIDE.md # Alliance management guide
-│   ├── DEPLOYMENT.md           # Production deployment guide
-│   ├── setup-local-env.md      # Local development setup
-│   ├── SECRET_KEY_ROTATION_SETUP.md # Security setup guide
-│   ├── DKIM-SETUP.md           # Email authentication setup
-│   ├── ENV-CONFIG.md           # Environment configuration guide
-│   ├── COMPOSER-INSTALL.md     # Dependency installation guide
-│   ├── SECURITY_CHANGELOG.md   # Security update history
-│   ├── VERSION_SUMMARY.md      # Version information
-│   └── guide.md                # Technical guide (original spec)
+├── Documentation → Moved to ../docs/admin/
+│   ├── README.md               # This file (overview only)
+│   └── ../docs/admin/          # Complete admin documentation
+│       ├── ADMIN_FUNCTIONALITY.md  # Feature documentation
+│       ├── ALLIANCE_MANAGEMENT_GUIDE.md # Alliance management guide
+│       ├── setup-local-env.md      # Local development setup
+│       ├── SECRET_KEY_ROTATION_SETUP.md # Security setup guide
+│       ├── DKIM-SETUP.md           # Email authentication setup
+│       ├── ENV-CONFIG.md           # Environment configuration guide
+│       ├── COMPOSER-INSTALL.md     # Dependency installation guide
+│       ├── SECURITY_CHANGELOG.md   # Security update history
+│       ├── MULTI_ROLE_IMPLEMENTATION.md # Multi-role system
+│       ├── MIGRATION_SYSTEM.md     # Version migration
+│       ├── VERSION_SUMMARY.md      # Version information
+│       └── guide.md                # Technical guide (original spec)
 │
 ├── Testing & Development
 │   ├── test_dependencies.php   # Dependency verification

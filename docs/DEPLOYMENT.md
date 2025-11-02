@@ -1,185 +1,447 @@
 # Deployment Guide - Server 1586
 
-**Version:** 3.2.0
-**Last Updated:** 2025-10-28
-**Status:** ✅ Production Deployment Active
+**Version:** 3.4.0
+**Last Updated:** 2025-11-02
+**Status:** ✅ Production Active
 
 ---
 
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [Automated CI/CD Deployment](#automated-cicd-deployment)
-3. [Version Migration System](#version-migration-system) ⭐ **NEW**
-4. [Manual Deployment](#manual-deployment)
-5. [Deployment History](#deployment-history)
-6. [GitHub Actions Setup](#github-actions-setup)
-7. [Environment Configuration](#environment-configuration)
-8. [Troubleshooting](#troubleshooting)
+2. [Quick Start](#quick-start)
+3. [Deployment Methods](#deployment-methods)
+   - [Automated CI/CD (GitHub Actions)](#1-automated-cicd-github-actions)
+   - [Manual FTP Deployment](#2-manual-ftp-deployment)
+   - [Incremental Deployment](#3-incremental-deployment)
+   - [Public Site Only](#4-public-site-only-deployment)
+4. [Version Migration System](#version-migration-system)
+5. [Environment Configuration](#environment-configuration)
+6. [Verification & Testing](#verification--testing)
+7. [Troubleshooting](#troubleshooting)
+8. [Best Practices](#best-practices)
 
 ---
 
 ## Overview
 
-The Server 1586 website uses automated GitHub Actions for continuous deployment. Every push to the `mainline` branch triggers:
+Server 1586 supports multiple deployment strategies:
 
-1. ✅ **Test & Validation** - Unit tests, JSON/CSV validation
-2. ✅ **FTP Deployment** - Automatic upload to production server
-3. ✅ **Composer Install** - Backend dependencies installed via SSH
-4. ✅ **Key Rotation** (conditional) - JWT keys rotated on major changes
+| Deployment Type | Use Case | Method |
+|----------------|----------|--------|
+| **Automated CI/CD** | Production | GitHub Actions (FTP + SSH) |
+| **Incremental** | Fast updates | Python script with caching |
+| **Manual** | Emergency/testing | Python FTP script |
+| **Public site only** | Static frontend | FTP/Netlify/Vercel |
 
-**Production URL:** https://www.example.com
-**Admin Panel:** https://www.example.com/admin/dashboard.php
+**Production URLs:**
+- Public Site: https://www.example.com
+- Admin Panel: https://www.example.com/admin/dashboard.php
 
 ---
 
-## Automated CI/CD Deployment
+## Quick Start
 
-### How It Works
-
-GitHub Actions workflow (`.github/workflows/deploy.yml`) automatically deploys on every push to `mainline`:
+### For Developers (Automated)
 
 ```bash
+# 1. Make changes
 git add .
-git commit -m "Your changes"
+git commit -m "feat: Update alliance rankings"
+
+# 2. Push to production
+git push origin mainline
+
+# 3. GitHub Actions automatically:
+#    - Runs tests
+#    - Deploys via FTP
+#    - Installs Composer dependencies
+#    - Verifies deployment
+```
+
+### For Production (After Deployment)
+
+```bash
+# 1. Check for migration warning in admin panel
+# 2. If migration needed, run:
+php admin/migrate.php
+
+# 3. Verify site is working
+curl https://www.example.com/version.json
+```
+
+---
+
+## Deployment Methods
+
+### 1. Automated CI/CD (GitHub Actions)
+
+**Best for: Production deployments**
+
+#### How It Works
+
+Every push to `mainline` branch triggers automated deployment:
+
+```yaml
+Test → FTP Deploy → Composer Install → Verify → Migrations (if needed)
+```
+
+#### GitHub Secrets Required
+
+Navigate to **Settings → Secrets and variables → Actions**:
+
+| Secret | Description | Example |
+|--------|-------------|---------|
+| `FTP_HOST` | FTP server | `ftp.example.com` |
+| `FTP_USER` | FTP username | `user@example.com` |
+| `FTP_PASS` | FTP password | `secure_password` |
+| `SSH_HOST` | SSH server | `ssh.example.com` |
+| `SSH_PORT` | SSH port | `21098` |
+| `SSH_USER` | SSH username | `sshuser` |
+| `SSH_PRIVATE_KEY` | ED25519 key | `-----BEGIN OPENSSH...` |
+| `DEPLOY_PATH` | Server directory | `public_html` |
+| `APP_URL` | Production URL | `https://www.example.com` |
+| `JWT_SECRET_KEY` | JWT signing key | `base64_string` |
+| `SMTP_HOST` | Mail server | `smtp.example.com` |
+| `SMTP_PORT` | Mail port | `587` |
+| `SMTP_USER` | Mail username | `admin@example.com` |
+| `SMTP_PASS` | Mail password | `secure_password` |
+| `SMTP_FROM` | From email | `admin@example.com` |
+| `SMTP_FROM_NAME` | From name | `Server 1586 Admin` |
+| `ADMIN_EMAIL` | Admin email | `admin@example.com` |
+
+#### SSH Key Setup
+
+```bash
+# 1. Generate ED25519 key
+ssh-keygen -t ed25519 -C "github-actions" -f ~/.ssh/github_deploy
+
+# 2. Add public key to server
+cat ~/.ssh/github_deploy.pub
+# Copy to server's ~/.ssh/authorized_keys
+
+# 3. Add private key to GitHub Secrets
+cat ~/.ssh/github_deploy
+# Copy entire output to SSH_PRIVATE_KEY secret
+```
+
+#### Workflow Triggers
+
+**Standard deployment:**
+```bash
+git commit -m "Update alliance rankings"
 git push origin mainline
 ```
 
-### Workflow Steps
-
-1. **Test Phase:**
-   - Runs unit tests (`scripts/run-tests.py`)
-   - Validates JSON files (version.json, alliances, rules, amendments, rotation schedule, server info, signatures)
-   - Validates CSV files (power-history.csv)
-
-2. **Deploy Phase:**
-   - Creates production `.env` file from GitHub Secrets
-   - Deploys files via FTP using `scripts/deploy-ftp-ci.py`
-   - Verifies deployment (checks version.json accessibility and version match)
-   - Installs Composer dependencies via SSH
-   - Optionally rotates JWT keys (on `[major]`, `[rotate-keys]`, or `BREAKING CHANGE`)
-
-3. **Deployment Summary:**
-   - Shows deployed commit SHA
-   - Lists deployment URLs
-   - Confirms Composer installation
-
-### Deployment Triggers
-
-**Standard Deployment:**
+**With key rotation:**
 ```bash
-git commit -m "Update alliance rankings"
-```
-
-**With Key Rotation:**
-```bash
-git commit -m "Major security update [major]"
-# or
-git commit -m "Security patch [rotate-keys]"
+git commit -m "Security update [rotate-keys]"
 # or
 git commit -m "feat: New API
 
 BREAKING CHANGE: Old endpoints removed"
 ```
 
-See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for key rotation details.
+#### What Gets Deployed
 
-### Version.json Deployment Verification
+**Included:**
+- `index.html`, CSS, JavaScript
+- `data/*.json`, `data/*.csv`
+- `admin/*.php`
+- `admin/vendor/` (Composer dependencies)
+- `version.json`
 
-The deployment workflow includes automatic verification that `version.json` is deployed correctly:
+**Excluded (.ftpignore):**
+- `admin/.env` ⚠️ Must be manually configured
+- `admin/test_*.php`
+- `.git/`, `.github/`, `.claude/`
+- `scripts/`, `docs/`, `*.md`
+- Backup files (`*.backup`, `*.bak`)
 
-**Automated Verification Steps:**
-1. ✅ Pre-deployment: Validates JSON syntax in test phase
-2. ✅ Post-deployment: Verifies HTTP 200 response from production
-3. ✅ Version Match: Confirms deployed version matches local version
-4. ✅ Parse Test: Ensures JSON is valid and contains expected structure
+---
 
-**Manual Verification:**
+### 2. Manual FTP Deployment
+
+**Best for: Emergency updates, testing**
+
+#### Prerequisites
+
 ```bash
-# Check version.json is accessible
-curl https://www.example.com/version.json
-
-# Expected output:
-{
-  "version": "3.2.0",
-  "releaseDate": "2025-10-28",
-  "components": { ... },
-  "features": { ... }
-}
+pip install pywin32  # Windows only
 ```
 
-**What's Verified:**
-- File is accessible (HTTP 200)
-- JSON is valid and parseable
-- Version number matches git commit
-- All expected fields are present
+#### Setup Credentials
 
-If verification fails, the deployment is marked as failed and requires investigation.
+**Windows Credential Manager:**
+```powershell
+cmdkey /generic:ftp_example.com /user:USERNAME /pass:"PASSWORD"
+```
+
+**Or set environment variables:**
+```bash
+set FTP_HOST=ftp.example.com
+set FTP_USER=username
+set FTP_PASS=password
+```
+
+#### Deploy
+
+```bash
+# Deploy everything
+python scripts/deploy-ftp-ci.py
+
+# Check what will be deployed
+python scripts/deploy-ftp-ci.py --dry-run
+```
+
+#### Output Example
+
+```
+==================================================
+  Connecting to ftp.example.com...
+  ✓ Connected successfully
+==================================================
+
+Uploading files...
+  [  5%] index.html (15.2 KB)
+  [ 10%] admin/dashboard.php (18.7 KB)
+  ...
+  [100%] version.json (1.2 KB)
+
+==================================================
+Deployment Summary:
+  Uploaded: 198 files
+  Failed:   0 files
+  Duration: 287 seconds
+==================================================
+```
+
+---
+
+### 3. Incremental Deployment
+
+**Best for: Fast updates (80-90% faster)**
+
+#### How It Works
+
+Uses MD5 checksums + modification timestamps to detect changes:
+
+```python
+Scan files → Calculate checksums → Compare with cache → Upload only changed
+```
+
+**Performance:**
+- Full deployment: 200 files, 4-5 minutes
+- Incremental: 5-10 files, 30-45 seconds
+
+#### Usage
+
+**Standard (incremental):**
+```bash
+python scripts/deploy-ftp-incremental.py
+```
+
+**Force full upload:**
+```bash
+python scripts/deploy-ftp-incremental.py --force
+```
+
+**Checksum-only (ignore timestamps):**
+```bash
+python scripts/deploy-ftp-incremental.py --checksum-only
+```
+
+#### Cache Management
+
+**Local deployment:**
+- State cached in `.deploy-state.json` (gitignored)
+- Safe to delete (triggers full upload next time)
+
+**GitHub Actions:**
+- Uses `actions/cache` with 7-day retention
+- Automatically restored/saved
+
+#### Output Example
+
+```
+==================================================
+Server 1586 - Incremental FTP Deployment
+==================================================
+
+[1/5] Loading deployment state...
+      ✓ Last deployment: 2025-11-02T12:00:00
+      ✓ 198 files in cache
+
+[2/5] Loading .ftpignore patterns...
+      ✓ Loaded 45 patterns
+
+[3/5] Analyzing files...
+      ✓ Total files: 200
+      ✓ To upload: 8
+      ✓ Skipped: 192 (unchanged)
+
+[4/5] Uploading 8 changed files (47.3 KB)...
+      [ 12.5%] admin/migrate.php (15.2 KB) [modified]
+      [ 25.0%] version.json (1.2 KB) [modified]
+      ...
+      [100.0%] admin/jwt.php (8.1 KB) [modified]
+
+[5/5] Saving deployment state...
+      ✓ State saved
+
+==================================================
+Deployment Summary:
+  Total files:   200
+  Uploaded:      8 files
+  Skipped:       192 files (unchanged)
+  Time savings:  96% faster
+  Duration:      38.2 seconds
+==================================================
+```
+
+#### Change Detection Logic
+
+1. **Force flag** (`--force`): Upload everything
+2. **New file**: Not in cache → Upload
+3. **Modification time**: File modified → Check checksum
+4. **MD5 Checksum**: Checksum different → Upload
+
+---
+
+### 4. Public Site Only Deployment
+
+**Best for: Static frontend without admin panel**
+
+#### Files Required
+
+```
+Server1586-clean/
+├── index.html
+├── css/styles.css
+├── js/app.js
+├── data/
+│   ├── alliances.json
+│   ├── rules.json
+│   ├── amendments.json
+│   ├── rotation-schedule.json
+│   ├── server-info.json
+│   ├── signature-history.json
+│   ├── power-history.csv
+│   └── council.js
+├── version.json
+└── images/ (optional)
+```
+
+**Total Size:** ~150-200 KB (uncompressed)
+
+#### Method A: FTP Client (FileZilla)
+
+1. Connect to FTP server
+2. Navigate to `public_html/`
+3. Upload files (preserve structure)
+4. Set permissions: Files `644`, Directories `755`
+
+#### Method B: Python Script
+
+```python
+# deploy_public_site.py
+import ftplib
+
+FTP_HOST = "ftp.example.com"
+FTP_USER = "username"
+FTP_PASS = "password"
+REMOTE_DIR = "/public_html"
+
+files = [
+    "index.html",
+    "version.json",
+    "css/styles.css",
+    "js/app.js",
+    "data/alliances.json",
+    "data/rules.json",
+    # ... add all data files
+]
+
+ftp = ftplib.FTP(FTP_HOST)
+ftp.login(FTP_USER, FTP_PASS)
+ftp.cwd(REMOTE_DIR)
+
+for file in files:
+    with open(file, 'rb') as f:
+        ftp.storbinary(f'STOR {file}', f)
+    print(f"✓ {file}")
+
+ftp.quit()
+```
+
+#### Method C: Static Hosts (Zero Config)
+
+**Netlify Drop:**
+- Drag & drop folder to https://app.netlify.com/drop
+- Instant deployment with HTTPS
+
+**Vercel:**
+```bash
+npm install -g vercel
+vercel --prod
+```
+
+**GitHub Pages:**
+- Enable in repo settings
+- Select `mainline` branch
+- Site at: `https://username.github.io/repo-name`
+
+#### Method D: AWS S3
+
+```bash
+aws s3 sync . s3://your-bucket-name \
+  --exclude "admin/*" \
+  --exclude "scripts/*" \
+  --exclude ".git/*" \
+  --exclude "*.md"
+```
 
 ---
 
 ## Version Migration System
 
-⭐ **NEW** (v3.1.0) - Automatic schema migrations for production deployments
+⭐ Automatic schema migrations for production deployments (v3.1.0+)
 
 ### Overview
 
-When deploying new code versions, data files (`.env`, JSON schemas) may need updates. The migration system automatically detects version mismatches and safely applies necessary upgrades.
-
-**Key Features:**
-- ✅ Automatic version mismatch detection
-- ✅ Visual warning banner on admin pages
-- ✅ Safe, incremental migrations with backups
-- ✅ CLI and web interface
-- ✅ Idempotent (safe to run multiple times)
-
-### How It Works
-
-**Version Tracking:**
-- **Code Version**: `version.json` (committed to git)
-- **Installed Version**: `admin/.installed_version` (production state, not in git)
-
-After deployment, if versions don't match:
-1. Admin page loads
-2. Orange warning banner appears: **"⬆️ Migration Required"**
-3. Admin clicks "Run Migration Now" or runs `php admin/migrate.php`
-4. Migrations execute in order (e.g., 3.0.0 → 3.1.0 → 3.2.0)
-5. `.installed_version` updated to match code version
-6. Warning disappears
+After code deployment, if versions don't match:
+1. Admin page shows orange warning banner: **"⬆️ Migration Required"**
+2. Click "Run Migration Now" or run `php admin/migrate.php`
+3. Migrations execute in order (e.g., 3.0.0 → 3.1.0 → 3.2.0)
+4. `.installed_version` updated to match code version
 
 ### Running Migrations
 
-**Option 1: Web Interface** (After Deployment)
+**Option 1: Web Interface**
 1. Log into admin panel
-2. See orange warning banner at top
-3. Click **"🔧 Run Migration Now"**
-4. Wait for completion message
+2. Click **"🔧 Run Migration Now"** in warning banner
 
-**Option 2: CLI** (Recommended for Production)
+**Option 2: CLI (Recommended)**
 ```bash
 # SSH into production server
 ssh user@server
-
-# Navigate to admin directory
 cd /path/to/admin
-
-# Run migration
 php migrate.php
 ```
 
 **Example Output:**
 ```
 === Version Migration System ===
-Code version: 3.2.0
-Installed version: 3.1.0
+Code version: 3.4.0
+Installed version: 3.3.2
 
-🔄 Migration needed: 3.1.0 → 3.2.0
+🔄 Migration needed: 3.3.2 → 3.4.0
 
-🔧 Running migration: 3.2.0
-   - Setting up audit logging...
-   💾 Backup created: audit_log.json.bak.2025-10-19_143052
-   ✓ audit_log.json created
-   ✓ Completed: 3.2.0
+🔧 Running migration: 3.4.0
+   - Migrating to multi-role system...
+   💾 Backup created: users.json.bak.2025-11-02_120000
+   ✓ Users migrated to multi-role format
+   ✓ Completed: 3.4.0
 
 === Migration Summary ===
 Migrations run: 1
@@ -188,261 +450,34 @@ Errors: 0
 ✅ Migration completed successfully!
 ```
 
-### What Migrations Do
-
-Migrations can:
-- **Add fields to JSON files** (e.g., `r5History` to alliances.json)
-- **Create new data files** (e.g., `audit_log.json`)
-- **Initialize directories** (e.g., `backups/`)
-- **Validate .env variables** (warns if missing)
-- **Restructure data** (schema upgrades)
-
-**All changes are backed up** before modification:
-- `alliances.json.bak.2025-10-19_143052`
-- `users.json.bak.2025-10-19_151230`
-
-### Pre-built Migrations
+### Available Migrations
 
 | Version | Description |
 |---------|-------------|
-| **v3.0.0** | JWT authentication setup, validate .env |
-| **v3.1.0** | Add r5History to alliances |
-| **v3.2.0** | Initialize audit logging system |
-| **v3.3.0** | Create backup directory with .htaccess |
+| v3.0.0 | JWT authentication setup, validate .env |
+| v3.1.0 | Add r5History to alliances |
+| v3.2.0 | Initialize audit logging system |
+| v3.3.0 | Create backup directory with .htaccess |
+| v3.4.0 | Multi-role system migration |
 
-### Deployment Workflow with Migrations
+### Troubleshooting
 
-1. **Deploy code** (GitHub Actions or manual)
-   ```bash
-   git push origin mainline
-   # Deployment completes, version.json = 3.2.0
-   ```
-
-2. **Check for migration warning**
-   - Visit admin panel
-   - See orange banner if migration needed
-
-3. **Run migration**
-   ```bash
-   ssh user@server
-   php /path/to/admin/migrate.php
-   ```
-
-4. **Verify**
-   - Banner disappears
-   - New features work correctly
-   - Check logs for errors
-
-### Troubleshooting Migrations
-
-**Migration Warning Still Appears:**
+**Migration warning still appears:**
 ```bash
-# Check versions
-cat version.json          # Code version
-cat admin/.installed_version  # Installed version
-
-# Manually sync if needed
-echo "3.2.0" > admin/.installed_version
+cat version.json                  # Check code version
+cat admin/.installed_version      # Check installed version
+echo "3.4.0" > admin/.installed_version  # Manual sync if needed
 ```
 
-**Migration Failed Midway:**
+**Migration failed:**
 ```bash
 # Restore from backup
-cp admin/alliances.json.bak.2025-10-19_143052 data/alliances.json
-
-# Fix issue, re-run migration
+cp admin/users.json.bak.2025-11-02_120000 admin/users.json
+# Fix issue and re-run
 php admin/migrate.php
 ```
 
-**Missing .env Variables:**
-Migrations can't automatically add to `.env`. If migration logs show:
-```
-⚠️  Missing .env variables: NEW_FEATURE_ENABLED
-ℹ️  Add: NEW_FEATURE_ENABLED=true
-```
-
-Manually edit `admin/.env`:
-```bash
-echo "NEW_FEATURE_ENABLED=true" >> admin/.env
-```
-
-### Complete Documentation
-
-See **[admin/MIGRATION_SYSTEM.md](../admin/MIGRATION_SYSTEM.md)** for:
-- Writing custom migrations
-- Migration best practices
-- Rollback scenarios
-- Testing migrations
-- Auto-migration setup (optional)
-
----
-
-## Manual Deployment
-
-For emergency deployments or local testing:
-
-### Prerequisites
-
-**Python 3.7+** with `pywin32`:
-```bash
-pip install pywin32
-```
-
-### Deployment Script
-
-```bash
-python scripts/deploy-ftp-ci.py
-```
-
-The script:
-- ✅ Reads FTP credentials from environment variables or Windows Credential Manager
-- ✅ Respects `.ftpignore` exclusions
-- ✅ Creates remote directories as needed
-- ✅ Shows upload progress and summary
-
-### FTP Credentials Setup
-
-**GitHub Actions (automatic):**
-- Stored in GitHub Secrets
-- `FTP_HOST`, `FTP_USER`, `FTP_PASS`
-
-**Local Development:**
-- Stored in Windows Credential Manager
-- Target: `ftp://your-server.com`
-- Username: `your-ftp-username`
-- Password: `your-ftp-password`
-
-### Excluded Files (.ftpignore)
-
-The following files are NOT deployed:
-```
-.git/
-.github/
-node_modules/
-vendor/
-*.md (except README.md)
-.env.local*
-test-token-*.json
-admin/.env.backup.*
-admin/secret_keys.json.backup.*
-scripts/
-ocr/
-tesseract_training/
-```
-
----
-
-## Deployment History
-
-### v3.0.0 - October 16, 2025
-- ✅ Complete admin panel with JWT authentication
-- ✅ Role-based access control (Admin, R5, R4, Power Editor)
-- ✅ Multi-factor authentication
-- ✅ Security monitoring and audit logging
-- ✅ Backup & restore system
-- ✅ Email masking for PII protection
-
-### v2.0.0 - October 7, 2025
-- ✅ Dynamic rank calculation based on power
-- ✅ Alliance tags in rotation schedule (stable rankings)
-- ✅ Fair rotation algorithm with fairness reporting
-- ✅ Power trends chart with accurate date spacing
-
-### v1.4.0 - October 6, 2025
-- ✅ JSON data migration (no more hardcoded JS data)
-- ✅ Amendment system with "Show Changes" toggle
-- ✅ Collapsible sections for rules and amendments
-
-### Power Editor Deployment (October 15, 2025)
-- ✅ Power Editor (APE) role implementation
-- ✅ Alliance power bulk editor with live statistics
-- ✅ Add/delete alliances with dynamic rank calculation
-- ✅ Unsaved changes warning
-
-### CI/CD Setup (October 2025)
-- ✅ GitHub Actions workflow implemented
-- ✅ Automated FTP deployment
-- ✅ SSH Composer installation
-- ✅ Test validation pipeline
-- ✅ JWT key rotation integration
-
----
-
-## GitHub Actions Setup
-
-### Required GitHub Secrets
-
-Navigate to **Settings → Secrets and variables → Actions**:
-
-| Secret Name | Description | Example |
-|------------|-------------|---------|
-| `FTP_HOST` | FTP server hostname | `ftp.example.com` |
-| `FTP_USER` | FTP username | `ftpuser@example.com` |
-| `FTP_PASS` | FTP password | `[secure_password]` |
-| `SSH_HOST` | SSH server hostname | `ssh.example.com` |
-| `SSH_PORT` | SSH port | `22` or `2222` |
-| `SSH_USER` | SSH username | `sshuser` |
-| `SSH_PRIVATE_KEY` | SSH private key (ED25519) | `-----BEGIN OPENSSH PRIVATE KEY-----` |
-| `DEPLOY_PATH` | Server directory | `public_html` or `yourdomain.com` |
-| `APP_URL` | Production URL | `https://www.example.com` |
-| `JWT_SECRET_KEY` | JWT signing key | `[base64_encoded_key]` |
-| `SMTP_HOST` | SMTP server | `smtp.example.com` |
-| `SMTP_PORT` | SMTP port | `587` |
-| `SMTP_USER` | SMTP username | `admin@example.com` |
-| `SMTP_PASS` | SMTP password | `[secure_password]` |
-| `SMTP_FROM` | From email | `admin@example.com` |
-| `SMTP_FROM_NAME` | From name | `Last War 1586 Admin` |
-| `ADMIN_EMAIL` | Admin email | `admin@example.com` |
-
-### SSH Key Setup
-
-1. **Generate ED25519 key:**
-   ```bash
-   ssh-keygen -t ed25519 -C "github-actions-deploy" -f ~/.ssh/github_deploy
-   ```
-
-2. **Add public key to server:**
-   ```bash
-   cat ~/.ssh/github_deploy.pub
-   # Copy output to server's ~/.ssh/authorized_keys
-   ```
-
-3. **Add private key to GitHub Secrets:**
-   ```bash
-   cat ~/.ssh/github_deploy
-   # Copy entire output (including BEGIN/END lines) to SSH_PRIVATE_KEY secret
-   ```
-
-### Workflow File
-
-Located at `.github/workflows/deploy.yml`:
-
-```yaml
-name: Deploy to Production
-
-on:
-  push:
-    branches: [mainline]
-  workflow_dispatch:  # Manual trigger
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - Checkout code
-      - Setup Python
-      - Run unit tests
-      - Validate JSON/CSV files
-
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - Create .env file
-      - Deploy via FTP
-      - Install Composer dependencies (SSH)
-      - Rotate JWT keys (conditional)
-```
+See [docs/admin/MIGRATION_SYSTEM.md](admin/MIGRATION_SYSTEM.md) for complete documentation.
 
 ---
 
@@ -450,23 +485,39 @@ jobs:
 
 ### Production .env File
 
-Created automatically by GitHub Actions from secrets:
+⚠️ **CRITICAL**: Admin panel requires `.env` file for JWT authentication. This file is **NOT deployed automatically**.
 
-```env
-# JWT Secret Key
-SECRET_KEY=[from JWT_SECRET_KEY secret]
+**Manual setup required:**
 
-# SMTP Configuration
-SMTP_HOST=[from SMTP_HOST secret]
-SMTP_PORT=[from SMTP_PORT secret]
-SMTP_USER=[from SMTP_USER secret]
-SMTP_PASS=[from SMTP_PASS secret]
-SMTP_FROM=[from SMTP_FROM secret]
-SMTP_FROM_NAME="[from SMTP_FROM_NAME secret]"
+```bash
+# 1. SSH into production server
+ssh user@server
+
+# 2. Navigate to admin directory
+cd /path/to/public_html/admin
+
+# 3. Create .env file
+nano .env
+```
+
+**File contents:**
+```ini
+# JWT Configuration
+SECRET_KEY=your-64-character-production-secret-key-here
+TOKEN_EXPIRY=3600
 
 # Application Configuration
-APP_URL=[from APP_URL secret]
-ADMIN_EMAIL=[from ADMIN_EMAIL secret]
+APP_URL=https://www.example.com
+ADMIN_EMAIL=admin@example.com
+
+# Email Configuration (PHPMailer)
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_SECURE=tls
+SMTP_USERNAME=noreply@example.com
+SMTP_PASSWORD=your-smtp-password-here
+SMTP_FROM_EMAIL=noreply@example.com
+SMTP_FROM_NAME=Server 1586 Admin
 
 # Token Expiry
 MAGIC_LINK_EXPIRY=600        # 10 minutes
@@ -476,73 +527,167 @@ SESSION_TOKEN_EXPIRY=3600    # 1 hour
 APP_ENV=production
 ```
 
-### Local .env File
-
-For local development, copy `.env.example`:
-
+**Generate secure SECRET_KEY:**
 ```bash
-cd admin
-cp .env.example .env
-# Edit .env with your local configuration
+# Using OpenSSL
+openssl rand -base64 32
+
+# Using PHP
+php -r "echo bin2hex(random_bytes(32));"
 ```
 
-See [admin/ENV-CONFIG.md](../admin/ENV-CONFIG.md) for all environment variables.
+**Set permissions:**
+```bash
+chmod 644 .env
+```
+
+### GitHub Actions .env Creation
+
+GitHub Actions automatically creates `.env` from secrets during deployment.
+
+⚠️ **SECURITY NOTE**: The `.env` file is excluded from FTP deployment (`.ftpignore`) to prevent overwriting production keys. This prevents mass user logouts caused by JWT key rotation. See [docs/PRODUCTION-ENV-SETUP.md](PRODUCTION-ENV-SETUP.md).
+
+---
+
+## Verification & Testing
+
+### Post-Deployment Checklist
+
+**1. Check Homepage**
+```bash
+curl -I https://www.example.com/
+# Should return: HTTP/1.1 200 OK
+```
+
+**2. Verify Version**
+```bash
+curl https://www.example.com/version.json
+# Should return JSON with current version
+```
+
+**3. Check Admin Panel**
+```bash
+curl -I https://www.example.com/admin/dashboard.php
+# Should return: HTTP/1.1 200 OK (or redirect to login)
+```
+
+**4. Test Data Files**
+```bash
+curl https://www.example.com/data/alliances.json
+curl https://www.example.com/data/rules.json
+# Each should return valid JSON
+```
+
+**5. Run Migrations (if needed)**
+```bash
+# Check for migration warning in admin panel
+# If present, run:
+php admin/migrate.php
+```
+
+**6. Test in Browser**
+- Visit https://www.example.com
+- Check console for errors (F12 → Console)
+- Verify all sections load correctly
+- Test admin panel access
+
+**7. Mobile Test**
+- Resize browser to mobile width
+- Check responsive layout
+- Test hamburger menu
+- Verify all functionality works
 
 ---
 
 ## Troubleshooting
 
-### Deployment Fails
+### Deployment Failures
 
-**Check GitHub Actions logs:**
+**GitHub Actions failed:**
 1. Go to **Actions** tab in GitHub
-2. Click on failed workflow run
-3. Expand failed step to see error
+2. Click failed workflow run
+3. Expand failed step for error details
 
-**Common Issues:**
+**Common issues:**
 
-**FTP Connection Failed:**
+**FTP Connection Failed**
 - Verify `FTP_HOST`, `FTP_USER`, `FTP_PASS` secrets
-- Check if FTP server is accessible
-- Verify server firewall allows GitHub Actions IPs
+- Check server firewall allows FTP connections
+- Test credentials manually with FileZilla
 
-**SSH Connection Failed:**
-- Verify `SSH_PRIVATE_KEY` includes `-----BEGIN OPENSSH PRIVATE KEY-----` headers
-- Check `SSH_HOST`, `SSH_PORT`, `SSH_USER` secrets
-- Ensure public key is in server's `~/.ssh/authorized_keys`
+**SSH Connection Failed**
+- Verify `SSH_PRIVATE_KEY` includes headers
+- Check public key in server's `authorized_keys`
+- Test SSH access: `ssh -i key user@host`
 
-**Composer Install Failed:**
-- Check `DEPLOY_PATH` points to correct directory
-- Verify SSH user has write permissions
-- Check if Composer is installed on server: `composer --version`
+**Composer Install Failed**
+- Verify `DEPLOY_PATH` is correct
+- Check SSH user has write permissions
+- Ensure Composer installed: `composer --version`
 
-**Test Failures:**
-- Run tests locally: `python scripts/run-tests.py`
-- Validate JSON manually: `python -m json.tool data/alliances.json`
-- Check CSV format: `python scripts/validate-csv.py`
+### Admin Panel Issues
 
-### Manual Deployment Issues
+**"JWT Secret Key Not Configured"**
+- `.env` file missing or `SECRET_KEY` not set
+- Upload `.env` to `admin/` directory
+- Generate secure key (see Environment Configuration)
 
-**Windows Credential Manager not found:**
-- Install `pywin32`: `pip install pywin32`
-- Or set environment variables:
-  ```bash
-  set FTP_HOST=ftp.example.com
-  set FTP_USER=username
-  set FTP_PASS=password
-  python scripts/deploy-ftp-ci.py
-  ```
+**"Invalid Token" Error**
+- Token expired (10 minutes for magic links)
+- Generate new link: `php admin/generate_magic_link.php email@example.com`
 
-**Permission Denied:**
-- Check FTP credentials
-- Verify user has write access to target directory
+**"Failed to Load Alliances"**
+- Path to `data/alliances.json` incorrect
+- Verify file exists and is readable (644 permissions)
 
-### Key Rotation Issues
+**Composer Dependencies Missing**
+- `vendor/` directory not deployed
+- Run: `cd admin && composer install`
 
-See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for:
-- Key sync problems
-- Manual rotation
-- Grace period configuration
+### Website Issues
+
+**JSON Errors in Console**
+```bash
+# Validate JSON syntax
+python -m json.tool data/alliances.json
+python -m json.tool data/rules.json
+```
+
+**Chart Doesn't Load**
+- Check browser console for CDN errors
+- Verify `data/power-history.csv` format
+- Run: `python scripts/validate-csv.py`
+
+**Styles Not Applied**
+- Clear browser cache: Ctrl+Shift+R
+- Check CSS loaded: `curl https://www.example.com/css/styles.css`
+- Verify version cache bust in page source
+
+**Navigation Menu Not Working**
+- Check JavaScript loaded (F12 console)
+- Verify `data/council.js` accessible
+- Check for JavaScript errors
+
+### Incremental Deployment Issues
+
+**Cache Not Working (always uploads all files)**
+```bash
+# Local: Check state file exists
+ls -la .deploy-state.json
+
+# GitHub Actions: Check cache step in logs
+# Look for "Cache restored from key: ftp-deploy-state-..."
+```
+
+**Files Not Uploading When They Should**
+```bash
+# Force full upload
+python scripts/deploy-ftp-incremental.py --force
+
+# Or delete state and re-deploy
+rm .deploy-state.json
+python scripts/deploy-ftp-incremental.py
+```
 
 ---
 
@@ -553,27 +698,35 @@ See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for:
 1. ✅ Test locally first
 2. ✅ Run unit tests: `python scripts/run-tests.py`
 3. ✅ Validate JSON: `python -m json.tool data/*.json`
-4. ✅ Update version numbers in affected files
+4. ✅ Update version numbers
 5. ✅ Write clear commit messages
 
 ### After Deployment
 
-1. ✅ Verify website loads: https://www.example.com
-2. ✅ **Verify version.json is accessible**: `curl https://www.example.com/version.json`
-3. ✅ Check admin panel: https://www.example.com/admin/
-4. ✅ **Check for migration warning banner** (if version changed)
-5. ✅ **Run migrations if needed**: `php admin/migrate.php` (see [Version Migration System](#version-migration-system))
-6. ✅ Review deployment logs in GitHub Actions
-7. ✅ Test critical functionality (login, data updates)
-8. ✅ Monitor error logs if available
+1. ✅ Verify website loads
+2. ✅ Check version.json accessible
+3. ✅ Look for migration warning banner
+4. ✅ Run migrations if needed: `php admin/migrate.php`
+5. ✅ Test admin panel login
+6. ✅ Review deployment logs
+7. ✅ Monitor error logs
 
 ### Security
 
 - 🔒 Never commit `.env` files
-- 🔒 Rotate secrets periodically
+- 🔒 Rotate secrets periodically (every 90 days)
 - 🔒 Use strong passwords for FTP/SSH
 - 🔒 Enable 2FA on GitHub account
-- 🔒 Limit SSH key access (deploy-only user recommended)
+- 🔒 Limit SSH key access (deploy-only user)
+- 🔒 Always use HTTPS in production
+
+### Performance
+
+- ⚡ Use incremental deployment for fast updates
+- ⚡ Enable gzip compression (`.htaccess`)
+- ⚡ Set browser caching headers
+- ⚡ Minify CSS/JS for production (optional)
+- ⚡ Use CDN for static assets
 
 ---
 
@@ -582,27 +735,29 @@ See [KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md) for:
 | Task | Command |
 |------|---------|
 | **Deploy to production** | `git push origin mainline` |
-| **Run migrations** | `php admin/migrate.php` ⭐ |
+| **Run migrations** | `php admin/migrate.php` |
 | **Manual deploy** | `python scripts/deploy-ftp-ci.py` |
+| **Incremental deploy** | `python scripts/deploy-ftp-incremental.py` |
+| **Force full upload** | `python scripts/deploy-ftp-incremental.py --force` |
 | **Run tests** | `python scripts/run-tests.py` |
 | **Validate JSON** | `python -m json.tool data/alliances.json` |
-| **Update rotation** | `python scripts/update-rotation-schedule.py` |
-| **View workflow** | GitHub → Actions tab |
-| **Check deployment** | https://www.example.com |
+| **Check deployment** | `curl https://www.example.com/version.json` |
+| **Generate admin access** | `php admin/generate_magic_link.php email@example.com` |
 
 ---
 
 ## Related Documentation
 
-- **[README.md](../README.md)** - Project overview
-- **[admin/MIGRATION_SYSTEM.md](../admin/MIGRATION_SYSTEM.md)** - Version migration system ⭐
-- **[KEY_ROTATION_GUIDE.md](../KEY_ROTATION_GUIDE.md)** - JWT key rotation
-- **[admin/DEPLOYMENT.md](../admin/DEPLOYMENT.md)** - Admin panel deployment
-- **[admin/ENV-CONFIG.md](../admin/ENV-CONFIG.md)** - Environment variables
-- **[scripts/README.md](../scripts/README.md)** - Deployment scripts
+- [docs/admin/MIGRATION_SYSTEM.md](admin/MIGRATION_SYSTEM.md) - Version migration system
+- [docs/PRODUCTION-ENV-SETUP.md](PRODUCTION-ENV-SETUP.md) - Production .env management
+- [docs/admin/ENV-CONFIG.md](admin/ENV-CONFIG.md) - Environment variables
+- [docs/GIT_HOOKS.md](GIT_HOOKS.md) - Git hooks for quality gates
+- [docs/GITHUB_RELEASES.md](GITHUB_RELEASES.md) - Release process
+- [scripts/README.md](../scripts/README.md) - Deployment scripts
 
 ---
 
-**Last Updated:** 2025-10-28
+**Last Updated:** 2025-11-02
 **Maintained By:** k33bz
 **Production URL:** https://www.example.com
+**GitHub Issues:** https://github.com/k33bz/lastwar-server1586/issues

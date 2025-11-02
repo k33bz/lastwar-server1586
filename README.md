@@ -130,14 +130,16 @@ Server1586/
 ## 📚 Documentation Index
 
 > **📍 You are here:** README.md → Main project overview
+>
+> **📖 Full Documentation:** [docs/README.md](docs/README.md) - Complete documentation index
 
 ### 🎯 Quick Navigation
 
 **I want to...**
-- 👨‍💻 **Develop locally** → [admin/setup-local-env.md](admin/setup-local-env.md)
+- 👨‍💻 **Develop locally** → [docs/admin/setup-local-env.md](docs/admin/setup-local-env.md)
 - 🚀 **Deploy to production** → [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
 - 🔐 **Setup admin panel** → [admin/README.md](admin/README.md)
-- 📖 **Browse all docs** → [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md)
+- 📖 **Browse all docs** → [docs/README.md](docs/README.md)
 - 📋 **See what changed** → [docs/CHANGELOG.md](docs/CHANGELOG.md)
 
 ### 📚 Core Documentation
@@ -145,38 +147,40 @@ Server1586/
 | Document | Description | Audience |
 |----------|-------------|----------|
 | **[README.md](README.md)** | This file - Project overview | Everyone |
-| **[docs/DOCUMENTATION.md](docs/DOCUMENTATION.md)** | Master index - All documentation | Everyone |
+| **[docs/README.md](docs/README.md)** | Complete documentation index | Everyone |
 | **[docs/CLAUDE.md](docs/CLAUDE.md)** | Developer guide & architecture | Developers |
 | **[docs/CHANGELOG.md](docs/CHANGELOG.md)** | Version history & changes | Everyone |
-| **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** | Deployment guide (CI/CD + manual) | DevOps |
+| **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** | Comprehensive deployment guide | DevOps |
 
 ### 🔧 Component Documentation
 
 | Component | Documentation | Description |
 |-----------|---------------|-------------|
 | **Admin Panel** | [admin/README.md](admin/README.md) | Admin system overview |
+| **Admin Guides** | [docs/admin/](docs/admin/) | Complete admin documentation |
 | **Automation Scripts** | [scripts/README.md](scripts/README.md) | Deployment & schedule scripts |
-| **Data Schemas** | [data/ALLIANCE_SCHEMA.md](data/ALLIANCE_SCHEMA.md) | Data structure docs |
+| **Data Schemas** | [docs/schemas/](docs/schemas/) | Data structure documentation |
 
 ### 🛠️ Setup & Configuration
 
 | Task | Documentation | Quick Link |
 |------|---------------|------------|
-| **Local Development** | [admin/setup-local-env.md](admin/setup-local-env.md) | PHP + Composer setup |
-| **Environment Config** | [admin/ENV-CONFIG.md](admin/ENV-CONFIG.md) | `.env` variables |
-| **GitHub Actions** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#github-actions-setup) | CI/CD pipeline |
-| **Public Site Deployment** | [docs/PUBLIC_SITE_DEPLOYMENT.md](docs/PUBLIC_SITE_DEPLOYMENT.md) | Static frontend only |
-| **Full Site Deployment** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | FTP + SSH + Admin |
+| **Local Development** | [docs/admin/setup-local-env.md](docs/admin/setup-local-env.md) | PHP + Composer setup |
+| **Environment Config** | [docs/admin/ENV-CONFIG.md](docs/admin/ENV-CONFIG.md) | `.env` variables |
+| **GitHub Actions** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#1-automated-cicd-github-actions) | CI/CD pipeline |
+| **Production Deployment** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Complete deployment guide |
+| **Git Hooks** | [docs/GIT_HOOKS.md](docs/GIT_HOOKS.md) | Quality gates & automation |
 | **GitHub Releases** | [docs/GITHUB_RELEASES.md](docs/GITHUB_RELEASES.md) | Release management |
 
 ### 🔐 Security & Admin Features
 
 | Feature | Documentation | Description |
 |---------|---------------|-------------|
-| **Admin Features** | [admin/ADMIN_FUNCTIONALITY.md](admin/ADMIN_FUNCTIONALITY.md) | Feature overview |
-| **Alliance Management** | [admin/ALLIANCE_MANAGEMENT_GUIDE.md](admin/ALLIANCE_MANAGEMENT_GUIDE.md) | CRUD operations |
-| **JWT Key Rotation** | [documentation-archive/KEY_ROTATION_GUIDE.md](documentation-archive/KEY_ROTATION_GUIDE.md) | Security key management |
-| **User Roles** | [admin/USER-PERSONAS.md](admin/USER-PERSONAS.md) | RBAC system |
+| **Admin Features** | [docs/admin/ADMIN_FUNCTIONALITY.md](docs/admin/ADMIN_FUNCTIONALITY.md) | Feature overview |
+| **Multi-Role System** | [docs/admin/MULTI_ROLE_IMPLEMENTATION.md](docs/admin/MULTI_ROLE_IMPLEMENTATION.md) | Role management |
+| **Alliance Management** | [docs/admin/ALLIANCE_MANAGEMENT_GUIDE.md](docs/admin/ALLIANCE_MANAGEMENT_GUIDE.md) | CRUD operations |
+| **JWT Key Rotation** | [docs/admin/SECRET_KEY_ROTATION_SETUP.md](docs/admin/SECRET_KEY_ROTATION_SETUP.md) | Security key management |
+| **User Roles** | [docs/admin/USER-PERSONAS.md](docs/admin/USER-PERSONAS.md) | RBAC system |
 
 ---
 
@@ -246,7 +250,7 @@ python scripts/deploy-public-only.py
 ```
 Deploys only the static website (no admin panel). Perfect for hosting on any static file server.
 
-📘 **[Public Site Deployment Guide](docs/PUBLIC_SITE_DEPLOYMENT.md)** - Static frontend deployment only
+📘 **[Deployment Guide](docs/DEPLOYMENT.md#4-public-site-only-deployment)** - See "Public Site Only" section
 
 **Option 3: Full Site with Admin Panel**
 ```bash
