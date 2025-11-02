@@ -936,7 +936,12 @@ async function saveCategoryForm(event) {
 }
 
 async function deleteCategory(categoryId) {
-    if (!confirm('Are you sure you want to delete this category?')) {
+    const confirmed = await confirmAction(
+        'Are you sure you want to delete this category?',
+        'Delete Category',
+        { dangerMode: true }
+    );
+    if (!confirmed) {
         return;
     }
 
@@ -1118,7 +1123,12 @@ async function saveTagForm(event) {
 }
 
 async function deleteTag(tagId) {
-    if (!confirm('Are you sure you want to delete this tag?')) {
+    const confirmed = await confirmAction(
+        'Are you sure you want to delete this tag?',
+        'Delete Tag',
+        { dangerMode: true }
+    );
+    if (!confirmed) {
         return;
     }
 
@@ -1303,10 +1313,16 @@ function formatDate(dateString) {
 
 function showToast(message, type = 'info') {
     // Use existing toast system from footer
-    if (typeof showToast !== 'undefined') {
+    if (typeof window.showToast !== 'undefined') {
         window.showToast(message, type);
     } else {
-        alert(message);
+        // Fallback: create a simple toast-like message
+        console.warn('Toast system not loaded, using fallback');
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        toast.style.cssText = 'position:fixed;top:20px;right:20px;background:#333;color:#fff;padding:12px 24px;border-radius:4px;z-index:10000';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
     }
 }
 </script>

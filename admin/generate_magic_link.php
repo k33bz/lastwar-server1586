@@ -324,7 +324,7 @@ $users_data = read_json_file(USERS_FILE);
                             btn.style.background = '#28a745';
                         }, 2000);
                     }).catch(err => {
-                        alert('Failed to copy. Please select and copy manually.');
+                        showToast('Failed to copy automatically. Please select and copy manually.', 'warning');
                     });
                 }
                 </script>

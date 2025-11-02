@@ -264,6 +264,24 @@ if (isset($_GET['action']) && $_GET['action'] === 'add') {
             }
             // Initial check on page load
             updatePowerEditorVisibility();
+
+            // Handle delete user confirmation
+            const deleteBtn = document.getElementById('deleteUserBtn');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+
+                    const confirmed = await confirmAction(
+                        'Are you sure you want to delete this user?',
+                        'Delete User',
+                        { dangerMode: true }
+                    );
+
+                    if (confirmed) {
+                        this.form.submit();
+                    }
+                });
+            }
         </script>
     </div>
 
@@ -483,7 +501,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
             <?php endif; ?>
             <div class="actions">
                 <button type="submit" class="btn btn-primary">Update User</button>
-                <button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete User</button>
+                <button type="submit" name="delete" id="deleteUserBtn" class="btn btn-danger">Delete User</button>
                 <a href="user_management.php" class="btn btn-secondary">← Back to Users</a>
                 <a href="dashboard.php" class="btn btn-secondary">Cancel</a>
             </div>
@@ -500,6 +518,24 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['email']
             }
             // Initial check on page load
             updatePowerEditorVisibility();
+
+            // Handle delete user confirmation
+            const deleteBtn = document.getElementById('deleteUserBtn');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+
+                    const confirmed = await confirmAction(
+                        'Are you sure you want to delete this user?',
+                        'Delete User',
+                        { dangerMode: true }
+                    );
+
+                    if (confirmed) {
+                        this.form.submit();
+                    }
+                });
+            }
         </script>
     </div>
 

@@ -906,7 +906,7 @@ include 'includes/header.php';
                                 </span>
                             </td>
                             <td>
-                                <form method="post" style="margin: 0;" onsubmit="return confirm('Revoke this test token? This action cannot be undone.');">
+                                <form method="post" style="margin: 0;" class="revoke-token-form">
                                     <input type="hidden" name="revoke_token" value="1">
                                     <input type="hidden" name="jti" value="<?= htmlspecialchars($token['jti']) ?>">
                                     <button type="submit" class="btn" style="padding: 0.25rem 0.75rem; font-size: 0.85rem; background: #dc3545;">
@@ -1052,6 +1052,23 @@ include 'includes/header.php';
     setTimeout(function() {
         window.location.reload();
     }, 30000);
+
+    // Handle revoke token confirmation
+    document.querySelectorAll('.revoke-token-form').forEach(form => {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const confirmed = await confirmAction(
+                'Revoke this test token? This action cannot be undone.',
+                'Revoke Token',
+                { dangerMode: true }
+            );
+
+            if (confirmed) {
+                this.submit();
+            }
+        });
+    });
 </script>
 
 <?php include 'includes/footer.php'; ?>

@@ -235,13 +235,13 @@ include 'includes/header.php';
             <h3>🔄 Manual Key Rotation</h3>
             <p>Rotate the JWT secret key. This will invalidate all current sessions and require all users to log in again.</p>
             
-            <form method="POST">
+            <form method="POST" id="rotateKeyForm">
                 <input type="hidden" name="action" value="rotate_key">
                 <div class="form-group">
                     <label for="reason">Rotation Reason:</label>
                     <input type="text" id="reason" name="reason" placeholder="e.g., Scheduled monthly rotation" required>
                 </div>
-                <button type="submit" class="btn btn-primary" onclick="return confirm('This will log out all users. Continue?')">
+                <button type="submit" class="btn btn-primary">
                     🔄 Rotate Secret Key
                 </button>
             </form>
@@ -252,13 +252,13 @@ include 'includes/header.php';
             <h3>🚨 Emergency Key Rotation</h3>
             <p><strong>WARNING:</strong> Emergency rotation immediately invalidates ALL tokens and sends alerts to all admins.</p>
             
-            <form method="POST">
+            <form method="POST" id="emergencyRotateForm">
                 <input type="hidden" name="action" value="emergency_rotate">
                 <div class="form-group">
                     <label for="emergency_reason">Security Incident Reason:</label>
                     <textarea id="emergency_reason" name="emergency_reason" rows="3" placeholder="Describe the security incident requiring emergency rotation..." required></textarea>
                 </div>
-                <button type="submit" class="btn btn-danger" onclick="return confirm('EMERGENCY ROTATION: This will immediately invalidate all sessions and send security alerts. Are you sure?')">
+                <button type="submit" class="btn btn-danger">
                     🚨 Emergency Rotate Now
                 </button>
             </form>
@@ -303,5 +303,37 @@ include 'includes/header.php';
         <a href="audit_logger.php" class="btn btn-secondary">View Audit Logs</a>
     </div>
 </div>
+
+<script>
+// Handle key rotation confirmation
+document.getElementById('rotateKeyForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const confirmed = await confirmAction(
+        'This will log out all users. Continue?',
+        'Rotate Secret Key',
+        { dangerMode: true }
+    );
+
+    if (confirmed) {
+        this.submit();
+    }
+});
+
+// Handle emergency rotation confirmation
+document.getElementById('emergencyRotateForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const confirmed = await confirmAction(
+        'EMERGENCY ROTATION: This will immediately invalidate all sessions and send security alerts. Are you sure?',
+        'Emergency Rotation',
+        { dangerMode: true }
+    );
+
+    if (confirmed) {
+        this.submit();
+    }
+});
+</script>
 
 <?php include 'includes/footer.php'; ?>

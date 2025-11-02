@@ -880,8 +880,13 @@ include 'includes/header.php';
             hasUnsavedChanges = alliances.some(a => a.isNew);
         }
 
-        function deleteAlliance(index, tag) {
-            if (!confirm(`Mark alliance "${tag}" for deletion?\n\nClick "Save All Changes" to permanently delete.`)) {
+        async function deleteAlliance(index, tag) {
+            const confirmed = await confirmAction(
+                `Mark alliance "${tag}" for deletion?\n\nClick "Save All Changes" to permanently delete.`,
+                'Delete Alliance',
+                { dangerMode: true }
+            );
+            if (!confirmed) {
                 return;
             }
 
@@ -896,9 +901,14 @@ include 'includes/header.php';
             showSuccess(`Alliance "${tag}" marked for deletion. Click "Save All Changes" to commit.`);
         }
 
-        function reloadAlliances() {
+        async function reloadAlliances() {
             if (hasUnsavedChanges) {
-                if (!confirm('You have unsaved changes. Are you sure you want to reload?')) {
+                const confirmed = await confirmAction(
+                    'You have unsaved changes. Are you sure you want to reload?',
+                    'Unsaved Changes',
+                    { dangerMode: true }
+                );
+                if (!confirmed) {
                     return;
                 }
             }

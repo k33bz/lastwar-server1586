@@ -629,11 +629,11 @@ include 'includes/header.php';
             try {
                 const response = await fetch('audit_log_api.php?action=raw');
                 const data = await response.text();
-                
+
                 document.getElementById('rawLogContent').value = data;
                 document.getElementById('rawLogModal').style.display = 'flex';
             } catch (error) {
-                alert('Error loading raw logs: ' + error.message);
+                alertModal('Error loading raw logs: ' + error.message, 'Error', 'error');
             }
         }
 
@@ -645,22 +645,22 @@ include 'includes/header.php';
             const textarea = document.getElementById('rawLogContent');
             textarea.select();
             textarea.setSelectionRange(0, 99999);
-            
+
             try {
                 document.execCommand('copy');
-                
+
                 // Visual feedback
                 const button = event.target;
                 const originalText = button.textContent;
                 button.textContent = '✅ Copied!';
                 button.style.background = '#28a745';
-                
+
                 setTimeout(() => {
                     button.textContent = originalText;
                     button.style.background = '';
                 }, 2000);
             } catch (err) {
-                alert('Failed to copy logs. Please select and copy manually.');
+                showToast('Failed to copy automatically. Text has been selected - press Ctrl+C to copy.', 'warning');
             }
         }
 

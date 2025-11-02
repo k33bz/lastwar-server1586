@@ -1015,21 +1015,26 @@ function saveUser() {
         if (data.success) {
             location.reload();
         } else {
-            alert('Error: ' + data.message);
+            alertModal(data.message, 'Error', 'error');
         }
     })
     .catch(error => {
-        alert('Error updating user: ' + error);
+        alertModal('Error updating user: ' + error, 'Error', 'error');
     });
 }
 
-function deleteUser(email) {
+async function deleteUser(email) {
     if (!email) {
         // Fallback to modal context if no email provided (for backward compatibility)
         email = document.getElementById('editEmail').value;
     }
-    
-    if (!confirm(`Are you sure you want to delete user: ${email}?\n\nThis action cannot be undone.`)) {
+
+    const confirmed = await confirmAction(
+        `Are you sure you want to delete user: ${email}?\n\nThis action cannot be undone.`,
+        'Delete User',
+        { dangerMode: true }
+    );
+    if (!confirmed) {
         return;
     }
     
@@ -1047,11 +1052,11 @@ function deleteUser(email) {
         if (data.success) {
             location.reload();
         } else {
-            alert('Error: ' + data.message);
+            alertModal(data.message, 'Error', 'error');
         }
     })
     .catch(error => {
-        alert('Error deleting user: ' + error);
+        alertModal('Error deleting user: ' + error, 'Error', 'error');
     });
 }
 
@@ -1106,14 +1111,14 @@ function addUser() {
     const email = document.getElementById('addEmail').value.trim();
 
     if (!email) {
-        alert('Please enter an email address');
+        alertModal('Please enter an email address.', 'Validation Error', 'warning');
         return;
     }
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-        alert('Please enter a valid email address');
+        alertModal('Please enter a valid email address.', 'Validation Error', 'warning');
         return;
     }
 
@@ -1124,7 +1129,7 @@ function addUser() {
     });
 
     if (roles.length === 0) {
-        alert('Please select at least one role');
+        alertModal('Please select at least one role.', 'Validation Error', 'warning');
         return;
     }
 
@@ -1142,9 +1147,9 @@ function addUser() {
         const allianceCheckboxes = document.querySelectorAll('input[name="add_alliances[]"]:checked');
         allianceCheckboxes.forEach(cb => alliances.push(cb.value));
     }
-    
+
     if (alliances.length === 0) {
-        alert('Please select at least one alliance');
+        alertModal('Please select at least one alliance.', 'Validation Error', 'warning');
         return;
     }
     
@@ -1159,11 +1164,11 @@ function addUser() {
         if (data.success) {
             location.reload();
         } else {
-            alert('Error: ' + data.message);
+            alertModal(data.message, 'Error', 'error');
         }
     })
     .catch(error => {
-        alert('Error adding user: ' + error);
+        alertModal('Error adding user: ' + error, 'Error', 'error');
     });
 }
 
@@ -1203,11 +1208,11 @@ function generateMagicLink(email) {
         if (data.success) {
             showMagicLinkModal(data.magic_link, data.expires_at, email, data.expiry_minutes);
         } else {
-            alert('Error: ' + data.message);
+            alertModal(data.message, 'Error', 'error');
         }
     })
     .catch(error => {
-        alert('Error generating magic link: ' + error);
+        alertModal('Error generating magic link: ' + error, 'Error', 'error');
     });
 }
 
@@ -1275,19 +1280,19 @@ function copyMagicLink() {
     
     try {
         document.execCommand('copy');
-        
+
         // Show feedback
         const button = event.target;
         const originalText = button.textContent;
         button.textContent = '✅ Copied!';
         button.style.background = '#28a745';
-        
+
         setTimeout(() => {
             button.textContent = originalText;
             button.style.background = '';
         }, 2000);
     } catch (err) {
-        alert('Failed to copy link. Please select and copy manually.');
+        showToast('Failed to copy automatically. Text has been selected - press Ctrl+C to copy.', 'warning');
     }
 }
 
@@ -1309,10 +1314,10 @@ function copyMagicLinkFromModal() {
             button.textContent = originalText;
             button.style.background = '';
         }, 2000);
-        
+
         showToast('Magic link copied to clipboard!', 'success');
     } catch (err) {
-        alert('Failed to copy link. Please select and copy manually.');
+        showToast('Failed to copy automatically. Text has been selected - press Ctrl+C to copy.', 'warning');
     }
 }
 
