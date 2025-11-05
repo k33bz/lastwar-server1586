@@ -232,10 +232,20 @@ function can_delete_alliances($token) {
  * Check if user has a specific role (supports multi-role)
  *
  * @param object $token Decoded JWT token
- * @param string $role Role to check for ('admin', 'r5', 'r4', 'ape', etc.)
- * @return bool True if user has the role
+ * @param string|array $role Role(s) to check for ('admin', 'r5', 'r4', 'ape', etc.)
+ * @return bool True if user has the role (or any of the roles if array)
  */
 function has_role($token, $role) {
+    // If checking multiple roles (array), check if user has any of them
+    if (is_array($role)) {
+        foreach ($role as $r) {
+            if (has_role($token, $r)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Check new multi-role format first
     if (isset($token->roles) && is_array($token->roles)) {
         return in_array($role, $token->roles);
