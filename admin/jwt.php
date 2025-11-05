@@ -537,4 +537,33 @@ function get_active_sessions($email) {
         return [];
     }
 }
+
+/**
+ * Get user display name (in-game name or email local part)
+ *
+ * @param string $email User email address
+ * @return string Display name
+ */
+function get_user_display_name($email) {
+    $user_data = get_user_by_email($email);
+
+    // If user has in-game name set, use it
+    if (!empty($user_data['in_game_name'])) {
+        return $user_data['in_game_name'];
+    }
+
+    // Otherwise, use email local part (before @)
+    $parts = explode('@', $email);
+    return $parts[0];
+}
+
+/**
+ * Get user display name from JWT token
+ *
+ * @param object $token JWT token
+ * @return string Display name
+ */
+function get_user_display_name_from_token($token) {
+    return get_user_display_name($token->sub);
+}
 ?>

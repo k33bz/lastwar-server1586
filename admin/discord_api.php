@@ -82,15 +82,24 @@ try {
                 throw new Exception('No accessible channels in selection');
             }
 
-            // Create message
+            // Get user display info for attribution
+            $display_name = get_user_display_name($user_email);
+            $user_roles = get_user_roles($user);
+            $primary_role = strtoupper($user_roles[0] ?? 'user');
+
+            // Create message with user attribution
+            $footer_options = [
+                'footer' => "{$display_name} ({$primary_role}) • Last War 1586 Bot"
+            ];
+
             if ($use_embed) {
                 $message = create_embed_announcement(
                     $embed_title ?: 'Announcement',
                     $message_content,
-                    ['color' => (int)$embed_color]
+                    array_merge(['color' => (int)$embed_color], $footer_options)
                 );
             } else {
-                $message = create_simple_announcement($message_content);
+                $message = create_simple_announcement($message_content, $footer_options);
             }
 
             // Send to channels

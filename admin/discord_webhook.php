@@ -310,6 +310,11 @@ function create_discord_embed($title, $description, $options = []) {
  * @return array Message structure
  */
 function create_simple_announcement($content, $options = []) {
+    // Add footer attribution to message content for simple (non-embed) messages
+    if (isset($options['footer'])) {
+        $content .= "\n\n*— " . $options['footer'] . "*";
+    }
+
     $message = ['content' => $content];
 
     // Add allowed mentions
