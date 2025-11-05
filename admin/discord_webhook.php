@@ -256,10 +256,10 @@ function create_discord_embed($title, $description, $options = []) {
 
     // Add footer
     if (isset($options['footer'])) {
-        $embed['footer'] = [
-            'text' => $options['footer'],
-            'icon_url' => $options['footer_icon'] ?? null
-        ];
+        $embed['footer'] = ['text' => $options['footer']];
+        if (isset($options['footer_icon'])) {
+            $embed['footer']['icon_url'] = $options['footer_icon'];
+        }
     } else {
         // Default footer
         $embed['footer'] = [
@@ -284,11 +284,13 @@ function create_discord_embed($title, $description, $options = []) {
 
     // Add author
     if (isset($options['author'])) {
-        $embed['author'] = [
-            'name' => $options['author'],
-            'icon_url' => $options['author_icon'] ?? null,
-            'url' => $options['author_url'] ?? null
-        ];
+        $embed['author'] = ['name' => $options['author']];
+        if (isset($options['author_icon'])) {
+            $embed['author']['icon_url'] = $options['author_icon'];
+        }
+        if (isset($options['author_url'])) {
+            $embed['author']['url'] = $options['author_url'];
+        }
     }
 
     return $embed;
