@@ -7,7 +7,7 @@
 require_once 'jwt.php';
 require_once 'json_helpers.php';
 require_once 'audit_logger.php';
-require_once 'input_validator.php';
+require_once 'includes/input_validator.php';
 
 header('Content-Type: application/json');
 
