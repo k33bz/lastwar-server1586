@@ -162,7 +162,12 @@ function handle_alliance_update() {
 
         // Discord announcement channels (Issue #59)
         $discord_channels = [];
+
+        // Debug: Log what we're receiving
+        error_log("Discord channels POST data: " . print_r($_POST['discord_channels'] ?? 'NOT SET', true));
+
         if (isset($_POST['discord_channels']) && is_array($_POST['discord_channels'])) {
+            error_log("Processing " . count($_POST['discord_channels']) . " discord channels");
             foreach ($_POST['discord_channels'] as $channel_data) {
                 $channel_id = trim($channel_data['id'] ?? '');
                 $channel_name = trim($channel_data['name'] ?? '');
@@ -194,6 +199,10 @@ function handle_alliance_update() {
             }
         }
         $alliances_array[$index]['discord']['channels'] = $discord_channels;
+
+        // Debug: Log what we're saving
+        error_log("Saving " . count($discord_channels) . " discord channels for alliance " . $tag);
+        error_log("Channels being saved: " . json_encode($discord_channels));
 
         // Contact info
         if (!isset($alliances_array[$index]['contact'])) {

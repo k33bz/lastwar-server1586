@@ -17,10 +17,12 @@
 require_once 'jwt.php';
 require_once 'includes/csrf.php';
 
-// CSRF Protection (must come before any state-changing operations)
-requireCsrfToken();
-
 $user = require_jwt_session();
+
+// CSRF Protection (only for state-changing operations)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    requireCsrfToken();
+}
 
 // Include helper functions
 require_once 'includes/alliance_helper.php';
