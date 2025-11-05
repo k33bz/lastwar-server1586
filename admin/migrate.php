@@ -196,6 +196,7 @@ class MigrationManager {
             '3.2.0' => 'migrateToV3_2',    // Add audit logging
             '3.3.0' => 'migrateToV3_3',    // Add backup/restore support
             '3.4.0' => 'migrateToV3_4',    // Multi-role system (roles array)
+            '3.5.0' => 'migrateToV3_5',    // Discord integration
             // Add future migrations here
         ];
 
@@ -443,6 +444,84 @@ class MigrationManager {
         }
         $this->log("   ✓ Users can now have multiple simultaneous roles");
         $this->log("   ✓ APE role can be assigned independently");
+    }
+
+    /**
+     * Migration: v3.5.0 - Discord Integration
+     */
+    private function migrateToV3_5() {
+        $this->log("   - Checking .env for Discord configuration...");
+
+        $env_file = $this->admin_dir . '.env';
+        if (!file_exists($env_file)) {
+            throw new Exception(".env file not found");
+        }
+
+        $env_content = file_get_contents($env_file);
+        $missing_vars = [];
+        $needs_attention = [];
+
+        // Check required Discord variables
+        $required_discord_vars = [
+            'DISCORD_BOT_TOKEN' => 'Discord bot authentication token (get from https://discord.com/developers)',
+            'DISCORD_CLIENT_ID' => 'Discord application ID',
+            'DISCORD_PUBLIC_KEY' => 'Discord application public key',
+            'DISCORD_ENABLED' => 'Enable/disable Discord integration (true/false)',
+            'DISCORD_RATE_LIMIT_ENABLED' => 'Enable rate limiting (true/false)',
+            'DISCORD_MAX_INSTANT_PER_HOUR' => 'Maximum instant messages per hour (default: 10)',
+            'DISCORD_MAX_SCHEDULED_PENDING' => 'Maximum scheduled messages (default: 50)',
+            'DISCORD_MAX_RECURRING_ACTIVE' => 'Maximum recurring messages (default: 5)'
+        ];
+
+        foreach ($required_discord_vars as $var => $description) {
+            if (strpos($env_content, $var . '=') === false) {
+                $missing_vars[] = "$var - $description";
+            } elseif ($var === 'DISCORD_BOT_TOKEN' && strpos($env_content, 'your_discord_bot_token_here') !== false) {
+                $needs_attention[] = "$var needs to be updated with actual bot token";
+            }
+        }
+
+        if (count($missing_vars) > 0) {
+            $this->log("   ⚠️  Missing .env variables:");
+            foreach ($missing_vars as $var) {
+                $this->log("      - $var");
+            }
+            $this->log("   ℹ️  Please add these to .env manually or copy from .env.example");
+            $this->log("   ℹ️  See docs/discord-announcements/BOT-SETUP.md for setup instructions");
+        } else {
+            $this->log("   ✓ All Discord configuration variables present");
+        }
+
+        if (count($needs_attention) > 0) {
+            $this->log("   ⚠️  Configuration needs attention:");
+            foreach ($needs_attention as $item) {
+                $this->log("      - $item");
+            }
+            $this->log("   ℹ️  Get your Discord bot token from https://discord.com/developers");
+            $this->log("   ℹ️  See docs/discord-announcements/BOT-SETUP.md for detailed setup");
+        }
+
+        // Initialize discord_rate_limits.json if doesn't exist
+        $rate_limits_file = $this->admin_dir . 'discord_rate_limits.json';
+        if (!file_exists($rate_limits_file)) {
+            $this->log("   - Creating discord_rate_limits.json...");
+            file_put_contents($rate_limits_file, json_encode([], JSON_PRETTY_PRINT));
+            $this->log("   ✓ discord_rate_limits.json created");
+        }
+
+        // Check if composer dependencies are installed (Guzzle for Discord API)
+        $vendor_dir = $this->admin_dir . 'vendor';
+        if (!file_exists($vendor_dir) || !file_exists($vendor_dir . '/autoload.php')) {
+            $this->log("   ⚠️  Composer dependencies not installed");
+            $this->log("   ℹ️  Run 'composer install' in admin/ directory");
+            $this->log("   ℹ️  Discord integration requires GuzzleHTTP library");
+        } else {
+            $this->log("   ✓ Composer dependencies installed");
+        }
+
+        $this->log("   ✓ Discord integration files ready");
+        $this->log("   ℹ️  Configure channels in data/alliances.json under discord.channels");
+        $this->log("   ℹ️  Visit /admin/discord_config.php to verify bot connection");
     }
 
     /**
