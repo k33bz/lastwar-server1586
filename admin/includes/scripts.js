@@ -665,6 +665,54 @@ async function confirmAction(message, title = 'Confirm Action', options = {}) {
 }
 
 /**
+ * Show a modal dialog (convenience wrapper for confirmAction/alertModal)
+ * @param {Object} options - Modal options
+ * @param {string} options.title - Modal title
+ * @param {string} options.message - Modal message
+ * @param {string} options.confirmText - Confirm button text (default: 'OK')
+ * @param {string} options.cancelText - Cancel button text (optional, creates confirm dialog)
+ * @param {string} options.confirmClass - CSS class for confirm button (e.g., 'btn-danger')
+ * @param {Function} options.onConfirm - Callback when confirmed
+ * @param {Function} options.onCancel - Callback when cancelled
+ * @returns {Promise<boolean>}
+ */
+async function showModal(options = {}) {
+    const defaults = {
+        title: 'Notice',
+        message: '',
+        confirmText: 'OK',
+        cancelText: null,
+        confirmClass: 'btn-primary',
+        onConfirm: null,
+        onCancel: null
+    };
+    const opts = { ...defaults, ...options };
+
+    // If no cancel button, show alert
+    if (!opts.cancelText) {
+        await alertModal(opts.message, opts.title, 'info');
+        if (opts.onConfirm) await opts.onConfirm();
+        return true;
+    }
+
+    // Show confirmation dialog
+    const dangerMode = opts.confirmClass === 'btn-danger';
+    const confirmed = await confirmAction(opts.message, opts.title, {
+        confirmText: opts.confirmText,
+        cancelText: opts.cancelText,
+        dangerMode
+    });
+
+    if (confirmed && opts.onConfirm) {
+        await opts.onConfirm();
+    } else if (!confirmed && opts.onCancel) {
+        await opts.onCancel();
+    }
+
+    return confirmed;
+}
+
+/**
  * Simplified alert replacement with modal
  * @param {string} message - Alert message
  * @param {string} title - Alert title

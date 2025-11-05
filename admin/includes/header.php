@@ -563,6 +563,21 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </div>
                 </div>
 
+                <!-- Discord Dropdown -->
+                <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && ($user->aud === 'admin' || $user->aud === 'r5' || $user->aud === 'r4')): ?>
+                <div class="nav-dropdown">
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['discord_announcements.php', 'discord_config.php']) ? 'active' : ''; ?>">
+                        Discord
+                    </div>
+                    <div class="nav-dropdown-menu">
+                        <a href="discord_announcements.php" class="nav-link <?php echo $current_page === 'discord_announcements.php' ? 'active' : ''; ?>">Announcements</a>
+                        <?php if ($user->aud === 'admin'): ?>
+                        <a href="discord_config.php" class="nav-link <?php echo $current_page === 'discord_config.php' ? 'active' : ''; ?>">Configuration</a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
                 <?php if ($user->aud === 'admin'): ?>
                 <!-- Users Dropdown -->
                 <div class="nav-dropdown">

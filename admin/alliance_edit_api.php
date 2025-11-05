@@ -160,6 +160,41 @@ function handle_alliance_update() {
         }
         $alliances_array[$index]['discord']['logoUrl'] = $discord_logo_validation['sanitized'] ?: null;
 
+        // Discord announcement channels (Issue #59)
+        $discord_channels = [];
+        if (isset($_POST['discord_channels']) && is_array($_POST['discord_channels'])) {
+            foreach ($_POST['discord_channels'] as $channel_data) {
+                $channel_id = trim($channel_data['id'] ?? '');
+                $channel_name = trim($channel_data['name'] ?? '');
+                $channel_type = $channel_data['type'] ?? 'announcements';
+                $channel_enabled = ($channel_data['enabled'] ?? '0') === '1';
+
+                // Validate channel ID (18-20 digits)
+                if (!empty($channel_id)) {
+                    if (!preg_match('/^\d{15,20}$/', $channel_id)) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Invalid Discord channel ID format: ' . $channel_id . '. Must be 15-20 digits.']);
+                        return;
+                    }
+
+                    // Validate channel name
+                    if (empty($channel_name)) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Channel name is required for channel ID: ' . $channel_id]);
+                        return;
+                    }
+
+                    $discord_channels[] = [
+                        'id' => $channel_id,
+                        'name' => sanitize_text($channel_name),
+                        'type' => in_array($channel_type, ['announcements', 'events', 'reminders', 'general']) ? $channel_type : 'announcements',
+                        'enabled' => $channel_enabled
+                    ];
+                }
+            }
+        }
+        $alliances_array[$index]['discord']['channels'] = $discord_channels;
+
         // Contact info
         if (!isset($alliances_array[$index]['contact'])) {
             $alliances_array[$index]['contact'] = [];

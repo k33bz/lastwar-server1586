@@ -582,6 +582,154 @@ if ($show_all) {
             <input type="text" name="discord_logo" value="<?= htmlspecialchars($discord['logoUrl'] ?? '') ?>" placeholder="images/discord-logos/TAG.png">
         </div>
 
+        <h2>Discord Announcement Channels <span style="color: #667eea; font-size: 0.9rem;">✨ New</span></h2>
+        <p style="color: #666; margin-bottom: 1rem;">Configure Discord channels for sending announcements. R5 and R4 members can send messages to these channels.</p>
+
+        <div id="discordChannelsContainer">
+            <?php
+            $discord_channels = $discord['channels'] ?? [];
+            if (empty($discord_channels)): ?>
+                <p style="color: #999; text-align: center; padding: 2rem;">No channels configured yet. Click "Add Channel" to get started.</p>
+            <?php else: ?>
+                <?php foreach ($discord_channels as $index => $channel): ?>
+                    <div class="discord-channel-item" data-index="<?= $index ?>">
+                        <div class="form-group">
+                            <label>Channel ID <small>(Right-click channel in Discord → Copy ID)</small></label>
+                            <input type="text" name="discord_channels[<?= $index ?>][id]" value="<?= htmlspecialchars($channel['id'] ?? '') ?>" placeholder="18-20 digit channel ID">
+                        </div>
+                        <div class="form-group">
+                            <label>Channel Name <small>(for display only)</small></label>
+                            <input type="text" name="discord_channels[<?= $index ?>][name]" value="<?= htmlspecialchars($channel['name'] ?? '') ?>" placeholder="e.g., announcements, events">
+                        </div>
+                        <div class="form-group">
+                            <label>Channel Type</label>
+                            <select name="discord_channels[<?= $index ?>][type]">
+                                <option value="announcements" <?= ($channel['type'] ?? '') === 'announcements' ? 'selected' : '' ?>>Announcements</option>
+                                <option value="events" <?= ($channel['type'] ?? '') === 'events' ? 'selected' : '' ?>>Events</option>
+                                <option value="reminders" <?= ($channel['type'] ?? '') === 'reminders' ? 'selected' : '' ?>>Reminders</option>
+                                <option value="general" <?= ($channel['type'] ?? '') === 'general' ? 'selected' : '' ?>>General</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="hidden" name="discord_channels[<?= $index ?>][enabled]" value="0">
+                                <input type="checkbox" name="discord_channels[<?= $index ?>][enabled]" value="1" <?= ($channel['enabled'] ?? true) ? 'checked' : '' ?>>
+                                <span>Enabled (users can send to this channel)</span>
+                            </label>
+                        </div>
+                        <button type="button" class="btn-remove-channel" onclick="removeDiscordChannel(<?= $index ?>)">Remove Channel</button>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+
+        <button type="button" class="btn-add-channel" onclick="addDiscordChannel()">+ Add Channel</button>
+
+        <style>
+            .discord-channel-item {
+                background: #f8f9fa;
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                padding: 1.5rem;
+                margin-bottom: 1rem;
+                position: relative;
+            }
+            .btn-add-channel {
+                background: #28a745;
+                color: white;
+                border: none;
+                padding: 0.75rem 1.5rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 600;
+                margin-bottom: 2rem;
+            }
+            .btn-add-channel:hover {
+                background: #218838;
+            }
+            .btn-remove-channel {
+                background: #dc3545;
+                color: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 0.9rem;
+            }
+            .btn-remove-channel:hover {
+                background: #c82333;
+            }
+        </style>
+
+        <script>
+            let channelIndex = <?= count($discord_channels) ?>;
+
+            function addDiscordChannel() {
+                const container = document.getElementById('discordChannelsContainer');
+                const noChannelsMsg = container.querySelector('p');
+                if (noChannelsMsg) noChannelsMsg.remove();
+
+                const channelHtml = `
+                    <div class="discord-channel-item" data-index="${channelIndex}">
+                        <div class="form-group">
+                            <label>Channel ID <small>(Right-click channel in Discord → Copy ID)</small></label>
+                            <input type="text" name="discord_channels[${channelIndex}][id]" placeholder="18-20 digit channel ID" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Channel Name <small>(for display only)</small></label>
+                            <input type="text" name="discord_channels[${channelIndex}][name]" placeholder="e.g., announcements, events" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Channel Type</label>
+                            <select name="discord_channels[${channelIndex}][type]">
+                                <option value="announcements" selected>Announcements</option>
+                                <option value="events">Events</option>
+                                <option value="reminders">Reminders</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="hidden" name="discord_channels[${channelIndex}][enabled]" value="0">
+                                <input type="checkbox" name="discord_channels[${channelIndex}][enabled]" value="1" checked>
+                                <span>Enabled (users can send to this channel)</span>
+                            </label>
+                        </div>
+                        <button type="button" class="btn-remove-channel" onclick="removeDiscordChannel(${channelIndex})">Remove Channel</button>
+                    </div>
+                `;
+
+                container.insertAdjacentHTML('beforeend', channelHtml);
+                channelIndex++;
+            }
+
+            async function removeDiscordChannel(index) {
+                const item = document.querySelector(`.discord-channel-item[data-index="${index}"]`);
+                if (item) {
+                    // Use confirmAction from scripts.js
+                    const confirmed = await confirmAction(
+                        'Are you sure you want to remove this Discord channel from the configuration?',
+                        'Remove Discord Channel?',
+                        {
+                            confirmText: 'Remove',
+                            cancelText: 'Cancel',
+                            dangerMode: true
+                        }
+                    );
+
+                    if (confirmed) {
+                        item.remove();
+
+                        // Show "no channels" message if empty
+                        const container = document.getElementById('discordChannelsContainer');
+                        if (container.children.length === 0) {
+                            container.innerHTML = '<p style="color: #999; text-align: center; padding: 2rem;">No channels configured yet. Click "Add Channel" to get started.</p>';
+                        }
+                    }
+                }
+            }
+        </script>
+
         <h2>Recruitment & Contact</h2>
 
         <div class="form-group">
@@ -708,8 +856,14 @@ document.addEventListener('DOMContentLoaded', function() {
             apiUrl = 'alliance_edit_api.php?action=sign_rules';
         }
         
+        // Get CSRF token from meta tag
+        const csrfToken = getCsrfToken();
+
         fetch(apiUrl, {
             method: 'POST',
+            headers: {
+                'X-CSRF-Token': csrfToken
+            },
             body: formData
         })
         .then(response => response.json())

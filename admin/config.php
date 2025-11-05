@@ -86,6 +86,29 @@ define('USERS_FILE', __DIR__ . '/users.json');
 define('BLACKLIST_FILE', __DIR__ . '/token_blacklist.json');
 define('ALLIANCES_FILE', dirname(__DIR__) . '/data/alliances.json');
 
+// Discord Bot Configuration (Issue #59)
+define('DISCORD_BOT_TOKEN', $_ENV['DISCORD_BOT_TOKEN'] ?? '');
+define('DISCORD_CLIENT_ID', $_ENV['DISCORD_CLIENT_ID'] ?? '');
+define('DISCORD_PUBLIC_KEY', $_ENV['DISCORD_PUBLIC_KEY'] ?? '');
+define('DISCORD_ENABLED', ($_ENV['DISCORD_ENABLED'] ?? 'false') === 'true');
+define('DISCORD_RATE_LIMIT_ENABLED', ($_ENV['DISCORD_RATE_LIMIT_ENABLED'] ?? 'true') === 'true');
+
+// Discord Rate Limits
+define('DISCORD_MAX_INSTANT_PER_HOUR', (int)($_ENV['DISCORD_MAX_INSTANT_PER_HOUR'] ?? 10));
+define('DISCORD_MAX_SCHEDULED_PENDING', (int)($_ENV['DISCORD_MAX_SCHEDULED_PENDING'] ?? 50));
+define('DISCORD_MAX_RECURRING_ACTIVE', (int)($_ENV['DISCORD_MAX_RECURRING_ACTIVE'] ?? 5));
+define('DISCORD_CROSS_ALLIANCE_DAILY_LIMIT', (int)($_ENV['DISCORD_CROSS_ALLIANCE_DAILY_LIMIT'] ?? 5));
+
+// Discord Webhook Fallback (Optional)
+define('DISCORD_WEBHOOK_URL_MAIN', $_ENV['DISCORD_WEBHOOK_URL_MAIN'] ?? '');
+define('DISCORD_WEBHOOK_URL_NAP15', $_ENV['DISCORD_WEBHOOK_URL_NAP15'] ?? '');
+
+// Discord Data Files
+define('DISCORD_CHANNELS_FILE', dirname(__DIR__) . '/data/discord-channels.json');
+define('DISCORD_ANNOUNCEMENTS_FILE', dirname(__DIR__) . '/data/discord-announcements.json');
+define('DISCORD_HISTORY_FILE', dirname(__DIR__) . '/data/discord-history.json');
+define('DISCORD_TEMPLATES_FILE', dirname(__DIR__) . '/data/discord-templates.json');
+
 // Security Headers
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');

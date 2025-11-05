@@ -1,0 +1,86 @@
+{
+    "users": [
+        {
+            "email": "matthewkastro@gmail.com",
+            "alliances": [
+                "*"
+            ],
+            "role": "admin",
+            "powereditor": true,
+            "active_sessions": [
+                {
+                    "jti": "0498cd76c35e9a06ce65e1de610dff45",
+                    "exp": 1761950239,
+                    "created_at": 1761946639,
+                    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:144.0) Gecko/20100101 Firefox/144.0"
+                }
+            ]
+        },
+        {
+            "email": "admin@example.com",
+            "alliances": [
+                "*"
+            ],
+            "role": "admin",
+            "powereditor": false
+        },
+        {
+            "email": "r5-user@example.com",
+            "alliances": [
+                "UvvU"
+            ],
+            "role": "r5",
+            "powereditor": false
+        },
+        {
+            "email": "r4-user@example.com",
+            "alliances": [
+                "UvvU",
+                "ORCE"
+            ],
+            "role": "r4",
+            "powereditor": false
+        },
+        {
+            "email": "r4-power@example.com",
+            "alliances": [
+                "UvvU",
+                "ORCE"
+            ],
+            "role": "r4",
+            "powereditor": true
+        },
+        {
+            "email": "r5-power@example.com",
+            "alliances": [
+                "UvvU"
+            ],
+            "role": "r5",
+            "powereditor": true
+        },
+        {
+            "email": "matthewkastro+r4_test2@gmail.com",
+            "alliances": [
+                "MTOP",
+                "nic1"
+            ],
+            "role": "r4",
+            "powereditor": false,
+            "active_sessions": [
+                {
+                    "jti": "a519069e4dfb2597f38254679d874133",
+                    "exp": 1760661583,
+                    "created_at": 1760657983,
+                    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:143.0) Gecko/20100101 Firefox/143.0"
+                }
+            ]
+        },
+        {
+            "email": "ejtollridge@gmail.com",
+            "alliances": [],
+            "roles": [
+                "ape"
+            ]
+        }
+    ]
+}
