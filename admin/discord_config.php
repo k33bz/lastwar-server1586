@@ -263,6 +263,54 @@ $bot_status = validate_discord_bot_token();
         <?php endif; ?>
     </div>
 
+    <!-- Bot Invite Link -->
+    <div class="config-section">
+        <h3>🔗 Bot Invite Link</h3>
+
+        <div class="alert alert-info">
+            <strong>Add Bot to Your Discord Server:</strong>
+            <p style="margin: 0.5rem 0;">
+                If you're getting permission errors (403) or "channel not found" errors (404), the bot needs to be invited to your Discord server.
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label>Bot Invite URL</label>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <input
+                    type="text"
+                    id="inviteUrl"
+                    readonly
+                    value="<?php echo DISCORD_BOT_INVITE_LINK; ?>"
+                    style="flex: 1;"
+                >
+                <button type="button" class="btn btn-primary" onclick="copyInviteLink()">
+                    📋 Copy Link
+                </button>
+                <a
+                    href="<?php echo DISCORD_BOT_INVITE_LINK; ?>"
+                    target="_blank"
+                    class="btn btn-success"
+                >
+                    🚀 Open Invite
+                </a>
+            </div>
+            <div class="help-text">
+                Click the link to add the bot to your Discord server. You must have "Manage Server" permission.
+            </div>
+        </div>
+
+        <div style="margin-top: 1rem;">
+            <strong>Required Bot Permissions:</strong>
+            <ul style="margin: 0.5rem 0 0 0; padding-left: 1.5rem;">
+                <li>Read Messages/View Channels</li>
+                <li>Send Messages</li>
+                <li>Embed Links</li>
+                <li>Read Message History</li>
+            </ul>
+        </div>
+    </div>
+
     <!-- Configuration Information -->
     <div class="config-section">
         <h3>📋 Configuration</h3>
@@ -342,6 +390,19 @@ Recurring messages: <?php echo DISCORD_MAX_RECURRING_ACTIVE; ?> active per user
 </div>
 
 <script>
+function copyInviteLink() {
+    const inviteUrl = document.getElementById('inviteUrl');
+    inviteUrl.select();
+    inviteUrl.setSelectionRange(0, 99999); // For mobile devices
+
+    try {
+        document.execCommand('copy');
+        showAlert('✓ Invite link copied to clipboard!', 'success');
+    } catch (err) {
+        showAlert('Failed to copy link. Please copy manually.', 'error');
+    }
+}
+
 async function testConnection() {
     const channelId = document.getElementById('testChannelId').value.trim();
     const resultDiv = document.getElementById('testResult');

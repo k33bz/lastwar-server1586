@@ -566,4 +566,32 @@ function get_user_display_name($email) {
 function get_user_display_name_from_token($token) {
     return get_user_display_name($token->sub);
 }
+
+/**
+ * Get user alliance tags formatted for display
+ *
+ * @param string $email User email
+ * @return string Formatted alliance tags like "[MTOP]" or "[MTOP][nic1]" or empty string
+ */
+function get_user_alliance_tags($email) {
+    $user_data = get_user_by_email($email);
+
+    if (!$user_data || empty($user_data['alliances'])) {
+        return '';
+    }
+
+    $alliances = $user_data['alliances'];
+
+    // If user has wildcard (*) access, don't show alliance tags
+    if (in_array('*', $alliances)) {
+        return '';
+    }
+
+    // Format alliances as [TAG1][TAG2]
+    $tags = array_map(function($alliance) {
+        return '[' . strtoupper($alliance) . ']';
+    }, $alliances);
+
+    return implode('', $tags);
+}
 ?>

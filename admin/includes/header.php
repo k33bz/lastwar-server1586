@@ -626,9 +626,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     endforeach;
                     ?>
                 </span>
-                <a href="user_profile.php" class="profile-btn" style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; background: rgba(255, 255, 255, 0.1); margin-right: 0.5rem; transition: all 0.3s ease;">
-                    👤 My Profile
-                </a>
                 <a href="../logout.php" class="logout-btn">
                     Logout <span class="token-countdown" id="token-countdown"></span>
                 </a>

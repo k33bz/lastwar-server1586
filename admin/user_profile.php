@@ -244,7 +244,7 @@ include 'includes/header.php';
                     id="inGameName"
                     name="in_game_name"
                     value="<?php echo htmlspecialchars($user_data['in_game_name'] ?? ''); ?>"
-                    placeholder="e.g., jonnybgood"
+                    placeholder="e.g., commander 1a2b3c4d5e"
                     required
                     maxlength="50"
                 >

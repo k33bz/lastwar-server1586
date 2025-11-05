@@ -83,13 +83,15 @@ try {
             }
 
             // Get user display info for attribution
+            $alliance_tags = get_user_alliance_tags($user_email);
             $display_name = get_user_display_name($user_email);
             $user_roles = get_user_roles($user);
             $primary_role = strtoupper($user_roles[0] ?? 'user');
 
-            // Create message with user attribution
+            // Create message with user attribution (with alliance tags if available)
+            $attribution = $alliance_tags ? "{$alliance_tags} {$display_name}" : $display_name;
             $footer_options = [
-                'footer' => "{$display_name} ({$primary_role}) • Last War 1586 Bot"
+                'footer' => "{$attribution} ({$primary_role}) • Last War 1586 Bot"
             ];
 
             if ($use_embed) {
@@ -111,24 +113,42 @@ try {
             $error_messages = [];
 
             foreach ($results as $channel_id => $result) {
+                // Get channel context for logging
+                $channel_info = get_channel_info_for_logging($user, $channel_id);
+
                 if ($result['success']) {
                     $success_count++;
-                    log_audit_event('discord_message_sent', $user_email, [
+                    $log_data = [
                         'channel_id' => $channel_id,
                         'type' => 'instant',
                         'message_preview' => substr($message_content, 0, 100)
-                    ]);
+                    ];
+
+                    // Add channel context if available
+                    if ($channel_info) {
+                        $log_data = array_merge($log_data, $channel_info);
+                    }
+
+                    log_audit_event('discord_message_sent', $user_email, $log_data);
                 } else {
                     $failed_channels[] = $channel_id;
                     $error_messages[$channel_id] = $result['error'] ?? 'Unknown error';
                     // Log the error to both error log and audit log
                     error_log("Discord send failed for channel {$channel_id}: " . ($result['error'] ?? 'Unknown error'));
-                    log_audit_event('discord_message_failed', $user_email, [
+
+                    $log_data = [
                         'channel_id' => $channel_id,
                         'type' => 'instant',
                         'error' => $result['error'] ?? 'Unknown error',
                         'message_preview' => substr($message_content, 0, 100)
-                    ]);
+                    ];
+
+                    // Add channel context if available
+                    if ($channel_info) {
+                        $log_data = array_merge($log_data, $channel_info);
+                    }
+
+                    log_audit_event('discord_message_failed', $user_email, $log_data);
                 }
             }
 
@@ -345,6 +365,30 @@ function validate_user_channel_access($user, $channel_ids) {
     $accessible_ids = array_column($accessible_channels, 'id');
 
     return array_intersect($channel_ids, $accessible_ids);
+}
+
+/**
+ * Get channel info by ID from user's accessible channels
+ *
+ * @param object $user JWT user object
+ * @param string $channel_id Discord channel ID
+ * @return array|null Channel info or null if not found
+ */
+function get_channel_info_for_logging($user, $channel_id) {
+    $accessible_channels = get_user_accessible_channels($user);
+
+    foreach ($accessible_channels as $channel) {
+        if ($channel['id'] === $channel_id) {
+            return [
+                'channel_name' => $channel['name'] ?? 'Unknown Channel',
+                'server_name' => $channel['server_name'] ?? 'Unknown Server',
+                'alliance' => $channel['alliance'] ?? null,
+                'alliance_name' => $channel['alliance_name'] ?? null
+            ];
+        }
+    }
+
+    return null;
 }
 
 /**

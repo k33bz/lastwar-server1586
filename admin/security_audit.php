@@ -346,8 +346,93 @@ include 'includes/header.php';
         .log-user {
             color: #495057;
             font-weight: 500;
+            cursor: help;
+            position: relative;
+            border-bottom: 1px dotted #6c757d;
         }
-        
+
+        .log-user:hover {
+            color: #212529;
+        }
+
+        /* User Info Tooltip */
+        .user-tooltip {
+            position: absolute;
+            background: #2c3e50;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            z-index: 10000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            min-width: 200px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .user-tooltip.show {
+            opacity: 1;
+        }
+
+        .user-tooltip-header {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .user-tooltip-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.25rem 0;
+            font-size: 0.8rem;
+        }
+
+        .user-tooltip-label {
+            color: rgba(255, 255, 255, 0.7);
+            margin-right: 0.5rem;
+        }
+
+        .user-tooltip-value {
+            font-weight: 500;
+        }
+
+        .user-tooltip-badge {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            margin: 0 0.15rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .user-tooltip-badge.role-admin {
+            background: #e74c3c;
+        }
+
+        .user-tooltip-badge.role-r5 {
+            background: #3498db;
+        }
+
+        .user-tooltip-badge.role-r4 {
+            background: #2ecc71;
+        }
+
+        .user-tooltip-badge.role-president {
+            background: #16a085;
+        }
+
+        .user-tooltip-badge.role-ape {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .user-tooltip-loading {
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+        }
+
         .log-ip {
             color: #6c757d;
             font-size: 0.8rem;
@@ -676,6 +761,136 @@ include 'includes/header.php';
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
         }
+
+        // User Info Tooltip System
+        const userInfoCache = {};
+        let activeTooltip = null;
+
+        async function getUserInfo(email) {
+            // Return cached data if available
+            if (userInfoCache[email]) {
+                return userInfoCache[email];
+            }
+
+            // Fetch user info from server
+            try {
+                const response = await fetch('audit_log_api.php?action=get_user_info&email=' + encodeURIComponent(email));
+                const data = await response.json();
+
+                if (data.success) {
+                    userInfoCache[email] = data.user_info;
+                    return data.user_info;
+                }
+            } catch (error) {
+                console.error('Failed to fetch user info:', error);
+            }
+
+            return null;
+        }
+
+        function createTooltip(email, userInfo) {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'user-tooltip';
+
+            if (!userInfo) {
+                tooltip.innerHTML = '<div class="user-tooltip-loading">Loading...</div>';
+                return tooltip;
+            }
+
+            let html = '<div class="user-tooltip-header">' + escapeHtml(email) + '</div>';
+
+            // Roles
+            if (userInfo.roles && userInfo.roles.length > 0) {
+                html += '<div class="user-tooltip-row">';
+                html += '<span class="user-tooltip-label">Roles:</span>';
+                html += '<span class="user-tooltip-value">';
+                userInfo.roles.forEach(role => {
+                    html += '<span class="user-tooltip-badge role-' + escapeHtml(role) + '">' + escapeHtml(role.toUpperCase()) + '</span>';
+                });
+                html += '</span>';
+                html += '</div>';
+            }
+
+            // Alliances
+            if (userInfo.alliances && userInfo.alliances.length > 0) {
+                html += '<div class="user-tooltip-row">';
+                html += '<span class="user-tooltip-label">Alliances:</span>';
+                html += '<span class="user-tooltip-value">' + escapeHtml(userInfo.alliances.join(', ')) + '</span>';
+                html += '</div>';
+            }
+
+            // In-game name
+            if (userInfo.in_game_name) {
+                html += '<div class="user-tooltip-row">';
+                html += '<span class="user-tooltip-label">In-Game:</span>';
+                html += '<span class="user-tooltip-value">' + escapeHtml(userInfo.in_game_name) + '</span>';
+                html += '</div>';
+            }
+
+            tooltip.innerHTML = html;
+            return tooltip;
+        }
+
+        function showTooltip(element) {
+            const email = element.getAttribute('data-email');
+            if (!email || email === 'unknown') return;
+
+            // Remove any existing tooltip
+            hideTooltip();
+
+            // Create and show new tooltip
+            activeTooltip = createTooltip(email, null);
+            document.body.appendChild(activeTooltip);
+
+            // Position tooltip
+            const rect = element.getBoundingClientRect();
+            activeTooltip.style.left = rect.left + 'px';
+            activeTooltip.style.top = (rect.bottom + 5) + 'px';
+
+            // Show tooltip
+            setTimeout(() => activeTooltip.classList.add('show'), 10);
+
+            // Fetch and update user info
+            getUserInfo(email).then(userInfo => {
+                if (activeTooltip && userInfo) {
+                    const newTooltip = createTooltip(email, userInfo);
+                    newTooltip.style.left = activeTooltip.style.left;
+                    newTooltip.style.top = activeTooltip.style.top;
+                    newTooltip.classList.add('show');
+
+                    document.body.removeChild(activeTooltip);
+                    activeTooltip = newTooltip;
+                    document.body.appendChild(activeTooltip);
+                }
+            });
+        }
+
+        function hideTooltip() {
+            if (activeTooltip) {
+                activeTooltip.remove();
+                activeTooltip = null;
+            }
+        }
+
+        // Attach tooltip event listeners to all log-user elements
+        function attachTooltipListeners() {
+            document.querySelectorAll('.log-user').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    showTooltip(this);
+                });
+                element.addEventListener('mouseleave', hideTooltip);
+            });
+        }
+
+        // Initial attachment
+        attachTooltipListeners();
+
+        // Re-attach after new logs are prepended
+        const originalPrependLogEntry = prependLogEntry;
+        window.prependLogEntry = function(log) {
+            originalPrependLogEntry(log);
+            attachTooltipListeners();
+        };
 
         // Close modal when clicking outside
         window.onclick = function(event) {

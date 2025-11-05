@@ -35,6 +35,7 @@ use GuzzleHttp\Exception\ClientException;
  * Discord API Configuration
  */
 define('DISCORD_API_BASE', 'https://discord.com/api/v10');
+define('DISCORD_BOT_INVITE_LINK', 'https://discord.com/oauth2/authorize?client_id=1435336079409545256&permissions=395137378368&integration_type=0&scope=bot');
 define('DISCORD_RATE_LIMIT_DELAY', 1); // seconds between requests
 define('DISCORD_MAX_RETRIES', 3);
 define('DISCORD_RETRY_DELAY', 5); // seconds
@@ -125,12 +126,12 @@ function send_discord_message($channel_id, $message, $retry_count = 0) {
 
         // Handle permissions error (403)
         if ($status_code === 403) {
-            throw new Exception("Bot lacks permission to send messages in this channel. Error: {$error_message}");
+            throw new Exception("Bot lacks permission to send messages in this channel. Please invite the bot or check permissions: " . DISCORD_BOT_INVITE_LINK);
         }
 
         // Handle not found (404)
         if ($status_code === 404) {
-            throw new Exception("Channel not found or bot is not in the server. Channel ID: {$channel_id}");
+            throw new Exception("Channel not found or bot is not in the server. Please invite the bot: " . DISCORD_BOT_INVITE_LINK);
         }
 
         // Handle bad request (400)

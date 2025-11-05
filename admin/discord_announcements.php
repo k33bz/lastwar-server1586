@@ -309,6 +309,151 @@ include 'includes/header.php';
         .color-option:hover {
             transform: scale(1.05);
         }
+
+        /* Error Modal Styles */
+        .error-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .error-modal.active {
+            display: flex;
+        }
+
+        .error-modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .error-modal-header {
+            background: #dc3545;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .error-modal-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .error-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .error-modal-body {
+            padding: 1.5rem;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .error-details {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .error-details h4 {
+            margin: 0 0 0.75rem 0;
+            font-size: 0.95rem;
+            color: #495057;
+        }
+
+        .error-details ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .error-details li {
+            margin-bottom: 0.5rem;
+            color: #721c24;
+        }
+
+        .error-help {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        .error-help strong {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .error-help a {
+            color: #0c5460;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        .error-modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .error-modal-footer button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .error-modal-footer button:hover {
+            background: #5a6268;
+        }
     </style>
 
     <div id="alertContainer"></div>
@@ -326,12 +471,12 @@ include 'includes/header.php';
 
             <div class="form-group">
                 <div class="checkbox-group">
-                    <input type="checkbox" id="useEmbed" name="use_embed">
+                    <input type="checkbox" id="useEmbed" name="use_embed" checked>
                     <label for="useEmbed">Use rich embed format (recommended)</label>
                 </div>
             </div>
 
-            <div id="embedOptions" class="embed-options">
+            <div id="embedOptions" class="embed-options active">
                 <div class="form-group">
                     <label for="embedTitle">Embed Title</label>
                     <input type="text" id="embedTitle" name="embed_title" placeholder="e.g., Important Announcement">
@@ -384,6 +529,22 @@ include 'includes/header.php';
     <div class="spinner"></div>
 </div>
 
+<!-- Error Modal -->
+<div id="errorModal" class="error-modal">
+    <div class="error-modal-content">
+        <div class="error-modal-header">
+            <h3>❌ Error</h3>
+            <button class="error-modal-close" onclick="closeErrorModal()">&times;</button>
+        </div>
+        <div class="error-modal-body" id="errorModalBody">
+            <!-- Error content will be inserted here -->
+        </div>
+        <div class="error-modal-footer">
+            <button onclick="closeErrorModal()">Close</button>
+        </div>
+    </div>
+</div>
+
 <script>
 // Track selected channels
 let selectedChannels = [];
@@ -399,10 +560,10 @@ async function loadChannels() {
             availableChannels = data.channels;
             renderChannels();
         } else {
-            showAlert('Failed to load channels: ' + data.error, 'error');
+            showErrorModal('Failed to load channels: ' + data.error);
         }
     } catch (error) {
-        showAlert('Error loading channels: ' + error.message, 'error');
+        showErrorModal('Error loading channels: ' + error.message);
     }
 }
 
@@ -481,18 +642,18 @@ document.getElementById('announcementForm').addEventListener('submit', async fun
 
     // Validate
     if (selectedChannels.length === 0) {
-        showAlert('Please select at least one channel', 'error');
+        showErrorModal('Please select at least one channel');
         return;
     }
 
     const message = document.getElementById('messageContent').value.trim();
     if (!message) {
-        showAlert('Please enter a message', 'error');
+        showErrorModal('Please enter a message');
         return;
     }
 
     if (message.length > 2000) {
-        showAlert('Message exceeds 2000 character limit', 'error');
+        showErrorModal('Message exceeds 2000 character limit');
         return;
     }
 
@@ -525,11 +686,17 @@ document.getElementById('announcementForm').addEventListener('submit', async fun
         if (data.success) {
             showAlert(data.message, 'success');
             resetForm();
+
+            // If some channels failed, show warning modal
+            if (data.failed_channels && data.failed_channels.length > 0) {
+                showErrorModal('Some channels failed to receive the message', data);
+            }
         } else {
-            showAlert('Failed to send: ' + data.error, 'error');
+            // Show detailed error modal
+            showErrorModal(data.error || 'Failed to send message', data);
         }
     } catch (error) {
-        showAlert('Error sending message: ' + error.message, 'error');
+        showErrorModal('Error sending message: ' + error.message);
     } finally {
         document.getElementById('loadingOverlay').classList.remove('active');
         document.getElementById('submitBtn').disabled = false;
@@ -546,7 +713,7 @@ function resetForm() {
     document.getElementById('charCount').classList.remove('warning', 'danger');
 }
 
-// Show alert
+// Show alert (for success messages)
 function showAlert(message, type) {
     const container = document.getElementById('alertContainer');
     const alert = document.createElement('div');
@@ -558,6 +725,83 @@ function showAlert(message, type) {
         alert.remove();
     }, 5000);
 }
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Show error modal
+function showErrorModal(error, details = null) {
+    const modal = document.getElementById('errorModal');
+    const body = document.getElementById('errorModalBody');
+
+    let html = '<div class="error-message">' + escapeHtml(error) + '</div>';
+
+    // If we have detailed error information
+    if (details) {
+        if (details.failed_channels && details.failed_channels.length > 0) {
+            html += '<div class="error-details">';
+            html += '<h4>Failed Channels:</h4>';
+            html += '<ul>';
+
+            details.failed_channels.forEach(channelId => {
+                const channelName = getChannelName(channelId);
+                const errorMsg = details.error_messages[channelId] || 'Unknown error';
+                html += '<li><strong>' + escapeHtml(channelName) + ':</strong> ' + escapeHtml(errorMsg) + '</li>';
+            });
+
+            html += '</ul>';
+            html += '</div>';
+
+            // Check if any error mentions bot permissions or access
+            const hasPermissionError = details.failed_channels.some(channelId => {
+                const msg = details.error_messages[channelId] || '';
+                return msg.includes('permission') || msg.includes('403') || msg.includes('404') || msg.includes('not found') || msg.includes('not in the server');
+            });
+
+            if (hasPermissionError) {
+                html += '<div class="error-help">';
+                html += '<strong>Need Help?</strong>';
+                html += 'If you\'re seeing permission errors, the bot may need to be invited to your Discord server or given the correct permissions. ';
+                html += '<a href="discord_config.php" target="_blank">Visit Discord Configuration</a> for the bot invite link and setup instructions.';
+                html += '</div>';
+            }
+        }
+    }
+
+    body.innerHTML = html;
+    modal.classList.add('active');
+}
+
+// Close error modal
+function closeErrorModal() {
+    const modal = document.getElementById('errorModal');
+    modal.classList.remove('active');
+}
+
+// Helper function to get channel name by ID
+function getChannelName(channelId) {
+    const channel = availableChannels.find(ch => ch.id === channelId);
+    return channel ? channel.name : channelId;
+}
+
+// Close modal on outside click
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('errorModal');
+    if (event.target === modal) {
+        closeErrorModal();
+    }
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeErrorModal();
+    }
+});
 
 // Initialize
 loadChannels();

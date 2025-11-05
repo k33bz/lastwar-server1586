@@ -78,7 +78,7 @@ switch ($action) {
     case 'raw':
         // Return raw JSON log file content
         $audit_file = __DIR__ . '/audit_log.json';
-        
+
         if (file_exists($audit_file)) {
             header('Content-Type: application/json');
             echo file_get_contents($audit_file);
@@ -90,6 +90,36 @@ switch ($action) {
             ]);
         }
         exit;
+
+    case 'get_user_info':
+        // Get user info for tooltip display
+        $email = $_GET['email'] ?? '';
+
+        if (empty($email)) {
+            echo json_encode(['success' => false, 'error' => 'Email required']);
+            break;
+        }
+
+        require_once __DIR__ . '/json_helpers.php';
+        $user_data = get_user_by_email($email);
+
+        if ($user_data) {
+            echo json_encode([
+                'success' => true,
+                'user_info' => [
+                    'email' => $email,
+                    'roles' => $user_data['roles'] ?? [],
+                    'alliances' => $user_data['alliances'] ?? [],
+                    'in_game_name' => $user_data['in_game_name'] ?? null
+                ]
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'error' => 'User not found'
+            ]);
+        }
+        break;
 
     default:
         http_response_code(400);
