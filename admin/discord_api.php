@@ -88,9 +88,10 @@ try {
             // Send to channels
             $results = send_discord_message_multi($validated_channels, $message);
 
-            // Log successful sends
+            // Log successful sends and collect errors
             $success_count = 0;
             $failed_channels = [];
+            $error_messages = [];
 
             foreach ($results as $channel_id => $result) {
                 if ($result['success']) {
@@ -102,17 +103,34 @@ try {
                     ]);
                 } else {
                     $failed_channels[] = $channel_id;
+                    $error_messages[$channel_id] = $result['error'] ?? 'Unknown error';
+                    // Log the error
+                    error_log("Discord send failed for channel {$channel_id}: " . ($result['error'] ?? 'Unknown error'));
                 }
             }
 
             // Save to history
             save_discord_history($user_email, 'instant', $message, $validated_channels, $results);
 
+            // Return error if all channels failed
+            if ($success_count === 0) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Failed to send to any channels',
+                    'results' => $results,
+                    'failed_channels' => $failed_channels,
+                    'error_messages' => $error_messages
+                ]);
+                return;
+            }
+
             echo json_encode([
                 'success' => true,
                 'message' => "Sent to {$success_count}/" . count($validated_channels) . " channels",
                 'results' => $results,
-                'failed_channels' => $failed_channels
+                'failed_channels' => $failed_channels,
+                'error_messages' => $error_messages
             ]);
             break;
 
