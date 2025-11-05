@@ -610,10 +610,20 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <div class="user-info">
                 <span class="user-welcome"><?php echo emailDisplay($user->sub ?? 'User', true); ?></span>
                 <span class="user-role">
-                    <?php echo strtoupper($user->aud ?? 'USER'); ?>
-                    <?php if (($user->aud === 'r4' || $user->aud === 'r5') && isset($user->powereditor) && $user->powereditor): ?>
-                        <span style="background: #ffc107; color: #212529; padding: 0.1rem 0.3rem; border-radius: 4px; font-size: 0.6rem; margin-left: 0.25rem;">APE</span>
-                    <?php endif; ?>
+                    <?php
+                    $user_roles = get_user_roles($user);
+                    $primary_role = $user_roles[0] ?? 'user';
+                    echo strtoupper($primary_role);
+
+                    // Show badges for special roles
+                    foreach ($user_roles as $role):
+                        if ($role === 'ape'): ?>
+                            <span style="background: #ffc107; color: #212529; padding: 0.1rem 0.3rem; border-radius: 4px; font-size: 0.6rem; margin-left: 0.25rem;">APE</span>
+                        <?php elseif ($role === 'president'): ?>
+                            <span style="background: #16a085; color: white; padding: 0.1rem 0.3rem; border-radius: 4px; font-size: 0.6rem; margin-left: 0.25rem;">PRESIDENT</span>
+                        <?php endif;
+                    endforeach;
+                    ?>
                 </span>
                 <a href="user_profile.php" class="profile-btn" style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; background: rgba(255, 255, 255, 0.1); margin-right: 0.5rem; transition: all 0.3s ease;">
                     👤 My Profile
