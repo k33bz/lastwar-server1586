@@ -7,6 +7,7 @@
 // Require JWT authentication
 require_once 'jwt.php';
 require_once 'discord_webhook.php';
+require_once 'audit_logger.php';
 
 $user = require_jwt_session();
 
@@ -21,6 +22,11 @@ if (!DISCORD_ENABLED) {
     header('Location: dashboard.php?error=discord_disabled');
     exit();
 }
+
+// Log page access
+log_audit_event('discord_announcements_accessed', $user->sub, [
+    'user_roles' => get_user_roles($user)
+]);
 
 // Set page title for header
 $page_title = "Discord Announcements";

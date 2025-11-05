@@ -64,6 +64,10 @@ try {
             // Check rate limiting
             $user_email = $user->sub;
             if (!check_discord_rate_limit($user_email, 'instant')) {
+                log_audit_event('discord_rate_limit_exceeded', $user_email, [
+                    'type' => 'instant',
+                    'limit' => DISCORD_MAX_INSTANT_PER_HOUR
+                ]);
                 throw new Exception('Rate limit exceeded. Maximum ' . DISCORD_MAX_INSTANT_PER_HOUR . ' instant messages per hour.');
             }
 
@@ -71,6 +75,10 @@ try {
             $validated_channels = validate_user_channel_access($user, $channel_ids);
 
             if (empty($validated_channels)) {
+                log_audit_event('discord_channel_access_denied', $user_email, [
+                    'requested_channels' => $channel_ids,
+                    'reason' => 'No accessible channels in selection'
+                ]);
                 throw new Exception('No accessible channels in selection');
             }
 
@@ -104,8 +112,14 @@ try {
                 } else {
                     $failed_channels[] = $channel_id;
                     $error_messages[$channel_id] = $result['error'] ?? 'Unknown error';
-                    // Log the error
+                    // Log the error to both error log and audit log
                     error_log("Discord send failed for channel {$channel_id}: " . ($result['error'] ?? 'Unknown error'));
+                    log_audit_event('discord_message_failed', $user_email, [
+                        'channel_id' => $channel_id,
+                        'type' => 'instant',
+                        'error' => $result['error'] ?? 'Unknown error',
+                        'message_preview' => substr($message_content, 0, 100)
+                    ]);
                 }
             }
 
@@ -148,6 +162,13 @@ try {
 
             $result = test_discord_connection($channel_id);
 
+            // Log test attempt
+            log_audit_event('discord_test_connection', $user->sub, [
+                'channel_id' => $channel_id,
+                'success' => $result['success'] ?? false,
+                'error' => $result['error'] ?? null
+            ]);
+
             echo json_encode($result);
             break;
 
@@ -165,6 +186,11 @@ try {
         case 'get_channels':
             // Get accessible channels for current user
             $channels = get_user_accessible_channels($user);
+
+            // Log channel list access
+            log_audit_event('discord_channels_accessed', $user->sub, [
+                'channel_count' => count($channels)
+            ]);
 
             echo json_encode([
                 'success' => true,
@@ -200,6 +226,12 @@ try {
 
             $info = get_discord_channel_info($channel_id);
 
+            // Log channel info lookup
+            log_audit_event('discord_channel_info_accessed', $user->sub, [
+                'channel_id' => $channel_id,
+                'channel_name' => $info['name'] ?? 'unknown'
+            ]);
+
             echo json_encode([
                 'success' => true,
                 'channel' => $info
@@ -211,6 +243,13 @@ try {
     }
 
 } catch (Exception $e) {
+    // Log the error
+    log_audit_event('discord_api_error', $user->sub ?? 'unknown', [
+        'action' => $action ?? 'unknown',
+        'error' => $e->getMessage(),
+        'trace' => $e->getTraceAsString()
+    ]);
+
     http_response_code(400);
     echo json_encode([
         'success' => false,
