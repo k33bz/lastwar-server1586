@@ -183,15 +183,16 @@ function handle_alliance_update() {
                     }
 
                     // Validate channel name
-                    if (empty($channel_name)) {
+                    $channel_name_validation = validate_text_field($channel_name, 1, 100, true);
+                    if (!$channel_name_validation['valid']) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Channel name is required for channel ID: ' . $channel_id]);
+                        echo json_encode(['error' => 'Channel name for ' . $channel_id . ': ' . $channel_name_validation['error']]);
                         return;
                     }
 
                     $discord_channels[] = [
                         'id' => $channel_id,
-                        'name' => sanitize_text($channel_name),
+                        'name' => $channel_name_validation['sanitized'],
                         'type' => in_array($channel_type, ['announcements', 'events', 'reminders', 'general']) ? $channel_type : 'announcements',
                         'enabled' => $channel_enabled
                     ];
