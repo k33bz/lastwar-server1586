@@ -261,6 +261,16 @@ function isUserTokenActive($email) {
             color: white;
         }
 
+        .role-president {
+            background: #16a085;
+            color: white;
+        }
+
+        .role-ape {
+            background: #ffc107;
+            color: #212529;
+        }
+
         .role-none {
             background: #6c757d;
             color: white;
@@ -271,7 +281,7 @@ function isUserTokenActive($email) {
             color: white;
             text-decoration: line-through;
         }
-        
+
         .ape-badge {
             background: #ffc107;
             color: #212529;
@@ -487,9 +497,10 @@ function isUserTokenActive($email) {
                 <option value="admin">Admin</option>
                 <option value="r5">R5 Leaders</option>
                 <option value="r4">R4 Officers</option>
+                <option value="president">President</option>
+                <option value="ape">Power Editors (APE)</option>
                 <option value="none">None (Read-only)</option>
                 <option value="disabled">Disabled</option>
-                <option value="ape">Power Editors (APE)</option>
             </select>
             <select id="statusFilter" onchange="filterUsers()">
                 <option value="">All Status</option>
@@ -687,6 +698,10 @@ function isUserTokenActive($email) {
                         <label class="checkbox-label">
                             <input type="checkbox" name="add_roles[]" value="r4" id="addRoleR4">
                             <strong>R4</strong> - Alliance officer (can edit alliance data)
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="add_roles[]" value="president" id="addRolePresident">
+                            <strong>President</strong> - Can send announcements to all "general" channels
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" name="add_roles[]" value="ape" id="addRoleAPE">
@@ -1064,18 +1079,30 @@ async function deleteUser(email) {
 function openAddModal() {
     // Reset form
     document.getElementById('addUserForm').reset();
-    document.getElementById('addRole').value = 'r4';
-    document.getElementById('addPowerEditor').checked = false;
-    document.getElementById('addAllianceAll').checked = false;
-    
+
+    // Uncheck all role checkboxes
+    const roleCheckboxes = document.querySelectorAll('input[name="add_roles[]"]');
+    roleCheckboxes.forEach(cb => cb.checked = false);
+
+    // Check R4 by default
+    const r4Checkbox = document.getElementById('addRoleR4');
+    if (r4Checkbox) {
+        r4Checkbox.checked = true;
+    }
+
+    // Reset alliance all checkbox
+    const allianceAllCheckbox = document.getElementById('addAllianceAll');
+    if (allianceAllCheckbox) {
+        allianceAllCheckbox.checked = false;
+    }
+
     // Reset alliance checkboxes
     const addAllianceCheckboxes = document.querySelectorAll('input[name="add_alliances[]"]');
     addAllianceCheckboxes.forEach(cb => {
         cb.checked = false;
         cb.disabled = false;
     });
-    
-    updateAddPowerEditorVisibility();
+
     document.getElementById('addModal').classList.add('show');
 }
 
@@ -1091,20 +1118,6 @@ function toggleAddAllAlliances(checkbox) {
             cb.checked = false;
         }
     });
-}
-
-function updateAddPowerEditorVisibility() {
-    const roleSelect = document.getElementById('addRole');
-    const powerEditorGroup = document.getElementById('addPowerEditorGroup');
-    const powerEditorCheckbox = document.getElementById('addPowerEditor');
-
-    // Hide power editor for admin (has access by default), none (read-only), and disabled (no access)
-    if (['admin', 'none', 'disabled'].includes(roleSelect.value)) {
-        powerEditorGroup.style.display = 'none';
-        powerEditorCheckbox.checked = false;
-    } else {
-        powerEditorGroup.style.display = 'block';
-    }
 }
 
 function addUser() {
