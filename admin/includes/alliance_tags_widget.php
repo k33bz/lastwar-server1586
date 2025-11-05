@@ -806,9 +806,15 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
         formData.append('tag', allianceTag);
         formData.append('tags', JSON.stringify(selectedTags));
 
+        // Get CSRF token
+        const csrfToken = getCsrfToken();
+
         try {
             const response = await fetch('alliance_tags_api.php?action=update_alliance_tags', {
                 method: 'POST',
+                headers: {
+                    'X-CSRF-Token': csrfToken
+                },
                 body: formData
             });
 
@@ -869,9 +875,15 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
         const form = event.target;
         const formData = new FormData(form);
 
+        // Get CSRF token
+        const csrfToken = getCsrfToken();
+
         try {
             const response = await fetch('alliance_tags_api.php?action=suggest_tag', {
                 method: 'POST',
+                headers: {
+                    'X-CSRF-Token': csrfToken
+                },
                 body: formData
             });
 
