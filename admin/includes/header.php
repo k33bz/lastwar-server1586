@@ -546,6 +546,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             
             <nav class="admin-nav">
                 <a href="dashboard.php" class="nav-link <?php echo $current_page === 'dashboard.php' ? 'active' : ''; ?>">Dashboard</a>
+                <a href="user_profile.php" class="nav-link <?php echo $current_page === 'user_profile.php' ? 'active' : ''; ?>">👤 My Profile</a>
 
                 <!-- Alliances Dropdown -->
                 <div class="nav-dropdown">
