@@ -81,6 +81,9 @@ function send_discord_message($channel_id, $message, $retry_count = 0) {
     $client = new Client($client_options);
 
     try {
+        // Debug: Log the message being sent
+        error_log("Discord message to channel {$channel_id}: " . json_encode($message));
+
         $response = $client->post(DISCORD_API_BASE . "/channels/{$channel_id}/messages", [
             'headers' => [
                 'Authorization' => 'Bot ' . DISCORD_BOT_TOKEN,
@@ -103,6 +106,9 @@ function send_discord_message($channel_id, $message, $retry_count = 0) {
         $status_code = $e->getResponse()->getStatusCode();
         $error_body = json_decode($e->getResponse()->getBody()->getContents(), true);
         $error_message = $error_body['message'] ?? 'Unknown error';
+
+        // Debug: Log full error response
+        error_log("Discord API error ({$status_code}): " . json_encode($error_body));
 
         // Handle rate limiting (429)
         if ($status_code === 429) {

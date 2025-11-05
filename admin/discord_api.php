@@ -79,7 +79,7 @@ try {
                 $message = create_embed_announcement(
                     $embed_title ?: 'Announcement',
                     $message_content,
-                    ['color' => hexdec($embed_color)]
+                    ['color' => (int)$embed_color]
                 );
             } else {
                 $message = create_simple_announcement($message_content);
