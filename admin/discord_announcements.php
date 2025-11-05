@@ -495,6 +495,9 @@ document.getElementById('announcementForm').addEventListener('submit', async fun
     document.getElementById('submitBtn').disabled = true;
 
     try {
+        // Get CSRF token
+        const csrfToken = getCsrfToken();
+
         const formData = new FormData();
         formData.append('action', 'send_instant');
         formData.append('channel_ids', JSON.stringify(selectedChannels));
@@ -502,10 +505,12 @@ document.getElementById('announcementForm').addEventListener('submit', async fun
         formData.append('use_embed', document.getElementById('useEmbed').checked ? 'true' : 'false');
         formData.append('embed_title', document.getElementById('embedTitle').value || '');
         formData.append('embed_color', document.getElementById('embedColor').value);
-        formData.append('csrf_token', '<?php echo generate_csrf_token(); ?>');
 
         const response = await fetch('discord_api.php', {
             method: 'POST',
+            headers: {
+                'X-CSRF-Token': csrfToken
+            },
             body: formData
         });
 
