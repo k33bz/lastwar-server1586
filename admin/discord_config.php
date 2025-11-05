@@ -356,13 +356,18 @@ async function testConnection() {
     resultDiv.innerHTML = '';
 
     try {
+        // Get CSRF token
+        const csrfToken = getCsrfToken();
+
         const formData = new FormData();
         formData.append('action', 'test_connection');
         formData.append('channel_id', channelId);
-        formData.append('csrf_token', '<?php echo generate_csrf_token(); ?>');
 
         const response = await fetch('discord_api.php', {
             method: 'POST',
+            headers: {
+                'X-CSRF-Token': csrfToken
+            },
             body: formData
         });
 
