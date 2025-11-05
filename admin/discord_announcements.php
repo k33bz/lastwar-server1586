@@ -10,8 +10,8 @@ require_once 'discord_webhook.php';
 
 $user = require_jwt_session();
 
-// Check if user has at least R4 access
-if (!has_role($user, ['admin', 'r5', 'r4'])) {
+// Check if user has at least R4 access or president role
+if (!has_role($user, ['admin', 'r5', 'r4', 'president'])) {
     header('Location: dashboard.php?error=access_denied');
     exit();
 }

@@ -42,9 +42,9 @@ try {
 
     switch ($action) {
         case 'send_instant':
-            // Require at least R4 role
-            if (!has_role($user, ['admin', 'r5', 'r4'])) {
-                throw new Exception('Access denied. R4 or higher required.');
+            // Require at least R4 role or president
+            if (!has_role($user, ['admin', 'r5', 'r4', 'president'])) {
+                throw new Exception('Access denied. R4 or higher, or president role required.');
             }
 
             $channel_ids = json_decode($_POST['channel_ids'] ?? '[]', true);
@@ -316,6 +316,7 @@ function get_user_accessible_channels($user) {
 
     $user_alliances = $user_data['alliances'] ?? [];
     $is_admin = $user->aud === 'admin' || in_array('*', $user_alliances);
+    $is_president = has_role($user, 'president');
 
     // 1. Load alliance-specific channels from alliances.json
     if (file_exists(ALLIANCES_FILE)) {
@@ -325,11 +326,26 @@ function get_user_accessible_channels($user) {
             $alliance_tag = $alliance['tag'] ?? $alliance['alliance'] ?? '';
 
             // Check if user has access to this alliance
+            // Presidents get access to all "general" type channels
             if ($is_admin || in_array($alliance_tag, $user_alliances)) {
                 $discord_channels = $alliance['discord']['channels'] ?? [];
 
                 foreach ($discord_channels as $channel) {
                     if ($channel['enabled'] ?? false) {
+                        // Add alliance context to channel
+                        $channel['alliance'] = $alliance_tag;
+                        $channel['alliance_name'] = $alliance['name'] ?? $alliance_tag;
+                        $channel['server_name'] = $alliance['discord']['serverName'] ?? 'Discord';
+                        $channel['source'] = 'alliance';
+                        $accessible_channels[] = $channel;
+                    }
+                }
+            } elseif ($is_president) {
+                // Presidents can access "general" type channels from all alliances
+                $discord_channels = $alliance['discord']['channels'] ?? [];
+
+                foreach ($discord_channels as $channel) {
+                    if (($channel['enabled'] ?? false) && ($channel['type'] ?? '') === 'general') {
                         // Add alliance context to channel
                         $channel['alliance'] = $alliance_tag;
                         $channel['alliance_name'] = $alliance['name'] ?? $alliance_tag;

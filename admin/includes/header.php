@@ -564,7 +564,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </div>
 
                 <!-- Discord Dropdown -->
-                <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && ($user->aud === 'admin' || $user->aud === 'r5' || $user->aud === 'r4')): ?>
+                <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
                 <div class="nav-dropdown">
                     <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['discord_announcements.php', 'discord_config.php']) ? 'active' : ''; ?>">
                         Discord
