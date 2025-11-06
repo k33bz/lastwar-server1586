@@ -88,6 +88,13 @@ try {
             $user_roles = get_user_roles($user);
             $primary_role = strtoupper($user_roles[0] ?? 'user');
 
+            // Replace template variables in message content and title
+            require_once __DIR__ . '/discord_variable_replacer.php';
+            $message_content = replace_message_variables($message_content, $user_email);
+            if ($embed_title) {
+                $embed_title = replace_message_variables($embed_title, $user_email);
+            }
+
             // Create message with user attribution (with alliance tags if available)
             $attribution = $alliance_tags ? "{$alliance_tags} {$display_name}" : $display_name;
             $footer_options = [

@@ -52,16 +52,21 @@ foreach ($data['scheduled_messages'] as &$message) {
         continue; // Not yet time
     }
 
+    // Replace template variables in message
+    require_once __DIR__ . '/discord_variable_replacer.php';
+    $processed_message = replace_message_variables($message['message'], $message['created_by'], $message['channel_id']);
+    $processed_title = !empty($message['embed_title']) ? replace_message_variables($message['embed_title'], $message['created_by'], $message['channel_id']) : 'Scheduled Announcement';
+
     // Prepare Discord message
     if ($message['use_embed']) {
         $discord_message = create_rich_announcement(
-            $message['message'],
-            $message['embed_title'] ?? 'Scheduled Announcement',
+            $processed_message,
+            $processed_title,
             $message['embed_color'] ?? '#5865F2',
             $message['created_by']
         );
     } else {
-        $discord_message = create_simple_announcement($message['message']);
+        $discord_message = create_simple_announcement($processed_message);
     }
 
     // Send message
@@ -128,16 +133,20 @@ foreach ($recurring_data['recurring_messages'] as &$message) {
         continue; // Not yet time
     }
 
+    // Replace template variables in message
+    $processed_message = replace_message_variables($message['message'], $message['created_by'], $message['channel_id']);
+    $processed_title = !empty($message['embed_title']) ? replace_message_variables($message['embed_title'], $message['created_by'], $message['channel_id']) : 'Recurring Announcement';
+
     // Prepare Discord message
     if ($message['use_embed']) {
         $discord_message = create_rich_announcement(
-            $message['message'],
-            $message['embed_title'] ?? 'Recurring Announcement',
+            $processed_message,
+            $processed_title,
             $message['embed_color'] ?? '#5865F2',
             $message['created_by']
         );
     } else {
-        $discord_message = create_simple_announcement($message['message']);
+        $discord_message = create_simple_announcement($processed_message);
     }
 
     // Send message
