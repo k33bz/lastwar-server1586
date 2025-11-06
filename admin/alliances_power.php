@@ -680,6 +680,8 @@ include 'includes/header.php';
                                value="${escapeHtml(alliance.tag)}"
                                data-index="${alliance.index}"
                                data-field="tag"
+                               data-validate="alliance-tag"
+                               required
                                onchange="markChanged()"
                                ${alliance.isNew ? '' : 'readonly style="background: #f8f9fa; cursor: not-allowed;"'}
                                placeholder="TAG">
@@ -689,6 +691,8 @@ include 'includes/header.php';
                                value="${escapeHtml(alliance.name)}"
                                data-index="${alliance.index}"
                                data-field="name"
+                               data-validate="alliance-name"
+                               required
                                onchange="markChanged()"
                                placeholder="Alliance Name">
                     </td>
@@ -697,8 +701,11 @@ include 'includes/header.php';
                                value="${alliance.power || 0}"
                                data-index="${alliance.index}"
                                data-field="power"
+                               data-validate="alliance-power"
+                               required
                                onchange="markChanged()"
                                min="0"
+                               max="10000000000000"
                                step="1"
                                placeholder="0">
                     </td>
@@ -713,6 +720,19 @@ include 'includes/header.php';
                 `;
 
                 tbody.appendChild(row);
+            });
+
+            // Attach validation to all inputs
+            const inputs = tbody.querySelectorAll('input[data-validate]');
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => {
+                    validateField(input);
+                });
+                input.addEventListener('input', () => {
+                    if (input.classList.contains('is-invalid')) {
+                        clearFieldError(input);
+                    }
+                });
             });
         }
 
@@ -733,11 +753,25 @@ include 'includes/header.php';
         }
 
         function saveAlliances() {
-            // Collect all input values
-            const inputs = document.querySelectorAll('#alliancesTable input');
-            const updates = [];
+            // Validate all inputs first
+            const inputs = document.querySelectorAll('#alliancesTable input[data-validate]');
+            let hasErrors = false;
 
             inputs.forEach(input => {
+                if (!validateField(input)) {
+                    hasErrors = true;
+                }
+            });
+
+            if (hasErrors) {
+                showToast('Please fix validation errors before saving', 'error');
+                return;
+            }
+
+            // Collect all input values
+            const updates = [];
+
+            allInputs.forEach(input => {
                 const index = parseInt(input.dataset.index);
                 const field = input.dataset.field;
                 const value = field === 'power' ? parseInt(input.value) || 0 : input.value.trim();

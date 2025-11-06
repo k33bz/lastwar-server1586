@@ -681,7 +681,7 @@ function isUserTokenActive($email) {
             <form id="addUserForm">
                 <div class="form-group">
                     <label>Email:</label>
-                    <input type="email" id="addEmail" name="email" required placeholder="user@example.com">
+                    <input type="email" id="addEmail" name="email" required data-validate="email" placeholder="user@example.com">
                 </div>
                 
                 <div class="form-group">
@@ -1121,19 +1121,20 @@ function toggleAddAllAlliances(checkbox) {
 }
 
 function addUser() {
-    const email = document.getElementById('addEmail').value.trim();
+    const form = document.getElementById('addUserForm');
+    const emailField = document.getElementById('addEmail');
 
-    if (!email) {
-        alertModal('Please enter an email address.', 'Validation Error', 'warning');
+    // Validate form fields
+    if (!validateForm(form)) {
+        // Focus first invalid field
+        const firstInvalid = form.querySelector('.is-invalid');
+        if (firstInvalid) {
+            firstInvalid.focus();
+        }
         return;
     }
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        alertModal('Please enter a valid email address.', 'Validation Error', 'warning');
-        return;
-    }
+    const email = emailField.value.trim();
 
     // Collect all checked roles
     const roles = [];
@@ -1557,15 +1558,21 @@ function resetSort() {
     originalRowOrder.forEach(row => table.appendChild(row));
 }
 
-// Initialize filters on page load
+// Initialize filters and validation on page load
 document.addEventListener('DOMContentLoaded', function() {
     // Store original row order
     const table = document.querySelector('.users-table tbody');
     if (table) {
         originalRowOrder = Array.from(table.querySelectorAll('tr'));
     }
-    
+
     filterUsers(); // Initialize count
+
+    // Initialize form validation
+    const addForm = document.getElementById('addUserForm');
+    if (addForm) {
+        attachValidation(addForm);
+    }
 });
 
 // Close modal when clicking outside

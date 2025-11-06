@@ -3,9 +3,13 @@
  *
  * Common JavaScript functions used across admin pages
  *
- * @version 1.3.0
- * @date 2025-10-28
+ * @version 1.4.0
+ * @date 2025-11-06
  * @changelog
+ *   1.4.0 (2025-11-06) - Added comprehensive form validation library (Issue #20)
+ *                       - Client-side validators matching PHP backend
+ *                       - Real-time field validation with visual feedback
+ *                       - Reusable validation framework for all forms
  *   1.3.0 (2025-10-28) - Added CSRF protection to API requests (Issue #21)
  *                       - getCsrfToken() extracts token from meta tag
  *                       - apiRequest() automatically includes X-CSRF-Token header for POST/PUT/DELETE/PATCH
@@ -230,7 +234,7 @@ function showToast(message, type = 'info', duration = 3000) {
     }, duration);
 }
 
-// Add toast and modal animations to page
+// Add toast, modal, and validation styles to page
 if (!document.getElementById('toast-animations')) {
     const style = document.createElement('style');
     style.id = 'toast-animations';
@@ -283,6 +287,21 @@ if (!document.getElementById('toast-animations')) {
         /* Modal overlay transition */
         .modal {
             transition: opacity 0.3s ease;
+        }
+        /* Form validation styles */
+        .is-invalid {
+            border-color: #dc3545 !important;
+            background-color: #fff5f5 !important;
+        }
+        .is-valid {
+            border-color: #28a745 !important;
+            background-color: #f0fff4 !important;
+        }
+        .invalid-feedback {
+            color: #dc3545;
+            font-size: 0.875em;
+            margin-top: 0.25rem;
+            display: block;
         }
     `;
     document.head.appendChild(style);
@@ -340,6 +359,400 @@ function resetForm(form) {
     form.reset();
     form.querySelectorAll('.error').forEach(el => el.remove());
     form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+}
+
+// ============================================================================
+// Form Validation Library
+// ============================================================================
+
+/**
+ * Validation result object
+ * @typedef {Object} ValidationResult
+ * @property {boolean} valid - Whether validation passed
+ * @property {string} error - Error message if validation failed
+ */
+
+/**
+ * Validate alliance tag (2-10 chars, alphanumeric uppercase)
+ * @param {string} tag - Alliance tag to validate
+ * @param {boolean} strict - Enforce uppercase requirement
+ * @returns {ValidationResult}
+ */
+function validateAllianceTag(tag, strict = true) {
+    const sanitized = tag.trim().toUpperCase();
+
+    if (sanitized.length < 2 || sanitized.length > 10) {
+        return { valid: false, error: 'Alliance tag must be 2-10 characters' };
+    }
+
+    if (!/^[A-Z0-9]+$/.test(sanitized)) {
+        return { valid: false, error: 'Alliance tag must contain only letters and numbers' };
+    }
+
+    return { valid: true, error: '' };
+}
+
+/**
+ * Validate alliance name (3-100 chars)
+ * @param {string} name - Alliance name to validate
+ * @returns {ValidationResult}
+ */
+function validateAllianceName(name) {
+    const sanitized = name.trim();
+
+    if (sanitized.length < 3) {
+        return { valid: false, error: 'Alliance name must be at least 3 characters' };
+    }
+
+    if (sanitized.length > 100) {
+        return { valid: false, error: 'Alliance name must not exceed 100 characters' };
+    }
+
+    return { valid: true, error: '' };
+}
+
+/**
+ * Validate alliance power (0 to 10 trillion)
+ * @param {number|string} power - Power value to validate
+ * @returns {ValidationResult}
+ */
+function validateAlliancePower(power) {
+    const num = parseInt(power);
+
+    if (isNaN(num)) {
+        return { valid: false, error: 'Power must be a valid number' };
+    }
+
+    if (num < 0) {
+        return { valid: false, error: 'Power cannot be negative' };
+    }
+
+    if (num > 10000000000000) {
+        return { valid: false, error: 'Power exceeds maximum allowed value (10 trillion)' };
+    }
+
+    return { valid: true, error: '' };
+}
+
+/**
+ * Validate R5 name (3-50 chars)
+ * @param {string} name - R5 name to validate
+ * @returns {ValidationResult}
+ */
+function validateR5Name(name) {
+    const sanitized = name.trim();
+
+    if (sanitized.length < 3) {
+        return { valid: false, error: 'R5 name must be at least 3 characters' };
+    }
+
+    if (sanitized.length > 50) {
+        return { valid: false, error: 'R5 name must not exceed 50 characters' };
+    }
+
+    return { valid: true, error: '' };
+}
+
+/**
+ * Validate URL format
+ * @param {string} url - URL to validate
+ * @param {boolean} required - Whether field is required
+ * @returns {ValidationResult}
+ */
+function validateURL(url, required = false) {
+    const sanitized = url.trim();
+
+    if (!sanitized && !required) {
+        return { valid: true, error: '' };
+    }
+
+    if (!sanitized && required) {
+        return { valid: false, error: 'URL is required' };
+    }
+
+    try {
+        new URL(sanitized);
+        return { valid: true, error: '' };
+    } catch {
+        return { valid: false, error: 'Invalid URL format' };
+    }
+}
+
+/**
+ * Validate text field with length constraints
+ * @param {string} text - Text to validate
+ * @param {number} min - Minimum length
+ * @param {number} max - Maximum length
+ * @param {boolean} required - Whether field is required
+ * @returns {ValidationResult}
+ */
+function validateTextField(text, min = 0, max = 1000, required = false) {
+    const sanitized = text.trim();
+
+    if (!sanitized && !required) {
+        return { valid: true, error: '' };
+    }
+
+    if (!sanitized && required) {
+        return { valid: false, error: 'This field is required' };
+    }
+
+    if (sanitized.length < min) {
+        return { valid: false, error: `Must be at least ${min} characters` };
+    }
+
+    if (sanitized.length > max) {
+        return { valid: false, error: `Must not exceed ${max} characters` };
+    }
+
+    return { valid: true, error: '' };
+}
+
+/**
+ * Validate numeric field with range constraints
+ * @param {number|string} value - Value to validate
+ * @param {number} min - Minimum value
+ * @param {number} max - Maximum value
+ * @param {boolean} required - Whether field is required
+ * @returns {ValidationResult}
+ */
+function validateNumericField(value, min = 0, max = Number.MAX_SAFE_INTEGER, required = false) {
+    const str = String(value).trim();
+
+    if (!str && !required) {
+        return { valid: true, error: '' };
+    }
+
+    if (!str && required) {
+        return { valid: false, error: 'This field is required' };
+    }
+
+    const num = parseFloat(value);
+
+    if (isNaN(num)) {
+        return { valid: false, error: 'Must be a valid number' };
+    }
+
+    if (num < min) {
+        return { valid: false, error: `Must be at least ${min}` };
+    }
+
+    if (num > max) {
+        return { valid: false, error: `Must not exceed ${max}` };
+    }
+
+    return { valid: true, error: '' };
+}
+
+/**
+ * Validate Discord channel ID (18-20 digit numeric)
+ * @param {string} channelId - Discord channel ID to validate
+ * @param {boolean} required - Whether field is required
+ * @returns {ValidationResult}
+ */
+function validateDiscordChannelId(channelId, required = false) {
+    const sanitized = channelId.trim();
+
+    if (!sanitized && !required) {
+        return { valid: true, error: '' };
+    }
+
+    if (!sanitized && required) {
+        return { valid: false, error: 'Discord channel ID is required' };
+    }
+
+    if (!/^\d{18,20}$/.test(sanitized)) {
+        return { valid: false, error: 'Discord channel ID must be 18-20 digits' };
+    }
+
+    return { valid: true, error: '' };
+}
+
+/**
+ * Validate email format
+ * @param {string} email - Email to validate
+ * @param {boolean} required - Whether field is required
+ * @returns {ValidationResult}
+ */
+function validateEmail(email, required = true) {
+    const sanitized = email.trim();
+
+    if (!sanitized && !required) {
+        return { valid: true, error: '' };
+    }
+
+    if (!sanitized && required) {
+        return { valid: false, error: 'Email is required' };
+    }
+
+    if (!isValidEmail(sanitized)) {
+        return { valid: false, error: 'Invalid email format' };
+    }
+
+    return { valid: true, error: '' };
+}
+
+/**
+ * Show validation error on a field
+ * @param {HTMLInputElement} field - Input field element
+ * @param {string} error - Error message
+ */
+function showFieldError(field, error) {
+    // Remove existing error
+    clearFieldError(field);
+
+    // Add invalid class
+    field.classList.add('is-invalid');
+    field.classList.remove('is-valid');
+
+    // Create error message element
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'invalid-feedback';
+    errorDiv.style.cssText = 'color: #dc3545; font-size: 0.875em; margin-top: 0.25rem; display: block;';
+    errorDiv.textContent = error;
+
+    // Insert error after field
+    field.parentNode.insertBefore(errorDiv, field.nextSibling);
+}
+
+/**
+ * Clear validation error from a field
+ * @param {HTMLInputElement} field - Input field element
+ */
+function clearFieldError(field) {
+    field.classList.remove('is-invalid');
+
+    // Remove error message if exists
+    const errorDiv = field.nextElementSibling;
+    if (errorDiv && errorDiv.classList.contains('invalid-feedback')) {
+        errorDiv.remove();
+    }
+}
+
+/**
+ * Mark field as valid
+ * @param {HTMLInputElement} field - Input field element
+ */
+function markFieldValid(field) {
+    clearFieldError(field);
+    field.classList.add('is-valid');
+}
+
+/**
+ * Validate a single field based on its data-validate attribute
+ * @param {HTMLInputElement} field - Input field element
+ * @returns {boolean} - Whether validation passed
+ */
+function validateField(field) {
+    const validateType = field.dataset.validate;
+    const required = field.hasAttribute('required') || field.dataset.required === 'true';
+    const value = field.value;
+
+    let result = { valid: true, error: '' };
+
+    // Run appropriate validator
+    switch (validateType) {
+        case 'email':
+            result = validateEmail(value, required);
+            break;
+        case 'alliance-tag':
+            result = validateAllianceTag(value, true);
+            break;
+        case 'alliance-name':
+            result = validateAllianceName(value);
+            break;
+        case 'alliance-power':
+            result = validateAlliancePower(value);
+            break;
+        case 'r5-name':
+            result = validateR5Name(value);
+            break;
+        case 'url':
+            result = validateURL(value, required);
+            break;
+        case 'discord-channel-id':
+            result = validateDiscordChannelId(value, required);
+            break;
+        case 'text':
+            const min = parseInt(field.dataset.min) || 0;
+            const max = parseInt(field.dataset.max) || 1000;
+            result = validateTextField(value, min, max, required);
+            break;
+        case 'number':
+            const numMin = parseFloat(field.dataset.min) || 0;
+            const numMax = parseFloat(field.dataset.max) || Number.MAX_SAFE_INTEGER;
+            result = validateNumericField(value, numMin, numMax, required);
+            break;
+        default:
+            // No validation specified
+            if (required && !value.trim()) {
+                result = { valid: false, error: 'This field is required' };
+            }
+    }
+
+    // Show/hide error
+    if (!result.valid) {
+        showFieldError(field, result.error);
+        return false;
+    } else {
+        markFieldValid(field);
+        return true;
+    }
+}
+
+/**
+ * Validate all fields in a form
+ * @param {HTMLFormElement} form - Form element
+ * @returns {boolean} - Whether all validation passed
+ */
+function validateForm(form) {
+    const fields = form.querySelectorAll('[data-validate], [required]');
+    let isValid = true;
+
+    fields.forEach(field => {
+        if (!validateField(field)) {
+            isValid = false;
+        }
+    });
+
+    return isValid;
+}
+
+/**
+ * Attach real-time validation to form fields
+ * @param {HTMLFormElement} form - Form element
+ */
+function attachValidation(form) {
+    const fields = form.querySelectorAll('[data-validate]');
+
+    fields.forEach(field => {
+        // Validate on blur
+        field.addEventListener('blur', () => {
+            validateField(field);
+        });
+
+        // Clear error on input (wait for next blur to revalidate)
+        field.addEventListener('input', () => {
+            if (field.classList.contains('is-invalid')) {
+                clearFieldError(field);
+            }
+        });
+    });
+
+    // Validate form on submit
+    form.addEventListener('submit', (e) => {
+        if (!validateForm(form)) {
+            e.preventDefault();
+
+            // Focus first invalid field
+            const firstInvalid = form.querySelector('.is-invalid');
+            if (firstInvalid) {
+                firstInvalid.focus();
+            }
+
+            showToast('Please fix validation errors before submitting', 'error');
+        }
+    });
 }
 
 // ============================================================================
