@@ -1,5 +1,5 @@
 {
-  "version": "3.6.0",
+  "version": "3.7.0",
   "releaseDate": "2025-11-06",
   "components": {
     "frontend": {
@@ -9,11 +9,11 @@
       "css": "1.5.0"
     },
     "admin": {
-      "version": "3.6.0",
-      "php": "3.6.0",
+      "version": "3.7.0",
+      "php": "3.7.0",
       "migration_system": "1.0.0",
       "user_management": "2.0.0",
-      "discord_integration": "3.0.0"
+      "discord_integration": "4.0.0"
     },
     "scripts": {
       "rotation": "2.2.0"
@@ -21,15 +21,16 @@
   },
   "features": {
     "discord_integration": {
-      "version": "3.0.0",
+      "version": "4.0.0",
       "date": "2025-11-06",
-      "description": "Discord bot integration with instant, scheduled, and recurring announcements with full management interface",
+      "description": "Discord bot integration with instant, scheduled, and recurring announcements, reusable templates, and dynamic variable replacement",
       "database_schema": "v3",
       "migration": "3.5.0",
       "phases": {
         "phase1": "Instant messaging (v1.0.0)",
         "phase2": "Scheduled messaging (v2.0.0)",
-        "phase3": "Recurring messaging (v3.0.0)"
+        "phase3": "Recurring messaging (v3.0.0)",
+        "phase4": "Message templates & variables (v4.0.0)"
       },
       "changes": [
         "Discord bot API integration with message sending",
@@ -52,7 +53,16 @@
         "Enable/disable toggle for recurring messages",
         "Send history tracking with count and timestamps",
         "Next send time preview and calculation",
-        "Unified processor for scheduled and recurring messages"
+        "Unified processor for scheduled and recurring messages",
+        "Message templates system (Phase 4 - v4.0.0)",
+        "Reusable message templates with variable support",
+        "Global and alliance-specific templates",
+        "Template submission and approval workflow",
+        "Dynamic variable replacement at send-time",
+        "Variables: server, user, alliance, datetime, custom fields",
+        "Template selector in all message forms",
+        "Click-to-insert variable buttons",
+        "Template management UI with create/delete/approve"
       ],
       "files": [
         "admin/discord_webhook.php",
@@ -63,6 +73,9 @@
         "admin/discord_scheduled_processor.php",
         "admin/discord_recurring.php",
         "admin/discord_recurring_api.php",
+        "admin/discord_templates.php",
+        "admin/discord_templates_api.php",
+        "admin/discord_variable_replacer.php",
         "admin/discord_config.php",
         "admin/jwt.php",
         "admin/security_audit.php",
