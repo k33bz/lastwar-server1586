@@ -1,0 +1,15 @@
+# PHPUnit test artifacts
+coverage/
+.phpunit.cache/
+.phpunit.result.cache
+
+# Temporary test files
+temp_*
+test_*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

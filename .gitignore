@@ -92,9 +92,8 @@ tesseract_training/data/*.tr
 
 # Test Files
 test/
-# NOTE: admin/tests/ IS tracked - it contains the PHP unit test suite
-# Only ignore root-level tests/ directory
-/tests/
+# NOTE: tests/ directory IS tracked - contains PHPUnit test suite
+# Temporary test files and coverage are ignored via tests/.gitignore
 *.test.js
 *.spec.js
 
@@ -109,6 +108,11 @@ admin/test-*.txt
 coverage/
 *.coverage
 .nyc_output/
+
+# PHPUnit
+.phpunit.cache/
+.phpunit.result.cache
+phpunit.xml.bak
 
 # Build Outputs (if build process added)
 dist/
