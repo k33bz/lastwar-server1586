@@ -567,11 +567,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <!-- Discord Dropdown -->
                 <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
                 <div class="nav-dropdown">
-                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['discord_announcements.php', 'discord_config.php']) ? 'active' : ''; ?>">
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['discord_announcements.php', 'discord_scheduled.php', 'discord_config.php']) ? 'active' : ''; ?>">
                         Discord
                     </div>
                     <div class="nav-dropdown-menu">
                         <a href="discord_announcements.php" class="nav-link <?php echo $current_page === 'discord_announcements.php' ? 'active' : ''; ?>">Announcements</a>
+                        <a href="discord_scheduled.php" class="nav-link <?php echo $current_page === 'discord_scheduled.php' ? 'active' : ''; ?>">Scheduled Messages</a>
                         <?php if ($user->aud === 'admin'): ?>
                         <a href="discord_config.php" class="nav-link <?php echo $current_page === 'discord_config.php' ? 'active' : ''; ?>">Configuration</a>
                         <?php endif; ?>

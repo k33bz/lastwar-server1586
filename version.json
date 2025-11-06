@@ -1,6 +1,6 @@
 {
-  "version": "3.5.0",
-  "releaseDate": "2025-11-05",
+  "version": "3.6.0",
+  "releaseDate": "2025-11-06",
   "components": {
     "frontend": {
       "version": "3.1.0",
@@ -9,11 +9,11 @@
       "css": "1.5.0"
     },
     "admin": {
-      "version": "3.5.0",
-      "php": "3.5.0",
+      "version": "3.6.0",
+      "php": "3.6.0",
       "migration_system": "1.0.0",
       "user_management": "2.0.0",
-      "discord_integration": "1.0.0"
+      "discord_integration": "2.0.0"
     },
     "scripts": {
       "rotation": "2.2.0"
@@ -21,11 +21,16 @@
   },
   "features": {
     "discord_integration": {
-      "version": "1.0.0",
-      "date": "2025-11-05",
-      "description": "Discord bot integration with announcements, error handling, and audit logging",
+      "version": "2.0.0",
+      "date": "2025-11-06",
+      "description": "Discord bot integration with instant and scheduled announcements, error handling, and audit logging",
       "database_schema": "v3",
       "migration": "3.5.0",
+      "phases": {
+        "phase1": "Instant messaging (v1.0.0)",
+        "phase2": "Scheduled messaging (v2.0.0)",
+        "phase3": "Recurring messaging (planned)"
+      },
       "changes": [
         "Discord bot API integration with message sending",
         "Alliance tags in message attribution ([TAG] username format)",
@@ -35,12 +40,21 @@
         "Channel and server name context in audit logs",
         "User info tooltips in audit log viewer (roles, alliances, in-game names)",
         "Rate limiting for Discord message sending",
-        "President role for cross-alliance general announcements"
+        "President role for cross-alliance general announcements",
+        "Scheduled message system (Phase 2 - v2.0.0)",
+        "Schedule announcements for future delivery",
+        "Manage scheduled messages with create/delete operations",
+        "Automatic message processing via cron job",
+        "Visual status tracking (pending, sent, failed)",
+        "Timezone-aware scheduling interface"
       ],
       "files": [
         "admin/discord_webhook.php",
         "admin/discord_api.php",
         "admin/discord_announcements.php",
+        "admin/discord_scheduled.php",
+        "admin/discord_scheduled_api.php",
+        "admin/discord_scheduled_processor.php",
         "admin/discord_config.php",
         "admin/jwt.php",
         "admin/security_audit.php",

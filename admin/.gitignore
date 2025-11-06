@@ -12,6 +12,9 @@ audit_log.json
 /vendor/
 # composer.lock - MUST be tracked for applications to ensure consistent dependencies
 
+# Discord data
+discord_scheduled.json
+
 # Test files
 test_magic_links.php
 test-smtp.php
