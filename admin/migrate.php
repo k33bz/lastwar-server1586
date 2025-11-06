@@ -32,10 +32,10 @@ if (php_sapi_name() !== 'cli') {
     require_once __DIR__ . '/jwt.php';
     $user = require_jwt_session();
 
-    // Only admins can run migrations via web
-    if ($user->aud !== 'admin') {
+    // Only users with admin role can run migrations via web
+    if (!has_role($user, 'admin')) {
         http_response_code(403);
-        die(json_encode(['error' => 'Admin access required for migrations']));
+        die('<!DOCTYPE html><html><head><title>Access Denied</title></head><body><h1>403 Forbidden</h1><p>Admin role required for migrations.</p></body></html>');
     }
 
     $admin_email = $user->sub;
@@ -171,6 +171,9 @@ class MigrationManager {
 
         $this->log("");
         $this->log("✅ Migration completed successfully!");
+
+        // Record migration in history
+        $this->recordMigrationHistory($installed_version, $current_version, $this->migrations_run);
 
         // Log migration completion
         log_audit_event('migration_completed', $this->admin_email, [
@@ -534,6 +537,161 @@ class MigrationManager {
     }
 
     /**
+     * Update .env file with new variables
+     *
+     * @param array $variables Key-value pairs to add/update
+     * @return bool Success status
+     */
+    public function updateEnvFile($variables) {
+        $env_file = $this->admin_dir . '.env';
+
+        if (!file_exists($env_file)) {
+            $this->errors[] = ".env file not found";
+            return false;
+        }
+
+        // Backup before modifying
+        $this->backupFile($env_file);
+
+        $env_content = file_get_contents($env_file);
+        $updated = false;
+
+        foreach ($variables as $key => $value) {
+            // Check if variable exists
+            if (preg_match('/^' . preg_quote($key, '/') . '=/m', $env_content)) {
+                // Update existing variable
+                $env_content = preg_replace(
+                    '/^' . preg_quote($key, '/') . '=.*/m',
+                    $key . '=' . $value,
+                    $env_content
+                );
+            } else {
+                // Add new variable at the end
+                $env_content .= "\n" . $key . '=' . $value;
+            }
+            $updated = true;
+        }
+
+        if ($updated) {
+            file_put_contents($env_file, $env_content);
+            $this->log("   ✓ Updated .env file with " . count($variables) . " variable(s)");
+        }
+
+        return true;
+    }
+
+    /**
+     * Get missing environment variables for a migration
+     *
+     * @param string $version Migration version
+     * @return array Array of missing variables with descriptions
+     */
+    public function getMissingEnvVars($version) {
+        $env_file = $this->admin_dir . '.env';
+        if (!file_exists($env_file)) {
+            return [];
+        }
+
+        $env_content = file_get_contents($env_file);
+        $missing = [];
+
+        // Define required variables per version
+        $requirements = [
+            '3.5.0' => [
+                'DISCORD_BOT_TOKEN' => [
+                    'description' => 'Discord bot authentication token',
+                    'placeholder' => 'MTQzNTMzNjA3OTQwOTU0NTI1Ng.GorOcC.your_token_here',
+                    'required' => true
+                ],
+                'DISCORD_CLIENT_ID' => [
+                    'description' => 'Discord application client ID',
+                    'placeholder' => '1435336079409545256',
+                    'required' => true
+                ],
+                'DISCORD_PUBLIC_KEY' => [
+                    'description' => 'Discord application public key',
+                    'placeholder' => 'your_public_key_here',
+                    'required' => true
+                ],
+                'DISCORD_ENABLED' => [
+                    'description' => 'Enable Discord integration',
+                    'placeholder' => 'true',
+                    'required' => true
+                ],
+                'DISCORD_RATE_LIMIT_ENABLED' => [
+                    'description' => 'Enable Discord rate limiting',
+                    'placeholder' => 'true',
+                    'required' => false
+                ],
+                'DISCORD_MAX_INSTANT_PER_HOUR' => [
+                    'description' => 'Maximum instant messages per hour',
+                    'placeholder' => '10',
+                    'required' => false
+                ]
+            ]
+        ];
+
+        if (!isset($requirements[$version])) {
+            return [];
+        }
+
+        foreach ($requirements[$version] as $var => $info) {
+            // Check if variable exists and is not a placeholder
+            if (!preg_match('/^' . preg_quote($var, '/') . '=/m', $env_content)) {
+                $missing[$var] = $info;
+            } elseif (preg_match('/^' . preg_quote($var, '/') . '=(your_.*|.*_here)/m', $env_content)) {
+                // Variable exists but has placeholder value
+                $info['has_placeholder'] = true;
+                $missing[$var] = $info;
+            }
+        }
+
+        return $missing;
+    }
+
+    /**
+     * Record migration in history
+     *
+     * @param string $from_version
+     * @param string $to_version
+     * @param array $migrations_run
+     */
+    public function recordMigrationHistory($from_version, $to_version, $migrations_run) {
+        $history_file = $this->admin_dir . 'migration_history.json';
+
+        $history = ['migrations' => []];
+        if (file_exists($history_file)) {
+            $history = json_decode(file_get_contents($history_file), true) ?? ['migrations' => []];
+        }
+
+        $history['migrations'][] = [
+            'from_version' => $from_version,
+            'to_version' => $to_version,
+            'migrations_run' => $migrations_run,
+            'timestamp' => date('c'),
+            'admin_email' => $this->admin_email
+        ];
+
+        file_put_contents($history_file, json_encode($history, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * Get migration history
+     *
+     * @return array Migration history
+     */
+    public function getMigrationHistory() {
+        $history_file = $this->admin_dir . 'migration_history.json';
+
+        if (!file_exists($history_file)) {
+            return [];
+        }
+
+        $history = json_decode(file_get_contents($history_file), true);
+        return $history['migrations'] ?? [];
+    }
+
+    /**
      * Log message to console/output
      */
     private function log($message) {
@@ -557,22 +715,431 @@ class MigrationManager {
 // Run migration
 $manager = new MigrationManager($admin_email);
 
-// For web mode, buffer output to prevent header issues
-if (php_sapi_name() !== 'cli') {
-    ob_start();
-}
-
-$result = $manager->migrate();
-
-// Output result
+// CLI mode - run migration immediately
 if (php_sapi_name() === 'cli') {
+    $result = $manager->migrate();
     exit($result['success'] ? 0 : 1);
-} else {
-    // Clear buffered output (migration logs)
-    ob_end_clean();
-
-    // Send JSON response
-    header('Content-Type: application/json');
-    echo json_encode($result, JSON_PRETTY_PRINT);
 }
+
+// Web mode - interactive interface
+$current_version = $manager->getCurrentVersion();
+$installed_version = $manager->getInstalledVersion();
+$needs_upgrade = version_compare($current_version, $installed_version, '>');
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['env_vars'])) {
+    $env_vars = [];
+    foreach ($_POST['env_vars'] as $key => $value) {
+        if (!empty($value)) {
+            $env_vars[$key] = $value;
+        }
+    }
+
+    if (!empty($env_vars)) {
+        $manager->updateEnvFile($env_vars);
+        $success_message = "Environment variables updated successfully!";
+    }
+}
+
+// Handle migration run request
+$migration_result = null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_migration'])) {
+    ob_start();
+    $migration_result = $manager->migrate();
+    ob_end_clean();
+}
+
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Migration - Server 1586 Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .version-info {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .form-group .help-text {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .required-badge {
+            display: inline-block;
+            background: #dc3545;
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            margin-left: 0.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .history-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .history-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .migration-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            margin: 0.1rem;
+        }
+
+        .no-history {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .migration-result {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .migration-result h3 {
+            color: #28a745;
+            margin-bottom: 1rem;
+        }
+
+        .migration-result.error h3 {
+            color: #dc3545;
+        }
+
+        .migration-result pre {
+            background: white;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔄 Database Migration</h1>
+            <div class="version-info">
+                Current Version: <?php echo htmlspecialchars($current_version); ?> |
+                Installed Version: <?php echo htmlspecialchars($installed_version); ?>
+            </div>
+        </div>
+
+        <div class="content">
+            <?php if (isset($success_message)): ?>
+                <div class="alert alert-success">
+                    ✓ <?php echo htmlspecialchars($success_message); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($migration_result): ?>
+                <div class="migration-result <?php echo $migration_result['success'] ? '' : 'error'; ?>">
+                    <h3><?php echo $migration_result['success'] ? '✓ Migration Completed Successfully!' : '✗ Migration Failed'; ?></h3>
+                    <?php if (!empty($migration_result['message'])): ?>
+                        <p><?php echo htmlspecialchars($migration_result['message']); ?></p>
+                    <?php endif; ?>
+                    <?php if (!empty($migration_result['migrations_run'])): ?>
+                        <p><strong>Migrations applied:</strong></p>
+                        <ul>
+                            <?php foreach ($migration_result['migrations_run'] as $migration): ?>
+                                <li><?php echo htmlspecialchars($migration); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
+                    <div class="button-group">
+                        <a href="dashboard.php" class="btn btn-primary">← Back to Dashboard</a>
+                        <a href="migrate.php" class="btn btn-secondary">Run Another Migration</a>
+                    </div>
+                </div>
+            <?php elseif ($needs_upgrade): ?>
+                <?php
+                $missing_vars = $manager->getMissingEnvVars($current_version);
+                ?>
+
+                <?php if (!empty($missing_vars)): ?>
+                    <div class="section">
+                        <h2>🔧 Configuration Required</h2>
+                        <div class="alert alert-warning">
+                            The migration to version <strong><?php echo htmlspecialchars($current_version); ?></strong> requires
+                            additional configuration. Please provide the following environment variables:
+                        </div>
+
+                        <form method="POST" action="migrate.php">
+                            <?php foreach ($missing_vars as $var => $info): ?>
+                                <div class="form-group">
+                                    <label>
+                                        <?php echo htmlspecialchars($var); ?>
+                                        <?php if ($info['required']): ?>
+                                            <span class="required-badge">REQUIRED</span>
+                                        <?php endif; ?>
+                                    </label>
+                                    <input
+                                        type="<?php echo (strpos($var, 'TOKEN') !== false || strpos($var, 'KEY') !== false) ? 'password' : 'text'; ?>"
+                                        name="env_vars[<?php echo htmlspecialchars($var); ?>]"
+                                        placeholder="<?php echo htmlspecialchars($info['placeholder']); ?>"
+                                        <?php echo $info['required'] ? 'required' : ''; ?>
+                                    >
+                                    <div class="help-text">
+                                        <?php echo htmlspecialchars($info['description']); ?>
+                                        <?php if (isset($info['has_placeholder'])): ?>
+                                            <br><strong>Note:</strong> Current value appears to be a placeholder. Please update.
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+
+                            <div class="button-group">
+                                <button type="submit" class="btn btn-primary">💾 Save Configuration</button>
+                                <a href="dashboard.php" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                <?php else: ?>
+                    <div class="section">
+                        <h2>🚀 Ready to Migrate</h2>
+                        <div class="alert alert-info">
+                            All configuration requirements are met. Click below to migrate from version
+                            <strong><?php echo htmlspecialchars($installed_version); ?></strong> to
+                            <strong><?php echo htmlspecialchars($current_version); ?></strong>.
+                        </div>
+
+                        <form method="POST" action="migrate.php">
+                            <input type="hidden" name="run_migration" value="1">
+                            <div class="button-group">
+                                <button type="submit" class="btn btn-success">▶ Run Migration</button>
+                                <a href="dashboard.php" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                <?php endif; ?>
+
+            <?php else: ?>
+                <div class="section">
+                    <h2>📜 Migration History</h2>
+                    <div class="alert alert-success">
+                        Your system is up to date. Current version: <strong><?php echo htmlspecialchars($current_version); ?></strong>
+                    </div>
+
+                    <?php
+                    $history = $manager->getMigrationHistory();
+                    if (!empty($history)):
+                    ?>
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Migration</th>
+                                    <th>Applied By</th>
+                                    <th>Changes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach (array_reverse($history) as $entry): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars(date('Y-m-d H:i', strtotime($entry['timestamp']))); ?></td>
+                                        <td>
+                                            <strong><?php echo htmlspecialchars($entry['from_version']); ?></strong>
+                                            →
+                                            <strong><?php echo htmlspecialchars($entry['to_version']); ?></strong>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($entry['admin_email']); ?></td>
+                                        <td>
+                                            <?php foreach ($entry['migrations_run'] as $migration): ?>
+                                                <span class="migration-badge"><?php echo htmlspecialchars($migration); ?></span>
+                                            <?php endforeach; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php else: ?>
+                        <div class="no-history">
+                            <p>No migration history recorded yet.</p>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="button-group">
+                        <a href="dashboard.php" class="btn btn-primary">← Back to Dashboard</a>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</body>
+</html>

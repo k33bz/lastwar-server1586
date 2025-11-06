@@ -182,4 +182,5 @@ admin/nul
 
 # Kiro Settings - Keep environment files secure
 .kiro/.env
-.kiro/settings/github-token.jsonadmin/discord_rate_limits.json
+.kiro/settings/github-token.json
+admin/discord_rate_limits.json
