@@ -1,5 +1,5 @@
 {
-  "version": "3.5.1",
+  "version": "3.6.0",
   "releaseDate": "2025-11-06",
   "components": {
     "frontend": {
@@ -9,11 +9,11 @@
       "css": "1.5.0"
     },
     "admin": {
-      "version": "3.5.1",
-      "php": "3.5.1",
+      "version": "3.6.0",
+      "php": "3.6.0",
       "migration_system": "1.0.0",
       "user_management": "2.0.0",
-      "discord_integration": "2.0.0"
+      "discord_integration": "3.0.0"
     },
     "scripts": {
       "rotation": "2.2.0"
@@ -21,15 +21,15 @@
   },
   "features": {
     "discord_integration": {
-      "version": "2.0.0",
+      "version": "3.0.0",
       "date": "2025-11-06",
-      "description": "Discord bot integration with instant and scheduled announcements, error handling, and audit logging",
+      "description": "Discord bot integration with instant, scheduled, and recurring announcements with full management interface",
       "database_schema": "v3",
       "migration": "3.5.0",
       "phases": {
         "phase1": "Instant messaging (v1.0.0)",
         "phase2": "Scheduled messaging (v2.0.0)",
-        "phase3": "Recurring messaging (planned)"
+        "phase3": "Recurring messaging (v3.0.0)"
       },
       "changes": [
         "Discord bot API integration with message sending",
@@ -46,7 +46,13 @@
         "Manage scheduled messages with create/delete operations",
         "Automatic message processing via cron job",
         "Visual status tracking (pending, sent, failed)",
-        "Timezone-aware scheduling interface"
+        "Timezone-aware scheduling interface",
+        "Recurring message system (Phase 3 - v3.0.0)",
+        "Daily, weekly, and monthly recurring announcements",
+        "Enable/disable toggle for recurring messages",
+        "Send history tracking with count and timestamps",
+        "Next send time preview and calculation",
+        "Unified processor for scheduled and recurring messages"
       ],
       "files": [
         "admin/discord_webhook.php",
@@ -55,6 +61,8 @@
         "admin/discord_scheduled.php",
         "admin/discord_scheduled_api.php",
         "admin/discord_scheduled_processor.php",
+        "admin/discord_recurring.php",
+        "admin/discord_recurring_api.php",
         "admin/discord_config.php",
         "admin/jwt.php",
         "admin/security_audit.php",

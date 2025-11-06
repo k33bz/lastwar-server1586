@@ -110,9 +110,124 @@ foreach ($data['scheduled_messages'] as &$message) {
 // Save updated data
 save_scheduled_messages($scheduled_file, $data);
 
+// Process recurring messages
+$recurring_file = __DIR__ . '/discord_recurring.json';
+$recurring_data = load_scheduled_messages($recurring_file); // Reuse helper function
+$recurring_sent = 0;
+$recurring_failed = 0;
+
+foreach ($recurring_data['recurring_messages'] as &$message) {
+    // Skip if disabled
+    if (!$message['enabled']) {
+        continue;
+    }
+
+    // Check if it's time to send
+    $next_send_timestamp = strtotime($message['next_send_time']);
+    if ($next_send_timestamp > $current_time) {
+        continue; // Not yet time
+    }
+
+    // Prepare Discord message
+    if ($message['use_embed']) {
+        $discord_message = create_rich_announcement(
+            $message['message'],
+            $message['embed_title'] ?? 'Recurring Announcement',
+            $message['embed_color'] ?? '#5865F2',
+            $message['created_by']
+        );
+    } else {
+        $discord_message = create_simple_announcement($message['message']);
+    }
+
+    // Send message
+    try {
+        $result = send_discord_message($message['channel_id'], $discord_message);
+
+        if ($result['success']) {
+            $message['last_sent_at'] = date('Y-m-d H:i:s');
+            $message['send_count'] = ($message['send_count'] ?? 0) + 1;
+
+            // Calculate next send time
+            $next_send = calculate_next_send_time(
+                $message['frequency'],
+                $message['time_of_day'],
+                $message['day_of_week'] ?? null,
+                $message['day_of_month'] ?? null
+            );
+            $message['next_send_time'] = $next_send;
+
+            $recurring_sent++;
+
+            // Log successful send
+            log_audit_event('discord_recurring_sent', 'system', [
+                'message_id' => $message['id'],
+                'channel_id' => $message['channel_id'],
+                'created_by' => $message['created_by'],
+                'frequency' => $message['frequency'],
+                'send_count' => $message['send_count'],
+                'next_send_time' => $next_send
+            ]);
+
+            error_log("Recurring message {$message['id']} sent successfully (count: {$message['send_count']})");
+        } else {
+            throw new Exception($result['error'] ?? 'Unknown error');
+        }
+    } catch (Exception $e) {
+        $recurring_failed++;
+
+        // Log failure but don't disable the message
+        log_audit_event('discord_recurring_failed', 'system', [
+            'message_id' => $message['id'],
+            'channel_id' => $message['channel_id'],
+            'created_by' => $message['created_by'],
+            'error' => $e->getMessage()
+        ]);
+
+        error_log("Recurring message {$message['id']} failed: " . $e->getMessage());
+    }
+
+    // Rate limiting: wait 1 second between messages
+    sleep(1);
+}
+
+// Helper function for calculating next send time
+function calculate_next_send_time($frequency, $time_of_day, $day_of_week = null, $day_of_month = null) {
+    $now = time();
+    list($hour, $minute) = explode(':', $time_of_day);
+
+    switch ($frequency) {
+        case 'daily':
+            $next = strtotime("tomorrow {$time_of_day}");
+            return date('Y-m-d H:i:s', $next);
+
+        case 'weekly':
+            $days = ['sunday' => 0, 'monday' => 1, 'tuesday' => 2, 'wednesday' => 3,
+                     'thursday' => 4, 'friday' => 5, 'saturday' => 6];
+            $target_day = $days[strtolower($day_of_week)] ?? 0;
+            $next = strtotime("next " . ucfirst($day_of_week) . " {$time_of_day}");
+            return date('Y-m-d H:i:s', $next);
+
+        case 'monthly':
+            $target_day = (int)$day_of_month;
+            $next_month = date('Y-m', strtotime('+1 month'));
+            $next = strtotime("{$next_month}-{$target_day} {$time_of_day}");
+            return date('Y-m-d H:i:s', $next);
+
+        default:
+            return null;
+    }
+}
+
+// Save updated recurring data
+save_scheduled_messages($recurring_file, $recurring_data);
+
 // Summary
-if ($messages_sent > 0 || $messages_failed > 0) {
-    error_log("Discord scheduled processor completed: {$messages_sent} sent, {$messages_failed} failed");
+$total_sent = $messages_sent + $recurring_sent;
+$total_failed = $messages_failed + $recurring_failed;
+
+if ($total_sent > 0 || $total_failed > 0) {
+    error_log("Discord processor completed: Scheduled({$messages_sent} sent, {$messages_failed} failed), Recurring({$recurring_sent} sent, {$recurring_failed} failed)");
 }
 
 exit(0);
