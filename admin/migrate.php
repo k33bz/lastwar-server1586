@@ -106,7 +106,7 @@ class MigrationManager {
     /**
      * Get current deployed version from version.json
      */
-    private function getCurrentVersion() {
+    public function getCurrentVersion() {
         if (!file_exists($this->version_file)) {
             return '0.0.0';
         }
@@ -118,7 +118,7 @@ class MigrationManager {
     /**
      * Get installed version from tracking file
      */
-    private function getInstalledVersion() {
+    public function getInstalledVersion() {
         $installed_file = $this->admin_dir . '.installed_version';
 
         if (!file_exists($installed_file)) {
