@@ -1,0 +1,141 @@
+#!/bin/bash
+# Git Commit Message Hook
+# Validates and improves commit message quality
+#
+# Features:
+# - Enforces Conventional Commits format
+# - Checks message length and clarity
+# - LM Studio commit message review (optional)
+# - Suggests improvements
+#
+# To skip LM Studio review:
+#   SKIP_LMSTUDIO=1 git commit -m "message"
+#
+# Format: <type>(<scope>): <description>
+# Types: feat, fix, docs, style, refactor, test, chore, security, perf
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Skip checks for merge commits and revert commits
+if echo "$COMMIT_MSG" | grep -qE "^(Merge|Revert)"; then
+    exit 0
+fi
+
+# Skip if message starts with #(comment) or is empty
+if echo "$COMMIT_MSG" | grep -qE "^#" || [ -z "$(echo "$COMMIT_MSG" | sed '/^#/d' | sed '/^\s*$/d')" ]; then
+    exit 0
+fi
+
+echo ""
+echo -e "${BLUE}→ Validating commit message...${NC}"
+
+# ============================================================================
+# 1. Conventional Commits Format Check
+# ============================================================================
+PATTERN='^(feat|fix|docs|style|refactor|test|chore|security|perf|build|ci|revert)(\(.+\))?: .{10,}'
+
+if ! echo "$COMMIT_MSG" | grep -qE "$PATTERN"; then
+    echo -e "${RED}❌ Invalid commit message format${NC}"
+    echo ""
+    echo "Required format: <type>(<scope>): <description>"
+    echo ""
+    echo "Types:"
+    echo "  feat:     New feature"
+    echo "  fix:      Bug fix"
+    echo "  docs:     Documentation changes"
+    echo "  security: Security improvements"
+    echo "  refactor: Code refactoring"
+    echo "  test:     Test changes"
+    echo "  perf:     Performance improvements"
+    echo "  chore:    Maintenance tasks"
+    echo ""
+    echo "Examples:"
+    echo "  feat(admin): Add multi-role system for users"
+    echo "  fix(csrf): Resolve token validation mismatch"
+    echo "  security(jwt): Implement automatic key rotation"
+    echo "  docs(api): Update user management API documentation"
+    echo ""
+    echo "Your message:"
+    echo "  $COMMIT_MSG"
+    echo ""
+    exit 1
+fi
+
+echo -e "${GREEN}✓${NC} Conventional Commits format"
+
+# ============================================================================
+# 2. Issue Reference Check
+# ============================================================================
+if echo "$COMMIT_MSG" | grep -qE '^fix'; then
+    if ! echo "$COMMIT_MSG" | grep -qE '(#[0-9]+|Fixes #[0-9]+|Closes #[0-9]+)'; then
+        echo -e "${YELLOW}⚠️  Bug fix without issue reference${NC}"
+        echo "   Consider adding 'Fixes #123' or 'Closes #123'"
+    else
+        echo -e "${GREEN}✓${NC} Issue reference included"
+    fi
+fi
+
+# ============================================================================
+# 3. Length and Clarity Check
+# ============================================================================
+FIRST_LINE=$(echo "$COMMIT_MSG" | head -1)
+DESC_LENGTH=$(echo "$FIRST_LINE" | wc -c)
+
+if [ "$DESC_LENGTH" -lt 20 ]; then
+    echo -e "${YELLOW}⚠️  Commit message is very short (${DESC_LENGTH} chars)${NC}"
+    echo "   Consider adding more context (aim for 20-72 characters)"
+elif [ "$DESC_LENGTH" -gt 72 ]; then
+    echo -e "${YELLOW}⚠️  First line is long (${DESC_LENGTH} chars)${NC}"
+    echo "   Recommended: Keep first line under 72 characters"
+else
+    echo -e "${GREEN}✓${NC} Good message length (${DESC_LENGTH} chars)"
+fi
+
+# ============================================================================
+# 4. LM Studio Commit Message Quality Review (Optional)
+# ============================================================================
+if [ -z "$SKIP_LMSTUDIO" ]; then
+    # Check if LM Studio is running
+    if curl -s -o /dev/null -w "%{http_code}" http://localhost:1234/v1/models 2>/dev/null | grep -q "200"; then
+        echo ""
+        echo -e "${BLUE}→ Running LM Studio commit message review...${NC}"
+        echo "   [Set SKIP_LMSTUDIO=1 to skip]"
+
+        # Get staged diff for context
+        DIFF_SUMMARY=$(git diff --cached --stat | head -5)
+
+        # Run quality check via external Python script
+        HOOK_DIR=$(dirname "$0")
+
+        # Use Python launcher (py) for Windows, fall back to python3/python
+        if command -v py &> /dev/null; then
+            py "$HOOK_DIR/commit-msg-lmstudio.py" "$COMMIT_MSG" "$DIFF_SUMMARY"
+        elif command -v python3 &> /dev/null; then
+            python3 "$HOOK_DIR/commit-msg-lmstudio.py" "$COMMIT_MSG" "$DIFF_SUMMARY"
+        else
+            python "$HOOK_DIR/commit-msg-lmstudio.py" "$COMMIT_MSG" "$DIFF_SUMMARY"
+        fi
+
+        LMSTUDIO_EXIT=$?
+        if [ $LMSTUDIO_EXIT -ne 0 ]; then
+            exit 1
+        fi
+    fi
+fi
+
+# ============================================================================
+# Success
+# ============================================================================
+echo ""
+echo -e "${GREEN}✅ Commit message validated${NC}"
+echo ""
+
+exit 0

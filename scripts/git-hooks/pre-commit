@@ -1,0 +1,16 @@
+#!/bin/bash
+# Git Pre-Commit Hook
+# Runs Python scripts for all checks to ensure Windows compatibility
+
+HOOK_DIR=$(dirname "$0")
+
+# Use Python launcher (py) for Windows, fall back to python3/python
+if command -v py &> /dev/null; then
+    py "$HOOK_DIR/pre-commit-checks.py"
+elif command -v python3 &> /dev/null; then
+    python3 "$HOOK_DIR/pre-commit-checks.py"
+else
+    python "$HOOK_DIR/pre-commit-checks.py"
+fi
+
+exit $?
