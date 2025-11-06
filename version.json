@@ -1,5 +1,5 @@
 {
-  "version": "3.6.0",
+  "version": "3.5.1",
   "releaseDate": "2025-11-06",
   "components": {
     "frontend": {
@@ -9,8 +9,8 @@
       "css": "1.5.0"
     },
     "admin": {
-      "version": "3.6.0",
-      "php": "3.6.0",
+      "version": "3.5.1",
+      "php": "3.5.1",
       "migration_system": "1.0.0",
       "user_management": "2.0.0",
       "discord_integration": "2.0.0"
