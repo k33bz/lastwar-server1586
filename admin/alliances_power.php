@@ -578,6 +578,7 @@ include 'includes/header.php';
         }
         
         const CAN_DELETE_ALLIANCES = <?= $can_delete ? 'true' : 'false' ?>;
+        const CSRF_TOKEN = '<?= getCsrfToken() ?>';
         let alliances = [];
         let deletedIndices = []; // Track indices of deleted alliances
         let hasUnsavedChanges = false;
@@ -639,6 +640,23 @@ include 'includes/header.php';
                     showError('Failed to load alliances: ' + error.message);
                     document.getElementById('loadingIndicator').style.display = 'none';
                 });
+        }
+
+        function syncInputsToModel() {
+            // Sync current input values back to the alliances array before re-rendering
+            const inputs = document.querySelectorAll('#alliancesTable input');
+
+            inputs.forEach(input => {
+                const index = parseInt(input.dataset.index);
+                const field = input.dataset.field;
+                const value = field === 'power' ? parseInt(input.value) || 0 : input.value.trim();
+
+                // Find alliance and update its value
+                const alliance = alliances.find(a => a.index === index);
+                if (alliance) {
+                    alliance[field] = value;
+                }
+            });
         }
 
         function renderAlliances() {
@@ -775,7 +793,10 @@ include 'includes/header.php';
             const promises = indices.map(index => {
                 return fetch('alliances_power_api.php?action=delete', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': CSRF_TOKEN
+                    },
                     body: JSON.stringify({ index: index })
                 }).then(r => r.json());
             });
@@ -799,7 +820,10 @@ include 'includes/header.php';
 
             return fetch('alliances_power_api.php?action=update', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': CSRF_TOKEN
+                },
                 body: JSON.stringify(requestBody)
             })
             .then(response => response.json())
@@ -829,7 +853,10 @@ include 'includes/header.php';
 
                 return fetch('alliances_power_api.php?action=add', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': CSRF_TOKEN
+                    },
                     body: JSON.stringify(requestBody)
                 }).then(r => r.json());
             });
@@ -850,6 +877,9 @@ include 'includes/header.php';
         }
 
         function addNewAlliance() {
+            // Sync current input values before adding new row
+            syncInputsToModel();
+
             const newIndex = alliances.length > 0 ? Math.max(...alliances.map(a => a.index)) + 1 : 0;
 
             alliances.push({
@@ -874,6 +904,9 @@ include 'includes/header.php';
         }
 
         function cancelNewAlliance(index) {
+            // Sync inputs before removing the alliance
+            syncInputsToModel();
+
             alliances = alliances.filter(a => a.index !== index);
             renderAlliances();
             updateStats();
@@ -889,6 +922,9 @@ include 'includes/header.php';
             if (!confirmed) {
                 return;
             }
+
+            // Sync inputs before marking for deletion
+            syncInputsToModel();
 
             // Mark as deleted locally
             deletedIndices.push(index);
