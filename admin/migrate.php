@@ -713,7 +713,14 @@ class MigrationManager {
 }
 
 // Run migration
-$manager = new MigrationManager($admin_email);
+try {
+    $manager = new MigrationManager($admin_email);
+} catch (Exception $e) {
+    if (php_sapi_name() !== 'cli') {
+        die('<!DOCTYPE html><html><head><title>Error</title></head><body><h1>Migration Error</h1><pre>' . htmlspecialchars($e->getMessage()) . '</pre></body></html>');
+    }
+    die("Error: " . $e->getMessage() . "\n");
+}
 
 // CLI mode - run migration immediately
 if (php_sapi_name() === 'cli') {
@@ -722,9 +729,13 @@ if (php_sapi_name() === 'cli') {
 }
 
 // Web mode - interactive interface
-$current_version = $manager->getCurrentVersion();
-$installed_version = $manager->getInstalledVersion();
-$needs_upgrade = version_compare($current_version, $installed_version, '>');
+try {
+    $current_version = $manager->getCurrentVersion();
+    $installed_version = $manager->getInstalledVersion();
+    $needs_upgrade = version_compare($current_version, $installed_version, '>');
+} catch (Exception $e) {
+    die('<!DOCTYPE html><html><head><title>Error</title></head><body><h1>Version Check Error</h1><pre>' . htmlspecialchars($e->getMessage()) . '</pre><p>Stack trace:</p><pre>' . htmlspecialchars($e->getTraceAsString()) . '</pre></body></html>');
+}
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['env_vars'])) {
