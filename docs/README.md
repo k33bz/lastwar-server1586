@@ -93,12 +93,13 @@ Complete admin system documentation in **[docs/admin/](admin/)**.
 | **[admin/ALERT-TO-MODAL-REPLACEMENTS.md](admin/ALERT-TO-MODAL-REPLACEMENTS.md)** | UI modal system |
 | **[admin/VERSION_SUMMARY.md](admin/VERSION_SUMMARY.md)** | Admin panel version history |
 
-### Components
+### Components & UI/UX
 
 | Document | Description |
 |----------|-------------|
 | **[admin/includes/README.md](admin/includes/README.md)** | Shared components overview |
 | **[admin/includes/SHARED-COMPONENTS.md](admin/includes/SHARED-COMPONENTS.md)** | Component documentation |
+| **[LOADING_STATES.md](LOADING_STATES.md)** | Global loading overlay & toast notifications (v3.1.0) |
 
 ---
 

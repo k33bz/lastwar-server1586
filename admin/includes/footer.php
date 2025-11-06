@@ -547,6 +547,174 @@ $last_updated = $version_data['lastUpdated'] ?? date('Y-m-d');
             }
         });
         <?php endif; ?>
+
+        // Global Loading Overlay System
+        window.Loading = {
+            show: function(message = 'Loading...') {
+                const overlay = document.getElementById('globalLoadingOverlay');
+                const text = document.getElementById('loadingText');
+                if (overlay && text) {
+                    text.textContent = message;
+                    overlay.style.display = 'flex';
+                }
+            },
+            hide: function() {
+                const overlay = document.getElementById('globalLoadingOverlay');
+                if (overlay) {
+                    overlay.style.display = 'none';
+                }
+            },
+            update: function(message) {
+                const text = document.getElementById('loadingText');
+                if (text) {
+                    text.textContent = message;
+                }
+            }
+        };
+
+        // Utility function to show toast notifications
+        window.showToast = function(message, type = 'info') {
+            // Check if toast exists, create if not
+            let toast = document.getElementById('globalToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'globalToast';
+                toast.className = 'global-toast';
+                document.body.appendChild(toast);
+            }
+
+            // Set message and type
+            toast.textContent = message;
+            toast.className = 'global-toast toast-' + type + ' toast-show';
+
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                toast.className = 'global-toast toast-' + type;
+            }, 3000);
+        };
     </script>
+
+    <!-- Global Loading Overlay -->
+    <div id="globalLoadingOverlay" class="global-loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner-border"></div>
+            <p id="loadingText">Loading...</p>
+        </div>
+    </div>
+
+    <style>
+        /* Global Loading Overlay */
+        .global-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(3px);
+        }
+
+        .loading-spinner {
+            background: white;
+            padding: 2.5rem 3rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .spinner-border {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-spinner p {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Global Toast Notifications */
+        .global-toast {
+            position: fixed;
+            top: -100px;
+            right: 20px;
+            min-width: 300px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10000;
+            transition: top 0.3s ease-out;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .global-toast.toast-show {
+            top: 80px;
+        }
+
+        .toast-success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+        }
+
+        .toast-error {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .toast-warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+
+        .toast-info {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .loading-spinner {
+                padding: 2rem;
+            }
+
+            .spinner-border {
+                width: 50px;
+                height: 50px;
+            }
+
+            .global-toast {
+                min-width: auto;
+                max-width: 90%;
+                right: 5%;
+            }
+        }
+    </style>
 </body>
 </html>
