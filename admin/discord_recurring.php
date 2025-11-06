@@ -69,6 +69,8 @@ include 'includes/header.php';
         .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: #28a745; }
         input:checked + .slider:before { transform: translateX(26px); }
+        .btn-variable { background: white; border: 1px solid #667eea; color: #667eea; padding: 0.5rem 0.75rem; border-radius: 4px; font-size: 0.875rem; cursor: pointer; font-family: 'Courier New', monospace; transition: all 0.2s; }
+        .btn-variable:hover { background: #667eea; color: white; }
     </style>
 
     <div class="tab-buttons">
@@ -123,9 +125,32 @@ include 'includes/header.php';
                 <div class="help-text">When should this message send each time?</div>
             </div>
 
+            <!-- Template & Variables -->
+            <div class="form-group">
+                <label for="templateSelect">📝 Use Template (Optional)</label>
+                <select id="templateSelect" onchange="loadTemplate()">
+                    <option value="">-- Select a template --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>📌 Quick Variables</label>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <button type="button" class="btn-variable" onclick="insertVariable('{sender_name}')">sender_name</button>
+                    <button type="button" class="btn-variable" onclick="insertVariable('{r5_name}')">r5_name</button>
+                    <button type="button" class="btn-variable" onclick="insertVariable('{alliance_name}')">alliance_name</button>
+                    <button type="button" class="btn-variable" onclick="insertVariable('{date}')">date</button>
+                </div>
+                <div class="help-text">
+                    <a href="discord_templates.php" target="_blank" style="color: #667eea;">View all variables & manage templates →</a>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label>Message Content *</label>
-                <textarea id="messageContent" required placeholder="Enter recurring announcement..." maxlength="2000"></textarea>
+                <textarea id="messageContent" required placeholder="Enter recurring announcement...
+
+You can use variables like {sender_name}, {r5_name}, etc." maxlength="2000"></textarea>
             </div>
 
             <div class="form-group">
@@ -144,7 +169,46 @@ include 'includes/header.php';
 </div>
 
 <script>
-    let channels = [], recurringMessages = [];
+    let channels = [], recurringMessages = [], templates = [];
+
+    // Load templates
+    async function loadTemplates() {
+        try {
+            const response = await fetch('discord_templates_api.php?action=list');
+            const data = await response.json();
+            if (data.success) {
+                templates = data.templates;
+                const select = document.getElementById('templateSelect');
+                select.innerHTML = '<option value="">-- Select a template --</option>';
+                templates.forEach(t => {
+                    const option = document.createElement('option');
+                    option.value = t.id;
+                    option.textContent = `${t.name} (${t.scope === 'global' ? '🌍' : '🏢'})`;
+                    option.dataset.content = t.content;
+                    select.appendChild(option);
+                });
+            }
+        } catch (error) { console.error('Error loading templates:', error); }
+    }
+
+    // Load selected template
+    function loadTemplate() {
+        const select = document.getElementById('templateSelect');
+        const option = select.options[select.selectedIndex];
+        if (option.dataset.content) {
+            document.getElementById('messageContent').value = option.dataset.content;
+        }
+    }
+
+    // Insert variable
+    function insertVariable(variable) {
+        const textarea = document.getElementById('messageContent');
+        const start = textarea.selectionStart;
+        const text = textarea.value;
+        textarea.value = text.substring(0, start) + variable + text.substring(textarea.selectionEnd);
+        textarea.focus();
+        textarea.selectionStart = textarea.selectionEnd = start + variable.length;
+    }
 
     function switchTab(tab) {
         document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
@@ -424,6 +488,7 @@ include 'includes/header.php';
 
     // Initialize
     loadChannels();
+    loadTemplates();
 </script>
 
 <?php include 'includes/footer.php'; ?>
