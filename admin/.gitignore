@@ -10,7 +10,7 @@ audit_log.json
 
 # Composer
 /vendor/
-composer.lock
+# composer.lock - MUST be tracked for applications to ensure consistent dependencies
 
 # Test files
 test_magic_links.php
