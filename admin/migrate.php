@@ -20,22 +20,69 @@
  * - Auto: Called by config.php on version mismatch
  */
 
+// Enable error display for debugging
+if (php_sapi_name() !== 'cli') {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
+    // Custom error handler to catch all errors
+    set_error_handler(function($errno, $errstr, $errfile, $errline) {
+        $error_html = '<!DOCTYPE html><html><head><title>Migration Error</title></head><body>';
+        $error_html .= '<h1>Migration Error</h1>';
+        $error_html .= '<p><strong>Error:</strong> ' . htmlspecialchars($errstr) . '</p>';
+        $error_html .= '<p><strong>File:</strong> ' . htmlspecialchars($errfile) . '</p>';
+        $error_html .= '<p><strong>Line:</strong> ' . htmlspecialchars($errline) . '</p>';
+        $error_html .= '</body></html>';
+        die($error_html);
+    });
+}
+
 define('ADMIN_INIT', true);
-require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/audit_logger.php';
+
+try {
+    require_once __DIR__ . '/config.php';
+} catch (Exception $e) {
+    if (php_sapi_name() !== 'cli') {
+        die('<!DOCTYPE html><html><head><title>Error</title></head><body><h1>Config Error</h1><pre>' . htmlspecialchars($e->getMessage()) . '</pre></body></html>');
+    }
+    die("Config error: " . $e->getMessage() . "\n");
+}
+
+try {
+    require_once __DIR__ . '/audit_logger.php';
+} catch (Exception $e) {
+    if (php_sapi_name() !== 'cli') {
+        die('<!DOCTYPE html><html><head><title>Error</title></head><body><h1>Audit Logger Error</h1><pre>' . htmlspecialchars($e->getMessage()) . '</pre></body></html>');
+    }
+    die("Audit logger error: " . $e->getMessage() . "\n");
+}
 
 // Get user email for audit logging
 $admin_email = 'cli_user';
 
 // CLI mode doesn't need JWT, web mode does
 if (php_sapi_name() !== 'cli') {
-    require_once __DIR__ . '/jwt.php';
-    $user = require_jwt_session();
+    try {
+        require_once __DIR__ . '/jwt.php';
+    } catch (Exception $e) {
+        die('<!DOCTYPE html><html><head><title>Error</title></head><body><h1>JWT Library Error</h1><pre>' . htmlspecialchars($e->getMessage()) . '</pre></body></html>');
+    }
+
+    try {
+        $user = require_jwt_session();
+    } catch (Exception $e) {
+        die('<!DOCTYPE html><html><head><title>Error</title></head><body><h1>JWT Session Error</h1><pre>' . htmlspecialchars($e->getMessage()) . '</pre><p>This might mean you need to log in again.</p></body></html>');
+    }
 
     // Only users with admin role can run migrations via web
-    if (!has_role($user, 'admin')) {
-        http_response_code(403);
-        die('<!DOCTYPE html><html><head><title>Access Denied</title></head><body><h1>403 Forbidden</h1><p>Admin role required for migrations.</p></body></html>');
+    try {
+        if (!has_role($user, 'admin')) {
+            http_response_code(403);
+            die('<!DOCTYPE html><html><head><title>Access Denied</title></head><body><h1>403 Forbidden</h1><p>Admin role required for migrations.</p></body></html>');
+        }
+    } catch (Exception $e) {
+        die('<!DOCTYPE html><html><head><title>Error</title></head><body><h1>Role Check Error</h1><pre>' . htmlspecialchars($e->getMessage()) . '</pre></body></html>');
     }
 
     $admin_email = $user->sub;
