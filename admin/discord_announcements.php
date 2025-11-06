@@ -454,6 +454,28 @@ include 'includes/header.php';
         .error-modal-footer button:hover {
             background: #5a6268;
         }
+
+        /* Template & Variable Button Styles */
+        .btn-variable {
+            background: white;
+            border: 1px solid #667eea;
+            color: #667eea;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: all 0.2s;
+        }
+
+        .btn-variable:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-variable:active {
+            transform: scale(0.95);
+        }
     </style>
 
     <div id="alertContainer"></div>
@@ -496,9 +518,36 @@ include 'includes/header.php';
                 </div>
             </div>
 
+            <!-- Template & Variables Section -->
+            <div class="form-group">
+                <label for="templateSelect">📝 Use Template (Optional)</label>
+                <select id="templateSelect" onchange="loadTemplate()">
+                    <option value="">-- Select a template --</option>
+                </select>
+                <div class="help-text">Load a pre-made template with variables</div>
+            </div>
+
+            <div class="form-group">
+                <label>📌 Quick Variables</label>
+                <div id="quickVariables" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <button type="button" class="btn-variable" onclick="insertVariable('{sender_name}')">sender_name</button>
+                    <button type="button" class="btn-variable" onclick="insertVariable('{alliance_name}')">alliance_name</button>
+                    <button type="button" class="btn-variable" onclick="insertVariable('{r5_name}')">r5_name</button>
+                    <button type="button" class="btn-variable" onclick="insertVariable('{server_name}')">server_name</button>
+                    <button type="button" class="btn-variable" onclick="insertVariable('{date}')">date</button>
+                    <button type="button" class="btn-variable" onclick="insertVariable('{time}')">time</button>
+                </div>
+                <div class="help-text">
+                    Click to insert variables.
+                    <a href="discord_templates.php" target="_blank" style="color: #667eea;">View all variables & manage templates →</a>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label for="messageContent">Message *</label>
-                <textarea id="messageContent" name="message" placeholder="Enter your announcement message here..." required></textarea>
+                <textarea id="messageContent" name="message" placeholder="Enter your announcement message here...
+
+You can use variables like {sender_name}, {r5_name}, {alliance_name}, etc." required></textarea>
                 <div class="char-count" id="charCount">0 / 2000 characters</div>
                 <div class="help-text">Supports Discord markdown: **bold**, *italic*, __underline__, ~~strikethrough~~</div>
             </div>
@@ -549,6 +598,63 @@ include 'includes/header.php';
 // Track selected channels
 let selectedChannels = [];
 let availableChannels = [];
+let templates = [];
+
+// Load templates
+async function loadTemplates() {
+    try {
+        const response = await fetch('discord_templates_api.php?action=list');
+        const data = await response.json();
+
+        if (data.success) {
+            templates = data.templates;
+            populateTemplateSelect();
+        }
+    } catch (error) {
+        console.error('Error loading templates:', error);
+    }
+}
+
+// Populate template dropdown
+function populateTemplateSelect() {
+    const select = document.getElementById('templateSelect');
+    select.innerHTML = '<option value="">-- Select a template --</option>';
+
+    templates.forEach(template => {
+        const option = document.createElement('option');
+        option.value = template.id;
+        option.textContent = `${template.name} (${template.scope === 'global' ? '🌍 Global' : '🏢 ' + (template.alliance || 'Alliance')})`;
+        option.dataset.content = template.content;
+        select.appendChild(option);
+    });
+}
+
+// Load selected template
+function loadTemplate() {
+    const select = document.getElementById('templateSelect');
+    const selectedOption = select.options[select.selectedIndex];
+
+    if (selectedOption.dataset.content) {
+        document.getElementById('messageContent').value = selectedOption.dataset.content;
+        // Trigger character count update
+        document.getElementById('messageContent').dispatchEvent(new Event('input'));
+    }
+}
+
+// Insert variable into message at cursor position
+function insertVariable(variable) {
+    const textarea = document.getElementById('messageContent');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+
+    textarea.value = text.substring(0, start) + variable + text.substring(end);
+    textarea.focus();
+    textarea.selectionStart = textarea.selectionEnd = start + variable.length;
+
+    // Trigger character count update
+    textarea.dispatchEvent(new Event('input'));
+}
 
 // Load available channels
 async function loadChannels() {
@@ -805,6 +911,7 @@ document.addEventListener('keydown', function(event) {
 
 // Initialize
 loadChannels();
+loadTemplates();
 </script>
 
 <?php include 'includes/footer.php'; ?>
