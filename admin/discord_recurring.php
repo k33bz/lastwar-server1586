@@ -264,7 +264,7 @@ You can use variables like {sender_name}, {r5_name}, etc." maxlength="2000"></te
         channels.forEach(channel => {
             const option = document.createElement('option');
             option.value = channel.id;
-            option.textContent = `${channel.name} (${channel.alliance || 'Global'})`;
+            option.textContent = `${channel.display_name || channel.name}`;
             select.appendChild(option);
         });
     }

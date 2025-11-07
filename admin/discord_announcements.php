@@ -687,7 +687,7 @@ function renderChannels() {
             <div class="checkbox-group">
                 <input type="checkbox" id="channel_${channel.id}" value="${channel.id}" onchange="toggleChannel('${channel.id}')">
                 <label for="channel_${channel.id}">
-                    <span class="channel-name">#${channel.name}</span>
+                    <span class="channel-name">#${channel.display_name || channel.name}</span>
                     ${channel.server_name ? `<span style="color: #999;"> (${channel.server_name})</span>` : ''}
                 </label>
             </div>

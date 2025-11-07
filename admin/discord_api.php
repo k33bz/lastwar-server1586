@@ -424,9 +424,9 @@ function get_user_accessible_channels($user) {
         foreach ($alliances_data as $alliance) {
             $alliance_tag = $alliance['tag'] ?? $alliance['alliance'] ?? '';
 
-            // Check if user has access to this alliance
-            // Presidents get access to all "general" type channels
-            if ($is_admin || in_array($alliance_tag, $user_alliances)) {
+            // Admins see ALL channels from ALL alliances
+            // Regular users only see their alliance channels
+            if ($is_admin) {
                 $discord_channels = $alliance['discord']['channels'] ?? [];
 
                 foreach ($discord_channels as $channel) {
@@ -436,6 +436,24 @@ function get_user_accessible_channels($user) {
                         $channel['alliance_name'] = $alliance['name'] ?? $alliance_tag;
                         $channel['server_name'] = $alliance['discord']['serverName'] ?? 'Discord';
                         $channel['source'] = 'alliance';
+                        // Prefix channel name with alliance tag
+                        $channel['display_name'] = '[' . $alliance_tag . '] ' . $channel['name'];
+                        $accessible_channels[] = $channel;
+                    }
+                }
+            } elseif (in_array($alliance_tag, $user_alliances)) {
+                // Regular users see only their alliance channels
+                $discord_channels = $alliance['discord']['channels'] ?? [];
+
+                foreach ($discord_channels as $channel) {
+                    if ($channel['enabled'] ?? false) {
+                        // Add alliance context to channel
+                        $channel['alliance'] = $alliance_tag;
+                        $channel['alliance_name'] = $alliance['name'] ?? $alliance_tag;
+                        $channel['server_name'] = $alliance['discord']['serverName'] ?? 'Discord';
+                        $channel['source'] = 'alliance';
+                        // Prefix channel name with alliance tag
+                        $channel['display_name'] = '[' . $alliance_tag . '] ' . $channel['name'];
                         $accessible_channels[] = $channel;
                     }
                 }
@@ -450,6 +468,8 @@ function get_user_accessible_channels($user) {
                         $channel['alliance_name'] = $alliance['name'] ?? $alliance_tag;
                         $channel['server_name'] = $alliance['discord']['serverName'] ?? 'Discord';
                         $channel['source'] = 'alliance';
+                        // Prefix channel name with alliance tag
+                        $channel['display_name'] = '[' . $alliance_tag . '] ' . $channel['name'];
                         $accessible_channels[] = $channel;
                     }
                 }

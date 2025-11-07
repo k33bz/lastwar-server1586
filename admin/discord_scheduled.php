@@ -496,7 +496,7 @@ You can use variables like {sender_name}, {event_time}, etc." maxlength="2000"><
         channels.forEach(channel => {
             const option = document.createElement('option');
             option.value = channel.id;
-            option.textContent = `${channel.name} (${channel.alliance || 'Global'})`;
+            option.textContent = `${channel.display_name || channel.name}`;
             select.appendChild(option);
         });
     }
