@@ -230,7 +230,14 @@ Use variables like {r5_name}, {event_time}, etc. Click variables below to insert
         templateList.style.display = 'none';
 
         try {
-            const response = await fetch('discord_templates_api.php?action=list');
+            const response = await fetch('discord_templates_api.php?action=list', {
+                credentials: 'same-origin'
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
             const data = await response.json();
 
             loading.style.display = 'none';

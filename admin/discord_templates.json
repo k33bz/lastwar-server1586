@@ -1,4 +1,55 @@
 {
-  "templates": [],
+  "templates": [
+    {
+      "id": "tpl_ref_rally",
+      "name": "Rally Announcement",
+      "content": "🎯 **RALLY ALERT** 🎯\n\n**Rally Leader:** {sender_name}\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Target:** {location}\n**Time:** {event_time}\n\n**Notes:** {notes}\n\n@everyone Get ready!",
+      "variables_used": ["{sender_name}", "{alliance_name}", "{alliance_tag}", "{location}", "{event_time}", "{notes}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
+    },
+    {
+      "id": "tpl_ref_event",
+      "name": "Event Reminder",
+      "content": "📅 **EVENT REMINDER** 📅\n\n**Event:** {event_name}\n**Time:** {event_time}\n**Server:** {server_name}\n\nDon't miss it! ⏰",
+      "variables_used": ["{event_name}", "{event_time}", "{server_name}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
+    },
+    {
+      "id": "tpl_ref_recruitment",
+      "name": "Recruitment Message",
+      "content": "🔥 **WE'RE RECRUITING!** 🔥\n\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Contact:** {sender_name}\n\nJoin us and dominate {server_name}!\n\n💪 Active players welcome!\n🎯 Team-oriented gameplay\n🏆 Competitive and fun environment",
+      "variables_used": ["{alliance_name}", "{alliance_tag}", "{sender_name}", "{server_name}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
+    },
+    {
+      "id": "tpl_ref_meeting",
+      "name": "Alliance Meeting",
+      "content": "🗣️ **ALLIANCE MEETING** 🗣️\n\n**Date:** {date}\n**Time:** {event_time}\n**Host:** {r5_name}\n\n**Agenda:**\n{notes}\n\nAll members are encouraged to attend!",
+      "variables_used": ["{date}", "{event_time}", "{r5_name}", "{notes}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
+    },
+    {
+      "id": "tpl_ref_victory",
+      "name": "Victory Announcement",
+      "content": "🏆 **VICTORY!** 🏆\n\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Achievement:** {event_name}\n**Date:** {datetime}\n\nCongratulations to all members!\n\n{notes}",
+      "variables_used": ["{alliance_name}", "{alliance_tag}", "{event_name}", "{datetime}", "{notes}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
+    }
+  ],
   "pending_submissions": []
 }
