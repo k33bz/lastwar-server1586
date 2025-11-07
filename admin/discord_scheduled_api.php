@@ -1,18 +1,76 @@
 <?php
 /**
  * Discord Scheduled Messages API
- * Version: 1.0.0 (Phase 2 - Scheduled messaging)
+ * Version: 1.0.1 (Phase 2 - Scheduled messaging)
  *
  * Handles CRUD operations for scheduled Discord messages
+ *
+ * Changelog:
+ *   1.0.1 (2025-11-07) - Added comprehensive error handling
+ *   1.0.0 (2025-11-04) - Initial implementation
  */
 
-require_once 'jwt.php';
-require_once 'audit_logger.php';
-require_once 'json_helpers.php';
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+
+// Set up fatal error handler to catch ANY error
+register_shutdown_function(function() {
+    $error = error_get_last();
+    if ($error && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        // Clear any output buffer
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header('Content-Type: application/json');
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Fatal error occurred',
+            'details' => [
+                'message' => $error['message'],
+                'file' => basename($error['file']),
+                'line' => $error['line'],
+                'type' => $error['type']
+            ]
+        ]);
+        exit();
+    }
+});
+
+// Start output buffering to catch any output before JSON
+ob_start();
 
 header('Content-Type: application/json');
 
-$user = require_jwt_session();
+// Wrap require statements in try-catch
+try {
+    require_once 'jwt.php';
+    require_once 'audit_logger.php';
+    require_once 'json_helpers.php';
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Server configuration error',
+        'details' => $e->getMessage()
+    ]);
+    exit();
+}
+
+try {
+    $user = require_jwt_session();
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Authentication error',
+        'details' => $e->getMessage()
+    ]);
+    exit();
+}
 
 // Check if user has at least R4 access or president role
 if (!has_role($user, ['admin', 'r5', 'r4', 'president'])) {
@@ -49,6 +107,8 @@ function get_user_channels($user) {
     require_once 'discord_webhook.php';
     return get_user_accessible_channels($user);
 }
+
+try {
 
 switch ($action) {
     case 'list':
@@ -203,5 +263,57 @@ switch ($action) {
     default:
         http_response_code(400);
         echo json_encode(['success' => false, 'error' => 'Invalid action']);
+}
+
+} catch (Exception $e) {
+    // Log the error
+    error_log('Discord Scheduled API Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+
+    log_audit_event('discord_scheduled_api_error', $user->sub ?? 'unknown', [
+        'action' => $action ?? 'unknown',
+        'error' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine(),
+        'trace' => $e->getTraceAsString()
+    ]);
+
+    // Clean output buffer
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
+
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage(),
+        'details' => [
+            'file' => basename($e->getFile()),
+            'line' => $e->getLine()
+        ]
+    ]);
+} catch (Throwable $e) {
+    // Catch any other errors (PHP 7+ fatal errors)
+    error_log('Discord Scheduled API Fatal Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+
+    // Clean output buffer
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
+
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Fatal server error',
+        'details' => [
+            'message' => $e->getMessage(),
+            'file' => basename($e->getFile()),
+            'line' => $e->getLine()
+        ]
+    ]);
+}
+
+// Clean output buffer for successful responses too
+if (ob_get_level()) {
+    ob_end_flush();
 }
 ?>
