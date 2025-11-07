@@ -707,16 +707,81 @@ function showCustomVariableInputs(variables) {
         const inputGroup = document.createElement('div');
         inputGroup.style.marginBottom = '0.75rem';
 
-        inputGroup.innerHTML = `
-            <label for="var_${cleanName}" style="display: block; margin-bottom: 0.25rem; font-weight: 500; color: #555;">
-                ${label}:
-            </label>
-            <input type="text"
-                   id="var_${cleanName}"
-                   data-variable="${varName}"
-                   placeholder="Enter ${label.toLowerCase()}"
-                   style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem;">
-        `;
+        // Special handling for specific variables
+        if (cleanName === 'event_time' || cleanName === 'time') {
+            // Date-time picker with "Use Now" option
+            inputGroup.innerHTML = `
+                <label style="display: block; margin-bottom: 0.25rem; font-weight: 500; color: #555;">
+                    ${label}:
+                </label>
+                <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.25rem;">
+                    <input type="checkbox" id="var_${cleanName}_now" onchange="toggleTimeNow('${cleanName}')">
+                    <label for="var_${cleanName}_now" style="margin: 0; font-weight: normal;">Use Now</label>
+                </div>
+                <input type="datetime-local"
+                       id="var_${cleanName}"
+                       data-variable="${varName}"
+                       style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem;">
+            `;
+        } else if (cleanName === 'location') {
+            // X/Y coordinate inputs
+            inputGroup.innerHTML = `
+                <label style="display: block; margin-bottom: 0.25rem; font-weight: 500; color: #555;">
+                    ${label} (Coordinates):
+                </label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                    <div>
+                        <label for="var_${cleanName}_x" style="font-size: 0.85rem; color: #666;">X Coordinate:</label>
+                        <input type="number"
+                               id="var_${cleanName}_x"
+                               data-variable="${varName}"
+                               data-coord="x"
+                               placeholder="123"
+                               min="0"
+                               max="999"
+                               style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem;">
+                    </div>
+                    <div>
+                        <label for="var_${cleanName}_y" style="font-size: 0.85rem; color: #666;">Y Coordinate:</label>
+                        <input type="number"
+                               id="var_${cleanName}_y"
+                               data-variable="${varName}"
+                               data-coord="y"
+                               placeholder="456"
+                               min="0"
+                               max="999"
+                               style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem;">
+                    </div>
+                </div>
+            `;
+        } else if (cleanName === 'notes') {
+            // Textarea for notes
+            inputGroup.innerHTML = `
+                <label for="var_${cleanName}" style="display: block; margin-bottom: 0.25rem; font-weight: 500; color: #555;">
+                    ${label} (optional):
+                </label>
+                <textarea id="var_${cleanName}"
+                          data-variable="${varName}"
+                          placeholder="Enter additional notes (leave blank to omit)"
+                          rows="3"
+                          style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; resize: vertical;"></textarea>
+                <div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">
+                    If left blank, the notes section will be removed from the message
+                </div>
+            `;
+        } else {
+            // Standard text input
+            inputGroup.innerHTML = `
+                <label for="var_${cleanName}" style="display: block; margin-bottom: 0.25rem; font-weight: 500; color: #555;">
+                    ${label}:
+                </label>
+                <input type="text"
+                       id="var_${cleanName}"
+                       data-variable="${varName}"
+                       placeholder="Enter ${label.toLowerCase()}"
+                       style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem;">
+            `;
+        }
 
         container.appendChild(inputGroup);
     });
@@ -724,17 +789,96 @@ function showCustomVariableInputs(variables) {
     customVarsDiv.style.display = 'block';
 }
 
+// Toggle "Use Now" for time fields
+function toggleTimeNow(cleanName) {
+    const checkbox = document.getElementById(`var_${cleanName}_now`);
+    const input = document.getElementById(`var_${cleanName}`);
+
+    if (checkbox.checked) {
+        // Set to current date/time
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        input.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+        input.disabled = true;
+    } else {
+        input.disabled = false;
+    }
+}
+
 // Replace custom variables in message before sending
 function replaceCustomVariables(message) {
-    const inputs = document.querySelectorAll('#customVariableInputs input');
     let processedMessage = message;
+    const processedVars = new Set();
 
-    inputs.forEach(input => {
+    // Handle location coordinates (combine x:### y:###)
+    const locationXInput = document.getElementById('var_location_x');
+    const locationYInput = document.getElementById('var_location_y');
+
+    if (locationXInput && locationYInput) {
+        const x = locationXInput.value.trim();
+        const y = locationYInput.value.trim();
+
+        if (x && y) {
+            processedMessage = processedMessage.replace(/\{location\}/g, `x:${x} y:${y}`);
+            processedVars.add('{location}');
+        }
+    }
+
+    // Handle datetime inputs (format nicely)
+    const datetimeInputs = document.querySelectorAll('#customVariableInputs input[type="datetime-local"]');
+    datetimeInputs.forEach(input => {
+        const varName = input.dataset.variable;
+        const value = input.value;
+
+        if (varName && value) {
+            // Format datetime as "YYYY-MM-DD HH:MM"
+            const date = new Date(value);
+            const formatted = date.toLocaleString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            }).replace(',', '');
+
+            processedMessage = processedMessage.replace(new RegExp(varName.replace(/[{}]/g, '\\$&'), 'g'), formatted);
+            processedVars.add(varName);
+        }
+    });
+
+    // Handle textarea inputs (notes)
+    const textareas = document.querySelectorAll('#customVariableInputs textarea');
+    textareas.forEach(textarea => {
+        const varName = textarea.dataset.variable;
+        const value = textarea.value.trim();
+
+        if (varName) {
+            if (value) {
+                // Replace with value
+                processedMessage = processedMessage.replace(new RegExp(varName.replace(/[{}]/g, '\\$&'), 'g'), value);
+            } else {
+                // Remove entire line containing the variable if it's blank
+                const lines = processedMessage.split('\n');
+                processedMessage = lines.filter(line => !line.includes(varName)).join('\n');
+            }
+            processedVars.add(varName);
+        }
+    });
+
+    // Handle regular text inputs (excluding location coords)
+    const textInputs = document.querySelectorAll('#customVariableInputs input[type="text"], #customVariableInputs input[type="number"]:not([data-coord])');
+    textInputs.forEach(input => {
         const varName = input.dataset.variable;
         const value = input.value.trim();
 
-        if (varName && value) {
+        if (varName && value && !processedVars.has(varName)) {
             processedMessage = processedMessage.replace(new RegExp(varName.replace(/[{}]/g, '\\$&'), 'g'), value);
+            processedVars.add(varName);
         }
     });
 

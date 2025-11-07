@@ -43,13 +43,13 @@ function replace_message_variables($message, $sender_email, $channel_id = null) 
     $replacements['{server_name}'] = $_ENV['APP_NAME'] ?? 'Server 1586';
     $replacements['{server_reset_time}'] = get_server_reset_time();
 
-    // User variables
+    // User variables (NEVER include email addresses in Discord messages)
     if ($sender_data) {
-        $replacements['{sender_name}'] = $sender_data['ign'] ?? $sender_data['email'];
+        $replacements['{sender_name}'] = $sender_data['ign'] ?? $sender_data['in_game_name'] ?? 'Unknown User';
         $replacements['{sender_alliance}'] = $sender_data['alliance'] ?? 'None';
         $replacements['{sender_tag}'] = $alliance_data ? ($alliance_data['tag'] ?? '') : '';
     } else {
-        $replacements['{sender_name}'] = $sender_email;
+        $replacements['{sender_name}'] = 'Unknown User';
         $replacements['{sender_alliance}'] = 'None';
         $replacements['{sender_tag}'] = '';
     }
@@ -165,13 +165,13 @@ function preview_variable_replacements($sender_email, $channel_id = null) {
     $preview['{server_name}'] = $_ENV['APP_NAME'] ?? 'Server 1586';
     $preview['{server_reset_time}'] = get_server_reset_time();
 
-    // User variables
+    // User variables (NEVER include email addresses in Discord messages)
     if ($sender_data) {
-        $preview['{sender_name}'] = $sender_data['ign'] ?? $sender_data['email'];
+        $preview['{sender_name}'] = $sender_data['ign'] ?? $sender_data['in_game_name'] ?? 'Unknown User';
         $preview['{sender_alliance}'] = $sender_data['alliance'] ?? 'None';
         $preview['{sender_tag}'] = $alliance_data ? ($alliance_data['tag'] ?? '') : '';
     } else {
-        $preview['{sender_name}'] = $sender_email;
+        $preview['{sender_name}'] = 'Unknown User';
         $preview['{sender_alliance}'] = 'None';
         $preview['{sender_tag}'] = '';
     }
