@@ -527,6 +527,12 @@ include 'includes/header.php';
                 <div class="help-text">Load a pre-made template with variables</div>
             </div>
 
+            <!-- Custom Variable Inputs (shown when template has custom vars) -->
+            <div id="customVariables" style="display: none; background: #f8f9fa; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.75rem; font-weight: 600; color: #555;">✏️ Fill in Custom Variables</label>
+                <div id="customVariableInputs"></div>
+            </div>
+
             <div class="form-group">
                 <label>📌 Quick Variables</label>
                 <div id="quickVariables" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
@@ -634,11 +640,105 @@ function loadTemplate() {
     const select = document.getElementById('templateSelect');
     const selectedOption = select.options[select.selectedIndex];
 
-    if (selectedOption.dataset.content) {
-        document.getElementById('messageContent').value = selectedOption.dataset.content;
-        // Trigger character count update
-        document.getElementById('messageContent').dispatchEvent(new Event('input'));
+    if (!selectedOption.dataset.content) {
+        // Clear custom variables if deselecting template
+        document.getElementById('customVariables').style.display = 'none';
+        return;
     }
+
+    const templateId = selectedOption.value;
+    const template = templates.find(t => t.id === templateId);
+
+    if (!template) return;
+
+    // Extract title from template name (remove tags like [S02])
+    let title = template.name;
+    // Remove [S02], [TAG], etc. from the beginning
+    title = title.replace(/^\[[^\]]+\]\s*/, '');
+
+    // Auto-fill title if using embeds
+    if (document.getElementById('useEmbed').checked) {
+        document.getElementById('embedTitle').value = title;
+    }
+
+    // Load message content
+    document.getElementById('messageContent').value = template.content;
+    document.getElementById('messageContent').dispatchEvent(new Event('input'));
+
+    // Detect custom variables in template
+    const customVars = detectCustomVariables(template.content);
+
+    if (customVars.length > 0) {
+        showCustomVariableInputs(customVars);
+    } else {
+        document.getElementById('customVariables').style.display = 'none';
+    }
+}
+
+// Detect custom variables (ones that aren't auto-populated)
+function detectCustomVariables(content) {
+    const allVars = content.match(/\{([^}]+)\}/g) || [];
+
+    // Variables that are automatically replaced
+    const autoVars = [
+        '{server_name}', '{server_reset_time}',
+        '{sender_name}', '{sender_alliance}', '{sender_tag}',
+        '{alliance_name}', '{alliance_tag}', '{r5_name}',
+        '{date}', '{time}', '{datetime}'
+    ];
+
+    // Filter to only custom variables
+    const customVars = [...new Set(allVars)].filter(v => !autoVars.includes(v));
+
+    return customVars;
+}
+
+// Show input fields for custom variables
+function showCustomVariableInputs(variables) {
+    const container = document.getElementById('customVariableInputs');
+    const customVarsDiv = document.getElementById('customVariables');
+
+    container.innerHTML = '';
+
+    variables.forEach(varName => {
+        const cleanName = varName.replace(/[{}]/g, '');
+        const label = cleanName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+        const inputGroup = document.createElement('div');
+        inputGroup.style.marginBottom = '0.75rem';
+
+        inputGroup.innerHTML = `
+            <label for="var_${cleanName}" style="display: block; margin-bottom: 0.25rem; font-weight: 500; color: #555;">
+                ${label}:
+            </label>
+            <input type="text"
+                   id="var_${cleanName}"
+                   data-variable="${varName}"
+                   placeholder="Enter ${label.toLowerCase()}"
+                   style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem;">
+        `;
+
+        container.appendChild(inputGroup);
+    });
+
+    customVarsDiv.style.display = 'block';
+}
+
+// Replace custom variables in message before sending
+function replaceCustomVariables(message) {
+    const inputs = document.querySelectorAll('#customVariableInputs input');
+    let processedMessage = message;
+
+    inputs.forEach(input => {
+        const varName = input.dataset.variable;
+        const value = input.value.trim();
+
+        if (varName && value) {
+            processedMessage = processedMessage.replace(new RegExp(varName.replace(/[{}]/g, '\\$&'), 'g'), value);
+        }
+    });
+
+    return processedMessage;
 }
 
 // Insert variable into message at cursor position
@@ -752,11 +852,14 @@ document.getElementById('announcementForm').addEventListener('submit', async fun
         return;
     }
 
-    const message = document.getElementById('messageContent').value.trim();
+    let message = document.getElementById('messageContent').value.trim();
     if (!message) {
         showErrorModal('Please enter a message');
         return;
     }
+
+    // Replace custom variables before validation and sending
+    message = replaceCustomVariables(message);
 
     if (message.length > 2000) {
         showErrorModal('Message exceeds 2000 character limit');
@@ -771,12 +874,16 @@ document.getElementById('announcementForm').addEventListener('submit', async fun
         // Get CSRF token
         const csrfToken = getCsrfToken();
 
+        // Also replace custom variables in title if present
+        let embedTitle = document.getElementById('embedTitle').value || '';
+        embedTitle = replaceCustomVariables(embedTitle);
+
         const formData = new FormData();
         formData.append('action', 'send_instant');
         formData.append('channel_ids', JSON.stringify(selectedChannels));
         formData.append('message', message);
         formData.append('use_embed', document.getElementById('useEmbed').checked ? 'true' : 'false');
-        formData.append('embed_title', document.getElementById('embedTitle').value || '');
+        formData.append('embed_title', embedTitle);
         formData.append('embed_color', document.getElementById('embedColor').value);
 
         const response = await fetch('discord_api.php', {
@@ -784,8 +891,22 @@ document.getElementById('announcementForm').addEventListener('submit', async fun
             headers: {
                 'X-CSRF-Token': csrfToken
             },
-            body: formData
+            body: formData,
+            credentials: 'same-origin'
         });
+
+        // Check if response is OK before parsing
+        if (!response.ok) {
+            const text = await response.text();
+            console.error('Server error response:', text);
+
+            try {
+                const errorData = JSON.parse(text);
+                throw new Error(errorData.error || `Server error (${response.status})`);
+            } catch (parseError) {
+                throw new Error(`Server error (${response.status}): ${text || 'No response body'}`);
+            }
+        }
 
         const data = await response.json();
 
