@@ -240,13 +240,22 @@ try {
                 exit();
             }
 
-            // Update user's rate limit in users.json
+            // Update user's rate limit in users.json (only if different from default)
             $users_data = read_json_file(__DIR__ . '/users.json');
             $user_updated = false;
 
             foreach ($users_data['users'] as &$u) {
                 if ($u['email'] === $approved_request['user_email']) {
-                    $u['discord_rate_limit'] = $approved_request['requested_limit'];
+                    $requested_limit = $approved_request['requested_limit'];
+
+                    // Only store if different from system default
+                    if ($requested_limit != DISCORD_MAX_INSTANT_PER_HOUR) {
+                        $u['discord_rate_limit'] = $requested_limit;
+                    } else {
+                        // Remove field if it equals default (cleanup)
+                        unset($u['discord_rate_limit']);
+                    }
+
                     $user_updated = true;
                     break;
                 }
@@ -353,7 +362,15 @@ try {
             foreach ($users_data['users'] as &$u) {
                 if ($u['email'] === $target_email) {
                     $old_limit = $u['discord_rate_limit'] ?? DISCORD_MAX_INSTANT_PER_HOUR;
-                    $u['discord_rate_limit'] = $new_limit;
+
+                    // Only store if different from system default
+                    if ($new_limit != DISCORD_MAX_INSTANT_PER_HOUR) {
+                        $u['discord_rate_limit'] = $new_limit;
+                    } else {
+                        // Remove field if it equals default (cleanup)
+                        unset($u['discord_rate_limit']);
+                    }
+
                     $found = true;
 
                     log_audit_event('discord_rate_limit_admin_set', $user->sub, [

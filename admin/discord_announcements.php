@@ -724,18 +724,27 @@ function showCustomVariableInputs(variables) {
                        style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem;">
             `;
         } else if (cleanName === 'location') {
-            // X/Y coordinate inputs
+            // Location name + X/Y coordinate inputs (all optional)
             inputGroup.innerHTML = `
                 <label style="display: block; margin-bottom: 0.25rem; font-weight: 500; color: #555;">
-                    ${label} (Coordinates):
+                    ${label} (optional):
                 </label>
+                <div style="margin-bottom: 0.5rem;">
+                    <label for="var_${cleanName}_name" style="font-size: 0.85rem; color: #666;">Location Name:</label>
+                    <input type="text"
+                           id="var_${cleanName}_name"
+                           data-variable="${varName}"
+                           data-location="name"
+                           placeholder="e.g., Enemy Base, Resource Point"
+                           style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem;">
+                </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
                     <div>
                         <label for="var_${cleanName}_x" style="font-size: 0.85rem; color: #666;">X Coordinate:</label>
                         <input type="number"
                                id="var_${cleanName}_x"
                                data-variable="${varName}"
-                               data-coord="x"
+                               data-location="x"
                                placeholder="123"
                                min="0"
                                max="999"
@@ -746,12 +755,15 @@ function showCustomVariableInputs(variables) {
                         <input type="number"
                                id="var_${cleanName}_y"
                                data-variable="${varName}"
-                               data-coord="y"
+                               data-location="y"
                                placeholder="456"
                                min="0"
                                max="999"
                                style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem;">
                     </div>
+                </div>
+                <div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">
+                    All fields optional. Will format as: "Name x:### y:###"
                 </div>
             `;
         } else if (cleanName === 'notes') {
@@ -814,16 +826,34 @@ function replaceCustomVariables(message) {
     let processedMessage = message;
     const processedVars = new Set();
 
-    // Handle location coordinates (combine x:### y:###)
+    // Handle location (name + coordinates, all optional)
+    const locationNameInput = document.getElementById('var_location_name');
     const locationXInput = document.getElementById('var_location_x');
     const locationYInput = document.getElementById('var_location_y');
 
-    if (locationXInput && locationYInput) {
-        const x = locationXInput.value.trim();
-        const y = locationYInput.value.trim();
+    if (locationNameInput || locationXInput || locationYInput) {
+        const name = locationNameInput ? locationNameInput.value.trim() : '';
+        const x = locationXInput ? locationXInput.value.trim() : '';
+        const y = locationYInput ? locationYInput.value.trim() : '';
 
+        // Build location string from available parts
+        let locationParts = [];
+        if (name) locationParts.push(name);
         if (x && y) {
-            processedMessage = processedMessage.replace(/\{location\}/g, `x:${x} y:${y}`);
+            locationParts.push(`x:${x} y:${y}`);
+        } else if (x) {
+            locationParts.push(`x:${x}`);
+        } else if (y) {
+            locationParts.push(`y:${y}`);
+        }
+
+        if (locationParts.length > 0) {
+            processedMessage = processedMessage.replace(/\{location\}/g, locationParts.join(' '));
+            processedVars.add('{location}');
+        } else {
+            // If all location fields are blank, remove the line
+            const lines = processedMessage.split('\n');
+            processedMessage = lines.filter(line => !line.includes('{location}')).join('\n');
             processedVars.add('{location}');
         }
     }
