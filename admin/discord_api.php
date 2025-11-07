@@ -21,6 +21,34 @@ error_reporting(E_ALL);
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 
+// Set up fatal error handler to catch ANY error
+register_shutdown_function(function() {
+    $error = error_get_last();
+    if ($error && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        // Clear any output buffer
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header('Content-Type: application/json');
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Fatal error occurred',
+            'details' => [
+                'message' => $error['message'],
+                'file' => basename($error['file']),
+                'line' => $error['line'],
+                'type' => $error['type']
+            ]
+        ]);
+        exit();
+    }
+});
+
+// Start output buffering to catch any output before JSON
+ob_start();
+
 header('Content-Type: application/json');
 
 // Wrap require statements in try-catch
@@ -311,6 +339,11 @@ try {
         'trace' => $e->getTraceAsString()
     ]);
 
+    // Clean output buffer
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
+
     http_response_code(500);
     echo json_encode([
         'success' => false,
@@ -324,6 +357,11 @@ try {
     // Catch any other errors (PHP 7+ fatal errors)
     error_log('Discord API Fatal Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
 
+    // Clean output buffer
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
+
     http_response_code(500);
     echo json_encode([
         'success' => false,
@@ -334,6 +372,11 @@ try {
             'line' => $e->getLine()
         ]
     ]);
+}
+
+// Clean output buffer for successful responses too
+if (ob_get_level()) {
+    ob_end_flush();
 }
 
 /**
