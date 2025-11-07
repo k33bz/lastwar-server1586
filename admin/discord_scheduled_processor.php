@@ -1,15 +1,21 @@
 <?php
 /**
  * Discord Scheduled Messages Processor
- * Version: 1.0.0 (Phase 2 - Scheduled messaging)
+ * Version: 1.1.0 (Phase 2 - Scheduled messaging)
  *
  * Processes and sends scheduled Discord messages
  * Run this via cron every minute: * * * * * php /path/to/admin/discord_scheduled_processor.php
+ *
+ * Changelog:
+ *   1.1.0 (2025-11-07) - Added auto-delete message tracking support
+ *                       - Pass tracking info to send_discord_message for scheduled/recurring messages
+ *   1.0.0 (2025-11-04) - Initial implementation
  */
 
 define('ADMIN_INIT', true);
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/discord_webhook.php';
+require_once __DIR__ . '/discord_message_tracker.php';
 require_once __DIR__ . '/audit_logger.php';
 
 $scheduled_file = __DIR__ . '/discord_scheduled.json';
@@ -83,7 +89,19 @@ foreach ($data['scheduled_messages'] as &$message) {
 
     // Send message
     try {
-        $result = send_discord_message($message['channel_id'], $discord_message);
+        // Prepare tracking info for auto-delete
+        $tracking_info = [];
+        $delete_after_hours = $message['delete_after_hours'] ?? null;
+        if ($delete_after_hours !== null && $delete_after_hours > 0) {
+            $tracking_info = [
+                'internal_id' => $message['id'],
+                'delete_after_hours' => $delete_after_hours,
+                'message_type' => 'scheduled',
+                'user_email' => $message['created_by']
+            ];
+        }
+
+        $result = send_discord_message($message['channel_id'], $discord_message, 0, $tracking_info);
 
         if ($result['success']) {
             $message['status'] = 'sent';
@@ -175,7 +193,21 @@ foreach ($recurring_data['recurring_messages'] as &$message) {
 
     // Send message
     try {
-        $result = send_discord_message($message['channel_id'], $discord_message);
+        // Prepare tracking info for auto-delete
+        $tracking_info = [];
+        $delete_after_hours = $message['delete_after_hours'] ?? null;
+        if ($delete_after_hours !== null && $delete_after_hours > 0) {
+            // Generate unique ID for each occurrence of recurring message
+            $occurrence_id = $message['id'] . '_' . time();
+            $tracking_info = [
+                'internal_id' => $occurrence_id,
+                'delete_after_hours' => $delete_after_hours,
+                'message_type' => 'recurring',
+                'user_email' => $message['created_by']
+            ];
+        }
+
+        $result = send_discord_message($message['channel_id'], $discord_message, 0, $tracking_info);
 
         if ($result['success']) {
             $message['last_sent_at'] = date('Y-m-d H:i:s');

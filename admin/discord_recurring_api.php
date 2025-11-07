@@ -1,9 +1,14 @@
 <?php
 /**
  * Discord Recurring Messages API
- * Version: 1.0.0 (Phase 3 - Recurring messaging)
+ * Version: 1.1.0 (Phase 3 - Recurring messaging)
  *
  * Handles CRUD operations for recurring Discord messages
+ *
+ * Changelog:
+ *   1.1.0 (2025-11-07) - Added auto-delete message support
+ *                       - Store delete_after_hours in recurring message objects
+ *   1.0.0 (2025-11-04) - Initial implementation
  */
 
 require_once 'jwt.php';
@@ -205,7 +210,8 @@ switch ($action) {
             'send_count' => 0,
             'created_by' => $user->sub,
             'created_at' => date('Y-m-d H:i:s'),
-            'enabled' => true
+            'enabled' => true,
+            'delete_after_hours' => isset($input['delete_after_hours']) && $input['delete_after_hours'] !== '' ? (int)$input['delete_after_hours'] : null
         ];
 
         $data = load_recurring_messages($recurring_file);

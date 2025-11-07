@@ -11,9 +11,13 @@
  *
  * GitHub Issue: https://github.com/k33bz/lastwar-server1586/issues/59
  *
- * @version 1.0.0
- * @date 2025-11-04
+ * @version 1.1.0
+ * @date 2025-11-07
  * @changelog
+ *   1.1.0 (2025-11-07) - Added auto-delete message tracking support
+ *                      - send_discord_message() accepts tracking_info parameter
+ *                      - send_discord_message_multi() accepts tracking_info parameter
+ *                      - Track messages for automatic cleanup after X hours
  *   1.0.0 (2025-11-04) - Initial implementation
  *                      - Discord bot API message sending
  *                      - Webhook fallback support
@@ -26,6 +30,7 @@ if (!defined('ADMIN_INIT')) {
     define('ADMIN_INIT', true);
 }
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/discord_message_tracker.php';
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -46,10 +51,11 @@ define('DISCORD_RETRY_DELAY', 5); // seconds
  * @param string $channel_id Discord channel ID
  * @param array $message Message data (content, embeds, etc.)
  * @param int $retry_count Current retry attempt (internal use)
+ * @param array $tracking_info Optional tracking info for auto-delete (internal_id, delete_after_hours, message_type, user_email)
  * @return array Response with success status and Discord message ID
  * @throws Exception if message cannot be sent
  */
-function send_discord_message($channel_id, $message, $retry_count = 0) {
+function send_discord_message($channel_id, $message, $retry_count = 0, $tracking_info = []) {
     if (!defined('DISCORD_BOT_TOKEN') || empty(DISCORD_BOT_TOKEN)) {
         throw new Exception('Discord bot token not configured. Please set DISCORD_BOT_TOKEN in admin/.env');
     }
@@ -96,9 +102,23 @@ function send_discord_message($channel_id, $message, $retry_count = 0) {
 
         $body = json_decode($response->getBody()->getContents(), true);
 
+        $discord_message_id = $body['id'] ?? null;
+
+        // Track message for auto-delete if requested
+        if (!empty($tracking_info) && $discord_message_id) {
+            track_discord_message(
+                $tracking_info['internal_id'] ?? 'msg_' . uniqid(),
+                $discord_message_id,
+                $channel_id,
+                $tracking_info['delete_after_hours'] ?? null,
+                $tracking_info['message_type'] ?? 'instant',
+                $tracking_info['user_email'] ?? 'system'
+            );
+        }
+
         return [
             'success' => true,
-            'message_id' => $body['id'] ?? null,
+            'message_id' => $discord_message_id,
             'channel_id' => $channel_id,
             'timestamp' => $body['timestamp'] ?? null
         ];
@@ -162,14 +182,15 @@ function send_discord_message($channel_id, $message, $retry_count = 0) {
  *
  * @param array $channel_ids Array of Discord channel IDs
  * @param array $message Message data
+ * @param array $tracking_info Optional tracking info for auto-delete (internal_id, delete_after_hours, message_type, user_email)
  * @return array Array of results for each channel
  */
-function send_discord_message_multi($channel_ids, $message) {
+function send_discord_message_multi($channel_ids, $message, $tracking_info = []) {
     $results = [];
 
     foreach ($channel_ids as $channel_id) {
         try {
-            $result = send_discord_message($channel_id, $message);
+            $result = send_discord_message($channel_id, $message, 0, $tracking_info);
             $results[$channel_id] = $result;
 
             // Rate limiting: wait between messages

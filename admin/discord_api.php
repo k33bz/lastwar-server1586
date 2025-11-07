@@ -9,9 +9,12 @@
  *
  * GitHub Issue: https://github.com/k33bz/lastwar-server1586/issues/59
  *
- * @version 1.0.1
- * @date 2025-11-06
+ * @version 1.1.0
+ * @date 2025-11-07
  * @changelog
+ *   1.1.0 (2025-11-07) - Added auto-delete message support
+ *                       - Accept delete_after_hours parameter for instant messages
+ *                       - Track sent messages for automatic cleanup
  *   1.0.1 (2025-11-06) - Added error handling for require statements and fatal errors
  *   1.0.0 (2025-11-04) - Initial implementation
  */
@@ -100,6 +103,7 @@ try {
             $use_embed = ($_POST['use_embed'] ?? 'false') === 'true';
             $embed_title = $_POST['embed_title'] ?? '';
             $embed_color = $_POST['embed_color'] ?? '3447003';
+            $delete_after_hours = isset($_POST['delete_after_hours']) && $_POST['delete_after_hours'] !== '' ? (int)$_POST['delete_after_hours'] : null;
 
             if (empty($channel_ids)) {
                 throw new Exception('At least one channel must be selected');
@@ -160,8 +164,22 @@ try {
                 $message = create_simple_announcement($message_content, $footer_options);
             }
 
+            // Generate unique message ID for tracking
+            $message_id = 'msg_' . bin2hex(random_bytes(8));
+
+            // Prepare tracking info for auto-delete
+            $tracking_info = [];
+            if ($delete_after_hours !== null && $delete_after_hours > 0) {
+                $tracking_info = [
+                    'internal_id' => $message_id,
+                    'delete_after_hours' => $delete_after_hours,
+                    'message_type' => 'instant',
+                    'user_email' => $user_email
+                ];
+            }
+
             // Send to channels
-            $results = send_discord_message_multi($validated_channels, $message);
+            $results = send_discord_message_multi($validated_channels, $message, $tracking_info);
 
             // Log successful sends and collect errors
             $success_count = 0;
@@ -208,8 +226,8 @@ try {
                 }
             }
 
-            // Save to history
-            save_discord_history($user_email, 'instant', $message, $validated_channels, $results);
+            // Save to history with same ID used for tracking
+            save_discord_history($user_email, 'instant', $message, $validated_channels, $results, $message_id);
 
             // Return error if all channels failed
             if ($success_count === 0) {
@@ -617,8 +635,9 @@ function get_user_accessible_channels($user) {
  * @param array $message Message data
  * @param array $targets Target channel IDs
  * @param array $results Send results
+ * @param string|null $message_id Optional pre-generated message ID
  */
-function save_discord_history($user_email, $type, $message, $targets, $results) {
+function save_discord_history($user_email, $type, $message, $targets, $results, $message_id = null) {
     $history_file = DISCORD_HISTORY_FILE;
 
     $history = ['messages' => []];
@@ -626,8 +645,10 @@ function save_discord_history($user_email, $type, $message, $targets, $results) 
         $history = json_decode(file_get_contents($history_file), true) ?: ['messages' => []];
     }
 
-    // Generate unique ID
-    $message_id = 'msg_' . bin2hex(random_bytes(8));
+    // Generate unique ID if not provided
+    if ($message_id === null) {
+        $message_id = 'msg_' . bin2hex(random_bytes(8));
+    }
 
     // Extract message preview
     $preview = '';

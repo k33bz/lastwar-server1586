@@ -1,11 +1,13 @@
 <?php
 /**
  * Discord Scheduled Messages API
- * Version: 1.0.1 (Phase 2 - Scheduled messaging)
+ * Version: 1.1.0 (Phase 2 - Scheduled messaging)
  *
  * Handles CRUD operations for scheduled Discord messages
  *
  * Changelog:
+ *   1.1.0 (2025-11-07) - Added auto-delete message support
+ *                       - Store delete_after_hours in scheduled message objects
  *   1.0.1 (2025-11-07) - Added comprehensive error handling
  *   1.0.0 (2025-11-04) - Initial implementation
  */
@@ -245,7 +247,8 @@ switch ($action) {
             'created_at' => date('Y-m-d H:i:s'),
             'status' => 'pending',
             'sent_at' => null,
-            'error' => null
+            'error' => null,
+            'delete_after_hours' => isset($input['delete_after_hours']) && $input['delete_after_hours'] !== '' ? (int)$input['delete_after_hours'] : null
         ];
 
         $data = load_scheduled_messages($scheduled_file);
