@@ -1,0 +1,12 @@
+{
+    "season_start_date": null,
+    "season_start_time": "00:00",
+    "server_timezone": "UTC",
+    "faction_war_time": "14:00",
+    "faction_war_duration_hours": 4,
+    "daily_reset_time": "00:00",
+    "valor_badge_day": "wednesday",
+    "config_updated_at": null,
+    "config_updated_by": null,
+    "notes": "Season 2 configuration. Set season_start_date to activate all events and calendar generation."
+}

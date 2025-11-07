@@ -1,0 +1,223 @@
+{
+    "event_templates": [
+        {
+            "id": "week_1_start",
+            "name": "Week 1 - Settling the Storm Begins",
+            "type": "week_phase",
+            "week": 1,
+            "day_offset": 0,
+            "time": "00:00",
+            "importance": "high",
+            "auto_announce": true,
+            "template_key": "week_1_checklist",
+            "description": "Season 2 begins! Focus on Furnace setup and early city securing."
+        },
+        {
+            "id": "cold_wave_1",
+            "name": "Cold Wave #1",
+            "type": "cold_wave",
+            "week": 1,
+            "day_offset": 4,
+            "time": "00:00",
+            "importance": "critical",
+            "auto_announce": true,
+            "template_key": "cold_wave_warning",
+            "description": "First Cold Wave arrives. Ensure equipment is fueled."
+        },
+        {
+            "id": "valor_badge_weekly",
+            "name": "Valor Badge Day (Wednesday)",
+            "type": "weekly_recurring",
+            "recurrence": "weekly",
+            "day_of_week": "wednesday",
+            "time": "08:00",
+            "importance": "medium",
+            "auto_announce": true,
+            "template_key": "valor_badge_wednesday",
+            "description": "Best day to use Valor Badges for max EXP boost"
+        },
+        {
+            "id": "faction_war_weekly",
+            "name": "Faction War",
+            "type": "weekly_recurring",
+            "recurrence": "weekly",
+            "day_of_week": "saturday",
+            "time": null,
+            "importance": "critical",
+            "auto_announce": true,
+            "reminder_hours": [24, 1, 0.25],
+            "template_key": "faction_war_prep",
+            "description": "Weekly PvP event pitting factions against each other"
+        },
+        {
+            "id": "week_2_start",
+            "name": "Week 2 - Cold Frontline Begins",
+            "type": "week_phase",
+            "week": 2,
+            "day_offset": 0,
+            "time": "00:00",
+            "importance": "high",
+            "auto_announce": true,
+            "template_key": "week_2_checklist",
+            "description": "Focus on map control expansion and Cold Wave survival"
+        },
+        {
+            "id": "week_3_start",
+            "name": "Week 3 - Heat Check & PvP Rise",
+            "type": "week_phase",
+            "week": 3,
+            "day_offset": 0,
+            "time": "00:00",
+            "importance": "high",
+            "auto_announce": true,
+            "template_key": "week_3_checklist",
+            "description": "City pushes intensify, Rare Soil spawns activate"
+        },
+        {
+            "id": "rare_soil_spawn_1",
+            "name": "Rare Soil First Spawn",
+            "type": "rare_soil",
+            "week": 3,
+            "day_offset": 2,
+            "time": "12:00",
+            "importance": "critical",
+            "auto_announce": true,
+            "template_key": "rare_soil_competition",
+            "description": "First Rare Soil locations spawn - critical for season ranking"
+        },
+        {
+            "id": "week_4_start",
+            "name": "Week 4 - Midseason Power Spike",
+            "type": "week_phase",
+            "week": 4,
+            "day_offset": 0,
+            "time": "00:00",
+            "importance": "high",
+            "auto_announce": true,
+            "template_key": "week_4_checklist",
+            "description": "Dominance consolidation, Rare Soil securing"
+        },
+        {
+            "id": "week_5_start",
+            "name": "Week 5 - Rare Soil Race",
+            "type": "week_phase",
+            "week": 5,
+            "day_offset": 0,
+            "time": "00:00",
+            "importance": "critical",
+            "auto_announce": true,
+            "template_key": "week_5_checklist",
+            "description": "Turning point for endgame push - key city control battles"
+        },
+        {
+            "id": "week_6_start",
+            "name": "Week 6 - Soil War",
+            "type": "week_phase",
+            "week": 6,
+            "day_offset": 0,
+            "time": "00:00",
+            "importance": "critical",
+            "auto_announce": true,
+            "template_key": "week_6_checklist",
+            "description": "Full-scale conflict over Rare Soil resources"
+        },
+        {
+            "id": "week_7_start",
+            "name": "Week 7 - Endgame & Final Push",
+            "type": "week_phase",
+            "week": 7,
+            "day_offset": 0,
+            "time": "00:00",
+            "importance": "critical",
+            "auto_announce": true,
+            "template_key": "week_7_checklist",
+            "description": "Final Rare Soil sprint, season reward maximization"
+        },
+        {
+            "id": "season_end",
+            "name": "Season 2 Ends",
+            "type": "season_milestone",
+            "week": 7,
+            "day_offset": 6,
+            "time": "23:59",
+            "importance": "critical",
+            "auto_announce": true,
+            "template_key": "season_end",
+            "description": "Season 2 concludes - final rankings determined"
+        }
+    ],
+    "template_definitions": {
+        "week_1_checklist": {
+            "title": "📋 Week 1: Settling the Storm - Objectives",
+            "content": "**Week 1 Focus: Foundation Building**\n\n✅ **Priority Tasks:**\n• Upgrade Furnace to Level 10\n• Unlock Titanium Alloy Factories\n• Reach Profession Level 40+\n• Secure initial cities on map\n• Stock Coal reserves\n• Prepare for Cold Wave (arrives Day 4-5)\n\n⚠️ **Important:** Use Valor Badges on Wednesday for maximum EXP boost!\n\n📅 Week 1 ends in: {days_until_next_week} days\n🔥 Furnace Level: {furnace_level}\n💪 Alliance Power: {alliance_power}",
+            "use_embed": true,
+            "embed_color": "3447003"
+        },
+        "cold_wave_warning": {
+            "title": "❄️ COLD WAVE INCOMING",
+            "content": "**Cold Wave Alert - Action Required!**\n\n⚠️ **Immediate Actions:**\n• Fuel your equipment at Furnace NOW\n• Stock Coal reserves (check alliance stocks)\n• Verify Virus Resistance (VR) levels\n• Move troops to heated zones if needed\n\n❄️ **Cold Zones** will require heating to survive!\n\n📍 Duration: Ongoing until further notice\n🔥 Furnace Status: {furnace_level}\n⛽ Coal Reserves: {coal_reserves}\n\n**Don't get caught in the cold unprepared!**",
+            "use_embed": true,
+            "embed_color": "5793266"
+        },
+        "valor_badge_wednesday": {
+            "title": "🎖️ VALOR BADGE DAY - Wednesday",
+            "content": "**TODAY is the best day to use Valor Badges!**\n\n💡 **Why Wednesday?**\n• Maximum EXP boost active\n• Most efficient profession leveling\n• Push to reach next breakpoint\n\n📊 **Current Stats:**\n• Alliance Average: Level {avg_profession_level}\n• Target for Week: Level {target_profession_level}\n\n⚠️ **Don't waste badges on other days!**\n\nReact with 🎖️ when you've used your badges today!",
+            "use_embed": true,
+            "embed_color": "16750899"
+        },
+        "faction_war_prep": {
+            "title": "⚔️ FACTION WAR PREPARATION",
+            "content": "**Faction War starts {faction_war_countdown}!**\n\n📌 **Rally Leaders Assigned:**\n• Main: {r5_name}\n• Backup: [Assign R4s]\n\n✅ **Pre-Event Checklist:**\n□ Activate all buffs (Profession, Furnace, Hero, Recon)\n□ Fuel equipment for cold zones\n□ Stock healing speedups\n□ Switch to PvP spec/loadout\n□ Join voice channel 15min early\n\n🎯 **Strategy:**\n• Focus on tower control first\n• Rotate rally leads to avoid cooldowns\n• Scout before engaging\n• Coordinate in voice chat\n\n⏰ Event Time: {faction_war_time}\n👥 Expected Attendance: React with ⚔️ to confirm!\n\n**See you on the battlefield!** 💪",
+            "use_embed": true,
+            "embed_color": "15158332"
+        },
+        "rare_soil_competition": {
+            "title": "💎 RARE SOIL SPAWN ALERT",
+            "content": "**CRITICAL: Rare Soil locations are now active!**\n\n🎯 **Priority Level: MAXIMUM**\n\n📍 **Key Locations:**\n• [Coordinates to be scouted]\n• [Will update as located]\n\n👥 **Team Assignments:**\n• Attack Team: {attack_team}\n• Defense Team: {defense_team}\n• Gathering Team: {gathering_team}\n\n⚠️ **This determines season ranking!**\n\n🏆 Current Alliance Rank: {alliance_rank}\n💎 Soil Locations Held: {rare_soil_count}\n\n**All hands on deck!** 🚨\nReact with 💎 to confirm participation!",
+            "use_embed": true,
+            "embed_color": "15844367"
+        },
+        "week_2_checklist": {
+            "title": "❄️ Week 2: Cold Frontline - Objectives",
+            "content": "**Week 2 Focus: Expansion & Survival**\n\n✅ **Priority Tasks:**\n• Fuel equipment for Cold Zones\n• Expand map control before Rare Soil spawns\n• Level up VR (Virus Resistance) for PvE\n• Continue Furnace heating operations\n• Prepare for Week 3 PvP intensification\n\n💡 **Tip:** Dump badges on Wednesday!\n\n📅 Week 2 ends in: {days_until_next_week} days\n🗺️ Cities Controlled: {cities_controlled}\n💪 Alliance Power: {alliance_power}",
+            "use_embed": true,
+            "embed_color": "3447003"
+        },
+        "week_3_checklist": {
+            "title": "🔥 Week 3: Heat Check & PvP Rise",
+            "content": "**Week 3 Focus: Competition Intensifies**\n\n✅ **Priority Tasks:**\n• City pushes intensify - coordinate attacks\n• Rare Soil spawns activate (Day 2-3)\n• Prepare for unavoidable competitive PvP\n• Secure strategic positions before Week 4\n• Stock resources for extended battles\n\n💎 **Rare Soil Alert:** First spawns this week!\n\n📅 Week 3 ends in: {days_until_next_week} days\n💎 Soil Locations: {rare_soil_count}\n💪 Alliance Power: {alliance_power}",
+            "use_embed": true,
+            "embed_color": "15158332"
+        },
+        "week_4_checklist": {
+            "title": "💪 Week 4: Midseason Power Spike",
+            "content": "**Week 4 Focus: Consolidate Dominance**\n\n✅ **Priority Tasks:**\n• Secure and defend Rare Soil locations\n• Hit critical upgrade breakpoints\n• Maintain city control\n• Prepare for Week 5 Rare Soil Race\n• Assess alliance positioning\n\n📊 **Midseason Assessment:**\n• Current Rank: {alliance_rank}\n• Soil Held: {rare_soil_count}\n• Power Growth: {power_change_percent}%\n\n📅 Week 4 ends in: {days_until_next_week} days\n💪 Alliance Power: {alliance_power}",
+            "use_embed": true,
+            "embed_color": "3447003"
+        },
+        "week_5_checklist": {
+            "title": "💎 Week 5: Rare Soil Race - CRITICAL",
+            "content": "**Week 5 Focus: Turning Point**\n\n🚨 **CRITICAL WEEK FOR ENDGAME**\n\n✅ **Priority Tasks:**\n• Maximum effort on Rare Soil control\n• Key city control battles\n• Prepare for final push (Weeks 6-7)\n• Scout enemy positions\n• Coordinate full alliance participation\n\n🎯 **This week determines trajectory!**\n\n📊 **Current Standing:**\n• Alliance Rank: {alliance_rank}\n• Soil Locations: {rare_soil_count}\n• Power: {alliance_power}\n\n📅 Week 5 ends in: {days_until_next_week} days\n\n**Every contribution matters!** 💪",
+            "use_embed": true,
+            "embed_color": "15844367"
+        },
+        "week_6_checklist": {
+            "title": "⚔️ Week 6: Soil War - FULL CONFLICT",
+            "content": "**Week 6 Focus: All-Out War**\n\n🔥 **MAXIMUM INTENSITY**\n\n✅ **Priority Tasks:**\n• Full-scale Rare Soil warfare\n• Defend current locations at all costs\n• Coordinate attacks on enemy soil\n• PvP and tactical positioning dominant\n• Prepare for final week sprint\n\n📊 **War Status:**\n• Alliance Rank: {alliance_rank}\n• Soil Locations: {rare_soil_count}\n• Major Enemies: [Top 3 competitors]\n\n📅 Week 6 ends in: {days_until_next_week} days\n\n**Fight for every inch!** ⚔️",
+            "use_embed": true,
+            "embed_color": "15158332"
+        },
+        "week_7_checklist": {
+            "title": "🏆 Week 7: ENDGAME - Final Push",
+            "content": "**Week 7 Focus: Final Sprint**\n\n🎯 **LAST CHANCE FOR SEASON REWARDS**\n\n✅ **Priority Tasks:**\n• Final Rare Soil sprint\n• Maximize season rewards\n• Alliance placement finalization\n• Secure leaderboard position\n• Give everything you've got!\n\n📊 **Final Standings:**\n• Current Rank: {alliance_rank}\n• Soil Locations: {rare_soil_count}\n• Season Reward Tier: {reward_tier}\n\n⏰ **Season ends in: {days_until_season_end} days**\n\n**Leave nothing on the table!** 🏆💪\n\nSeason 2 has been an incredible journey!",
+            "use_embed": true,
+            "embed_color": "16766720"
+        },
+        "season_end": {
+            "title": "🏁 Season 2: Polar Storm - COMPLETE",
+            "content": "**Season 2 has ended!**\n\n🏆 **Final Results:**\n• Alliance Rank: {alliance_rank}\n• Total Power: {alliance_power}\n• Rare Soil Held: {rare_soil_count}\n• Faction Wars Won: {faction_wars_won}\n\n👏 **Top Contributors:**\n• MVP Power Gain: {top_power_player}\n• MVP Kills: {top_killer}\n• MVP Gatherer: {top_gatherer}\n\n💎 **Season Rewards:**\n• Reward Tier: {reward_tier}\n• [Rewards will be distributed]\n\n**Thank you all for an incredible season!**\n\nRest up, Season 3 awaits! 🚀",
+            "use_embed": true,
+            "embed_color": "16766720"
+        }
+    }
+}
