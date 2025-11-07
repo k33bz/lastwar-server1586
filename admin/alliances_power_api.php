@@ -115,6 +115,9 @@ try {
         // Get optional timestamp for accurate power history
         $timestamp = $input['timestamp'] ?? null;
 
+        // Get overwrite flag for duplicate dates
+        $overwrite_duplicates = $input['overwrite_duplicates'] ?? false;
+
         // Load current alliances
         $alliances = json_read($alliances_file);
 
@@ -195,17 +198,51 @@ try {
         // Update CSV using helper (creates alliances.csv)
         AllianceHelper::updateAllianceCSV($alliances);
 
+        // Sync CSV with alliances.json (add missing columns, no deletions)
+        $sync_result = sync_csv_with_alliances($alliances);
+
         // Append power snapshot to power-history.csv with provided timestamp
-        append_power_snapshot($alliances, $timestamp);
+        $snapshot_result = append_power_snapshot($alliances, $timestamp, $overwrite_duplicates);
+
+        // Check for duplicate date - if found and not overwriting, prompt user
+        if (!$snapshot_result['success'] && ($snapshot_result['duplicate'] ?? false)) {
+            http_response_code(409); // Conflict
+            echo json_encode([
+                'success' => false,
+                'duplicate' => true,
+                'datetime' => $snapshot_result['datetime'],
+                'message' => $snapshot_result['message'],
+                'prompt' => 'A power snapshot already exists for this date/time. Do you want to merge the data?'
+            ]);
+            exit;
+        }
+
+        // Sort CSV by date and power after adding new data
+        sort_csv_rows();
 
         // Log audit event with changes
         log_audit_event('edit_alliance_power', $user->sub, [
             'alliances_modified' => count($changes),
             'changes' => $changes,
-            'timestamp_used' => $timestamp ?? 'current_time'
+            'timestamp_used' => $timestamp ?? 'current_time',
+            'csv_sync' => $sync_result,
+            'snapshot_merged' => $snapshot_result['merged'] ?? false
         ]);
 
-        echo json_encode(['success' => true, 'message' => 'Alliances updated successfully']);
+        $message = 'Alliances updated successfully';
+        if ($sync_result['added'] > 0) {
+            $message .= '. Added ' . $sync_result['added'] . ' new alliance column(s) to CSV';
+        }
+        if ($snapshot_result['merged'] ?? false) {
+            $message .= '. Merged with existing power snapshot for this date/time';
+        }
+
+        echo json_encode([
+            'success' => true,
+            'message' => $message,
+            'csv_sync' => $sync_result,
+            'snapshot' => $snapshot_result
+        ]);
         break;
 
     case 'add':

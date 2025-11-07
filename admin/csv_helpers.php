@@ -34,9 +34,10 @@ define('POWER_HISTORY_CSV', __DIR__ . '/../data/power-history.csv');
  * @param array $alliances Array of alliance data from alliances.json
  * @param string|null $timestamp Optional ISO 8601 timestamp (e.g., 2025-10-28T14:30:00.000Z)
  *                                If not provided, uses current UTC time
- * @return bool Success status
+ * @param bool $overwrite_duplicates If true, replaces existing row with same datetime
+ * @return array Result with success status and duplicate info
  */
-function append_power_snapshot($alliances, $timestamp = null) {
+function append_power_snapshot($alliances, $timestamp = null, $overwrite_duplicates = false) {
     try {
         $csv_path = POWER_HISTORY_CSV;
 
@@ -45,16 +46,31 @@ function append_power_snapshot($alliances, $timestamp = null) {
             throw new Exception("CSV file not found: $csv_path");
         }
 
+        // Acquire exclusive lock
+        $lock_file = $csv_path . '.lock';
+        $lock_handle = fopen($lock_file, 'w');
+        if (!$lock_handle || !flock($lock_handle, LOCK_EX)) {
+            throw new Exception("Failed to acquire CSV lock");
+        }
+
         $file = fopen($csv_path, 'r');
         if (!$file) {
+            flock($lock_handle, LOCK_UN);
+            fclose($lock_handle);
             throw new Exception("Failed to open CSV file");
         }
 
-        // Read header row
+        // Read header row and all data
         $header = fgetcsv($file);
+        $all_data = [];
+        while (($row = fgetcsv($file)) !== false) {
+            $all_data[] = $row;
+        }
         fclose($file);
 
         if (!$header || ($header[0] !== 'datetime' && $header[0] !== 'date')) {
+            flock($lock_handle, LOCK_UN);
+            fclose($lock_handle);
             throw new Exception("Invalid CSV format: missing or incorrect header");
         }
 
@@ -86,26 +102,73 @@ function append_power_snapshot($alliances, $timestamp = null) {
             $row[] = $power_map[$tag] ?? 0;  // Default to 0 if alliance not found
         }
 
-        // Append row to CSV
-        $file = fopen($csv_path, 'a');
+        // Check for duplicate datetime
+        $duplicate_index = -1;
+        foreach ($all_data as $index => $existing_row) {
+            if ($existing_row[0] === $datetime) {
+                $duplicate_index = $index;
+                break;
+            }
+        }
+
+        $result = ['success' => false, 'duplicate' => false, 'merged' => false];
+
+        if ($duplicate_index !== -1) {
+            if ($overwrite_duplicates) {
+                // Replace existing row with new data (merge: take non-zero values)
+                $existing = $all_data[$duplicate_index];
+                $merged_row = [$datetime];
+                for ($i = 1; $i < count($row); $i++) {
+                    $new_val = (int)($row[$i] ?? 0);
+                    $old_val = (int)($existing[$i] ?? 0);
+                    // Take new value if it's non-zero, otherwise keep old
+                    $merged_row[] = $new_val > 0 ? $new_val : $old_val;
+                }
+                $all_data[$duplicate_index] = $merged_row;
+                $result['merged'] = true;
+                $result['success'] = true;
+            } else {
+                // Return duplicate flag without writing
+                flock($lock_handle, LOCK_UN);
+                fclose($lock_handle);
+                @unlink($lock_file);
+                return [
+                    'success' => false,
+                    'duplicate' => true,
+                    'datetime' => $datetime,
+                    'message' => "Duplicate datetime found: {$datetime}. Set overwrite_duplicates=true to merge."
+                ];
+            }
+        } else {
+            // No duplicate, append new row
+            $all_data[] = $row;
+            $result['success'] = true;
+        }
+
+        // Write updated CSV
+        $file = fopen($csv_path, 'w');
         if (!$file) {
+            flock($lock_handle, LOCK_UN);
+            fclose($lock_handle);
             throw new Exception("Failed to open CSV file for writing");
         }
 
-        // Use file locking to prevent concurrent writes
-        if (flock($file, LOCK_EX)) {
-            fputcsv($file, $row);
-            flock($file, LOCK_UN);
-            fclose($file);
-            return true;
-        } else {
-            fclose($file);
-            throw new Exception("Failed to acquire file lock");
+        fputcsv($file, array_merge(['datetime'], $alliance_tags));
+        foreach ($all_data as $data_row) {
+            fputcsv($file, $data_row);
         }
+        fclose($file);
+
+        // Release lock
+        flock($lock_handle, LOCK_UN);
+        fclose($lock_handle);
+        @unlink($lock_file);
+
+        return $result;
 
     } catch (Exception $e) {
         error_log("Failed to append power snapshot: " . $e->getMessage());
-        return false;
+        return ['success' => false, 'error' => $e->getMessage()];
     }
 }
 
@@ -177,6 +240,281 @@ function get_latest_power_snapshots($limit = 30) {
     } catch (Exception $e) {
         error_log("Failed to get latest power snapshots: " . $e->getMessage());
         return [];
+    }
+}
+
+/**
+ * Sync CSV with alliances.json - add missing alliance columns
+ *
+ * Ensures all alliances in alliances.json have corresponding columns in CSV
+ * Never removes columns (no deletions), only adds missing ones
+ *
+ * @param array $alliances Current alliance data from alliances.json
+ * @return array Result with success status and stats
+ */
+function sync_csv_with_alliances($alliances) {
+    try {
+        $csv_path = POWER_HISTORY_CSV;
+
+        if (!file_exists($csv_path)) {
+            throw new Exception("CSV file not found");
+        }
+
+        // Get alliance tags from alliances.json
+        $json_tags = [];
+        foreach ($alliances as $alliance) {
+            $json_tags[] = $alliance['tag'] ?? '';
+        }
+
+        // Acquire exclusive lock on CSV file
+        $lock_file = $csv_path . '.lock';
+        $lock_handle = fopen($lock_file, 'w');
+        if (!$lock_handle || !flock($lock_handle, LOCK_EX)) {
+            throw new Exception("Failed to acquire CSV lock");
+        }
+
+        // Read existing CSV
+        $file = fopen($csv_path, 'r');
+        if (!$file) {
+            flock($lock_handle, LOCK_UN);
+            fclose($lock_handle);
+            throw new Exception("Failed to open CSV file");
+        }
+
+        $csv_header = fgetcsv($file);
+        $csv_data = [];
+        while (($row = fgetcsv($file)) !== false) {
+            $csv_data[] = $row;
+        }
+        fclose($file);
+
+        // Get current CSV tags (skip 'datetime' column)
+        $csv_tags = array_slice($csv_header, 1);
+
+        // Find missing tags (in JSON but not in CSV)
+        $missing_tags = array_diff($json_tags, $csv_tags);
+
+        if (empty($missing_tags)) {
+            flock($lock_handle, LOCK_UN);
+            fclose($lock_handle);
+            @unlink($lock_file);
+            return ['success' => true, 'added' => 0, 'message' => 'CSV already in sync'];
+        }
+
+        // Add missing tags to header
+        $new_header = array_merge($csv_header, array_values($missing_tags));
+
+        // Extend all data rows with zeros for new columns
+        $new_data = [];
+        foreach ($csv_data as $row) {
+            $new_row = array_merge($row, array_fill(0, count($missing_tags), 0));
+            $new_data[] = $new_row;
+        }
+
+        // Write updated CSV
+        $file = fopen($csv_path, 'w');
+        if (!$file) {
+            flock($lock_handle, LOCK_UN);
+            fclose($lock_handle);
+            throw new Exception("Failed to open CSV for writing");
+        }
+
+        fputcsv($file, $new_header);
+        foreach ($new_data as $row) {
+            fputcsv($file, $row);
+        }
+        fclose($file);
+
+        // Release lock
+        flock($lock_handle, LOCK_UN);
+        fclose($lock_handle);
+        @unlink($lock_file);
+
+        return [
+            'success' => true,
+            'added' => count($missing_tags),
+            'tags' => array_values($missing_tags),
+            'message' => 'Added ' . count($missing_tags) . ' missing alliance(s) to CSV'
+        ];
+
+    } catch (Exception $e) {
+        error_log("Failed to sync CSV with alliances: " . $e->getMessage());
+        return ['success' => false, 'error' => $e->getMessage()];
+    }
+}
+
+/**
+ * Sort CSV rows by date and power
+ *
+ * Sorts: latest date first, then by total power descending for columns
+ * Within same date, sorts alliance columns alphabetically
+ *
+ * @return bool Success status
+ */
+function sort_csv_rows() {
+    try {
+        $csv_path = POWER_HISTORY_CSV;
+
+        if (!file_exists($csv_path)) {
+            throw new Exception("CSV file not found");
+        }
+
+        // Acquire exclusive lock
+        $lock_file = $csv_path . '.lock';
+        $lock_handle = fopen($lock_file, 'w');
+        if (!$lock_handle || !flock($lock_handle, LOCK_EX)) {
+            throw new Exception("Failed to acquire CSV lock");
+        }
+
+        // Read CSV
+        $file = fopen($csv_path, 'r');
+        if (!$file) {
+            flock($lock_handle, LOCK_UN);
+            fclose($lock_handle);
+            throw new Exception("Failed to open CSV file");
+        }
+
+        $header = fgetcsv($file);
+        $data = [];
+        while (($row = fgetcsv($file)) !== false) {
+            $data[] = $row;
+        }
+        fclose($file);
+
+        // Sort data rows by datetime descending (latest first)
+        usort($data, function($a, $b) {
+            return strcmp($b[0], $a[0]); // Reverse compare for descending
+        });
+
+        // Calculate total power for each alliance column (for column sorting)
+        $alliance_totals = [];
+        $num_cols = count($header);
+        for ($col = 1; $col < $num_cols; $col++) {
+            $total = 0;
+            foreach ($data as $row) {
+                $total += (int)($row[$col] ?? 0);
+            }
+            $alliance_totals[$col] = $total;
+        }
+
+        // Sort alliance columns by total power descending, then alphabetically
+        $col_order = range(1, $num_cols - 1); // Skip datetime column
+        usort($col_order, function($a, $b) use ($alliance_totals, $header) {
+            $power_diff = $alliance_totals[$b] - $alliance_totals[$a];
+            if ($power_diff != 0) {
+                return $power_diff;
+            }
+            // If power is equal, sort alphabetically by tag
+            return strcmp($header[$a], $header[$b]);
+        });
+
+        // Rebuild header with new column order
+        $new_header = ['datetime'];
+        foreach ($col_order as $col) {
+            $new_header[] = $header[$col];
+        }
+
+        // Rebuild data rows with new column order
+        $new_data = [];
+        foreach ($data as $row) {
+            $new_row = [$row[0]]; // Keep datetime
+            foreach ($col_order as $col) {
+                $new_row[] = $row[$col] ?? 0;
+            }
+            $new_data[] = $new_row;
+        }
+
+        // Write sorted CSV
+        $file = fopen($csv_path, 'w');
+        if (!$file) {
+            flock($lock_handle, LOCK_UN);
+            fclose($lock_handle);
+            throw new Exception("Failed to open CSV for writing");
+        }
+
+        fputcsv($file, $new_header);
+        foreach ($new_data as $row) {
+            fputcsv($file, $row);
+        }
+        fclose($file);
+
+        // Release lock
+        flock($lock_handle, LOCK_UN);
+        fclose($lock_handle);
+        @unlink($lock_file);
+
+        return true;
+
+    } catch (Exception $e) {
+        error_log("Failed to sort CSV rows: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Check if duplicate date exists and handle merge/overwrite
+ *
+ * @param string $datetime Datetime string to check
+ * @param array $new_data New power data to add
+ * @return array Result with action taken
+ */
+function handle_duplicate_date($datetime, $new_data) {
+    try {
+        $csv_path = POWER_HISTORY_CSV;
+
+        if (!file_exists($csv_path)) {
+            return ['exists' => false];
+        }
+
+        // Acquire exclusive lock
+        $lock_file = $csv_path . '.lock';
+        $lock_handle = fopen($lock_file, 'w');
+        if (!$lock_handle || !flock($lock_handle, LOCK_EX)) {
+            throw new Exception("Failed to acquire CSV lock");
+        }
+
+        // Read CSV
+        $file = fopen($csv_path, 'r');
+        if (!$file) {
+            flock($lock_handle, LOCK_UN);
+            fclose($lock_handle);
+            throw new Exception("Failed to open CSV file");
+        }
+
+        $header = fgetcsv($file);
+        $data = [];
+        $duplicate_index = -1;
+        $row_index = 0;
+
+        while (($row = fgetcsv($file)) !== false) {
+            if ($row[0] === $datetime) {
+                $duplicate_index = $row_index;
+            }
+            $data[] = $row;
+            $row_index++;
+        }
+        fclose($file);
+
+        // Release lock
+        flock($lock_handle, LOCK_UN);
+        fclose($lock_handle);
+        @unlink($lock_file);
+
+        if ($duplicate_index === -1) {
+            return ['exists' => false];
+        }
+
+        // Return existing data for comparison/merge decision
+        return [
+            'exists' => true,
+            'index' => $duplicate_index,
+            'existing_data' => $data[$duplicate_index],
+            'datetime' => $datetime
+        ];
+
+    } catch (Exception $e) {
+        error_log("Failed to check duplicate date: " . $e->getMessage());
+        return ['exists' => false, 'error' => $e->getMessage()];
     }
 }
 

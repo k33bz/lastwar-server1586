@@ -845,9 +845,12 @@ include 'includes/header.php';
             });
         }
 
-        function saveUpdates(updates) {
+        function saveUpdates(updates, overwrite_duplicates = false) {
             const timestamp = getDataTimestamp();
-            const requestBody = { alliances: updates };
+            const requestBody = {
+                alliances: updates,
+                overwrite_duplicates: overwrite_duplicates
+            };
             if (timestamp) {
                 requestBody.timestamp = timestamp;
             }
@@ -860,12 +863,32 @@ include 'includes/header.php';
                 },
                 body: JSON.stringify(requestBody)
             })
-            .then(response => response.json())
+            .then(response => {
+                // Handle 409 Conflict (duplicate datetime)
+                if (response.status === 409) {
+                    return response.json().then(data => {
+                        // Prompt user to merge
+                        if (confirm(data.prompt + '\n\nClick OK to merge data, Cancel to abort.')) {
+                            // Retry with overwrite flag
+                            return saveUpdates(updates, true);
+                        } else {
+                            throw new Error('Save cancelled - duplicate datetime not merged');
+                        }
+                    });
+                }
+                return response.json();
+            })
             .then(data => {
                 if (!data.success) {
                     throw new Error(data.error || 'Failed to save updates');
                 }
                 console.log(`Updated ${updates.length} alliance(s)`);
+                if (data.csv_sync && data.csv_sync.added > 0) {
+                    console.log(`Synced CSV: added ${data.csv_sync.added} alliance column(s)`);
+                }
+                if (data.snapshot && data.snapshot.merged) {
+                    console.log('Merged with existing power snapshot for this date/time');
+                }
                 return data;
             });
         }
