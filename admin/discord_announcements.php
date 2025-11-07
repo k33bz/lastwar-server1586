@@ -480,16 +480,25 @@ include 'includes/header.php';
 
     <div id="alertContainer"></div>
 
-    <?php if (DISCORD_ENABLED): ?>
-        <div class="alert alert-info">
-            ℹ️ <strong>Phase 1:</strong> Basic instant messaging is now available. Scheduled and recurring messages will be added in future updates.
-        </div>
-    <?php endif; ?>
-
     <form id="announcementForm">
         <!-- Message Content Section -->
         <div class="form-section">
             <h3>📝 Message Content</h3>
+
+            <!-- Template Selection (First) -->
+            <div class="form-group">
+                <label for="templateSelect">📝 Use Template (Optional)</label>
+                <select id="templateSelect" onchange="loadTemplate()">
+                    <option value="">-- Select a template --</option>
+                </select>
+                <div class="help-text">Load a pre-made template with variables</div>
+            </div>
+
+            <!-- Custom Variable Inputs (shown when template has custom vars) -->
+            <div id="customVariables" style="display: none; background: #f8f9fa; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.75rem; font-weight: 600; color: #555;">✏️ Fill in Custom Variables</label>
+                <div id="customVariableInputs"></div>
+            </div>
 
             <div class="form-group">
                 <div class="checkbox-group">
@@ -516,21 +525,6 @@ include 'includes/header.php';
                     </div>
                     <input type="hidden" id="embedColor" name="embed_color" value="3447003">
                 </div>
-            </div>
-
-            <!-- Template & Variables Section -->
-            <div class="form-group">
-                <label for="templateSelect">📝 Use Template (Optional)</label>
-                <select id="templateSelect" onchange="loadTemplate()">
-                    <option value="">-- Select a template --</option>
-                </select>
-                <div class="help-text">Load a pre-made template with variables</div>
-            </div>
-
-            <!-- Custom Variable Inputs (shown when template has custom vars) -->
-            <div id="customVariables" style="display: none; background: #f8f9fa; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
-                <label style="display: block; margin-bottom: 0.75rem; font-weight: 600; color: #555;">✏️ Fill in Custom Variables</label>
-                <div id="customVariableInputs"></div>
             </div>
 
             <div class="form-group">
