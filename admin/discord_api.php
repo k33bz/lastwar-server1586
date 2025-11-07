@@ -81,14 +81,15 @@ try {
                 throw new Exception('Message content is required');
             }
 
-            // Check rate limiting
+            // Check rate limiting (admins are exempt)
             $user_email = $user->sub;
-            if (!check_discord_rate_limit($user_email, 'instant')) {
+            if ($user->aud !== 'admin' && !check_discord_rate_limit($user_email, 'instant')) {
+                $user_limit = get_user_discord_rate_limit($user_email);
                 log_audit_event('discord_rate_limit_exceeded', $user_email, [
                     'type' => 'instant',
-                    'limit' => DISCORD_MAX_INSTANT_PER_HOUR
+                    'limit' => $user_limit
                 ]);
-                throw new Exception('Rate limit exceeded. Maximum ' . DISCORD_MAX_INSTANT_PER_HOUR . ' instant messages per hour.');
+                throw new Exception('Rate limit exceeded. Maximum ' . $user_limit . ' instant messages per hour. You can request an increase from your profile.');
             }
 
             // Validate channels and permissions
@@ -336,6 +337,28 @@ try {
 }
 
 /**
+ * Get user-specific Discord rate limit
+ *
+ * @param string $email User email
+ * @return int Rate limit for instant messages per hour
+ */
+function get_user_discord_rate_limit($email) {
+    require_once __DIR__ . '/json_helpers.php';
+
+    $users_data = read_json_file(__DIR__ . '/users.json');
+
+    foreach ($users_data['users'] as $user) {
+        if ($user['email'] === $email) {
+            // Return user-specific limit if set, otherwise default
+            return $user['discord_rate_limit'] ?? DISCORD_MAX_INSTANT_PER_HOUR;
+        }
+    }
+
+    // Default limit if user not found
+    return DISCORD_MAX_INSTANT_PER_HOUR;
+}
+
+/**
  * Check Discord rate limits for user
  *
  * @param string $email User email
@@ -372,8 +395,11 @@ function check_discord_rate_limit($email, $type) {
                 }
             );
 
+            // Get user-specific rate limit
+            $user_limit = get_user_discord_rate_limit($email);
+
             // Check if limit exceeded
-            if (count($limits[$email]['instant']) >= DISCORD_MAX_INSTANT_PER_HOUR) {
+            if (count($limits[$email]['instant']) >= $user_limit) {
                 return false;
             }
 

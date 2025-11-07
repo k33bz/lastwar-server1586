@@ -284,7 +284,101 @@ include 'includes/header.php';
             </button>
         </div>
     </form>
+
+    <!-- Discord Rate Limits Section -->
+    <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED): ?>
+    <div class="profile-section">
+        <h3>📊 Discord Rate Limits</h3>
+
+        <div id="rateLimitInfo" style="min-height: 100px;">
+            <p style="text-align: center; color: #666;">Loading rate limit information...</p>
+        </div>
+    </div>
+    <?php endif; ?>
 </div>
+
+<style>
+.rate-limit-display {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.rate-limit-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #667eea;
+    margin: 0.5rem 0;
+}
+
+.rate-limit-label {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-secondary:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.request-form {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-top: 1rem;
+}
+
+.request-form input[type="number"],
+.request-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.request-form textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.pending-request {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+}
+
+.pending-request strong {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+</style>
 
 <script>
 // Form submission
@@ -347,6 +441,155 @@ function showAlert(message, type) {
     setTimeout(() => {
         alert.remove();
     }, 5000);
+}
+
+// Load Discord rate limit information
+async function loadRateLimitInfo() {
+    const container = document.getElementById('rateLimitInfo');
+    if (!container) return; // Discord not enabled
+
+    try {
+        const response = await fetch('discord_rate_limit_api.php?action=get_my_limit', {
+            credentials: 'same-origin'
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+            displayRateLimitInfo(data);
+        } else {
+            container.innerHTML = '<div class="alert alert-error">Failed to load rate limit information</div>';
+        }
+    } catch (error) {
+        console.error('Error loading rate limit:', error);
+        container.innerHTML = '<div class="alert alert-error">Error loading rate limit information</div>';
+    }
+}
+
+// Display rate limit information
+function displayRateLimitInfo(data) {
+    const container = document.getElementById('rateLimitInfo');
+    let html = '';
+
+    if (data.is_admin) {
+        html = `
+            <div class="rate-limit-display">
+                <div class="rate-limit-label">Discord Message Rate Limit</div>
+                <div class="rate-limit-value">∞ Unlimited</div>
+                <p style="color: #666; margin: 0;">Administrators have no rate limits</p>
+            </div>
+        `;
+    } else {
+        html = `
+            <div class="rate-limit-display">
+                <div class="rate-limit-label">Discord Message Rate Limit</div>
+                <div class="rate-limit-value">${data.current_limit} messages/hour</div>
+                <p style="color: #666; margin-bottom: 1rem;">Maximum instant Discord announcements you can send per hour</p>
+
+                ${data.pending_request ? `
+                    <div class="pending-request">
+                        <strong>⏳ Pending Request</strong>
+                        <p style="margin: 0;">
+                            You requested an increase to <strong>${data.pending_request.requested_limit} messages/hour</strong>
+                            on ${new Date(data.pending_request.requested_at).toLocaleDateString()}.
+                            <br><em>Waiting for admin approval.</em>
+                        </p>
+                    </div>
+                ` : `
+                    <button type="button" class="btn btn-secondary" onclick="showRequestForm()">
+                        📈 Request Limit Increase
+                    </button>
+                    <div id="requestForm" style="display: none;" class="request-form">
+                        <h4 style="margin-top: 0;">Request Rate Limit Increase</h4>
+                        <label>
+                            Requested Limit (messages per hour):
+                            <input type="number" id="requestedLimit" min="${data.current_limit + 1}" value="${data.current_limit + 10}" required>
+                        </label>
+                        <label>
+                            Reason for increase:
+                            <textarea id="requestReason" placeholder="Explain why you need a higher rate limit..." required></textarea>
+                        </label>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="button" class="btn btn-primary" onclick="submitRateLimitRequest()">Submit Request</button>
+                            <button type="button" class="btn btn-secondary" onclick="hideRequestForm()">Cancel</button>
+                        </div>
+                    </div>
+                `}
+            </div>
+        `;
+    }
+
+    container.innerHTML = html;
+}
+
+// Show request form
+function showRequestForm() {
+    document.getElementById('requestForm').style.display = 'block';
+    document.querySelector('[onclick="showRequestForm()"]').style.display = 'none';
+}
+
+// Hide request form
+function hideRequestForm() {
+    document.getElementById('requestForm').style.display = 'none';
+    document.querySelector('[onclick="showRequestForm()"]').style.display = 'block';
+}
+
+// Submit rate limit increase request
+async function submitRateLimitRequest() {
+    const requestedLimit = parseInt(document.getElementById('requestedLimit').value);
+    const reason = document.getElementById('requestReason').value.trim();
+
+    if (!requestedLimit || !reason) {
+        showAlert('Please fill in all fields', 'error');
+        return;
+    }
+
+    try {
+        const csrfToken = getCsrfToken();
+        const response = await fetch('discord_rate_limit_api.php?action=request_increase', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify({
+                requested_limit: requestedLimit,
+                reason: reason
+            }),
+            credentials: 'same-origin'
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            try {
+                const errorData = JSON.parse(text);
+                throw new Error(errorData.error || `Server error (${response.status})`);
+            } catch (parseError) {
+                throw new Error(`Server error (${response.status})`);
+            }
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+            showAlert(data.message, 'success');
+            // Reload rate limit info
+            loadRateLimitInfo();
+        } else {
+            showAlert('Failed to submit request: ' + data.error, 'error');
+        }
+    } catch (error) {
+        showAlert('Error submitting request: ' + error.message, 'error');
+    }
+}
+
+// Load rate limit info on page load
+if (document.getElementById('rateLimitInfo')) {
+    loadRateLimitInfo();
 }
 </script>
 
