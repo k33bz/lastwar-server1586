@@ -199,10 +199,10 @@ try {
         AllianceHelper::updateAllianceCSV($alliances);
 
         // Sync CSV with alliances.json (add missing columns, no deletions)
-        $sync_result = sync_csv_with_alliances($alliances);
+        $sync_result = sync_csv_with_alliances($alliances, $user->sub);
 
         // Append power snapshot to power-history.csv with provided timestamp
-        $snapshot_result = append_power_snapshot($alliances, $timestamp, $overwrite_duplicates);
+        $snapshot_result = append_power_snapshot($alliances, $timestamp, $overwrite_duplicates, $user->sub);
 
         // Check for duplicate date - if found and not overwriting, prompt user
         if (!$snapshot_result['success'] && ($snapshot_result['duplicate'] ?? false)) {
@@ -218,7 +218,7 @@ try {
         }
 
         // Sort CSV by date and power after adding new data
-        sort_csv_rows();
+        sort_csv_rows($user->sub);
 
         // Log audit event with changes
         log_audit_event('edit_alliance_power', $user->sub, [

@@ -25,6 +25,8 @@ if (!defined('ADMIN_INIT')) {
     define('ADMIN_INIT', true);
 }
 
+require_once __DIR__ . '/audit_logger.php';
+
 // Path to power history CSV
 define('POWER_HISTORY_CSV', __DIR__ . '/../data/power-history.csv');
 
@@ -35,9 +37,10 @@ define('POWER_HISTORY_CSV', __DIR__ . '/../data/power-history.csv');
  * @param string|null $timestamp Optional ISO 8601 timestamp (e.g., 2025-10-28T14:30:00.000Z)
  *                                If not provided, uses current UTC time
  * @param bool $overwrite_duplicates If true, replaces existing row with same datetime
+ * @param string $user_email User performing operation (for audit log)
  * @return array Result with success status and duplicate info
  */
-function append_power_snapshot($alliances, $timestamp = null, $overwrite_duplicates = false) {
+function append_power_snapshot($alliances, $timestamp = null, $overwrite_duplicates = false, $user_email = 'system') {
     try {
         $csv_path = POWER_HISTORY_CSV;
 
@@ -129,11 +132,18 @@ function append_power_snapshot($alliances, $timestamp = null, $overwrite_duplica
                 $all_data[$duplicate_index] = $merged_row;
                 $result['merged'] = true;
                 $result['success'] = true;
+
+                // Log merge operation
+                log_csv_merge($user_email, $datetime, true);
             } else {
                 // Return duplicate flag without writing
                 flock($lock_handle, LOCK_UN);
                 fclose($lock_handle);
                 @unlink($lock_file);
+
+                // Log duplicate detection
+                log_csv_merge($user_email, $datetime, false);
+
                 return [
                     'success' => false,
                     'duplicate' => true,
@@ -166,10 +176,23 @@ function append_power_snapshot($alliances, $timestamp = null, $overwrite_duplica
         fclose($lock_handle);
         @unlink($lock_file);
 
+        // Log successful snapshot append (not merge, which is logged separately)
+        if ($result['success'] && !$result['merged']) {
+            log_csv_operation('append', $user_email, [
+                'datetime' => $datetime,
+                'alliances_count' => count($alliances),
+                'timestamp_provided' => $timestamp ? 'custom' : 'current'
+            ]);
+        }
+
         return $result;
 
     } catch (Exception $e) {
         error_log("CSV Helper Error [append_power_snapshot]: " . $e->getMessage() . " | File: " . ($csv_path ?? 'unknown'));
+        log_csv_error('append', $user_email, $e->getMessage(), [
+            'file' => basename($csv_path ?? 'unknown'),
+            'alliances_count' => count($alliances ?? [])
+        ]);
         return ['success' => false, 'error' => $e->getMessage()];
     }
 }
@@ -252,9 +275,10 @@ function get_latest_power_snapshots($limit = 30) {
  * Never removes columns (no deletions), only adds missing ones
  *
  * @param array $alliances Current alliance data from alliances.json
+ * @param string $user_email User performing operation (for audit log)
  * @return array Result with success status and stats
  */
-function sync_csv_with_alliances($alliances) {
+function sync_csv_with_alliances($alliances, $user_email = 'system') {
     try {
         $csv_path = POWER_HISTORY_CSV;
 
@@ -334,6 +358,9 @@ function sync_csv_with_alliances($alliances) {
         fclose($lock_handle);
         @unlink($lock_file);
 
+        // Log sync operation
+        log_csv_sync($user_email, count($missing_tags), array_values($missing_tags));
+
         return [
             'success' => true,
             'added' => count($missing_tags),
@@ -343,6 +370,9 @@ function sync_csv_with_alliances($alliances) {
 
     } catch (Exception $e) {
         error_log("CSV Helper Error [sync_csv_with_alliances]: " . $e->getMessage() . " | Alliances: " . count($alliances ?? []));
+        log_csv_error('sync', $user_email, $e->getMessage(), [
+            'alliances_count' => count($alliances ?? [])
+        ]);
         return ['success' => false, 'error' => $e->getMessage()];
     }
 }
@@ -353,9 +383,10 @@ function sync_csv_with_alliances($alliances) {
  * Sorts: latest date first, then by total power descending for columns
  * Within same date, sorts alliance columns alphabetically
  *
+ * @param string $user_email User performing operation (for audit log)
  * @return bool Success status
  */
-function sort_csv_rows() {
+function sort_csv_rows($user_email = 'system') {
     try {
         $csv_path = POWER_HISTORY_CSV;
 
@@ -449,10 +480,14 @@ function sort_csv_rows() {
         fclose($lock_handle);
         @unlink($lock_file);
 
+        // Log sort operation
+        log_csv_sort($user_email, count($new_data), count($col_order));
+
         return true;
 
     } catch (Exception $e) {
         error_log("CSV Helper Error [sort_csv_rows]: " . $e->getMessage());
+        log_csv_error('sort', $user_email, $e->getMessage(), []);
         return false;
     }
 }
@@ -619,9 +654,10 @@ function update_csv_header($alliances) {
  * Removes any orphaned .lock files that may have been left behind
  * Call this periodically or when encountering lock acquisition failures
  *
+ * @param string $user_email User or system performing cleanup (for audit log)
  * @return array Result with count of removed lock files
  */
-function cleanup_csv_lock_files() {
+function cleanup_csv_lock_files($user_email = 'system') {
     try {
         $data_dir = dirname(POWER_HISTORY_CSV);
         $lock_files = glob($data_dir . '/*.lock');
@@ -637,6 +673,9 @@ function cleanup_csv_lock_files() {
             }
         }
 
+        // Log cleanup operation
+        log_csv_cleanup($user_email, $removed);
+
         return [
             'success' => true,
             'removed' => $removed,
@@ -645,6 +684,7 @@ function cleanup_csv_lock_files() {
 
     } catch (Exception $e) {
         error_log("CSV Helper Error [cleanup_csv_lock_files]: " . $e->getMessage());
+        log_csv_error('cleanup', $user_email, $e->getMessage(), []);
         return ['success' => false, 'error' => $e->getMessage()];
     }
 }

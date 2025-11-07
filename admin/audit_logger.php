@@ -330,4 +330,126 @@ function log_key_rotation_implementation($admin_email) {
         ]
     ]);
 }
+
+/**
+ * Log CSV operation event
+ *
+ * Tracks CSV file operations for power history tracking
+ *
+ * @param string $operation Operation type (append, sync, sort, merge, cleanup)
+ * @param string $user_email User performing the operation
+ * @param array $details Operation-specific details
+ * @param bool $success Whether operation succeeded
+ * @return bool Success status
+ */
+function log_csv_operation($operation, $user_email, $details = [], $success = true) {
+    $action = $success ? "csv_{$operation}" : "csv_{$operation}_failed";
+
+    // Add execution time and memory usage for performance tracking
+    $details['performance'] = [
+        'memory_peak_mb' => round(memory_get_peak_usage(true) / 1024 / 1024, 2),
+        'time' => microtime(true)
+    ];
+
+    // Add success indicator
+    $details['success'] = $success;
+
+    return log_audit_event($action, $user_email, $details);
+}
+
+/**
+ * Log CSV lock acquisition event
+ *
+ * @param string $user_email User acquiring lock
+ * @param string $file File being locked
+ * @param bool $acquired Whether lock was acquired
+ * @return bool Success status
+ */
+function log_csv_lock($user_email, $file, $acquired = true) {
+    return log_csv_operation('lock', $user_email, [
+        'file' => basename($file),
+        'acquired' => $acquired,
+        'lock_file' => basename($file) . '.lock'
+    ], $acquired);
+}
+
+/**
+ * Log CSV sync operation
+ *
+ * @param string $user_email User performing sync
+ * @param int $added Number of alliances added
+ * @param array $tags Alliance tags that were added
+ * @return bool Success status
+ */
+function log_csv_sync($user_email, $added, $tags = []) {
+    return log_csv_operation('sync', $user_email, [
+        'alliances_added' => $added,
+        'tags' => $tags,
+        'total_columns' => count($tags) + 1 // +1 for datetime
+    ]);
+}
+
+/**
+ * Log CSV sort operation
+ *
+ * @param string $user_email User performing sort
+ * @param int $rows Number of rows sorted
+ * @param int $columns Number of columns reordered
+ * @return bool Success status
+ */
+function log_csv_sort($user_email, $rows, $columns) {
+    return log_csv_operation('sort', $user_email, [
+        'rows_sorted' => $rows,
+        'columns_reordered' => $columns,
+        'sort_criteria' => 'date_desc_then_power_desc'
+    ]);
+}
+
+/**
+ * Log CSV duplicate merge operation
+ *
+ * @param string $user_email User performing merge
+ * @param string $datetime Datetime that was merged
+ * @param bool $merged Whether merge was performed
+ * @return bool Success status
+ */
+function log_csv_merge($user_email, $datetime, $merged = true) {
+    return log_csv_operation('merge', $user_email, [
+        'datetime' => $datetime,
+        'action' => $merged ? 'merged_data' : 'duplicate_detected',
+        'merge_strategy' => 'take_non_zero_values'
+    ], true);
+}
+
+/**
+ * Log CSV lock cleanup operation
+ *
+ * @param string $user_email User or system performing cleanup
+ * @param int $removed Number of lock files removed
+ * @return bool Success status
+ */
+function log_csv_cleanup($user_email, $removed) {
+    return log_csv_operation('cleanup', $user_email, [
+        'lock_files_removed' => $removed,
+        'age_threshold_minutes' => 5,
+        'triggered_by' => $removed > 0 ? 'stale_locks_found' : 'routine_check'
+    ]);
+}
+
+/**
+ * Log CSV error event
+ *
+ * @param string $operation Operation that failed
+ * @param string $user_email User performing operation
+ * @param string $error_message Error message
+ * @param array $context Additional context
+ * @return bool Success status
+ */
+function log_csv_error($operation, $user_email, $error_message, $context = []) {
+    return log_csv_operation($operation . '_error', $user_email, [
+        'error' => $error_message,
+        'context' => $context,
+        'severity' => 'error'
+    ], false);
+}
 ?>
