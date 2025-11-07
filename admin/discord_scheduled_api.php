@@ -219,7 +219,7 @@ switch ($action) {
             }
         }
 
-        if (!has_access) {
+        if (!$has_access) {
             http_response_code(403);
             echo json_encode(['success' => false, 'error' => 'No access to this channel']);
             exit();
