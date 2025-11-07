@@ -157,6 +157,19 @@ You can use variables like {sender_name}, {r5_name}, etc." maxlength="2000"></te
                 <label><input type="checkbox" id="useEmbed" checked> Use Rich Embed</label>
             </div>
 
+            <div class="form-group">
+                <label for="deleteAfterHours">Auto-Delete After</label>
+                <select id="deleteAfterHours" name="delete_after_hours">
+                    <option value="">Never (keep forever)</option>
+                    <option value="1">1 hour</option>
+                    <option value="6">6 hours</option>
+                    <option value="12">12 hours</option>
+                    <option value="24">24 hours</option>
+                    <option value="48">48 hours (2 days)</option>
+                </select>
+                <div class="help-text">Automatically delete each message after the specified time</div>
+            </div>
+
             <button type="submit" class="btn btn-primary">🔄 Create Recurring Message</button>
         </form>
     </div>
@@ -377,7 +390,8 @@ You can use variables like {sender_name}, {r5_name}, etc." maxlength="2000"></te
             frequency: frequency,
             time_of_day: timeOfDay,
             message: message,
-            use_embed: useEmbed
+            use_embed: useEmbed,
+            delete_after_hours: document.getElementById('deleteAfterHours').value
         };
 
         if (frequency === 'weekly') {

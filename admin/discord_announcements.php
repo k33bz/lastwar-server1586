@@ -564,6 +564,23 @@ You can use variables like {sender_name}, {r5_name}, {alliance_name}, etc." requ
             </div>
         </div>
 
+        <!-- Auto-Delete Section -->
+        <div class="form-section">
+            <h3>⏰ Auto-Delete</h3>
+            <div class="form-group">
+                <label for="deleteAfterHours">Automatically delete message after:</label>
+                <select id="deleteAfterHours" name="delete_after_hours">
+                    <option value="">Never (keep forever)</option>
+                    <option value="1">1 hour</option>
+                    <option value="6">6 hours</option>
+                    <option value="12">12 hours</option>
+                    <option value="24">24 hours</option>
+                    <option value="48">48 hours (2 days)</option>
+                </select>
+                <div class="help-text">Select how long to keep the message before automatically deleting it. This helps keep channels clean.</div>
+            </div>
+        </div>
+
         <!-- Actions -->
         <div style="display: flex; gap: 1rem; justify-content: flex-end;">
             <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset</button>
@@ -1053,6 +1070,12 @@ document.getElementById('announcementForm').addEventListener('submit', async fun
         formData.append('use_embed', document.getElementById('useEmbed').checked ? 'true' : 'false');
         formData.append('embed_title', embedTitle);
         formData.append('embed_color', document.getElementById('embedColor').value);
+
+        // Add auto-delete setting
+        const deleteAfterHours = document.getElementById('deleteAfterHours').value;
+        if (deleteAfterHours) {
+            formData.append('delete_after_hours', deleteAfterHours);
+        }
 
         const response = await fetch('discord_api.php', {
             method: 'POST',

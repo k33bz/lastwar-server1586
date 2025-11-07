@@ -388,6 +388,19 @@ You can use variables like {sender_name}, {event_time}, etc." maxlength="2000"><
                 <div class="help-text">Maximum 2000 characters</div>
             </div>
 
+            <div class="form-group">
+                <label for="deleteAfterHours">Auto-Delete After</label>
+                <select id="deleteAfterHours" name="delete_after_hours">
+                    <option value="">Never (keep forever)</option>
+                    <option value="1">1 hour</option>
+                    <option value="6">6 hours</option>
+                    <option value="12">12 hours</option>
+                    <option value="24">24 hours</option>
+                    <option value="48">48 hours (2 days)</option>
+                </select>
+                <div class="help-text">Automatically delete message after the specified time</div>
+            </div>
+
             <button type="submit" class="btn btn-primary">⏰ Schedule Message</button>
         </form>
     </div>
@@ -630,7 +643,8 @@ You can use variables like {sender_name}, {event_time}, etc." maxlength="2000"><
             scheduled_time: document.getElementById('scheduledTime').value,
             use_embed: document.getElementById('useEmbed').checked,
             embed_title: document.getElementById('embedTitle').value,
-            embed_color: document.getElementById('embedColor').value
+            embed_color: document.getElementById('embedColor').value,
+            delete_after_hours: document.getElementById('deleteAfterHours').value
         };
 
         try {
