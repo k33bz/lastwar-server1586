@@ -9,17 +9,37 @@
  *
  * GitHub Issue: https://github.com/k33bz/lastwar-server1586/issues/59
  *
- * @version 1.0.0
- * @date 2025-11-04
+ * @version 1.0.1
+ * @date 2025-11-06
+ * @changelog
+ *   1.0.1 (2025-11-06) - Added error handling for require statements and fatal errors
+ *   1.0.0 (2025-11-04) - Initial implementation
  */
 
-// Require JWT authentication
-require_once 'jwt.php';
-require_once 'json_helpers.php';
-require_once 'audit_logger.php';
-require_once 'discord_webhook.php';
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
 
 header('Content-Type: application/json');
+
+// Wrap require statements in try-catch
+try {
+    require_once 'jwt.php';
+    require_once 'json_helpers.php';
+    require_once 'audit_logger.php';
+    require_once 'discord_webhook.php';
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Server configuration error',
+        'details' => $e->getMessage(),
+        'file' => basename($e->getFile()),
+        'line' => $e->getLine()
+    ]);
+    exit();
+}
 
 try {
     $user = require_jwt_session();
@@ -280,16 +300,38 @@ try {
 
 } catch (Exception $e) {
     // Log the error
+    error_log('Discord API Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+
     log_audit_event('discord_api_error', $user->sub ?? 'unknown', [
         'action' => $action ?? 'unknown',
         'error' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine(),
         'trace' => $e->getTraceAsString()
     ]);
 
-    http_response_code(400);
+    http_response_code(500);
     echo json_encode([
         'success' => false,
-        'error' => $e->getMessage()
+        'error' => $e->getMessage(),
+        'details' => [
+            'file' => basename($e->getFile()),
+            'line' => $e->getLine()
+        ]
+    ]);
+} catch (Throwable $e) {
+    // Catch any other errors (PHP 7+ fatal errors)
+    error_log('Discord API Fatal Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Fatal server error',
+        'details' => [
+            'message' => $e->getMessage(),
+            'file' => basename($e->getFile()),
+            'line' => $e->getLine()
+        ]
     ]);
 }
 
