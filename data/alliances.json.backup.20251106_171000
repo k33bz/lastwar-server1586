@@ -1,0 +1,1818 @@
+[
+    {
+        "tag": "ORCE",
+        "name": "Omega Force",
+        "r5": {
+            "name": "EchoJT",
+            "gameId": null,
+            "discordId": null
+        },
+        "signed": false,
+        "power": 7842552554,
+        "discord": {
+            "serverName": "Omega Force Official",
+            "inviteUrl": null,
+            "logoUrl": "images/discord-logos/ORCE.png",
+            "memberCount": null
+        },
+        "crossServer": {
+            "hasPartner": false,
+            "servers": [],
+            "partnerTags": [],
+            "network": null
+        },
+        "info": {
+            "description": "Elite alliance focused on teamwork and strategy",
+            "founded": null,
+            "languages": [
+                "English"
+            ],
+            "timezone": "Global",
+            "recruiting": false,
+            "requirements": {
+                "minPower": 50000000,
+                "minLevel": 25,
+                "activity": "High",
+                "notes": "Must participate in all alliance events"
+            }
+        },
+        "contact": {
+            "recruitmentContact": null,
+            "discordRecruitment": null
+        },
+        "achievements": {
+            "rankHistory": [],
+            "peakPower": 6710688392,
+            "peakRank": 1,
+            "specialties": [
+                "Territory Control",
+                "Event Participation"
+            ]
+        },
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z",
+            "verified": false,
+            "featured": true
+        },
+        "r5History": [
+            {
+                "r5Name": "EchoJT",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "UvvU",
+        "name": "veni vidi vici",
+        "r5": {
+            "name": "쿠치나 ᓚᘏᗢ",
+            "gameId": null,
+            "discordId": null
+        },
+        "signed": false,
+        "power": 7154204298,
+        "r5History": [
+            {
+                "r5Name": "쿠치나 ᓚᘏᗢ",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "discord": {
+            "serverName": "UvvU",
+            "inviteUrl": "https://discord.gg/6ervqtFbyE",
+            "logoUrl": null
+        },
+        "contact": {
+            "recruitmentContact": null,
+            "discordRecruitment": null
+        },
+        "info": {
+            "description": null,
+            "timezone": null,
+            "recruiting": false,
+            "requirements": {
+                "minPower": null,
+                "minLevel": null,
+                "activity": null,
+                "notes": null
+            }
+        },
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "nkot",
+        "name": "korea one team",
+        "r5": "잔인한노니 Noni",
+        "signed": false,
+        "power": 5487634013,
+        "r5History": [
+            {
+                "r5Name": "잔인한노니 Noni",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "STR8",
+        "name": "STR8 SAVAGE",
+        "r5": "ULoveGucciiღ",
+        "signed": false,
+        "power": 6068306651,
+        "r5History": [
+            {
+                "r5Name": "ULoveGucciiღ",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "EPIC",
+        "name": "KarmaKings",
+        "r5": "MastaGinger",
+        "signed": false,
+        "power": 5315160489,
+        "r5History": [
+            {
+                "r5Name": "MastaGinger",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "404a",
+        "name": "Not Found",
+        "r5": "DjNinja17",
+        "signed": false,
+        "power": 5243383601,
+        "r5History": [
+            {
+                "r5Name": "DjNinja17",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "LE4L",
+        "name": "Legião del Alba",
+        "r5": "Alessaurem",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "Alessaurem",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "FLM",
+        "name": "Fortis Legio Magna",
+        "r5": "KiluaZoldic",
+        "signed": false,
+        "power": 5182307694,
+        "r5History": [
+            {
+                "r5Name": "KiluaZoldic",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "NYPR",
+        "name": "NY Bats",
+        "r5": "Batman100x35PR",
+        "signed": false,
+        "power": 4255446020,
+        "r5History": [
+            {
+                "r5Name": "Batman100x35PR",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "SWBA",
+        "name": "SinnersWillBeAshed",
+        "r5": "Don123123",
+        "signed": false,
+        "power": 4293645575,
+        "r5History": [
+            {
+                "r5Name": "Don123123",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "86KO",
+        "name": "??",
+        "r5": "ʚᴸᵘᶰᵃɞ",
+        "signed": false,
+        "power": 2323922491,
+        "r5History": [
+            {
+                "r5Name": "ʚᴸᵘᶰᵃɞ",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "FNXS",
+        "name": "F é n i x",
+        "r5": "Gera D Vc",
+        "signed": false,
+        "power": 3147619067,
+        "r5History": [
+            {
+                "r5Name": "Gera D Vc",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "MTOP",
+        "name": "MonteOlimpo",
+        "r5": {
+            "name": "MTOP test",
+            "gameId": "ThatGuy",
+            "discordId": null
+        },
+        "signed": false,
+        "power": 446450739,
+        "r5History": [
+            {
+                "r5Name": "MTOP test",
+                "gameId": "ThatGuy",
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "discord": {
+            "serverName": null,
+            "inviteUrl": null,
+            "logoUrl": null
+        },
+        "contact": {
+            "recruitmentContact": "me!",
+            "discordRecruitment": null
+        },
+        "info": {
+            "description": "desc goes here!",
+            "timezone": "MDT",
+            "recruiting": true,
+            "requirements": {
+                "minPower": 9000,
+                "minLevel": 10,
+                "activity": "Casual",
+                "notes": null
+            }
+        },
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "NiKi",
+        "name": "NIKII",
+        "r5": "NakappaFenomeno",
+        "signed": false,
+        "power": 4427463487,
+        "r5History": [
+            {
+                "r5Name": "NakappaFenomeno",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "MZKU",
+        "name": "Mazoku",
+        "r5": "Grand Puba Daddio",
+        "signed": false,
+        "power": 1802116122,
+        "r5History": [
+            {
+                "r5Name": "Grand Puba Daddio",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "bfp8",
+        "name": "Zxrll",
+        "r5": "Fr3lancr",
+        "signed": false,
+        "power": 1410839850,
+        "r5History": [
+            {
+                "r5Name": "Fr3lancr",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "UUSN",
+        "name": "Kantinny",
+        "r5": "KingKlik TC",
+        "signed": false,
+        "power": 1047866924,
+        "r5History": [
+            {
+                "r5Name": "KingKlik TC",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "LSKJ",
+        "name": "The Lasts",
+        "r5": "R5 of LSKJ",
+        "signed": false,
+        "power": 568731838,
+        "r5History": [
+            {
+                "r5Name": "R5 of LSKJ",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "sk98",
+        "name": "The Lastc",
+        "r5": "Commander 210321586",
+        "signed": false,
+        "power": 560713048,
+        "r5History": [
+            {
+                "r5Name": "Commander 210321586",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "1985",
+        "name": "1985",
+        "r5": "최사령 관",
+        "signed": false,
+        "power": 616601128,
+        "r5History": [
+            {
+                "r5Name": "최사령 관",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "C4B",
+        "name": "United Fight",
+        "r5": "Capboaventura",
+        "signed": false,
+        "power": 713583309,
+        "r5History": [
+            {
+                "r5Name": "Capboaventura",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "z5fa",
+        "name": "lustig store",
+        "r5": "yuridn",
+        "signed": false,
+        "power": 401927650,
+        "r5History": [
+            {
+                "r5Name": "yuridn",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "w1l0",
+        "name": "MountainDew",
+        "r5": "T Brown",
+        "signed": false,
+        "power": 529152473,
+        "r5History": [
+            {
+                "r5Name": "T Brown",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "BOS7",
+        "name": "Born of sin",
+        "r5": "Commander 1c8ef1586",
+        "signed": false,
+        "power": 351061164,
+        "r5History": [
+            {
+                "r5Name": "Commander 1c8ef1586",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "NMMN",
+        "name": "VictoryOrExtinction",
+        "r5": "Nolergd",
+        "signed": false,
+        "power": 372458551,
+        "r5History": [
+            {
+                "r5Name": "Nolergd",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "SLTR",
+        "name": "Slither de Caos",
+        "r5": "R5 of SLTR",
+        "signed": false,
+        "power": 273175316,
+        "r5History": [
+            {
+                "r5Name": "R5 of SLTR",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "Redr",
+        "name": "Red",
+        "r5": "R5 of Redr",
+        "signed": false,
+        "power": 297729360,
+        "r5History": [
+            {
+                "r5Name": "R5 of Redr",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "SLMA",
+        "name": "astanhão",
+        "r5": "R5 of SLMA",
+        "signed": false,
+        "power": 252890829,
+        "r5History": [
+            {
+                "r5Name": "R5 of SLMA",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "SWSL",
+        "name": "The Nerds",
+        "r5": "R5 of SWSL",
+        "signed": false,
+        "power": 206108439,
+        "r5History": [
+            {
+                "r5Name": "R5 of SWSL",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "NRDS",
+        "name": "The Nerds",
+        "r5": "R5 of NRDS",
+        "signed": false,
+        "power": 222396161,
+        "r5History": [
+            {
+                "r5Name": "R5 of NRDS",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "RDCS",
+        "name": "Reino do Caos",
+        "r5": "R5 of RDCS",
+        "signed": false,
+        "power": 198566055,
+        "r5History": [
+            {
+                "r5Name": "R5 of RDCS",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "CHVL",
+        "name": "Elites de Caos",
+        "r5": "R5 of CHVL",
+        "signed": false,
+        "power": 188438787,
+        "r5History": [
+            {
+                "r5Name": "R5 of CHVL",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "NFLA",
+        "name": "GettinxZooted",
+        "r5": "R5 of NFLA",
+        "signed": false,
+        "power": 192857580,
+        "r5History": [
+            {
+                "r5Name": "R5 of NFLA",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "Lbdu",
+        "name": "Laëla",
+        "r5": "R5 of Lbdu",
+        "signed": false,
+        "power": 140078397,
+        "r5History": [
+            {
+                "r5Name": "R5 of Lbdu",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "nic1",
+        "name": "nicolinha",
+        "r5": "R5 of nic1",
+        "signed": false,
+        "power": 139521315,
+        "r5History": [
+            {
+                "r5Name": "R5 of nic1",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "LsBJ",
+        "name": "astanhão",
+        "r5": "R5 of LsBJ",
+        "signed": false,
+        "power": 129478918,
+        "r5History": [
+            {
+                "r5Name": "R5 of LsBJ",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "LeGA",
+        "name": "LeGa",
+        "r5": "R5 of LeGA",
+        "signed": false,
+        "power": 116028848,
+        "r5History": [
+            {
+                "r5Name": "R5 of LeGA",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "Lepa",
+        "name": "Lucasloco",
+        "r5": "R5 of Lepa",
+        "signed": false,
+        "power": 131170948,
+        "r5History": [
+            {
+                "r5Name": "R5 of Lepa",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "Bbr1",
+        "name": "Lascanonn",
+        "r5": "R5 of Bbr1",
+        "signed": false,
+        "power": 113428691,
+        "r5History": [
+            {
+                "r5Name": "R5 of Bbr1",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "RU66",
+        "name": "Rur",
+        "r5": "R5 of RU66",
+        "signed": false,
+        "power": 120752997,
+        "r5History": [
+            {
+                "r5Name": "R5 of RU66",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "LsN0",
+        "name": "Bur",
+        "r5": "R5 of LsN0",
+        "signed": false,
+        "power": 101914788,
+        "r5History": [
+            {
+                "r5Name": "R5 of LsN0",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "L4TM",
+        "name": "La Última Orden",
+        "r5": "R5 of L4TM",
+        "signed": false,
+        "power": 185684530,
+        "r5History": [
+            {
+                "r5Name": "R5 of L4TM",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "SHDW",
+        "name": "La Última Orden",
+        "r5": "R5 of SHDW",
+        "signed": false,
+        "power": 94539668,
+        "r5History": [
+            {
+                "r5Name": "R5 of SHDW",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "SWGE",
+        "name": "Nooooooooooooo",
+        "r5": "R5 of SWGE",
+        "signed": false,
+        "power": 92451015,
+        "r5History": [
+            {
+                "r5Name": "R5 of SWGE",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "rico",
+        "name": "brassssiiiiillllll",
+        "r5": "R5 of rico",
+        "signed": false,
+        "power": 91493792,
+        "r5History": [
+            {
+                "r5Name": "R5 of rico",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "MAnD",
+        "name": "Elon dono",
+        "r5": "R5 of MAnD",
+        "signed": false,
+        "power": 72528458,
+        "r5History": [
+            {
+                "r5Name": "R5 of MAnD",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "Gwc",
+        "name": "Gwc",
+        "r5": "R5 of Gwc",
+        "signed": false,
+        "power": 73146200,
+        "r5History": [
+            {
+                "r5Name": "R5 of Gwc",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "nand",
+        "name": "NATIVOS BRR",
+        "r5": "R5 of nand",
+        "signed": false,
+        "power": 89153991,
+        "r5History": [
+            {
+                "r5Name": "R5 of nand",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "MbSt",
+        "name": "NATIONS 999",
+        "r5": "R5 of MbSt",
+        "signed": false,
+        "power": 71317272,
+        "r5History": [
+            {
+                "r5Name": "R5 of MbSt",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "JEWS",
+        "name": "Turbo Jews",
+        "r5": "R5 of JEWS",
+        "signed": false,
+        "power": 54573308,
+        "r5History": [
+            {
+                "r5Name": "R5 of JEWS",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "FYPE",
+        "name": "Gods low",
+        "r5": "R5 of FYPE",
+        "signed": false,
+        "power": 67234832,
+        "r5History": [
+            {
+                "r5Name": "R5 of FYPE",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "tzh",
+        "name": "zombiehitter",
+        "r5": "R5 of tzh",
+        "signed": false,
+        "power": 76050562,
+        "r5History": [
+            {
+                "r5Name": "R5 of tzh",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "BSoG",
+        "name": "peahakBurr",
+        "r5": "R5 of BSoG",
+        "signed": false,
+        "power": 62379252,
+        "r5History": [
+            {
+                "r5Name": "R5 of BSoG",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "1586",
+        "name": "placeholder1",
+        "r5": "R5 of 1586",
+        "signed": false,
+        "power": 62370252,
+        "r5History": [
+            {
+                "r5Name": "R5 of 1586",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "TSTG",
+        "name": "peahakBurr",
+        "r5": "R5 of TSTG",
+        "signed": false,
+        "power": 62152832,
+        "r5History": [
+            {
+                "r5Name": "R5 of TSTG",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "jea4",
+        "name": "jea4",
+        "r5": "R5 of jea4",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "R5 of jea4",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "TmpL",
+        "name": "무적길드군",
+        "r5": "R5 of TmpL",
+        "signed": false,
+        "power": 61317088,
+        "r5History": [
+            {
+                "r5Name": "R5 of TmpL",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "LHPS",
+        "name": "Evil Walks Loudly",
+        "r5": "R5 of LHPS",
+        "signed": false,
+        "power": 54735436,
+        "r5History": [
+            {
+                "r5Name": "R5 of LHPS",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "EWE1",
+        "name": "Evil Walks Eternity",
+        "r5": "R5 of EWE1",
+        "signed": false,
+        "power": 48649990,
+        "r5History": [
+            {
+                "r5Name": "R5 of EWE1",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "SGE2",
+        "name": "SavagesGataEat2",
+        "r5": "R5 of SGE2",
+        "signed": false,
+        "power": 65059501,
+        "r5History": [
+            {
+                "r5Name": "R5 of SGE2",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "LGLW",
+        "name": "Sanguinário451",
+        "r5": "R5 of LGLW",
+        "signed": false,
+        "power": 54458458,
+        "r5History": [
+            {
+                "r5Name": "R5 of LGLW",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "RNWF",
+        "name": "Chaos",
+        "r5": "R5 of RNWF",
+        "signed": false,
+        "power": 50877549,
+        "r5History": [
+            {
+                "r5Name": "R5 of RNWF",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "qpdl",
+        "name": "qpdl",
+        "r5": "R5 of qpdl",
+        "signed": false,
+        "power": 70140458,
+        "r5History": [
+            {
+                "r5Name": "R5 of qpdl",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "ArtW",
+        "name": "Reinforced",
+        "r5": "R5 of ArtW",
+        "signed": false,
+        "power": 48628329,
+        "r5History": [
+            {
+                "r5Name": "R5 of ArtW",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "jein",
+        "name": "jein",
+        "r5": "R5 of jein",
+        "signed": false,
+        "power": 57407624,
+        "r5History": [
+            {
+                "r5Name": "R5 of jein",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "RSTE",
+        "name": "Resistancë",
+        "r5": "R5 of RSTE",
+        "signed": false,
+        "power": 56809255,
+        "r5History": [
+            {
+                "r5Name": "R5 of RSTE",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "MT7",
+        "name": "Deuses da guerra",
+        "r5": "R5 of MT7",
+        "signed": false,
+        "power": 45844972,
+        "r5History": [
+            {
+                "r5Name": "R5 of MT7",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "poci",
+        "name": "Blackk666",
+        "r5": "R5 of poci",
+        "signed": false,
+        "power": 58637210,
+        "r5History": [
+            {
+                "r5Name": "R5 of poci",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "EvLB",
+        "name": "Boom de guerre",
+        "r5": "R5 of EvLB",
+        "signed": false,
+        "power": 43964927,
+        "r5History": [
+            {
+                "r5Name": "R5 of EvLB",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "SOUL",
+        "name": "BloodStone",
+        "r5": "R5 of SOUL",
+        "signed": false,
+        "power": 43763816,
+        "r5History": [
+            {
+                "r5Name": "R5 of SOUL",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "MssH",
+        "name": "Evarlasting",
+        "r5": "R5 of MssH",
+        "signed": false,
+        "power": 43763816,
+        "r5History": [
+            {
+                "r5Name": "R5 of MssH",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "STNK",
+        "name": "TEMPLAP",
+        "r5": "R5 of STNK",
+        "signed": false,
+        "power": 43558988,
+        "r5History": [
+            {
+                "r5Name": "R5 of STNK",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "7kr",
+        "name": "TEMPLAR",
+        "r5": "R5 of 7kr",
+        "signed": false,
+        "power": 56774369,
+        "r5History": [
+            {
+                "r5Name": "R5 of 7kr",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "lpe",
+        "name": "love peace",
+        "r5": "R5 of lpe",
+        "signed": false,
+        "power": 35980883,
+        "r5History": [
+            {
+                "r5Name": "R5 of lpe",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ],
+        "metadata": {
+            "lastUpdated": "2025-10-28T13:36:11Z"
+        }
+    },
+    {
+        "tag": "joumH",
+        "name": "love peace",
+        "r5": "R5 of joumH",
+        "signed": false,
+        "power": 37518173,
+        "r5History": [
+            {
+                "r5Name": "R5 of joumH",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "6mko",
+        "name": "jaimani",
+        "r5": "R5 of 6mko",
+        "signed": false,
+        "power": 35831998,
+        "r5History": [
+            {
+                "r5Name": "R5 of 6mko",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-10-12T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "c4B",
+        "name": "c4B",
+        "r5": "Capboaventura",
+        "signed": false,
+        "power": 0,
+        "r5History": [
+            {
+                "r5Name": "Capboaventura",
+                "gameId": null,
+                "discordId": null,
+                "startDate": "2025-05-19T00:00:00Z",
+                "endDate": null,
+                "current": true,
+                "signatures": []
+            }
+        ]
+    },
+    {
+        "tag": "MXtL",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "AR33",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "VLOR",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "ASSX",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "VEM",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "U888",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "AMBt",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "Soyt",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "Uai",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "jea4",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "qpdl",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "SGE2",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "poci",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "jein",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "RSTE",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "7kr",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "EWE1",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    },
+    {
+        "tag": "lpe",
+        "name": "???",
+        "r5": null,
+        "signed": false,
+        "power": null,
+        "r5History": [],
+        "metadata": {
+            "lastUpdated": null
+        }
+    }
+]

@@ -1,0 +1,24 @@
+diff --git a/admin/discord_config.php b/admin/discord_config.php
+index 6e60701..78fbb3c 100644
+--- a/admin/discord_config.php
++++ b/admin/discord_config.php
+@@ -356,13 +356,18 @@ async function testConnection() {
+     resultDiv.innerHTML = '';
+ 
+     try {
++        // Get CSRF token
++        const csrfToken = getCsrfToken();
++
+         const formData = new FormData();
+         formData.append('action', 'test_connection');
+         formData.append('channel_id', channelId);
+-        formData.append('csrf_token', '<?php echo generate_csrf_token(); ?>');
+ 
+         const response = await fetch('discord_api.php', {
+             method: 'POST',
++            headers: {
++                'X-CSRF-Token': csrfToken
++            },
+             body: formData
+         });
+ 

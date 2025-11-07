@@ -82,8 +82,7 @@ function save_templates($file, $data) {
 
 // Helper: Get user's alliance
 function get_user_alliance($user) {
-    require_once 'json_helpers.php';
-    $users_data = load_json_file(__DIR__ . '/users.json');
+    $users_data = read_json_file(__DIR__ . '/users.json');
 
     foreach ($users_data['users'] as $u) {
         if ($u['email'] === $user->sub) {
