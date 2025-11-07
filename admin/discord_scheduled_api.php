@@ -104,8 +104,62 @@ function save_scheduled_messages($file, $data) {
 
 // Helper: Get user accessible channels
 function get_user_channels($user) {
-    require_once 'discord_webhook.php';
-    return get_user_accessible_channels($user);
+    // Load the function from discord_api.php if not already loaded
+    if (!function_exists('get_user_accessible_channels')) {
+        // Include just the function we need
+        // get_user_accessible_channels is in discord_api.php but we can't include the whole file
+        // So we'll replicate the logic here
+        $accessible_channels = [];
+        $user_data = get_user_by_email($user->sub);
+        if (!$user_data) {
+            return [];
+        }
+
+        $user_alliances = $user_data['alliances'] ?? [];
+        $is_admin = $user->aud === 'admin' || in_array('*', $user_alliances);
+
+        if (!defined('ALLIANCES_FILE')) {
+            define('ALLIANCES_FILE', __DIR__ . '/../data/alliances.json');
+        }
+
+        if (file_exists(ALLIANCES_FILE)) {
+            $alliances_data = json_decode(file_get_contents(ALLIANCES_FILE), true);
+
+            foreach ($alliances_data as $alliance) {
+                $alliance_tag = $alliance['tag'] ?? $alliance['alliance'] ?? '';
+
+                if ($is_admin) {
+                    $discord_channels = $alliance['discord']['channels'] ?? [];
+                    foreach ($discord_channels as $channel) {
+                        if ($channel['enabled'] ?? false) {
+                            $channel['alliance'] = $alliance_tag;
+                            $channel['alliance_name'] = $alliance['name'] ?? $alliance_tag;
+                            $channel['server_name'] = $alliance['discord']['serverName'] ?? 'Discord';
+                            $channel['source'] = 'alliance';
+                            $channel['display_name'] = '[' . $alliance_tag . '] ' . $channel['name'];
+                            $accessible_channels[] = $channel;
+                        }
+                    }
+                } elseif (in_array($alliance_tag, $user_alliances)) {
+                    $discord_channels = $alliance['discord']['channels'] ?? [];
+                    foreach ($discord_channels as $channel) {
+                        if ($channel['enabled'] ?? false) {
+                            $channel['alliance'] = $alliance_tag;
+                            $channel['alliance_name'] = $alliance['name'] ?? $alliance_tag;
+                            $channel['server_name'] = $alliance['discord']['serverName'] ?? 'Discord';
+                            $channel['source'] = 'alliance';
+                            $channel['display_name'] = '[' . $alliance_tag . '] ' . $channel['name'];
+                            $accessible_channels[] = $channel;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $accessible_channels;
+    } else {
+        return get_user_accessible_channels($user);
+    }
 }
 
 try {
