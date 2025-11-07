@@ -771,7 +771,7 @@ include 'includes/header.php';
             // Collect all input values
             const updates = [];
 
-            allInputs.forEach(input => {
+            inputs.forEach(input => {
                 const index = parseInt(input.dataset.index);
                 const field = input.dataset.field;
                 const value = field === 'power' ? parseInt(input.value) || 0 : input.value.trim();

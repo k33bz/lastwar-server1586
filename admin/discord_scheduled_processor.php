@@ -59,11 +59,23 @@ foreach ($data['scheduled_messages'] as &$message) {
 
     // Prepare Discord message
     if ($message['use_embed']) {
-        $discord_message = create_rich_announcement(
-            $processed_message,
+        // Get user info for footer
+        require_once __DIR__ . '/json_helpers.php';
+        $user_data = get_user_by_email($message['created_by']);
+        $user_name = $user_data['ign'] ?? $user_data['in_game_name'] ?? 'Unknown';
+        $user_alliance = $user_data['alliance'] ?? '';
+
+        // Convert hex color to decimal
+        $color_hex = ltrim($message['embed_color'] ?? '#5865F2', '#');
+        $color_decimal = hexdec($color_hex);
+
+        $discord_message = create_embed_announcement(
             $processed_title,
-            $message['embed_color'] ?? '#5865F2',
-            $message['created_by']
+            $processed_message,
+            [
+                'color' => $color_decimal,
+                'footer' => $user_alliance ? "[{$user_alliance}] {$user_name} • Last War 1586 Bot" : "{$user_name} • Last War 1586 Bot"
+            ]
         );
     } else {
         $discord_message = create_simple_announcement($processed_message);
@@ -139,11 +151,23 @@ foreach ($recurring_data['recurring_messages'] as &$message) {
 
     // Prepare Discord message
     if ($message['use_embed']) {
-        $discord_message = create_rich_announcement(
-            $processed_message,
+        // Get user info for footer
+        require_once __DIR__ . '/json_helpers.php';
+        $user_data = get_user_by_email($message['created_by']);
+        $user_name = $user_data['ign'] ?? $user_data['in_game_name'] ?? 'Unknown';
+        $user_alliance = $user_data['alliance'] ?? '';
+
+        // Convert hex color to decimal
+        $color_hex = ltrim($message['embed_color'] ?? '#5865F2', '#');
+        $color_decimal = hexdec($color_hex);
+
+        $discord_message = create_embed_announcement(
             $processed_title,
-            $message['embed_color'] ?? '#5865F2',
-            $message['created_by']
+            $processed_message,
+            [
+                'color' => $color_decimal,
+                'footer' => $user_alliance ? "[{$user_alliance}] {$user_name} • Last War 1586 Bot" : "{$user_name} • Last War 1586 Bot"
+            ]
         );
     } else {
         $discord_message = create_simple_announcement($processed_message);

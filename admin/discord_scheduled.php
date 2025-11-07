@@ -360,14 +360,6 @@ include 'includes/header.php';
             </div>
 
             <div class="form-group">
-                <label for="messageContent">Message Content *</label>
-                <textarea id="messageContent" name="message" required placeholder="Enter your announcement message...
-
-You can use variables like {sender_name}, {event_time}, etc." maxlength="2000"></textarea>
-                <div class="help-text">Maximum 2000 characters</div>
-            </div>
-
-            <div class="form-group">
                 <div class="checkbox-group">
                     <input type="checkbox" id="useEmbed" name="use_embed" checked onclick="toggleEmbedOptions()">
                     <label for="useEmbed" style="margin-bottom: 0;">Use Rich Embed (Recommended)</label>
@@ -386,6 +378,14 @@ You can use variables like {sender_name}, {event_time}, etc." maxlength="2000"><
                     <input type="color" id="embedColor" name="embed_color" value="#5865F2">
                     <div class="help-text">Choose a color for the embed sidebar</div>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label for="messageContent">Message Content *</label>
+                <textarea id="messageContent" name="message" required placeholder="Enter your announcement message...
+
+You can use variables like {sender_name}, {event_time}, etc." maxlength="2000"></textarea>
+                <div class="help-text">Maximum 2000 characters</div>
             </div>
 
             <button type="submit" class="btn btn-primary">⏰ Schedule Message</button>
@@ -419,6 +419,7 @@ You can use variables like {sender_name}, {event_time}, etc." maxlength="2000"><
                     option.value = t.id;
                     option.textContent = `${t.name} (${t.scope === 'global' ? '🌍' : '🏢'})`;
                     option.dataset.content = t.content;
+                    option.dataset.name = t.name; // Store template name for title
                     select.appendChild(option);
                 });
             }
@@ -431,6 +432,14 @@ You can use variables like {sender_name}, {event_time}, etc." maxlength="2000"><
         const option = select.options[select.selectedIndex];
         if (option.dataset.content) {
             document.getElementById('messageContent').value = option.dataset.content;
+            // Auto-populate embed title with template name
+            if (option.dataset.name) {
+                document.getElementById('embedTitle').value = option.dataset.name;
+            }
+        } else {
+            // Clear fields when no template selected
+            document.getElementById('messageContent').value = '';
+            document.getElementById('embedTitle').value = '';
         }
     }
 
