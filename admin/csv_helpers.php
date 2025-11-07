@@ -57,6 +57,7 @@ function append_power_snapshot($alliances, $timestamp = null, $overwrite_duplica
         if (!$file) {
             flock($lock_handle, LOCK_UN);
             fclose($lock_handle);
+            @unlink($lock_file);
             throw new Exception("Failed to open CSV file");
         }
 
@@ -71,6 +72,7 @@ function append_power_snapshot($alliances, $timestamp = null, $overwrite_duplica
         if (!$header || ($header[0] !== 'datetime' && $header[0] !== 'date')) {
             flock($lock_handle, LOCK_UN);
             fclose($lock_handle);
+            @unlink($lock_file);
             throw new Exception("Invalid CSV format: missing or incorrect header");
         }
 
@@ -167,7 +169,7 @@ function append_power_snapshot($alliances, $timestamp = null, $overwrite_duplica
         return $result;
 
     } catch (Exception $e) {
-        error_log("Failed to append power snapshot: " . $e->getMessage());
+        error_log("CSV Helper Error [append_power_snapshot]: " . $e->getMessage() . " | File: " . ($csv_path ?? 'unknown'));
         return ['success' => false, 'error' => $e->getMessage()];
     }
 }
@@ -238,7 +240,7 @@ function get_latest_power_snapshots($limit = 30) {
         return $result;
 
     } catch (Exception $e) {
-        error_log("Failed to get latest power snapshots: " . $e->getMessage());
+        error_log("CSV Helper Error [get_latest_power_snapshots]: " . $e->getMessage() . " | Limit: " . $limit);
         return [];
     }
 }
@@ -278,6 +280,7 @@ function sync_csv_with_alliances($alliances) {
         if (!$file) {
             flock($lock_handle, LOCK_UN);
             fclose($lock_handle);
+            @unlink($lock_file);
             throw new Exception("Failed to open CSV file");
         }
 
@@ -316,6 +319,7 @@ function sync_csv_with_alliances($alliances) {
         if (!$file) {
             flock($lock_handle, LOCK_UN);
             fclose($lock_handle);
+            @unlink($lock_file);
             throw new Exception("Failed to open CSV for writing");
         }
 
@@ -338,7 +342,7 @@ function sync_csv_with_alliances($alliances) {
         ];
 
     } catch (Exception $e) {
-        error_log("Failed to sync CSV with alliances: " . $e->getMessage());
+        error_log("CSV Helper Error [sync_csv_with_alliances]: " . $e->getMessage() . " | Alliances: " . count($alliances ?? []));
         return ['success' => false, 'error' => $e->getMessage()];
     }
 }
@@ -371,6 +375,7 @@ function sort_csv_rows() {
         if (!$file) {
             flock($lock_handle, LOCK_UN);
             fclose($lock_handle);
+            @unlink($lock_file);
             throw new Exception("Failed to open CSV file");
         }
 
@@ -429,6 +434,7 @@ function sort_csv_rows() {
         if (!$file) {
             flock($lock_handle, LOCK_UN);
             fclose($lock_handle);
+            @unlink($lock_file);
             throw new Exception("Failed to open CSV for writing");
         }
 
@@ -446,7 +452,7 @@ function sort_csv_rows() {
         return true;
 
     } catch (Exception $e) {
-        error_log("Failed to sort CSV rows: " . $e->getMessage());
+        error_log("CSV Helper Error [sort_csv_rows]: " . $e->getMessage());
         return false;
     }
 }
@@ -478,6 +484,7 @@ function handle_duplicate_date($datetime, $new_data) {
         if (!$file) {
             flock($lock_handle, LOCK_UN);
             fclose($lock_handle);
+            @unlink($lock_file);
             throw new Exception("Failed to open CSV file");
         }
 
@@ -513,7 +520,7 @@ function handle_duplicate_date($datetime, $new_data) {
         ];
 
     } catch (Exception $e) {
-        error_log("Failed to check duplicate date: " . $e->getMessage());
+        error_log("CSV Helper Error [handle_duplicate_date]: " . $e->getMessage() . " | Datetime: " . ($datetime ?? 'unknown'));
         return ['exists' => false, 'error' => $e->getMessage()];
     }
 }
@@ -601,8 +608,44 @@ function update_csv_header($alliances) {
         }
 
     } catch (Exception $e) {
-        error_log("Failed to update CSV header: " . $e->getMessage());
+        error_log("CSV Helper Error [update_csv_header]: " . $e->getMessage() . " | Alliances: " . count($alliances ?? []));
         return false;
+    }
+}
+
+/**
+ * Clean up stray lock files
+ *
+ * Removes any orphaned .lock files that may have been left behind
+ * Call this periodically or when encountering lock acquisition failures
+ *
+ * @return array Result with count of removed lock files
+ */
+function cleanup_csv_lock_files() {
+    try {
+        $data_dir = dirname(POWER_HISTORY_CSV);
+        $lock_files = glob($data_dir . '/*.lock');
+        $removed = 0;
+
+        foreach ($lock_files as $lock_file) {
+            // Check if lock file is stale (older than 5 minutes)
+            if (file_exists($lock_file) && (time() - filemtime($lock_file)) > 300) {
+                if (@unlink($lock_file)) {
+                    $removed++;
+                    error_log("CSV Helper: Cleaned up stale lock file: " . basename($lock_file));
+                }
+            }
+        }
+
+        return [
+            'success' => true,
+            'removed' => $removed,
+            'message' => "Cleaned up {$removed} stale lock file(s)"
+        ];
+
+    } catch (Exception $e) {
+        error_log("CSV Helper Error [cleanup_csv_lock_files]: " . $e->getMessage());
+        return ['success' => false, 'error' => $e->getMessage()];
     }
 }
 ?>
