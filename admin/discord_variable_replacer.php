@@ -82,31 +82,6 @@ function replace_message_variables($message, $sender_email, $channel_id = null) 
 }
 
 /**
- * Get user data by email
- */
-function get_user_by_email($email) {
-    require_once __DIR__ . '/json_helpers.php';
-
-    $users_file = __DIR__ . '/users.json';
-    if (!file_exists($users_file)) {
-        return null;
-    }
-
-    $users_data = json_decode(file_get_contents($users_file), true);
-    if (!$users_data || !isset($users_data['users'])) {
-        return null;
-    }
-
-    foreach ($users_data['users'] as $user) {
-        if ($user['email'] === $email) {
-            return $user;
-        }
-    }
-
-    return null;
-}
-
-/**
  * Get alliance data by tag
  */
 function get_alliance_data($alliance_tag) {
