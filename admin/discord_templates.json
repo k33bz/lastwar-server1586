@@ -49,6 +49,86 @@
       "alliance": null,
       "created_by": "system",
       "created_at": "2025-11-06 00:00:00"
+    },
+    {
+      "id": "tpl_s02_temperature",
+      "name": "[S02] Temperature Alert",
+      "content": "❄️ **[S02] TEMPERATURE ALERT** ❄️\n\n**Current Temp:** {notes}\n**Action Required:** Keep furnaces fueled with coal!\n\n⚠️ Frozen bases lose functionality\n🔥 Use High-Heat Furnaces to stay warm\n🏭 Check Alliance Furnace coverage\n\n**Reminder:** Base temperature ranges from -15°C to -80°C. Don't let your base freeze!",
+      "variables_used": ["{notes}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
+    },
+    {
+      "id": "tpl_s02_rare_soil",
+      "name": "[S02] Rare Soil Coordination",
+      "content": "🌍 **[S02] RARE SOIL WAR** 🌍\n\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Coordinator:** {sender_name}\n**Target Cities/Dig Sites:** {location}\n**Time:** {event_time}\n\n💎 Rare Soil determines our final alliance ranking!\n🎯 Max: 6 cities + 4 dig sites per player\n⏰ 36-hour protection after capture\n📊 2 capture limit per day\n\n{notes}\n\n@everyone Let's secure our territory!",
+      "variables_used": ["{alliance_name}", "{alliance_tag}", "{sender_name}", "{location}", "{event_time}", "{notes}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
+    },
+    {
+      "id": "tpl_s02_polar_beast",
+      "name": "[S02] Polar Beast Rally",
+      "content": "🐻‍❄️ **[S02] POLAR BEAST RALLY** 🐻‍❄️\n\n**Rally Leader:** {sender_name}\n**Target:** {location}\n**Rally Time:** {event_time}\n\n⚔️ Unfreeze the polar beast to unlock dig site!\n💎 Dig sites generate Rare Soil\n🎯 Must defeat beast before claiming territory\n\n**Remember:** Adjacency includes diagonal corners!\n\n{notes}\n\n@everyone Join up!",
+      "variables_used": ["{sender_name}", "{location}", "{event_time}", "{notes}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
+    },
+    {
+      "id": "tpl_s02_supply_collection",
+      "name": "[S02] Supply Collection Alert",
+      "content": "📦 **[S02] SUPPLY COLLECTION SPOTTED** 📦\n\n**Location:** {location}\n**Reported by:** {sender_name}\n**Available:** {event_time}\n\n🧊 Appears when land reaches 0°C\n⚡ Limited to 5 reclaim attempts daily\n🎁 Contains Coal, Titanium Alloy, and other resources\n\n**First come, first served!** Move quickly!\n\n{notes}",
+      "variables_used": ["{location}", "{sender_name}", "{event_time}", "{notes}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
+    },
+    {
+      "id": "tpl_s02_resource_donation",
+      "name": "[S02] Resource Donation Request",
+      "content": "⛏️ **[S02] RESOURCE DONATION NEEDED** ⛏️\n\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Requested by:** {sender_name}\n\n**Resources Needed:**\n{notes}\n\n🪨 **Coal** - Fuels furnaces and constructs buildings\n🔩 **Titanium Alloy** - Upgrades furnaces and military structures\n\n**How to get:**\n✅ Complete Season 2 quests\n✅ Win battles against polar enemies\n✅ Collect from Supply Collections\n✅ Alliance donations\n\nEvery contribution helps our alliance ranking!",
+      "variables_used": ["{alliance_name}", "{alliance_tag}", "{sender_name}", "{notes}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
+    },
+    {
+      "id": "tpl_s02_weekly_mission",
+      "name": "[S02] Weekly Mission Reminder",
+      "content": "📋 **[S02] WEEKLY MISSIONS** 📋\n\n**Week:** {notes}\n**Server:** {server_name}\n**Reset:** {event_time}\n\n🎯 **Alliance Goals:**\n• Mutual Assistance contributions\n• Siege operations participation\n• Rare Soil War activity\n• Combat victories tracking\n\n🎁 **Rewards Available:**\n• Coal & Titanium Alloy\n• Weekly Pass rewards\n• Season Battle Pass progress\n• Hero weapon passes (Murphy, Carlie, Swift)\n\nLet's complete these together!",
+      "variables_used": ["{notes}", "{server_name}", "{event_time}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
+    },
+    {
+      "id": "tpl_s02_siege_coordination",
+      "name": "[S02] Siege Operation",
+      "content": "⚔️ **[S02] SIEGE OPERATION** ⚔️\n\n**Coordinator:** {sender_name}\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Target:** {location}\n**Attack Time:** {event_time}\n\n🏰 **Siege Strategy:**\n{notes}\n\n🔥 Use Military Bases for hero damage bonuses\n🛡️ Coordinate with Alliance Furnace coverage\n⚡ Titanium Alloy structures provide tactical advantages\n\n**Reminder:** Siege operations count toward alliance contributions!\n\n@everyone Prepare for battle!",
+      "variables_used": ["{sender_name}", "{alliance_name}", "{alliance_tag}", "{location}", "{event_time}", "{notes}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
+    },
+    {
+      "id": "tpl_s02_emperor_boreas",
+      "name": "[S02] Emperor Boreas Battle",
+      "content": "👑 **[S02] EMPEROR BOREAS BATTLE** 👑\n\n**Rally Leader:** {sender_name}\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Rally Time:** {event_time}\n\n❄️ **Mission:** Defeat Emperor Boreas!\n🎯 **Objective:** Primary season goal\n🏆 **Rewards:** Major alliance ranking boost\n\n**Preparation Required:**\n• Max furnace heat for virus resistance\n• Upgraded military structures\n• Full hero lineup\n• Coordinate with alliance members\n\n{notes}\n\n@everyone This is the BIG ONE! Let's take down Boreas!",
+      "variables_used": ["{sender_name}", "{alliance_name}", "{alliance_tag}", "{event_time}", "{notes}"],
+      "scope": "global",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-06 00:00:00"
     }
   ],
   "pending_submissions": []
