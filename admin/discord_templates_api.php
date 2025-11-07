@@ -1,20 +1,51 @@
 <?php
 /**
  * Discord Message Templates API
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * Handles CRUD operations for Discord message templates with variable support
  * Templates can be global (all alliances) or alliance-specific
  * Similar to tags system with submission/approval workflow
+ *
+ * Changelog:
+ *   1.0.1 (2025-11-06) - Added error handling and logging for 500 errors
+ *   1.0.0 (2025-11-05) - Initial implementation
  */
 
-require_once 'jwt.php';
-require_once 'audit_logger.php';
-require_once 'json_helpers.php';
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+
+// Catch fatal errors
+try {
+    require_once 'jwt.php';
+    require_once 'audit_logger.php';
+    require_once 'json_helpers.php';
+} catch (Throwable $e) {
+    header('Content-Type: application/json');
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Server configuration error',
+        'details' => $e->getMessage()
+    ]);
+    exit();
+}
 
 header('Content-Type: application/json');
 
-$user = require_jwt_session();
+try {
+    $user = require_jwt_session();
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Authentication error',
+        'details' => $e->getMessage()
+    ]);
+    exit();
+}
 
 // Check if user has at least R4 access or president role
 if (!has_role($user, ['admin', 'r5', 'r4', 'president'])) {
@@ -32,6 +63,9 @@ if (!defined('DISCORD_ENABLED') || !DISCORD_ENABLED) {
 
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 $templates_file = __DIR__ . '/discord_templates.json';
+
+// Wrap all operations in try-catch for better error reporting
+try {
 
 // Helper: Load templates
 function load_templates($file) {
@@ -408,5 +442,19 @@ switch ($action) {
     default:
         http_response_code(400);
         echo json_encode(['success' => false, 'error' => 'Invalid action']);
+}
+
+} catch (Throwable $e) {
+    // Log the error
+    error_log('Discord Templates API Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Server error occurred',
+        'details' => $e->getMessage(),
+        'file' => basename($e->getFile()),
+        'line' => $e->getLine()
+    ]);
 }
 ?>
