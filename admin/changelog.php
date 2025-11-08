@@ -199,8 +199,6 @@ else:
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        <?php endif; ?>
-
         /* Changelog-specific styles */
         .changelog-content h1 {
             color: #2c3e50;
@@ -366,6 +364,7 @@ else:
             }
         }
     </style>
+<?php endif; ?>
 </head>
 <body>
     <?php if (!$is_admin_view): ?>

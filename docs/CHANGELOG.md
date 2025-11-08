@@ -7,6 +7,159 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.5.0] - 2025-11-07
+
+**Commit:** ec38c5e - fix(security): Fix CSRF protection for backup/restore operations
+
+### Fixed
+- Resolved CSRF token validation errors when creating manual backups or restoring from backups
+- Moved CSRF check after action determination in backup_restore_api.php
+- Added CSRF token to manual backup and restore FormData in security_backups.php
+- CSRF protection now only applies to state-changing operations (restore, manual_backup)
+- Preview action (GET) works without CSRF token following security best practices
+
+---
+
+## [3.5.0] - 2025-11-07
+
+**Commit:** b08bf51 - feat(discord): Add message tracking system for auto-delete
+
+### Added
+- Core tracking infrastructure for Discord message auto-deletion
+- New file: discord_message_tracker.php with tracking functions (track_discord_message, get_messages_for_deletion, mark_message_deleted, delete_discord_message, get_tracking_stats)
+- New file: discord_cleanup_processor.php for cron job execution (runs every minute)
+- New file: discord_message_tracking.json as JSON database for tracked messages
+- 30-day retention to prevent file bloat
+- Rate limiting (100ms between deletes) in cleanup processor
+- Treats 404 as success (already deleted)
+- Audit logging for all deletions
+
+### Changed
+- Used by discord_webhook.php send functions
+- Populated by all 3 Discord APIs (instant, scheduled, recurring)
+- Supports 1h, 6h, 12h, 24h, 48h deletion windows
+
+---
+
+## [3.5.0] - 2025-11-07
+
+**Commit:** d87048b - feat(season2): Add Alliance Duel VS event integration
+
+### Added
+- Full support for Alliance Duel VS 6-day event cycle in Season 2 system
+- 7 Alliance Duel event templates in season2_event_templates.json:
+  - Prep event (day -1, 18:00, Sunday evening reminder)
+  - Day 1: Radar Training (1 point)
+  - Day 2: Base Expansion (2 points)
+  - Day 3: Age of Science (2 points)
+  - Day 4: Train Heroes (2 points)
+  - Day 5: Total Mobilization (2 points)
+  - Day 6: Enemy Buster (4 points, critical importance, includes Alliance Assaults)
+- Alliance Duel configuration in season2_config.json:
+  - alliance_duel_enabled flag
+  - alliance_duel_weeks array [2, 4, 6] for multi-week scheduling
+  - alliance_duel_start_day (monday) configuration
+  - alliance_duel_duration_days setting
+- Calendar generator support for alliance_duel event type in season2_api.php
+- Generates 21 total events (7 templates × 3 weeks)
+- Each template includes rich Discord embed with specific guidance
+- Day 6 marked as "critical" importance with special Alliance Assault instructions
+
+### Changed
+- season2_api.php generate_season_calendar() to handle Alliance Duel events
+- Calculates dates from configured start day (Monday)
+- Applies day_offset for proper sequencing
+- Config update handler includes Alliance Duel settings
+
+### Technical
+- Set season start date once → All Alliance Duel events auto-generate
+- Events properly sequenced: Prep (Sun) → Days 1-6 (Mon-Sat)
+- Runs weeks 2, 4, 6 of Season 2 (configurable)
+- One-click announcements via existing Season 2 Manager UI
+- Point values match official Alliance Duel VS schedule
+- Source: https://lastwar.wiki/events/alliance-duel-vs/
+
+---
+
+## [3.5.0] - 2025-11-07
+
+**Commit:** 7a9dc0d - feat(season2): Add comprehensive UI and navigation for Season 2 Manager
+
+### Added
+- Created season2_manager.php (700+ lines) - Complete event management UI
+- Configuration panel for admins to set season start date and event settings
+- Status dashboard showing current week, day, and days elapsed
+- Event calendar with week filtering (All, Week 1-7)
+- Color-coded event cards by importance (low, medium, high, critical)
+- Channel selection modal for one-click announcements
+- Role-based access: R4+ can view/announce, admin can configure
+- Season 2 dropdown navigation in admin header
+- Responsive design for mobile devices
+
+### Changed
+- Updated includes/header.php to add Season 2 dropdown menu
+- Navigation dropdown shows "Event Calendar" link for R4+ users
+
+---
+
+## [3.5.0] - 2025-11-07
+
+**Commit:** 5512b5f - feat(season2): Add comprehensive Season 2 event management backend
+
+### Added
+- Created season2_config.json - Single source of truth for season configuration
+- Created season2_event_templates.json - 12+ event templates with Discord embeds
+- Created season2_calendar.json - Auto-generated calendar file
+- Created season2_api.php - Full REST API with calendar generator
+- GET endpoints: get_config, get_calendar, get_upcoming_events
+- POST endpoints: update_config (admin), announce_event (R4+)
+- Calendar generation from single start date input
+- Support for week_phase, weekly_recurring, cold_wave, rare_soil event types
+- Variable replacement system (15+ dynamic variables)
+- CSRF protection for state-changing operations
+- Audit logging for all configuration changes
+
+### Features
+- Set start date once → System auto-generates ALL 49 days (7 weeks) of events
+- Role-based permissions integrated with existing user system
+- Discord webhook integration for one-click announcements
+
+---
+
+## [3.5.0] - 2025-11-07
+
+**Commit:** 571c9b1 - feat(discord): Add auto-delete UI controls to all message forms
+
+### Added
+- Auto-delete dropdown selectors to discord_announcements.php
+- Auto-delete dropdown selectors to discord_scheduled.php
+- Auto-delete dropdown selectors to discord_recurring.php
+- Dropdown options: Never, 1 hour, 6 hours, 12 hours, 24 hours, 48 hours
+- JavaScript passes delete_after_hours to API endpoints
+
+### Changed
+- All three Discord message forms include auto-delete functionality
+- Integrated with message tracking system for automatic cleanup
+
+---
+
+## [3.5.0] - 2025-11-07
+
+**Commit:** 9d0b856 - feat(discord): Add auto-delete message tracking to APIs and processor
+
+### Added
+- Auto-delete message tracking to Discord APIs
+- Modified discord_api.php to handle delete_after_hours parameter
+- Modified discord_scheduled_api.php to store delete_after_hours in scheduled messages
+- Modified discord_recurring_api.php to store delete_after_hours in recurring messages
+- Updated discord_webhook.php send functions to accept tracking_info
+- Modified discord_scheduled_processor.php to pass tracking_info when sending
+
+### Changed
+- Discord APIs now support optional auto-delete timing
+- Message history saves delete_after_hours for tracking
+- Scheduled and recurring messages generate unique IDs for each occurrence
+
 
 
 
