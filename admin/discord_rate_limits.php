@@ -369,7 +369,7 @@ include 'includes/header.php';
 </div>
 
 <!-- Reject Modal -->
-<div id="rejectModal" class="modal">
+<div id="rejectModal" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
             <h3>❌ Reject Request</h3>

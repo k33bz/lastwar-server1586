@@ -637,7 +637,7 @@ function sortRolesByHierarchy($roles) {
 </div>
 
 <!-- Edit User Modal -->
-<div id="editModal" class="modal">
+<div id="editModal" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
             <h2>Edit User</h2>
@@ -715,7 +715,7 @@ function sortRolesByHierarchy($roles) {
 </div>
 
 <!-- Add User Modal -->
-<div id="addModal" class="modal">
+<div id="addModal" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
             <h2>Add New User</h2>

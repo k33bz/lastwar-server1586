@@ -316,7 +316,8 @@ $last_updated = $version_data['lastUpdated'] ?? date('Y-m-d');
             width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.5);
-            display: flex;
+            /* Do NOT set display here - let individual pages control visibility */
+            /* Modals should be hidden by default (display:none) and shown via JS */
             align-items: center;
             justify-content: center;
         }

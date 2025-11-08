@@ -248,7 +248,7 @@ include 'includes/header.php';
     </div>
 
     <!-- Preview Modal -->
-    <div id="preview-modal" class="modal">
+    <div id="preview-modal" class="modal" style="display: none;">
         <div class="modal-content" style="max-width: 800px;">
             <div class="modal-header">
                 <h2 style="color: #333; margin: 0;">Backup Preview</h2>
@@ -261,7 +261,7 @@ include 'includes/header.php';
     </div>
 
     <!-- Manual Backup Modal -->
-    <div id="manual-backup-modal" class="modal">
+    <div id="manual-backup-modal" class="modal" style="display: none;">
         <div class="modal-content" style="max-width: 500px;">
             <div class="modal-header">
                 <h2 style="color: #333; margin: 0;">Create Manual Backup</h2>
@@ -279,7 +279,7 @@ include 'includes/header.php';
     </div>
 
     <!-- Restore Confirmation Modal -->
-    <div id="restore-modal" class="modal">
+    <div id="restore-modal" class="modal" style="display: none;">
         <div class="modal-content" style="max-width: 600px;">
             <div class="modal-header">
                 <h2 style="color: #333; margin: 0;">⚠️ Confirm Restore</h2>
@@ -310,7 +310,7 @@ include 'includes/header.php';
     </div>
 
     <!-- Message Modal -->
-    <div id="message-modal" class="modal">
+    <div id="message-modal" class="modal" style="display: none;">
         <div class="modal-content" style="max-width: 500px;">
             <div class="modal-header">
                 <h2 id="message-title" style="color: #333; margin: 0;"></h2>

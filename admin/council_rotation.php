@@ -133,7 +133,7 @@ include 'includes/header.php';
 </div>
 
 <!-- Regenerate Confirmation Modal -->
-<div id="regenerateModal" class="modal">
+<div id="regenerateModal" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
             <h2>Confirm Schedule Regeneration</h2>
@@ -162,7 +162,7 @@ include 'includes/header.php';
 </div>
 
 <!-- Results Modal -->
-<div id="resultsModal" class="modal">
+<div id="resultsModal" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
             <h2>✅ Schedule Regenerated</h2>
