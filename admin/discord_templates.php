@@ -65,6 +65,18 @@ include 'includes/header.php';
         .scope-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
         .scope-badge.global { background: #d4edda; color: #155724; }
         .scope-badge.alliance { background: #d1ecf1; color: #0c5460; }
+        .season-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin-left: 0.5rem; }
+        .season-badge.general { background: #e9ecef; color: #495057; }
+        .season-badge.preseason { background: #fff3cd; color: #856404; }
+        .season-badge.s01 { background: #cfe2ff; color: #084298; }
+        .season-badge.s02 { background: #d1e7dd; color: #0a3622; }
+        .season-badge.s03 { background: #f8d7da; color: #58151c; }
+        .season-badge.s04 { background: #e2d9f3; color: #3d0066; }
+        .event-type-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin-left: 0.5rem; }
+        .event-type-badge.general { background: #f8f9fa; color: #6c757d; border: 1px solid #dee2e6; }
+        .event-type-badge.weekly_event { background: #fff3cd; color: #856404; }
+        .event-type-badge.vs_event { background: #f8d7da; color: #721c24; }
+        .event-type-badge.season_specific { background: #d1ecf1; color: #0c5460; }
         .alert { padding: 1rem; border-radius: 6px; margin-bottom: 1rem; }
         .alert-success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
         .alert-error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
@@ -114,6 +126,30 @@ Use variables like {r5_name}, {event_time}, etc. Click variables below to insert
             </div>
 
             <div class="form-group">
+                <label for="templateSeason">Season Category *</label>
+                <select id="templateSeason" required>
+                    <option value="general">General (All Seasons)</option>
+                    <option value="preseason">Preseason</option>
+                    <option value="s01">Season 1</option>
+                    <option value="s02">Season 2</option>
+                    <option value="s03">Season 3</option>
+                    <option value="s04">Season 4</option>
+                </select>
+                <div class="help-text">Select which season this template applies to</div>
+            </div>
+
+            <div class="form-group">
+                <label for="templateEventType">Event Type *</label>
+                <select id="templateEventType" required>
+                    <option value="general">General</option>
+                    <option value="weekly_event">Weekly Event (Recurring)</option>
+                    <option value="vs_event">VS Event (Alliance Duel, KE, etc.)</option>
+                    <option value="season_specific">Season Specific</option>
+                </select>
+                <div class="help-text">Categorize the type of event this template is for</div>
+            </div>
+
+            <div class="form-group">
                 <label>
                     <input type="checkbox" id="submitForGlobal">
                     Submit for Global Approval
@@ -134,6 +170,38 @@ Use variables like {r5_name}, {event_time}, etc. Click variables below to insert
     <!-- Manage Tab -->
     <div id="manageTab" class="tab-content">
         <div id="manageAlert"></div>
+
+        <!-- Filter Controls -->
+        <div id="filterControls" style="display: none; margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px; border: 2px solid #e9ecef;">
+            <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+                <div>
+                    <label for="seasonFilter" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #333;">Filter by Season:</label>
+                    <select id="seasonFilter" onchange="applyFilters()" style="padding: 0.5rem 1rem; border: 2px solid #e9ecef; border-radius: 6px; font-size: 1rem; min-width: 150px;">
+                        <option value="all">All Seasons</option>
+                        <option value="general">General</option>
+                        <option value="preseason">Preseason</option>
+                        <option value="s01">Season 1</option>
+                        <option value="s02">Season 2</option>
+                        <option value="s03">Season 3</option>
+                        <option value="s04">Season 4</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="eventTypeFilter" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #333;">Filter by Event Type:</label>
+                    <select id="eventTypeFilter" onchange="applyFilters()" style="padding: 0.5rem 1rem; border: 2px solid #e9ecef; border-radius: 6px; font-size: 1rem; min-width: 180px;">
+                        <option value="all">All Types</option>
+                        <option value="general">General</option>
+                        <option value="weekly_event">Weekly Events</option>
+                        <option value="vs_event">VS Events</option>
+                        <option value="season_specific">Season Specific</option>
+                    </select>
+                </div>
+                <div style="margin-left: auto;">
+                    <button onclick="resetFilters()" class="btn btn-secondary btn-small">🔄 Reset Filters</button>
+                </div>
+            </div>
+        </div>
+
         <div id="loading">Loading templates...</div>
         <div id="templateList" style="display: none;"></div>
     </div>
@@ -149,7 +217,7 @@ Use variables like {r5_name}, {event_time}, etc. Click variables below to insert
 </div>
 
 <script>
-    let templates = [], variables = {}, userAlliance = null;
+    let templates = [], allTemplates = [], variables = {}, userAlliance = null;
 
     function switchTab(tab) {
         document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
@@ -244,9 +312,11 @@ Use variables like {r5_name}, {event_time}, etc. Click variables below to insert
 
             if (data.success) {
                 templates = data.templates;
+                allTemplates = data.templates; // Store unfiltered copy
                 userAlliance = data.user_alliance;
                 renderTemplates();
                 templateList.style.display = 'block';
+                document.getElementById('filterControls').style.display = 'block'; // Show filters
             } else {
                 showAlert('manageAlert', 'error', 'Failed to load templates: ' + data.error);
             }
@@ -254,6 +324,28 @@ Use variables like {r5_name}, {event_time}, etc. Click variables below to insert
             loading.style.display = 'none';
             showAlert('manageAlert', 'error', 'Error loading templates: ' + error.message);
         }
+    }
+
+    // Apply filters
+    function applyFilters() {
+        const seasonFilter = document.getElementById('seasonFilter').value;
+        const eventTypeFilter = document.getElementById('eventTypeFilter').value;
+
+        templates = allTemplates.filter(template => {
+            const matchesSeason = seasonFilter === 'all' || (template.season || 'general') === seasonFilter;
+            const matchesEventType = eventTypeFilter === 'all' || (template.event_type || 'general') === eventTypeFilter;
+            return matchesSeason && matchesEventType;
+        });
+
+        renderTemplates();
+    }
+
+    // Reset filters
+    function resetFilters() {
+        document.getElementById('seasonFilter').value = 'all';
+        document.getElementById('eventTypeFilter').value = 'all';
+        templates = allTemplates;
+        renderTemplates();
     }
 
     // Render templates
@@ -275,6 +367,28 @@ Use variables like {r5_name}, {event_time}, etc. Click variables below to insert
                 '<span class="scope-badge global">🌍 Global</span>' :
                 `<span class="scope-badge alliance">🏢 ${template.alliance || 'Alliance'}</span>`;
 
+            // Season badge
+            const season = template.season || 'general';
+            const seasonLabels = {
+                'general': 'General',
+                'preseason': 'Preseason',
+                's01': 'S01',
+                's02': 'S02',
+                's03': 'S03',
+                's04': 'S04'
+            };
+            const seasonBadge = `<span class="season-badge ${season}">${seasonLabels[season] || season.toUpperCase()}</span>`;
+
+            // Event type badge
+            const eventType = template.event_type || 'general';
+            const eventTypeLabels = {
+                'general': 'General',
+                'weekly_event': '📅 Weekly',
+                'vs_event': '⚔️ VS Event',
+                'season_specific': '❄️ Season'
+            };
+            const eventTypeBadge = `<span class="event-type-badge ${eventType}">${eventTypeLabels[eventType] || eventType}</span>`;
+
             const canDelete = template.created_by === '<?php echo $user->sub; ?>' || '<?php echo $user->aud; ?>' === 'admin';
 
             return `
@@ -283,6 +397,8 @@ Use variables like {r5_name}, {event_time}, etc. Click variables below to insert
                         <div>
                             <strong>${escapeHtml(template.name)}</strong>
                             ${scopeBadge}
+                            ${seasonBadge}
+                            ${eventTypeBadge}
                         </div>
                         <div>
                             ${canDelete ? `<button class="btn btn-danger btn-small" onclick="deleteTemplate('${template.id}')">🗑️ Delete</button>` : ''}
@@ -312,11 +428,15 @@ Use variables like {r5_name}, {event_time}, etc. Click variables below to insert
 
         const name = document.getElementById('templateName').value;
         const content = document.getElementById('templateContent').value;
+        const season = document.getElementById('templateSeason').value;
+        const eventType = document.getElementById('templateEventType').value;
         const submitForGlobal = document.getElementById('submitForGlobal').checked;
 
         const payload = {
             name: name,
             content: content,
+            season: season,
+            event_type: eventType,
             scope: submitForGlobal ? 'global' : 'alliance',
             submit_for_global: submitForGlobal
         };

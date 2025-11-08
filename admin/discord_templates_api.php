@@ -218,6 +218,8 @@ switch ($action) {
             'content' => $input['content'],
             'variables_used' => array_map(function($v) { return '{' . $v . '}'; }, $variables_used),
             'scope' => $scope,
+            'season' => $input['season'] ?? 'general',
+            'event_type' => $input['event_type'] ?? 'general',
             'alliance' => $scope === 'alliance' ? $user_alliance : null,
             'created_by' => $user->sub,
             'created_at' => date('Y-m-d H:i:s')
