@@ -48,6 +48,33 @@ function isUserTokenActive($email) {
     return !empty($active_sessions);
 }
 
+// Function to sort roles by hierarchy
+function sortRolesByHierarchy($roles) {
+    if (!is_array($roles)) {
+        return [];
+    }
+
+    // Define role hierarchy (higher number = higher priority)
+    $roleOrder = [
+        'admin' => 6,
+        'president' => 5,
+        'r5' => 4,
+        'r4' => 3,
+        'ape' => 2,
+        'none' => 1,
+        'disabled' => 0
+    ];
+
+    // Sort roles by hierarchy
+    usort($roles, function($a, $b) use ($roleOrder) {
+        $aOrder = $roleOrder[$a] ?? -1;
+        $bOrder = $roleOrder[$b] ?? -1;
+        return $bOrder - $aOrder; // Descending order (highest first)
+    });
+
+    return $roles;
+}
+
 
 
 
@@ -447,6 +474,18 @@ function isUserTokenActive($email) {
                 echo count(array_filter($users, function($u) {
                     // Support both old and new formats
                     if (isset($u['roles']) && is_array($u['roles'])) {
+                        return in_array('president', $u['roles']);
+                    }
+                    return false; // Old format didn't have president role
+                }));
+            ?></div>
+            <div class="stat-label">Presidents</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number"><?php
+                echo count(array_filter($users, function($u) {
+                    // Support both old and new formats
+                    if (isset($u['roles']) && is_array($u['roles'])) {
                         return in_array('r5', $u['roles']);
                     }
                     return isset($u['role']) && $u['role'] === 'r5';
@@ -547,8 +586,9 @@ function isUserTokenActive($email) {
                             <?php
                             // Support both old format (role + powereditor) and new format (roles array)
                             if (isset($user['roles']) && is_array($user['roles'])) {
-                                // New multi-role format
-                                foreach ($user['roles'] as $role) {
+                                // New multi-role format - sort by hierarchy before displaying
+                                $sortedRoles = sortRolesByHierarchy($user['roles']);
+                                foreach ($sortedRoles as $role) {
                                     echo '<span class="role-badge role-' . htmlspecialchars($role) . '">';
                                     echo htmlspecialchars(strtoupper($role));
                                     echo '</span> ';
@@ -1506,9 +1546,19 @@ function sortTable(columnIndex) {
         
         // Handle different data types
         if (columnIndex === 1) { // Role column
-            const roleOrder = { 'admin': 3, 'r5': 2, 'r4': 1 };
-            aValue = roleOrder[aValue] || 0;
-            bValue = roleOrder[bValue] || 0;
+            // Role hierarchy (higher number = higher priority)
+            // Match PHP sortRolesByHierarchy function
+            const roleOrder = {
+                'admin': 6,
+                'president': 5,
+                'r5': 4,
+                'r4': 3,
+                'ape': 2,
+                'none': 1,
+                'disabled': 0
+            };
+            aValue = roleOrder[aValue] || -1;
+            bValue = roleOrder[bValue] || -1;
         } else if (columnIndex === 3) { // Status column
             aValue = aValue === 'active' ? 1 : 0;
             bValue = bValue === 'active' ? 1 : 0;
@@ -1533,9 +1583,31 @@ function getCellValue(row, columnIndex) {
             return cell.textContent.trim().toLowerCase();
         case 1: // Role - support multiple role badges
             const roleBadges = cell.querySelectorAll('.role-badge');
-            return Array.from(roleBadges).map(badge =>
+            const roles = Array.from(roleBadges).map(badge =>
                 badge.textContent.toLowerCase().replace('+ape', '').trim()
-            ).join(', ');
+            );
+
+            // If multiple roles, return the highest priority one for sorting
+            if (roles.length === 0) return '';
+            if (roles.length === 1) return roles[0];
+
+            // Define role hierarchy to find highest priority role
+            const roleOrder = {
+                'admin': 6,
+                'president': 5,
+                'r5': 4,
+                'r4': 3,
+                'ape': 2,
+                'none': 1,
+                'disabled': 0
+            };
+
+            // Find and return the highest priority role
+            return roles.reduce((highest, current) => {
+                const currentPriority = roleOrder[current] || -1;
+                const highestPriority = roleOrder[highest] || -1;
+                return currentPriority > highestPriority ? current : highest;
+            }, roles[0]);
         case 2: // Alliances
             const allianceTags = cell.querySelectorAll('.alliance-tag');
             return Array.from(allianceTags).map(tag => tag.textContent.trim()).join(', ');
