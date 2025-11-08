@@ -620,6 +620,10 @@ function isUserTokenActive($email) {
                             <strong>Admin</strong> - Full system access
                         </label>
                         <label class="checkbox-label">
+                            <input type="checkbox" name="roles[]" value="president" id="editRolePresident">
+                            <strong>President</strong> - Can regenerate council rotation + all R5/R4 features
+                        </label>
+                        <label class="checkbox-label">
                             <input type="checkbox" name="roles[]" value="r5" id="editRoleR5">
                             <strong>R5</strong> - Alliance leader (can edit + sign rules)
                         </label>
@@ -701,7 +705,7 @@ function isUserTokenActive($email) {
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" name="add_roles[]" value="president" id="addRolePresident">
-                            <strong>President</strong> - Can send announcements to all "general" channels
+                            <strong>President</strong> - Can regenerate council rotation + all R5/R4 features
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" name="add_roles[]" value="ape" id="addRoleAPE">
