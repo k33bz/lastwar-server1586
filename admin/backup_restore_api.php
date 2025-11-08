@@ -22,15 +22,17 @@ require_once __DIR__ . '/jwt.php';
 require_once __DIR__ . '/audit_logger.php';
 require_once __DIR__ . '/includes/csrf.php';
 
-// CSRF Protection (must come before any state-changing operations)
-requireCsrfToken();
-
 // Require admin session
 $user = require_admin_session();
 
 header('Content-Type: application/json');
 
 $action = $_POST['action'] ?? $_GET['action'] ?? 'list';
+
+// CSRF Protection for state-changing operations only
+if (in_array($action, ['restore', 'manual_backup'])) {
+    requireCsrfToken();
+}
 
 try {
     switch ($action) {

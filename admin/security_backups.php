@@ -352,6 +352,7 @@ include 'includes/header.php';
             const formData = new FormData();
             formData.append('action', 'manual_backup');
             formData.append('reason', reason);
+            formData.append('csrf_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
 
             closeModal('manual-backup-modal');
 
@@ -399,6 +400,7 @@ include 'includes/header.php';
             const formData = new FormData();
             formData.append('action', 'restore');
             formData.append('filename', pendingRestoreFilename);
+            formData.append('csrf_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
 
             closeModal('restore-modal');
 
