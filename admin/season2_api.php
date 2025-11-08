@@ -85,6 +85,10 @@ try {
             $config['faction_war_duration_hours'] = $input['faction_war_duration_hours'] ?? $config['faction_war_duration_hours'];
             $config['daily_reset_time'] = $input['daily_reset_time'] ?? $config['daily_reset_time'];
             $config['valor_badge_day'] = $input['valor_badge_day'] ?? $config['valor_badge_day'];
+            $config['alliance_duel_enabled'] = $input['alliance_duel_enabled'] ?? $config['alliance_duel_enabled'];
+            $config['alliance_duel_weeks'] = $input['alliance_duel_weeks'] ?? $config['alliance_duel_weeks'];
+            $config['alliance_duel_start_day'] = $input['alliance_duel_start_day'] ?? $config['alliance_duel_start_day'];
+            $config['alliance_duel_duration_days'] = $input['alliance_duel_duration_days'] ?? $config['alliance_duel_duration_days'];
             $config['config_updated_at'] = gmdate('Y-m-d H:i:s');
             $config['config_updated_by'] = $user->sub;
 
@@ -300,6 +304,40 @@ function generate_season_calendar($config, $templates_file) {
                     'auto_announce' => $template['auto_announce'] ?? false,
                     'reminder_hours' => $template['reminder_hours'] ?? []
                 ];
+            }
+        } elseif ($template['type'] === 'alliance_duel') {
+            // Generate Alliance Duel VS events for configured weeks
+            if ($config['alliance_duel_enabled'] ?? false) {
+                $duel_weeks = $config['alliance_duel_weeks'] ?? [];
+                $start_day = $config['alliance_duel_start_day'] ?? 'monday';
+
+                foreach ($duel_weeks as $duel_week) {
+                    // Find the start of this week
+                    $week_start = strtotime("+" . (($duel_week - 1) * 7) . " days", $season_start);
+
+                    // Find the configured start day (e.g., Monday) of this week
+                    // Using strtotime "next X" from the day before the week to include the week's first day
+                    $duel_start = strtotime("next {$start_day}", $week_start - 86400);
+
+                    // Add day_offset from template
+                    $day_offset = $template['day_offset'] ?? 0;
+                    $event_timestamp = strtotime("+" . $day_offset . " days", $duel_start);
+                    $event_date = date('Y-m-d', $event_timestamp);
+                    $event_time = $template['time'] ?? '08:00';
+
+                    $events[] = [
+                        'id' => $template['id'] . '_week_' . $duel_week,
+                        'name' => $template['name'] . ' (Week ' . $duel_week . ')',
+                        'type' => $template['type'],
+                        'datetime' => $event_date . ' ' . $event_time,
+                        'week' => $duel_week,
+                        'day_offset' => $day_offset,
+                        'importance' => $template['importance'],
+                        'template_key' => $template['template_key'],
+                        'description' => $template['description'],
+                        'auto_announce' => $template['auto_announce'] ?? false
+                    ];
+                }
             }
         }
     }

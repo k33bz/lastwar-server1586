@@ -6,7 +6,11 @@
     "faction_war_duration_hours": 4,
     "daily_reset_time": "00:00",
     "valor_badge_day": "wednesday",
+    "alliance_duel_enabled": true,
+    "alliance_duel_weeks": [2, 4, 6],
+    "alliance_duel_start_day": "monday",
+    "alliance_duel_duration_days": 6,
     "config_updated_at": null,
     "config_updated_by": null,
-    "notes": "Season 2 configuration. Set season_start_date to activate all events and calendar generation."
+    "notes": "Season 2 configuration. Set season_start_date to activate all events and calendar generation. Alliance Duel VS runs for 6 days starting on configured weeks."
 }
