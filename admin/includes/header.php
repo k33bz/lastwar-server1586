@@ -582,6 +582,18 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </div>
                 <?php endif; ?>
 
+                <!-- Season 2 Dropdown -->
+                <?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
+                <div class="nav-dropdown">
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['season2_manager.php']) ? 'active' : ''; ?>">
+                        ❄️ Season 2
+                    </div>
+                    <div class="nav-dropdown-menu">
+                        <a href="season2_manager.php" class="nav-link <?php echo $current_page === 'season2_manager.php' ? 'active' : ''; ?>">Event Calendar</a>
+                    </div>
+                </div>
+                <?php endif; ?>
+
                 <?php if ($user->aud === 'admin'): ?>
                 <!-- Users Dropdown -->
                 <div class="nav-dropdown">
