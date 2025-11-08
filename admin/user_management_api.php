@@ -57,7 +57,7 @@ try {
             }
 
             // Validate each role
-            $valid_roles = ['admin', 'r5', 'r4', 'ape', 'none', 'disabled'];
+            $valid_roles = ['admin', 'president', 'r5', 'r4', 'ape', 'none', 'disabled'];
             foreach ($roles as $role) {
                 if (!in_array($role, $valid_roles)) {
                     throw new Exception("Invalid role: $role");
@@ -108,7 +108,7 @@ try {
             }
 
             // Validate each role
-            $valid_roles = ['admin', 'r5', 'r4', 'ape', 'none', 'disabled'];
+            $valid_roles = ['admin', 'president', 'r5', 'r4', 'ape', 'none', 'disabled'];
             foreach ($roles as $role) {
                 if (!in_array($role, $valid_roles)) {
                     throw new Exception("Invalid role: $role");
