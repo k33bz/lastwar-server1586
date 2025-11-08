@@ -316,9 +316,55 @@ switch ($action) {
         // Regenerate schedule - requires CSRF token
         requireCsrfToken();
 
+        // VALIDATION 1: Check weekly regeneration limit (must be at least 7 days since last regeneration)
+        try {
+            $existing_schedule = load_schedule($schedule_file);
+            $last_generated = $existing_schedule['metadata']['lastRegenerationTimestamp'] ?? null;
+
+            if ($last_generated) {
+                $last_regen_time = new DateTime($last_generated);
+                $now = new DateTime('now', new DateTimeZone('UTC'));
+                $days_since = $now->diff($last_regen_time)->days;
+
+                if ($days_since < 7) {
+                    $days_remaining = 7 - $days_since;
+                    http_response_code(400);
+                    echo json_encode([
+                        'success' => false,
+                        'error' => "Council rotation can only be regenerated once per week. Last regeneration was {$days_since} days ago. Please wait {$days_remaining} more day(s).",
+                        'last_regenerated' => $last_generated,
+                        'days_since_last' => $days_since,
+                        'days_remaining' => $days_remaining
+                    ]);
+                    exit();
+                }
+            }
+        } catch (Exception $e) {
+            // If we can't check, log but allow to proceed (backward compatibility)
+            error_log("Warning: Could not check last regeneration time: " . $e->getMessage());
+        }
+
+        // VALIDATION 2: Check that alliance powers were updated recently (within last 7 days)
+        $power_history_file = __DIR__ . '/../data/power-history.csv';
+        if (file_exists($power_history_file)) {
+            $power_file_mtime = filemtime($power_history_file);
+            $now = time();
+            $days_since_power_update = floor(($now - $power_file_mtime) / 86400);
+
+            if ($days_since_power_update > 7) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => "Alliance powers must be updated before regenerating the council rotation. Powers were last updated {$days_since_power_update} days ago. Please update alliance powers first using the Power Editor.",
+                    'power_last_updated' => date('Y-m-d H:i:s', $power_file_mtime),
+                    'days_since_power_update' => $days_since_power_update
+                ]);
+                exit();
+            }
+        }
+
         try {
             $alliances = load_alliances($alliances_file);
-            $existing_schedule = load_schedule($schedule_file);
             $current_week = get_current_week_number();
             $next_rotation = get_next_rotation_date();
             $now = new DateTime('now', new DateTimeZone('UTC'));
@@ -355,14 +401,16 @@ switch ($action) {
             $top15_tags = array_map(function($a) { return $a['tag']; }, array_slice($alliances, 0, 15));
 
             // Create output
+            $regeneration_timestamp = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d\TH:i:s\Z');
             $output = [
-                'generatedAt' => (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d\TH:i:s\Z'),
+                'generatedAt' => $regeneration_timestamp,
                 'epoch' => WEEK_1_EPOCH,
                 'currentWeekNumber' => $current_week,
                 'metadata' => [
                     'top3Snapshot' => $top3_tags,
                     'top15Snapshot' => $top15_tags,
                     'lastGeneratedDate' => (new DateTime())->format('Y-m-d'),
+                    'lastRegenerationTimestamp' => $regeneration_timestamp,
                     'regeneratedBy' => $user->sub,
                     'regeneratedByRole' => $user->aud
                 ],
@@ -380,6 +428,74 @@ switch ($action) {
                 }
             }
 
+            // Send email notifications to all R5 users
+            require_once 'mailer.php';
+            $users_file = __DIR__ . '/users.json';
+            $r5_emails = [];
+
+            if (file_exists($users_file)) {
+                $users_data = json_decode(file_get_contents($users_file), true);
+                $users = $users_data['users'] ?? [];
+
+                // Find all users with R5 role
+                foreach ($users as $user_data) {
+                    $has_r5 = false;
+
+                    // Check new multi-role format
+                    if (isset($user_data['roles']) && is_array($user_data['roles'])) {
+                        $has_r5 = in_array('r5', $user_data['roles']);
+                    } else {
+                        // Check old format
+                        $has_r5 = isset($user_data['role']) && $user_data['role'] === 'r5';
+                    }
+
+                    // Don't send to disabled users
+                    $is_disabled = false;
+                    if (isset($user_data['roles']) && is_array($user_data['roles'])) {
+                        $is_disabled = in_array('disabled', $user_data['roles']);
+                    } else {
+                        $is_disabled = isset($user_data['role']) && $user_data['role'] === 'disabled';
+                    }
+
+                    if ($has_r5 && !$is_disabled) {
+                        $r5_emails[] = $user_data['email'];
+                    }
+                }
+            }
+
+            // Prepare email stats
+            $email_stats = [
+                'next_rotation_week' => $next_week,
+                'next_rotation_date' => $next_rotation->format('Y-m-d H:i:s T'),
+                'new_weeks_generated' => count($new_schedule),
+                'future_rotation_counts' => $future_counts
+            ];
+
+            // Send emails to all R5 users
+            $emails_sent = 0;
+            $emails_failed = 0;
+            foreach ($r5_emails as $r5_email) {
+                try {
+                    $sent = send_council_rotation_notification($r5_email, $email_stats, $user->sub);
+                    if ($sent) {
+                        $emails_sent++;
+                    } else {
+                        $emails_failed++;
+                        error_log("Failed to send council rotation notification to: $r5_email");
+                    }
+                } catch (Exception $e) {
+                    $emails_failed++;
+                    error_log("Exception sending council rotation notification to $r5_email: " . $e->getMessage());
+                }
+            }
+
+            // Log email notifications
+            log_audit_event('council_rotation_emails_sent', $user->sub, [
+                'r5_recipients' => count($r5_emails),
+                'emails_sent' => $emails_sent,
+                'emails_failed' => $emails_failed
+            ]);
+
             echo json_encode([
                 'success' => true,
                 'message' => 'Council rotation schedule regenerated successfully',
@@ -389,13 +505,19 @@ switch ($action) {
                     'total_weeks' => count($full_schedule),
                     'next_rotation_week' => $next_week,
                     'future_rotation_counts' => $future_counts
+                ],
+                'notifications' => [
+                    'r5_users_notified' => $emails_sent,
+                    'notifications_failed' => $emails_failed,
+                    'total_r5_users' => count($r5_emails)
                 ]
             ]);
 
             log_audit_event('council_rotation_regenerated', $user->sub, [
                 'next_week' => $next_week,
                 'weeks_generated' => count($new_schedule),
-                'weeks_preserved' => count($past_weeks)
+                'weeks_preserved' => count($past_weeks),
+                'r5_notifications_sent' => $emails_sent
             ]);
 
         } catch (Exception $e) {

@@ -250,17 +250,47 @@ include 'includes/header.php';
 
             if (data.success) {
                 showSuccess(data.message);
-                showResults(data.stats);
+                showResults(data.stats, data.notifications);
                 loadStatus(); // Reload status
             } else {
-                showError('Failed to regenerate schedule: ' + data.error);
+                // Show detailed error message from validation
+                let errorMsg = data.error || 'Failed to regenerate schedule';
+                if (data.days_remaining) {
+                    errorMsg += `\n\nLast regeneration: ${data.last_regenerated || 'Unknown'}\nDays since last: ${data.days_since_last}\nPlease wait: ${data.days_remaining} more day(s)`;
+                }
+                if (data.days_since_power_update) {
+                    errorMsg += `\n\nPower last updated: ${data.power_last_updated || 'Unknown'}\nDays ago: ${data.days_since_power_update}`;
+                }
+                showError(errorMsg);
             }
         } catch (error) {
             showError('Error regenerating schedule: ' + error.message);
         }
     }
 
-    function showResults(stats) {
+    function showResults(stats, notifications) {
+        const notificationSection = notifications ? `
+            <div class="info-box" style="margin-top: 1.5rem;">
+                <h3>📧 Email Notifications</h3>
+                <table class="fairness-table">
+                    <tr>
+                        <td><strong>R5 Users Notified:</strong></td>
+                        <td>${notifications.r5_users_notified}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total R5 Users:</strong></td>
+                        <td>${notifications.total_r5_users}</td>
+                    </tr>
+                    ${notifications.notifications_failed > 0 ? `
+                        <tr>
+                            <td><strong>Failed:</strong></td>
+                            <td style="color: #e74c3c;">${notifications.notifications_failed}</td>
+                        </tr>
+                    ` : ''}
+                </table>
+            </div>
+        ` : '';
+
         const content = `
             <div class="success-box" style="display: block;">
                 <strong>✅ Success!</strong> Schedule regenerated successfully.
@@ -285,6 +315,8 @@ include 'includes/header.php';
                     <td>Week ${stats.next_rotation_week}</td>
                 </tr>
             </table>
+
+            ${notificationSection}
 
             <h3 style="margin-top: 1.5rem;">Fairness Distribution (Next 52 Weeks)</h3>
             <table class="fairness-table">

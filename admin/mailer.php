@@ -615,4 +615,208 @@ EOT;
 
     return send_email($to, $subject, $html_body, true);
 }
+
+/**
+ * Send council rotation regeneration notification email
+ *
+ * @param string $to Recipient email address
+ * @param array $stats Regeneration statistics
+ * @param string $regenerated_by Email of admin/president who regenerated
+ * @return bool Success status
+ */
+function send_council_rotation_notification($to, $stats, $regenerated_by) {
+    $app_name = $_ENV['APP_NAME'] ?? 'Last War 1586 Admin';
+    $subject = $app_name . ' - Council Rotation Schedule Updated';
+
+    $next_rotation_date = $stats['next_rotation_date'] ?? 'Unknown';
+    $next_rotation_week = $stats['next_rotation_week'] ?? 'Unknown';
+    $weeks_generated = $stats['new_weeks_generated'] ?? 0;
+    $rotation_counts = $stats['future_rotation_counts'] ?? [];
+
+    // Build rotation distribution table
+    $distribution_rows = '';
+    foreach ($rotation_counts as $alliance_tag => $count) {
+        $distribution_rows .= "<tr><td style='padding:8px;border-bottom:1px solid #e0e0e0;'>{$alliance_tag}</td><td style='padding:8px;border-bottom:1px solid #e0e0e0;text-align:center;'>{$count}</td></tr>";
+    }
+
+    $html_body = <<<EOT
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+        }
+        .header h1 {
+            color: #667eea;
+            margin: 0;
+            font-size: 24px;
+        }
+        .badge {
+            display: inline-block;
+            background-color: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .content {
+            margin: 30px 0;
+        }
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+        .stats {
+            margin: 20px 0;
+        }
+        .stat-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .stat-label {
+            font-weight: 600;
+            color: #555;
+        }
+        .stat-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th {
+            background-color: #667eea;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .notice {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #856404;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 14px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #667eea;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗳️ Council Rotation Updated</h1>
+            <div class="badge">Schedule Regenerated</div>
+        </div>
+
+        <div class="content">
+            <p>Hello,</p>
+
+            <p>The <strong>council rotation schedule</strong> has been regenerated for the next {$weeks_generated} weeks. All future rotating council seats (ranks 6-15) have been recalculated to ensure fair distribution.</p>
+
+            <div class="info-box">
+                <h3>📅 Next Rotation</h3>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Week Number:</span>
+                        <span class="stat-value">#{$next_rotation_week}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Rotation Date:</span>
+                        <span class="stat-value">{$next_rotation_date}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Regenerated By:</span>
+                        <span class="stat-value">{$regenerated_by}</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>📊 Future Rotation Distribution</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Alliance</th>
+                        <th style="text-align:center;">Rotations (Next {$weeks_generated} Weeks)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {$distribution_rows}
+                </tbody>
+            </table>
+
+            <div class="notice">
+                <strong>ℹ️ Important:</strong> The regeneration only affects future weeks. All past and current week rotations remain unchanged.
+            </div>
+
+            <div style="text-align: center;">
+                <a href="https://www.lastwar1586.online/admin/council_rotation.php" class="button">View Full Schedule</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>This is an automated notification from {$app_name}.</p>
+            <p style="color: #999; font-size: 12px;">Please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+</html>
+EOT;
+
+    return send_email($to, $subject, $html_body, true);
+}
 ?>
