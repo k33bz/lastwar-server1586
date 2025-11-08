@@ -557,11 +557,11 @@ if ($show_all) {
         <div class="form-row">
             <div class="form-group">
                 <label>UID <small>(optional)</small></label>
-                <input type="text" name="r5_game_id" value="<?= htmlspecialchars($r5_game_id) ?>">
+                <input type="text" name="r5_game_id" value="<?= htmlspecialchars($r5_game_id) ?>"<?= $is_r4_only ? ' readonly style="background: #f0f0f0; cursor: not-allowed;"' : '' ?>>
             </div>
             <div class="form-group">
                 <label>Discord ID <small>(optional)</small></label>
-                <input type="text" name="r5_discord_id" value="<?= htmlspecialchars($r5_discord_id) ?>">
+                <input type="text" name="r5_discord_id" value="<?= htmlspecialchars($r5_discord_id) ?>"<?= $is_r4_only ? ' readonly style="background: #f0f0f0; cursor: not-allowed;"' : '' ?>>
             </div>
         </div>
 
