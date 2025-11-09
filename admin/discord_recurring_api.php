@@ -51,7 +51,7 @@ function save_recurring_messages($file, $data) {
 
 // Helper: Get user accessible channels
 function get_user_channels($user) {
-    require_once 'discord_webhook.php';
+    require_once 'discord_api.php';
     return get_user_accessible_channels($user);
 }
 
