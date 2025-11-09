@@ -312,7 +312,99 @@ try {
             </div>
         </div>
         <?php endif; ?>
-        
+
+        <!-- Discord Management - Available to admin, R5, R4, and President -->
+        <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
+        <div class="section-group">
+            <h2 class="section-title">
+                <span class="section-icon">💬</span>
+                Discord Management
+            </h2>
+
+            <div class="section-cards-grid">
+                <div class="section-card discord">
+                    <div class="card-header">
+                        <h3>📢 Announcements</h3>
+                        <span class="card-badge">Discord</span>
+                    </div>
+                    <p>Send instant announcements to your alliance Discord channels</p>
+                    <div class="action-buttons">
+                        <a href="discord_announcements.php" class="btn btn-primary">
+                            <span class="btn-icon">📢</span>
+                            Send Announcement
+                        </a>
+                    </div>
+                </div>
+
+                <div class="section-card discord">
+                    <div class="card-header">
+                        <h3>📅 Scheduled Messages</h3>
+                        <span class="card-badge">Discord</span>
+                    </div>
+                    <p>Schedule Discord messages for future events and reminders</p>
+                    <div class="action-buttons">
+                        <a href="discord_scheduled.php" class="btn btn-primary">
+                            <span class="btn-icon">📅</span>
+                            Manage Schedule
+                        </a>
+                    </div>
+                </div>
+
+                <div class="section-card discord">
+                    <div class="card-header">
+                        <h3>🔄 Recurring Messages</h3>
+                        <span class="card-badge">Discord</span>
+                    </div>
+                    <p>Set up automatic recurring messages for daily/weekly reminders</p>
+                    <div class="action-buttons">
+                        <a href="discord_recurring.php" class="btn btn-primary">
+                            <span class="btn-icon">🔄</span>
+                            Manage Recurring
+                        </a>
+                    </div>
+                </div>
+
+                <div class="section-card discord">
+                    <div class="card-header">
+                        <h3>📝 Message Templates</h3>
+                        <span class="card-badge">Discord</span>
+                    </div>
+                    <p>Create and manage reusable message templates</p>
+                    <div class="action-buttons">
+                        <a href="discord_templates.php" class="btn btn-primary">
+                            <span class="btn-icon">📝</span>
+                            View Templates
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <!-- Season 2 Management - Available to admin, R5, R4, and President -->
+        <?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
+        <div class="section-group">
+            <h2 class="section-title">
+                <span class="section-icon">❄️</span>
+                Season 2 Events
+            </h2>
+
+            <div class="section-card season">
+                <div class="card-header">
+                    <h3>📆 Event Calendar</h3>
+                    <span class="card-badge season">Season 2</span>
+                </div>
+                <p>View and manage Season 2 event calendar and schedules</p>
+                <div class="action-buttons">
+                    <a href="season2_manager.php" class="btn btn-primary">
+                        <span class="btn-icon">📆</span>
+                        Event Calendar
+                    </a>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+
         <?php if ($user->aud === 'admin'): ?>
         <!-- Admin-only sections -->
         <div class="section-group">
@@ -836,6 +928,8 @@ try {
 .section-card.power { border-left: 4px solid #e67e22; }
 .section-card.members { border-left: 4px solid #2ecc71; }
 .section-card.statistics { border-left: 4px solid #8e44ad; }
+.section-card.discord { border-left: 4px solid #5865F2; }
+.section-card.season { border-left: 4px solid #00B4D8; }
 
 .card-header {
     display: flex;
@@ -870,6 +964,8 @@ try {
 .card-badge.members { background: #d1ecf1; color: #0c5460; }
 .card-badge.statistics { background: #f3e5f5; color: #6a1b9a; }
 .card-badge.core { background: #667eea; color: white; }
+.card-badge.discord { background: #e8eafc; color: #5865F2; }
+.card-badge.season { background: #caf0f8; color: #023047; }
 
 .section-card p {
     color: #6c757d;
