@@ -437,6 +437,20 @@ try {
                         </a>
                     </div>
                 </div>
+
+                <div class="section-card discord">
+                    <div class="card-header">
+                        <h3>🔗 Channel Management</h3>
+                        <span class="card-badge">Settings</span>
+                    </div>
+                    <p>Configure Discord channels and webhooks for all alliances</p>
+                    <div class="action-buttons">
+                        <a href="discord_channels.php" class="btn btn-primary">
+                            <span class="btn-icon">🔗</span>
+                            Manage Channels
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
