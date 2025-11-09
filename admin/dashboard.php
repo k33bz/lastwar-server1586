@@ -173,6 +173,52 @@ try {
     </div>
 </div>
 
+<!-- Tab Navigation -->
+<div class="dashboard-tabs">
+    <div class="tabs-container">
+        <button class="tab-button active" data-tab="overview">
+            <span class="tab-icon">📊</span>
+            <span class="tab-label">Overview</span>
+        </button>
+
+        <?php if ($user->aud !== 'r4'): ?>
+        <button class="tab-button" data-tab="alliances">
+            <span class="tab-icon">⚔️</span>
+            <span class="tab-label">Alliances</span>
+        </button>
+        <?php endif; ?>
+
+        <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
+        <button class="tab-button" data-tab="discord">
+            <span class="tab-icon">💬</span>
+            <span class="tab-label">Discord</span>
+            <span class="tab-badge" id="discordBadge" style="display: none;">0</span>
+        </button>
+        <?php endif; ?>
+
+        <?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
+        <button class="tab-button" data-tab="season2">
+            <span class="tab-icon">❄️</span>
+            <span class="tab-label">Season 2</span>
+        </button>
+        <?php endif; ?>
+
+        <?php if ($user->aud === 'admin'): ?>
+        <button class="tab-button" data-tab="security">
+            <span class="tab-icon">🛡️</span>
+            <span class="tab-label">Security</span>
+        </button>
+
+        <button class="tab-button" data-tab="system">
+            <span class="tab-icon">⚙️</span>
+            <span class="tab-label">System</span>
+        </button>
+        <?php endif; ?>
+    </div>
+</div>
+
+<!-- Tab Content Panels -->
+<div class="tab-content active" id="overview-tab">
 <div class="stats-overview">
     <div class="stats-grid">
         <div class="stat-card users">
@@ -243,7 +289,6 @@ try {
     </div>
 </div>
 
-<div class="dashboard-content">
     <div class="quick-actions">
         <h2 class="section-title">
             <span class="section-icon">⚡</span>
@@ -281,10 +326,13 @@ try {
             <?php endif; ?>
         </div>
     </div>
+</div>
+<!-- End Overview Tab -->
 
+<!-- Alliances Tab -->
+<?php if ($user->aud !== 'r4'): ?>
+<div class="tab-content" id="alliances-tab">
     <div class="main-sections">
-        <!-- Alliance Management - Available to admin, R5, and power editors -->
-        <?php if ($user->aud !== 'r4'): ?>
         <div class="section-group">
             <h2 class="section-title">
                 <span class="section-icon">⚔️</span>
@@ -311,10 +359,15 @@ try {
                 </div>
             </div>
         </div>
-        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>
+<!-- End Alliances Tab -->
 
-        <!-- Discord Management - Available to admin, R5, R4, and President -->
-        <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
+<!-- Discord Tab -->
+<?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
+<div class="tab-content" id="discord-tab">
+    <div class="main-sections">
         <div class="section-group">
             <h2 class="section-title">
                 <span class="section-icon">💬</span>
@@ -379,10 +432,15 @@ try {
                 </div>
             </div>
         </div>
-        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>
+<!-- End Discord Tab -->
 
-        <!-- Season 2 Management - Available to admin, R5, R4, and President -->
-        <?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
+<!-- Season 2 Tab -->
+<?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
+<div class="tab-content" id="season2-tab">
+    <div class="main-sections">
         <div class="section-group">
             <h2 class="section-title">
                 <span class="section-icon">❄️</span>
@@ -403,10 +461,15 @@ try {
                 </div>
             </div>
         </div>
-        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>
+<!-- End Season 2 Tab -->
 
-        <?php if ($user->aud === 'admin'): ?>
-        <!-- Admin-only sections -->
+<!-- Security Tab (Admin Only) -->
+<?php if ($user->aud === 'admin'): ?>
+<div class="tab-content" id="security-tab">
+    <div class="main-sections">
         <div class="section-group">
             <h2 class="section-title">
                 <span class="section-icon">👑</span>
@@ -461,7 +524,22 @@ try {
                         </a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Security Tab -->
 
+<!-- System Tab (Admin Only) -->
+<div class="tab-content" id="system-tab">
+    <div class="main-sections">
+        <div class="section-group">
+            <h2 class="section-title">
+                <span class="section-icon">⚙️</span>
+                System Administration
+            </h2>
+
+            <div class="section-cards-grid">
                 <div class="section-card system">
                     <div class="card-header">
                         <h3>📊 System Administration</h3>
@@ -532,126 +610,156 @@ try {
                 </div>
             </div>
         </div>
-        <?php elseif ($user->aud === 'r5'): ?>
-        <!-- R5-specific sections -->
-        <div class="section-group">
-            <h2 class="section-title">
-                <span class="section-icon">⭐</span>
-                R5 Leadership
-            </h2>
-            
-            <div class="section-cards-grid">
-                <div class="section-card r5">
-                    <div class="card-header">
-                        <h3>📝 Alliance Administration</h3>
-                        <span class="card-badge r5">R5</span>
-                    </div>
-                    <p>Manage your alliance settings and sign server rules</p>
-                    <div class="action-buttons">
-                        <a href="alliance_edit.php" class="btn btn-primary">
-                            <span class="btn-icon">✏️</span>
-                            Edit Alliance
-                        </a>
-                        <a href="alliance_edit.php" class="btn btn-secondary">
-                            <span class="btn-icon">✏️</span>
-                            Edit All
-                        </a>
-                        <?php if (is_power_editor($user)): ?>
-                            <a href="alliances_power.php" class="btn btn-power">
-                                <span class="btn-icon">⚡</span>
-                                Power Editor
-                            </a>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                
-                <?php if (is_power_editor($user)): ?>
-                <div class="section-card power">
-                    <div class="card-header">
-                        <h3>⚡ Power Management</h3>
-                        <span class="card-badge power">Power Editor</span>
-                    </div>
-                    <p>Edit alliance power values and manage alliance data</p>
-                    <div class="action-buttons">
-                        <a href="alliances_power.php" class="btn btn-power">
-                            <span class="btn-icon">⚡</span>
-                            Power Editor
-                        </a>
-                        <a href="alliance_edit.php" class="btn btn-secondary">
-                            <span class="btn-icon">✏️</span>
-                            Editor
-                        </a>
-                    </div>
-                </div>
-                <?php endif; ?>
-                
-                <div class="section-card members">
-                    <div class="card-header">
-                        <h3>👥 Member Management</h3>
-                        <span class="card-badge members">Members</span>
-                    </div>
-                    <p>Manage alliance members and recruitment</p>
-                    <div class="action-buttons">
-                        <a href="alliance_members.php" class="btn btn-primary">
-                            <span class="btn-icon">👥</span>
-                            Members
-                        </a>
-                        <a href="recruitment.php" class="btn btn-secondary">
-                            <span class="btn-icon">📢</span>
-                            Recruitment
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <?php elseif ($user->aud === 'r4'): ?>
-        <!-- R4-specific sections -->
-        <div class="section-group">
-            <h2 class="section-title">
-                <span class="section-icon">🛡️</span>
-                R4 Operations
-            </h2>
-
-            <div class="section-cards-grid">
-                <div class="section-card r4">
-                    <div class="card-header">
-                        <h3>📝 Alliance Editor</h3>
-                        <span class="card-badge r4">R4</span>
-                    </div>
-                    <p>View and edit your alliance information</p>
-                    <div class="action-buttons">
-                        <a href="alliance_edit.php" class="btn btn-primary">
-                            <span class="btn-icon">✏️</span>
-                            Edit Alliance
-                        </a>
-                    </div>
-                </div>
-
-                <div class="section-card statistics">
-                    <div class="card-header">
-                        <h3>📊 Alliance Statistics</h3>
-                        <span class="card-badge statistics">Stats</span>
-                    </div>
-                    <p>View alliance power and member statistics</p>
-                    <div class="action-buttons">
-                        <a href="alliance_stats.php" class="btn btn-primary">
-                            <span class="btn-icon">📊</span>
-                            Statistics
-                        </a>
-                        <a href="alliance_power_history.php" class="btn btn-secondary">
-                            <span class="btn-icon">📈</span>
-                            Power History
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <?php endif; ?>
     </div>
 </div>
+<?php endif; ?>
+<!-- End System Tab -->
+
+<!-- R5 & R4 users see the same tab structure as admins (just with limited tabs) -->
+
+<script>
+// Tab Navigation
+document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetTab = this.dataset.tab;
+
+            // Remove active class from all buttons and content
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Add active class to clicked button and corresponding content
+            this.classList.add('active');
+            const targetContent = document.getElementById(targetTab + '-tab');
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+
+            // Store active tab in localStorage
+            localStorage.setItem('dashboardActiveTab', targetTab);
+        });
+    });
+
+    // Restore last active tab on page load
+    const savedTab = localStorage.getItem('dashboardActiveTab');
+    if (savedTab) {
+        const savedButton = document.querySelector(`[data-tab="${savedTab}"]`);
+        if (savedButton) {
+            savedButton.click();
+        }
+    }
+});
+</script>
 
 <style>
+/* Tab Navigation */
+.dashboard-tabs {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+    padding: 1rem;
+    position: sticky;
+    top: 70px;
+    z-index: 100;
+}
+
+.tabs-container {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.tabs-container::-webkit-scrollbar {
+    height: 4px;
+}
+
+.tabs-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.tabs-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    position: relative;
+}
+
+.tab-button:hover {
+    background: #f8f9fa;
+    color: #495057;
+}
+
+.tab-button.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.tab-icon {
+    font-size: 1.2rem;
+}
+
+.tab-label {
+    font-weight: 600;
+}
+
+.tab-badge {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    min-width: 20px;
+    text-align: center;
+}
+
+.tab-button.active .tab-badge {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Dashboard Header */
 .dashboard-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -1031,37 +1139,55 @@ try {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .dashboard-tabs {
+        position: static;
+        padding: 0.75rem;
+    }
+
+    .tab-button {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .tab-label {
+        display: none;
+    }
+
+    .tab-icon {
+        font-size: 1.4rem;
+    }
+
     .header-content {
         padding: 0 1rem;
     }
-    
+
     .dashboard-title {
         font-size: 2rem;
         flex-direction: column;
         text-align: center;
         gap: 0.5rem;
     }
-    
+
     .stats-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .quick-actions-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .section-cards-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .section-group {
         padding: 1.5rem;
     }
-    
+
     .action-buttons {
         flex-direction: column;
     }
-    
+
     .btn {
         justify-content: center;
     }
