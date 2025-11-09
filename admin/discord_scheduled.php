@@ -591,7 +591,7 @@ You can use variables like {sender_name}, {event_time}, etc." maxlength="2000"><
                         <span class="status-badge ${msg.status}">${msg.status}</span>
                         <div class="message-meta">
                             ${timeStr}: ${formatDateTime(msg.scheduled_time)}<br>
-                            Created by: ${msg.created_by}
+                            Created by: ${msg.created_by_display || msg.created_by}
                         </div>
                     </div>
                 </div>

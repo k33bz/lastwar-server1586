@@ -213,7 +213,7 @@ switch ($action) {
             return in_array($msg['channel_id'], $accessible_channel_ids);
         });
 
-        // Add channel names
+        // Add channel names and display names
         foreach ($user_messages as &$msg) {
             foreach ($accessible_channels as $channel) {
                 if ($channel['id'] === $msg['channel_id']) {
@@ -222,7 +222,12 @@ switch ($action) {
                     break;
                 }
             }
+            // Add display name for creator
+            if (isset($msg['created_by'])) {
+                $msg['created_by_display'] = get_user_display_name($msg['created_by']);
+            }
         }
+        unset($msg); // Break reference
 
         echo json_encode([
             'success' => true,

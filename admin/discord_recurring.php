@@ -363,7 +363,7 @@ You can use variables like {sender_name}, {r5_name}, etc." maxlength="2000"></te
                         <div><strong>Frequency:</strong> ${frequencyText}</div>
                         <div><strong>Next Send:</strong> ${formatDateTime(msg.next_send_time)}</div>
                         ${msg.last_sent_at ? `<div><strong>Last Sent:</strong> ${formatDateTime(msg.last_sent_at)} (Count: ${msg.send_count})</div>` : ''}
-                        <div><strong>Created:</strong> ${formatDateTime(msg.created_at)} by ${msg.created_by}</div>
+                        <div><strong>Created:</strong> ${formatDateTime(msg.created_at)} by ${msg.created_by_display || msg.created_by}</div>
                     </div>
                 </div>
             `;
