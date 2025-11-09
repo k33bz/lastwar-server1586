@@ -212,6 +212,13 @@ try {
         </button>
         <?php endif; ?>
 
+        <?php if (has_role($user, ['admin', 'president'])): ?>
+        <button class="tab-button" data-tab="president">
+            <span class="tab-icon">👑</span>
+            <span class="tab-label">President</span>
+        </button>
+        <?php endif; ?>
+
         <?php if ($user->aud === 'admin'): ?>
         <button class="tab-button" data-tab="security">
             <span class="tab-icon">🛡️</span>
@@ -458,13 +465,58 @@ try {
 <?php endif; ?>
 <!-- End Season 2 Tab -->
 
+<!-- President Tab -->
+<?php if (has_role($user, ['admin', 'president'])): ?>
+<div class="tab-content" id="president-tab">
+    <div class="main-sections">
+        <div class="section-group">
+            <h2 class="section-title">
+                <span class="section-icon">👑</span>
+                President Operations
+            </h2>
+
+            <div class="section-cards-grid">
+                <div class="section-card president">
+                    <div class="card-header">
+                        <h3>🗳️ Voting Management</h3>
+                        <span class="card-badge president">President</span>
+                    </div>
+                    <p>Manage server-wide votes and track participation</p>
+                    <div class="action-buttons">
+                        <a href="votes_management.php" class="btn btn-primary">
+                            <span class="btn-icon">🗳️</span>
+                            Manage Votes
+                        </a>
+                    </div>
+                </div>
+
+                <div class="section-card president">
+                    <div class="card-header">
+                        <h3>🔄 Council Rotation</h3>
+                        <span class="card-badge president">President</span>
+                    </div>
+                    <p>Manage council member rotation schedule and assignments</p>
+                    <div class="action-buttons">
+                        <a href="council_rotation.php" class="btn btn-primary">
+                            <span class="btn-icon">🔄</span>
+                            View Schedule
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+<!-- End President Tab -->
+
 <!-- Security Tab (Admin Only) -->
 <?php if ($user->aud === 'admin'): ?>
 <div class="tab-content" id="security-tab">
     <div class="main-sections">
         <div class="section-group">
             <h2 class="section-title">
-                <span class="section-icon">👑</span>
+                <span class="section-icon">🛡️</span>
                 Administrative Control
             </h2>
             
@@ -1290,6 +1342,7 @@ body.dark-theme .section-card::before {
 }
 
 .section-card.primary { border-left: 4px solid #667eea; }
+.section-card.president { border-left: 4px solid #f1c40f; }
 .section-card.admin { border-left: 4px solid #e74c3c; }
 .section-card.security { border-left: 4px solid #f39c12; }
 .section-card.system { border-left: 4px solid #27ae60; }
@@ -1326,6 +1379,7 @@ body.dark-theme .section-card::before {
 }
 
 .card-badge.admin { background: #fee; color: #c33; }
+.card-badge.president { background: #fff9e6; color: #b8860b; }
 .card-badge.security { background: #fff3cd; color: #856404; }
 .card-badge.system { background: #d4edda; color: #155724; }
 .card-badge.dev { background: #e2e3f1; color: #6f42c1; }
