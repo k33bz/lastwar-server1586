@@ -7,6 +7,111 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.7.0] - 2025-11-09
+
+**Release Focus:** Security Hardening & Privacy Protection
+
+### Security
+- **Comprehensive CSRF Protection** - Added CSRF token validation to all state-changing API endpoints
+  - votes_api.php: Vote management and screenshot uploads
+  - discord_templates_api.php: Template CRUD operations
+  - discord_scheduled_api.php: Scheduled message management
+  - discord_recurring_api.php: Recurring message operations
+  - All POST/PUT/DELETE operations now require X-CSRF-Token header
+  - Frontend includes getCsrfToken() function for AJAX requests
+
+- **File Upload Security Enhancement** (votes_api.php)
+  - Added file extension whitelist validation (jpg, jpeg, png, gif, webp)
+  - Extension converted to lowercase for consistent validation
+  - Double validation: both MIME type AND file extension checked
+  - Prevents extension-based attacks and file type confusion
+
+- **Authentication Hardening**
+  - test_alliances_api.php: Added JWT authentication requirement (was previously unprotected)
+  - All 20 API endpoints now have appropriate security controls
+  - No unauthenticated endpoints remaining
+
+### Privacy
+- **Display In-Game Names Instead of Emails (Issue #70 Completion)**
+  - discord_recurring.php: Now displays in-game name for message creators
+  - discord_scheduled.php: Now displays in-game name for message creators
+  - API enrichment adds 'created_by_display' field using get_user_display_name()
+  - Completes privacy protection across ALL admin pages
+
+### Fixed
+- Discord recurring messages creation - Fixed 500 error from missing $ on variable name
+- Discord recurring messages - Fixed JSON parse error from wrong file import
+- Discord recurring messages - Fixed 403 CSRF error with token validation
+- Discord scheduled messages - Now shows display names instead of email addresses
+
+---
+
+## [3.6.0] - 2025-11-08
+
+**Release Focus:** Voting System, Council Improvements & Privacy Protection
+
+### Added
+- **Comprehensive Voting System**
+  - Vote management with screenshot uploads for council votes
+  - Vote CRUD operations (create, read, update, delete)
+  - Screenshot storage system with validation (10MB limit, image types only)
+  - Public/private vote visibility toggle
+  - President role can create and manage votes
+  - File upload security with MIME type and extension validation
+
+- **President Role System**
+  - New president role with cross-alliance general announcement permissions
+  - President role display in user management
+  - Hierarchical role sorting (admin → r5 → r4 → president → ape)
+  - President can access "general" type channels from all alliances
+  - Role badge and permission descriptions
+
+- **Council Rotation Safeguards**
+  - Web-based council rotation schedule regeneration
+  - R5 email notifications for council rotation changes
+  - Automatic council schedule updates when rankings change
+  - Safeguards against manual rotation errors
+
+- **Privacy Protection (Issue #70)**
+  - Display in-game names instead of email addresses throughout admin panel
+  - Header welcome message uses in-game name
+  - Dashboard subtitle uses in-game name
+  - User management table shows in-game names
+  - Security audit logs display in-game names with email in tooltip
+  - User profile "You appear as:" preview box
+  - Real-time display name preview when editing profile
+  - Helper functions: get_user_display_name(), get_user_display_name_from_token()
+  - Fallback to email local part if no in-game name set
+
+### Changed
+- **Dashboard Enhancement**
+  - Added Discord Management section with 4 cards (Announcements, Scheduled, Recurring, Templates)
+  - Added Season 2 Events section with event calendar link
+  - Improved navigation accessibility for R4+ users
+  - Color-coded section cards (Discord blue #5865F2, Season cyan #00B4D8)
+
+- **Discord Templates Improvements**
+  - VS Event templates renamed to [VS-D1] through [VS-D6]
+  - Templates match Alliance Duel VS event days:
+    - D1: Radar Training (10,000 pts per task)
+    - D2: Base Expansion (specific building objectives)
+    - D3: Age of Science (research and tech focus)
+    - D4: Train Heroes (hero training objectives)
+    - D5: Total Mobilization (comprehensive objectives)
+    - D6: Enemy Buster (Alliance Assaults, 4 points - critical)
+  - All templates include accurate point values from https://lastwar.wiki
+  - Added season and event_type categorization for better filtering
+  - Schema updated: category → event_type, visibility → scope
+
+### Fixed
+- Discord templates filter now works correctly with event_type field
+- R5 Game ID and Discord ID fields disabled for R4 users (proper permissions)
+- Footer width unified across all admin pages
+- Modal auto-display issue resolved (no modals popup on page load)
+- User management API accepts president role in validation
+
+---
+
 ## [3.5.0] - 2025-11-07
 
 **Commit:** ec38c5e - fix(security): Fix CSRF protection for backup/restore operations
@@ -1213,5 +1318,5 @@ const alliances = [...]
 
 ---
 
-**Last Updated:** 2025-10-29
-**Current Version:** 3.3.0
+**Last Updated:** 2025-11-09
+**Current Version:** 3.7.0
