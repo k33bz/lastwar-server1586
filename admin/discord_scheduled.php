@@ -614,9 +614,13 @@ You can use variables like {sender_name}, {event_time}, etc." maxlength="2000"><
         }
 
         try {
+            const csrfToken = getCsrfToken();
             const response = await fetch('discord_scheduled_api.php?action=delete', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRF-Token': csrfToken
+                },
                 body: 'message_id=' + encodeURIComponent(messageId)
             });
 
@@ -648,9 +652,13 @@ You can use variables like {sender_name}, {event_time}, etc." maxlength="2000"><
         };
 
         try {
+            const csrfToken = getCsrfToken();
             const response = await fetch('discord_scheduled_api.php?action=create', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken
+                },
                 body: JSON.stringify(formData)
             });
 
