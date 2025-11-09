@@ -20,6 +20,7 @@ try {
     require_once 'jwt.php';
     require_once 'audit_logger.php';
     require_once 'json_helpers.php';
+    require_once 'includes/csrf.php';
 } catch (Throwable $e) {
     header('Content-Type: application/json');
     http_response_code(500);
@@ -43,6 +44,11 @@ try {
         'details' => $e->getMessage()
     ]);
     exit();
+}
+
+// CSRF Protection for POST requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    requireCsrfToken();
 }
 
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
@@ -437,8 +443,17 @@ function handle_screenshot_upload() {
         return;
     }
 
+    // Validate file extension
+    $extension = strtolower(pathinfo($_FILES['screenshot']['name'], PATHINFO_EXTENSION));
+    $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+    if (!in_array($extension, $allowed_extensions)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Invalid file extension. Only jpg, jpeg, png, gif, and webp are allowed.']);
+        return;
+    }
+
     // Generate unique filename
-    $extension = pathinfo($_FILES['screenshot']['name'], PATHINFO_EXTENSION);
     $filename = $vote_id . '_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $extension;
     $filepath = $screenshots_dir . $filename;
 

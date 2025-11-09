@@ -52,6 +52,7 @@ try {
     require_once 'jwt.php';
     require_once 'audit_logger.php';
     require_once 'json_helpers.php';
+    require_once 'includes/csrf.php';
 } catch (Throwable $e) {
     http_response_code(500);
     echo json_encode([
@@ -86,6 +87,11 @@ if (!defined('DISCORD_ENABLED') || !DISCORD_ENABLED) {
     http_response_code(400);
     echo json_encode(['success' => false, 'error' => 'Discord integration is disabled']);
     exit();
+}
+
+// CSRF Protection for POST requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    requireCsrfToken();
 }
 
 $action = $_GET['action'] ?? $_POST['action'] ?? '';

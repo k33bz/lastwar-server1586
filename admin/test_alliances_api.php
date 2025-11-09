@@ -1,11 +1,15 @@
 <?php
-// Test the alliance API logic without authentication
+// Test the alliance API logic
 header('Content-Type: application/json');
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 try {
+    require_once __DIR__ . '/jwt.php';
     require_once __DIR__ . '/json_helpers.php';
+
+    // Require authentication for security
+    $user = require_jwt_session();
 
     $alliances_file = __DIR__ . '/../data/alliances.json';
 
