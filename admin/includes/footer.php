@@ -42,49 +42,7 @@ $last_updated = $version_data['lastUpdated'] ?? date('Y-m-d');
                         </div>
                     </div>
                 </div>
-                
-                <div class="footer-section">
-                    <h4>Quick Actions</h4>
-                    <div class="quick-actions">
-                        <?php if (isset($user) && $user->aud !== 'guest'): ?>
-                        <a href="dashboard.php" class="quick-action">
-                            🏠 Dashboard
-                        </a>
-                        <?php if ($user->aud === 'admin' || (function_exists('is_power_editor') && is_power_editor($user))): ?>
-                        <a href="alliances_power.php" class="quick-action">
-                            ⚡ Alliance Power
-                        </a>
-                        <?php endif; ?>
-                        <?php if ($user->aud === 'admin'): ?>
-                        <a href="user_management.php" class="quick-action">
-                            👥 User Management
-                        </a>
-                        <a href="security_audit.php" class="quick-action">
-                            📋 Audit Logs
-                        </a>
-                        <a href="security_backups.php" class="quick-action">
-                            💾 Backups
-                        </a>
-                        <a href="security_monitor.php" class="quick-action">
-                            🛡️ Security Monitor
-                        </a>
-                        <?php elseif ($user->aud === 'r5'): ?>
-                        <a href="alliance_edit.php" class="quick-action">
-                            ✏️ Edit Alliance
-                        </a>
-                        <?php elseif ($user->aud === 'r4'): ?>
-                        <a href="alliance_edit.php" class="quick-action">
-                            📝 Alliance Info
-                        </a>
-                        <?php endif; ?>
-                        <?php else: ?>
-                        <a href="login.php" class="quick-action">
-                            🔐 Login
-                        </a>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                
+
                 <div class="footer-section">
                     <h4>System Info</h4>
                     <div class="system-info">
