@@ -165,10 +165,6 @@ try {
             <p class="dashboard-subtitle">Welcome back, <?php echo htmlspecialchars(get_user_display_name_from_token($user)); ?></p>
         </div>
         <div class="header-right">
-            <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle dark/light mode (T)">
-                <span class="theme-icon light">☀️</span>
-                <span class="theme-icon dark">🌙</span>
-            </button>
             <div class="user-badge">
                 <span class="role-badge role-<?php echo strtolower($user->aud); ?>">
                     <?php echo strtoupper($user->aud); ?>
@@ -716,9 +712,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add animated number counters to stat cards
     animateStatNumbers();
 
-    // Initialize theme toggle
-    initThemeToggle();
-
     // Initialize keyboard shortcuts
     initKeyboardShortcuts(tabButtons);
 });
@@ -795,28 +788,6 @@ function animateStatNumbers() {
     });
 }
 
-// Theme Toggle Functionality
-function initThemeToggle() {
-    const themeToggle = document.getElementById('themeToggle');
-    if (!themeToggle) return;
-
-    // Load saved theme from localStorage
-    const savedTheme = localStorage.getItem('dashboardTheme') || 'light';
-    if (savedTheme === 'dark') {
-        document.body.classList.add('dark-theme');
-    }
-
-    // Toggle theme on button click
-    themeToggle.addEventListener('click', function() {
-        document.body.classList.toggle('dark-theme');
-        const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
-        localStorage.setItem('dashboardTheme', currentTheme);
-
-        // Optional: Save to server for persistence across devices
-        // saveUserPreference('theme', currentTheme);
-    });
-}
-
 // Keyboard Shortcuts
 function initKeyboardShortcuts(tabButtons) {
     document.addEventListener('keydown', function(e) {
@@ -832,12 +803,6 @@ function initKeyboardShortcuts(tabButtons) {
                 e.preventDefault();
                 tabButtons[index].click();
             }
-        }
-
-        // T for theme toggle
-        if (key === 't' || key === 'T') {
-            e.preventDefault();
-            document.getElementById('themeToggle')?.click();
         }
 
         // Escape to close modals (future enhancement)
@@ -1096,52 +1061,6 @@ body {
     border-radius: 12px;
     font-size: 0.7rem;
     font-weight: 700;
-}
-
-/* Theme Toggle */
-.theme-toggle {
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    position: relative;
-    overflow: hidden;
-}
-
-.theme-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
-}
-
-.theme-toggle:active {
-    transform: scale(0.95);
-}
-
-.theme-icon {
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-}
-
-.theme-icon.light {
-    display: block;
-}
-
-.theme-icon.dark {
-    display: none;
-}
-
-body.dark-theme .theme-icon.light {
-    display: none;
-}
-
-body.dark-theme .theme-icon.dark {
-    display: block;
 }
 
 /* Stats Overview */

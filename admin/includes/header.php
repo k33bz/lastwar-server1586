@@ -252,64 +252,106 @@ $current_page = basename($_SERVER['PHP_SELF']);
             opacity: 0.9;
             font-weight: 400;
         }
-        
-        .email-mask-toggle {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            background: #fff;
-            border: 1px solid #e9ecef;
-            border-radius: 6px;
-            padding: 0.5rem;
-            cursor: pointer;
-            font-size: 1rem;
-            z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: all 0.2s;
+
+        /* Theme Toggle */
+        .theme-toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-right: 1rem;
         }
-        
-        .email-mask-toggle:hover {
-            background: #f8f9fa;
-            transform: translateY(-1px);
-        }
-        
-        .email-text, .email-masked {
-            font-family: inherit;
+
+        .theme-toggle-label {
+            font-size: 0.75rem;
+            color: #6c757d;
             font-weight: 500;
-            font-style: normal;
-            font-size: inherit;
-            line-height: inherit;
-            letter-spacing: inherit;
         }
-        
-        .email-text {
-            color: #333;
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
         }
-        
-        .email-masked {
-            color: #666;
+
+        .toggle-switch input {
+            display: none;
         }
-        
-        .email-toggle-btn {
-            background: none;
-            border: none;
+
+        .toggle-slider {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 120px;
+            height: 32px;
+            background: #e9ecef;
+            border-radius: 16px;
             cursor: pointer;
-            padding: 2px;
-            margin-left: 4px;
-            border-radius: 3px;
-            transition: all 0.2s ease;
-            opacity: 0.6;
+            transition: all 0.3s ease;
+            border: 2px solid #dee2e6;
         }
-        
-        .email-toggle-btn:hover {
-            background: #f0f0f0;
-            opacity: 1;
+
+        .toggle-slider:hover {
+            border-color: #adb5bd;
         }
-        
-        .email-toggle-btn svg {
-            width: 14px;
-            height: 14px;
-            fill: currentColor;
+
+        .toggle-option {
+            position: absolute;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .toggle-light {
+            left: 8px;
+            color: #495057;
+        }
+
+        .toggle-dark {
+            right: 8px;
+            color: #495057;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 56px;
+            height: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+
+        .toggle-switch input:checked + .toggle-slider::before {
+            transform: translateX(56px);
+        }
+
+        .toggle-switch input:checked + .toggle-slider .toggle-light {
+            color: #343a40;
+            font-weight: 600;
+        }
+
+        .toggle-switch input:not(:checked) + .toggle-slider .toggle-dark {
+            color: #ffffff;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch input:checked + .toggle-slider .toggle-dark {
+            color: #ffffff;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch input:not(:checked) + .toggle-slider .toggle-light {
+            color: #ffffff;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         
         .main-container {
@@ -365,40 +407,48 @@ $current_page = basename($_SERVER['PHP_SELF']);
             .admin-nav {
                 gap: 0.25rem;
             }
-            
+
             .nav-link {
                 padding: 0.5rem;
                 font-size: 0.8rem;
             }
-            
+
             .user-info {
                 gap: 0.5rem;
             }
-            
+
             .user-welcome {
                 display: none;
             }
+
+            .theme-toggle-label {
+                display: none;
+            }
         }
-        
+
         @media (max-width: 768px) {
             .header-container {
                 flex-direction: column;
                 gap: 0.75rem;
                 padding: 0 1rem;
             }
-            
+
             .admin-nav {
                 order: 2;
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 0.5rem;
             }
-            
-            .user-info {
+
+            .theme-toggle-container {
                 order: 1;
+            }
+
+            .user-info {
+                order: 3;
                 justify-content: center;
             }
-            
+
             .main-container {
                 padding: 0 1rem;
             }
@@ -447,82 +497,30 @@ $current_page = basename($_SERVER['PHP_SELF']);
             setInterval(updateTokenCountdown, 1000);
         }
         
-        // Email masking functionality
-        function toggleSingleEmail(button) {
-            var emailSpan = button.previousElementSibling;
-            var isShowingMasked = emailSpan.classList.contains('email-masked');
-            
-            if (isShowingMasked) {
-                // Show full email
-                emailSpan.textContent = emailSpan.dataset.email;
-                emailSpan.classList.remove('email-masked');
-                button.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>';
-                button.title = 'Hide email';
+        // Theme toggle functionality
+        function toggleTheme() {
+            const toggle = document.getElementById('theme-toggle');
+            const isDark = toggle.checked; // true = dark, false = light
+
+            if (isDark) {
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('adminTheme', 'dark');
             } else {
-                // Show masked email
-                emailSpan.textContent = emailSpan.dataset.masked;
-                emailSpan.classList.add('email-masked');
-                button.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
-                button.title = 'Show email';
+                document.body.classList.remove('dark-theme');
+                localStorage.setItem('adminTheme', 'light');
             }
         }
-        
-        function toggleAllEmails() {
-            var elements = document.querySelectorAll('.email-text[data-email]');
-            var anyMasked = false;
-            
-            // Check if any emails are currently masked
-            elements.forEach(function(el) {
-                if (el.classList.contains('email-masked')) {
-                    anyMasked = true;
-                }
-            });
-            
-            // Toggle all emails to the opposite state
-            elements.forEach(function(el) {
-                var toggleBtn = el.nextElementSibling;
-                if (toggleBtn && toggleBtn.classList.contains('email-toggle-btn')) {
-                    if (anyMasked) {
-                        // Show all
-                        el.textContent = el.dataset.email;
-                        el.classList.remove('email-masked');
-                        toggleBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>';
-                        toggleBtn.title = 'Hide email';
-                    } else {
-                        // Hide all
-                        el.textContent = el.dataset.masked;
-                        el.classList.add('email-masked');
-                        toggleBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
-                        toggleBtn.title = 'Show email';
-                    }
-                }
-            });
-            
-            // Update global toggle button
-            var globalBtn = document.getElementById('global-email-toggle');
-            if (globalBtn) {
-                if (anyMasked) {
-                    globalBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>';
-                    globalBtn.title = 'Hide all emails';
-                } else {
-                    globalBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
-                    globalBtn.title = 'Show all emails';
-                }
-            }
-        }
-        
+
         window.addEventListener('load', function() {
-            try {
-                // Create global toggle button
-                var toggleBtn = document.createElement('button');
-                toggleBtn.id = 'global-email-toggle';
-                toggleBtn.className = 'email-mask-toggle';
-                toggleBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
-                toggleBtn.title = 'Toggle all email visibility';
-                toggleBtn.onclick = toggleAllEmails;
-                document.body.appendChild(toggleBtn);
-            } catch (e) {
-                // Silently fail if there are issues
+            // Load saved theme preference
+            const savedTheme = localStorage.getItem('adminTheme') || localStorage.getItem('dashboardTheme') || 'light';
+            const toggle = document.getElementById('theme-toggle');
+
+            if (toggle) {
+                toggle.checked = savedTheme === 'dark';
+                if (savedTheme === 'dark') {
+                    document.body.classList.add('dark-theme');
+                }
             }
         });
     </script>
@@ -626,7 +624,17 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </div>
                 <?php endif; ?>
             </nav>
-            
+
+            <div class="theme-toggle-container">
+                <div class="toggle-switch">
+                    <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                    <label for="theme-toggle" class="toggle-slider">
+                        <span class="toggle-option toggle-light">☀️ Light</span>
+                        <span class="toggle-option toggle-dark">🌙 Dark</span>
+                    </label>
+                </div>
+            </div>
+
             <div class="user-info">
                 <span class="user-welcome">Welcome back, <?php echo htmlspecialchars(get_user_display_name_from_token($user)); ?></span>
                 <span class="user-role">
