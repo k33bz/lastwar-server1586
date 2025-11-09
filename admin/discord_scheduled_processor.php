@@ -1,16 +1,22 @@
 <?php
 /**
  * Discord Scheduled Messages Processor
- * Version: 1.1.0 (Phase 2 - Scheduled messaging)
+ * Version: 1.2.0 (Phase 2 - Scheduled messaging)
  *
  * Processes and sends scheduled Discord messages
  * Run this via cron every minute: * * * * * php /path/to/admin/discord_scheduled_processor.php
  *
  * Changelog:
+ *   1.2.0 (2025-11-09) - Fixed cron execution - bypass HTTPS redirect for CLI
  *   1.1.0 (2025-11-07) - Added auto-delete message tracking support
  *                       - Pass tracking info to send_discord_message for scheduled/recurring messages
  *   1.0.0 (2025-11-04) - Initial implementation
  */
+
+// Detect CLI mode - prevent HTTPS redirect when run from cron
+if (php_sapi_name() === 'cli' || !isset($_SERVER['HTTP_HOST'])) {
+    $_SERVER['HTTPS'] = 'on'; // Mark as HTTPS to bypass redirect check
+}
 
 define('ADMIN_INIT', true);
 require_once __DIR__ . '/config.php';
