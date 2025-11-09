@@ -14,10 +14,16 @@
 require_once 'jwt.php';
 require_once 'audit_logger.php';
 require_once 'json_helpers.php';
+require_once 'includes/csrf.php';
 
 header('Content-Type: application/json');
 
 $user = require_jwt_session();
+
+// CSRF Protection for POST requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    requireCsrfToken();
+}
 
 // Check if user has at least R4 access or president role
 if (!has_role($user, ['admin', 'r5', 'r4', 'president'])) {
@@ -50,9 +56,99 @@ function save_recurring_messages($file, $data) {
 }
 
 // Helper: Get user accessible channels
+// Note: Duplicated from discord_api.php to avoid executing API endpoint code
 function get_user_channels($user) {
-    require_once 'discord_api.php';
-    return get_user_accessible_channels($user);
+    $accessible_channels = [];
+
+    // Get user's alliances
+    $user_data = get_user_by_email($user->sub);
+    if (!$user_data) {
+        return [];
+    }
+
+    $user_alliances = $user_data['alliances'] ?? [];
+    $is_admin = $user->aud === 'admin' || in_array('*', $user_alliances);
+    $is_president = has_role($user, 'president');
+
+    // 1. Load alliance-specific channels from alliances.json
+    if (file_exists(ALLIANCES_FILE)) {
+        $alliances_data = json_decode(file_get_contents(ALLIANCES_FILE), true);
+
+        foreach ($alliances_data as $alliance) {
+            $alliance_tag = $alliance['tag'] ?? $alliance['alliance'] ?? '';
+
+            // Admins see ALL channels from ALL alliances
+            // Regular users only see their alliance channels
+            if ($is_admin) {
+                $discord_channels = $alliance['discord']['channels'] ?? [];
+
+                foreach ($discord_channels as $channel) {
+                    if ($channel['enabled'] ?? false) {
+                        // Add alliance context to channel
+                        $channel['alliance'] = $alliance_tag;
+                        $channel['alliance_name'] = $alliance['name'] ?? $alliance_tag;
+                        $channel['server_name'] = $alliance['discord']['serverName'] ?? 'Discord';
+                        $channel['source'] = 'alliance';
+                        // Prefix channel name with alliance tag
+                        $channel['display_name'] = '[' . $alliance_tag . '] ' . $channel['name'];
+                        $accessible_channels[] = $channel;
+                    }
+                }
+            } elseif (in_array($alliance_tag, $user_alliances)) {
+                // Regular users see only their alliance channels
+                $discord_channels = $alliance['discord']['channels'] ?? [];
+
+                foreach ($discord_channels as $channel) {
+                    if ($channel['enabled'] ?? false) {
+                        // Add alliance context to channel
+                        $channel['alliance'] = $alliance_tag;
+                        $channel['alliance_name'] = $alliance['name'] ?? $alliance_tag;
+                        $channel['server_name'] = $alliance['discord']['serverName'] ?? 'Discord';
+                        $channel['source'] = 'alliance';
+                        // Prefix channel name with alliance tag
+                        $channel['display_name'] = '[' . $alliance_tag . '] ' . $channel['name'];
+                        $accessible_channels[] = $channel;
+                    }
+                }
+            } elseif ($is_president) {
+                // Presidents can access "general" type channels from all alliances
+                $discord_channels = $alliance['discord']['channels'] ?? [];
+
+                foreach ($discord_channels as $channel) {
+                    if (($channel['enabled'] ?? false) && ($channel['type'] ?? '') === 'general') {
+                        // Add alliance context to channel
+                        $channel['alliance'] = $alliance_tag;
+                        $channel['alliance_name'] = $alliance['name'] ?? $alliance_tag;
+                        $channel['server_name'] = $alliance['discord']['serverName'] ?? 'Discord';
+                        $channel['source'] = 'alliance';
+                        // Prefix channel name with alliance tag
+                        $channel['display_name'] = '[' . $alliance_tag . '] ' . $channel['name'];
+                        $accessible_channels[] = $channel;
+                    }
+                }
+            }
+        }
+    }
+
+    // 2. Load global/cross-alliance channels from discord-channels.json
+    if (file_exists(DISCORD_CHANNELS_FILE)) {
+        $data = json_decode(file_get_contents(DISCORD_CHANNELS_FILE), true);
+        $global_channels = $data['global_channels'] ?? [];
+
+        foreach ($global_channels as $channel) {
+            if ($channel['enabled'] ?? false) {
+                // Global channels accessible by all, or check permissions
+                $channel_alliance = $channel['alliance'] ?? '*';
+
+                if ($is_admin || $channel_alliance === '*' || in_array($channel_alliance, $user_alliances)) {
+                    $channel['source'] = 'global';
+                    $accessible_channels[] = $channel;
+                }
+            }
+        }
+    }
+
+    return $accessible_channels;
 }
 
 // Helper: Calculate next send time

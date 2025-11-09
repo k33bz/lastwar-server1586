@@ -401,9 +401,13 @@ You can use variables like {sender_name}, {r5_name}, etc." maxlength="2000"></te
         }
 
         try {
+            const csrfToken = getCsrfToken();
             const response = await fetch('discord_recurring_api.php?action=create', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken
+                },
                 body: JSON.stringify(payload)
             });
 
