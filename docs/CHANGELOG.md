@@ -7,6 +7,120 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.8.0] - 2025-11-09
+
+**Release Focus:** Dashboard Enhancements, Metrics, and User Experience
+
+### Added
+- **President Tab Navigation**
+  - New dedicated tab for president operations
+  - Voting management access
+  - Council rotation schedule access
+  - Visible to admins and presidents
+  - Keyboard shortcut: Press 5
+
+- **CloudWatch-Style Metrics Dashboard**
+  - System metrics monitoring with Chart.js visualization
+  - Discord messages tracking (announcements, scheduled, recurring)
+  - Login attempts monitoring (successful vs failed)
+  - Data operations tracking (creates, updates, deletes)
+  - User activity breakdown by role (admin, R5, R4)
+  - Backup operations monitoring (manual, auto, restores)
+  - Top 10 actions display
+  - Time range selector: 1h, 24h, 7d, 30d, 90d
+  - Auto-refresh every 60 seconds
+  - Responsive grid layout with dark mode support
+
+- **Enhanced MFA Management Page**
+  - Comprehensive MFA information and setup instructions
+  - "What is MFA?" educational content
+  - Recommended authenticator apps list
+  - Security best practices section
+  - MFA adoption statistics dashboard
+  - User MFA status table showing:
+    - Enable/disable status with color-coded badges
+    - Last used timestamps (relative time)
+    - Backup codes remaining count with warnings
+    - Enable dates
+  - Best practices cards for admins
+
+- **Discord Channel Management System**
+  - Centralized channel configuration interface
+  - Unified view of alliance and global channels
+  - Multi-dimensional filtering (alliance, type, source, status, search)
+  - Live webhook testing functionality
+  - Toggle enable/disable for channels
+  - Full channel editing with validation
+  - Card-based responsive UI
+  - Real-time filtering without page reloads
+  - Role-based access control (R4/R5 see their alliances, admins see all)
+
+- **Dark Mode Toggle**
+  - Light/dark theme switching with sun/moon icon
+  - CSS custom properties for theme-aware colors
+  - Smooth transitions between themes (0.3s ease)
+  - localStorage persistence across page reloads
+  - Keyboard shortcut: Press 'T' to toggle
+  - Prepared for server-side preference sync
+  - All components theme-aware (tabs, cards, sections)
+
+- **Keyboard Shortcuts**
+  - Number keys 1-6: Switch between dashboard tabs
+  - Key 'T': Toggle dark/light theme
+  - Shortcuts disabled in input fields (no interference)
+  - Visual feedback with tab activation animations
+
+### Changed
+- **Dashboard Footer Cleanup**
+  - Removed "Quick Actions" section from Overview tab
+  - Cleaner, less cluttered layout
+  - Reduced redundancy (actions available in tabs)
+
+- **Security Tab Icon**
+  - Changed from 👑 (crown) to 🛡️ (shield)
+  - More appropriate for security functions
+
+### Fixed
+- **Backup Detection**
+  - Corrected glob pattern from `/alliances_*.json` to `/*.json`
+  - Dashboard now correctly displays recent backup timestamps
+  - Backup status indicators (recent/ok/old) work properly
+  - Fixes "Never" showing when backups exist
+
+### Technical
+- **New Files Created:**
+  - `admin/metrics_api.php` - Metrics data aggregation from audit logs
+  - `admin/metrics_dashboard.php` - Metrics visualization dashboard
+  - `admin/security_mfa_manage.php` - Enhanced MFA management interface
+  - `admin/discord_channels_api.php` - Channel management REST API
+  - `admin/discord_channels.php` - Channel management UI
+
+- **API Endpoints Added:**
+  - `metrics_api.php?action=discord_messages` - Discord message metrics
+  - `metrics_api.php?action=login_attempts` - Login attempt tracking
+  - `metrics_api.php?action=data_operations` - CRUD operation stats
+  - `metrics_api.php?action=user_activity` - User activity by role
+  - `metrics_api.php?action=backups` - Backup operation tracking
+  - `metrics_api.php?action=summary` - Overall statistics
+  - `discord_channels_api.php?action=list` - Get all channels
+  - `discord_channels_api.php?action=test_webhook` - Test Discord webhook
+  - `discord_channels_api.php?action=update_channel` - Update channel properties
+  - `discord_channels_api.php?action=toggle` - Enable/disable channels
+
+- **Theme System:**
+  - CSS variables for all colors (light/dark variants)
+  - Body class: `dark-theme` when dark mode active
+  - localStorage key: `dashboardTheme` (light|dark)
+  - Glassmorphism effects adapt to theme
+
+- **User Preferences Architecture:**
+  - Recommendation: Extend users.json with preferences field
+  - Simple implementation for <50KB per user
+  - Easy backup/restore (all in one file)
+  - Atomic read/write operations
+
+---
+
 ## [3.7.0] - 2025-11-09
 
 **Release Focus:** Security Hardening & Privacy Protection
