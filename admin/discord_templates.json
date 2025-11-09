@@ -157,9 +157,9 @@
       "created_at": "2025-11-06 00:00:00"
     },
     {
-      "id": "tpl_vs_kingdom_event",
-      "name": "Kingdom Event (KE) Reminder",
-      "content": "🏰 **KINGDOM EVENT ALERT** 🏰\n\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Event Start:** {event_time}\n**Coordinator:** {sender_name}\n\n⚔️ **Remember:**\n• Join your assigned rally\n• Follow R4/R5 instructions\n• Use your best heroes and boosts\n• Communication is key!\n\n🏆 Let's dominate the Kingdom Event!\n\n{notes}\n\n@everyone Good luck!",
+      "id": "tpl_vs_d1",
+      "name": "[VS-D1] Kingdom Event (KE)",
+      "content": "🏰 **[VS-D1] KINGDOM EVENT** 🏰\n\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Event Start:** {event_time}\n**Coordinator:** {sender_name}\n\n⚔️ **Remember:**\n• Join your assigned rally\n• Follow R4/R5 instructions\n• Use your best heroes and boosts\n• Communication is key!\n\n🏆 Let's dominate the Kingdom Event!\n\n{notes}\n\n@everyone Good luck!",
       "variables_used": ["{alliance_name}", "{alliance_tag}", "{event_time}", "{sender_name}", "{notes}"],
       "scope": "global",
       "season": "general",
@@ -169,9 +169,9 @@
       "created_at": "2025-11-08 00:00:00"
     },
     {
-      "id": "tpl_vs_svs_prep",
-      "name": "Server vs Server (SVS) Prep",
-      "content": "⚔️ **SVS PREPARATION** ⚔️\n\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Event Start:** {event_time}\n**Coordinator:** {sender_name}\n\n📋 **Preparation Checklist:**\n✅ Stock up on speedups\n✅ Prepare troop formations\n✅ Clear hospital space\n✅ Join Discord voice channel\n✅ Review strategy with R4/R5\n\n🔥 **Server vs Server - Time to show our strength!**\n\n{notes}\n\n@everyone Let's dominate!",
+      "id": "tpl_vs_d2",
+      "name": "[VS-D2] Server vs Server (SVS)",
+      "content": "⚔️ **[VS-D2] SERVER VS SERVER** ⚔️\n\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Event Start:** {event_time}\n**Coordinator:** {sender_name}\n\n📋 **Preparation Checklist:**\n✅ Stock up on speedups\n✅ Prepare troop formations\n✅ Clear hospital space\n✅ Join Discord voice channel\n✅ Review strategy with R4/R5\n\n🔥 **Time to show our strength!**\n\n{notes}\n\n@everyone Let's dominate!",
       "variables_used": ["{alliance_name}", "{alliance_tag}", "{event_time}", "{sender_name}", "{notes}"],
       "scope": "global",
       "season": "general",
@@ -181,9 +181,9 @@
       "created_at": "2025-11-08 00:00:00"
     },
     {
-      "id": "tpl_vs_alliance_duel",
-      "name": "Alliance Duel Reminder",
-      "content": "⚡ **ALLIANCE DUEL** ⚡\n\n**Our Alliance:** {alliance_name} [{alliance_tag}]\n**Opponent:** {notes}\n**Duel Time:** {event_time}\n\n🎯 **Strategy:**\n• Coordinate attacks in Discord\n• Focus on objectives\n• Support your teammates\n• Track enemy movements\n\n🏆 **Win Conditions:**\n• Most points wins\n• Team coordination is critical\n• Every battle counts!\n\n**Organized by:** {sender_name}\n\n@everyone Time to duel!",
+      "id": "tpl_vs_d3",
+      "name": "[VS-D3] Alliance Duel",
+      "content": "⚡ **[VS-D3] ALLIANCE DUEL** ⚡\n\n**Our Alliance:** {alliance_name} [{alliance_tag}]\n**Opponent:** {notes}\n**Duel Time:** {event_time}\n\n🎯 **Strategy:**\n• Coordinate attacks in Discord\n• Focus on objectives\n• Support your teammates\n• Track enemy movements\n\n🏆 **Win Conditions:**\n• Most points wins\n• Team coordination is critical\n• Every battle counts!\n\n**Organized by:** {sender_name}\n\n@everyone Time to duel!",
       "variables_used": ["{alliance_name}", "{alliance_tag}", "{notes}", "{event_time}", "{sender_name}"],
       "scope": "global",
       "season": "general",
@@ -193,9 +193,33 @@
       "created_at": "2025-11-08 00:00:00"
     },
     {
-      "id": "tpl_vs_server_war",
-      "name": "Server War Coordination",
-      "content": "🌍 **SERVER WAR** 🌍\n\n**Alliance:** {alliance_name} [{alliance_tag}]\n**War Start:** {event_time}\n**War Commander:** {sender_name}\n\n⚔️ **Battle Plan:**\n{notes}\n\n🛡️ **Preparation:**\n• Max troops ready\n• Heroes leveled and equipped\n• Resources secured\n• Rally assignments confirmed\n\n🏆 **Objectives:**\n• Capture strategic points\n• Defend alliance territory  \n• Support allied rallies\n• Maximize alliance contribution\n\n**FOR THE ALLIANCE!**\n\n@everyone Prepare for war!",
+      "id": "tpl_vs_d4",
+      "name": "[VS-D4] Server War",
+      "content": "🌍 **[VS-D4] SERVER WAR** 🌍\n\n**Alliance:** {alliance_name} [{alliance_tag}]\n**War Start:** {event_time}\n**War Commander:** {sender_name}\n\n⚔️ **Battle Plan:**\n{notes}\n\n🛡️ **Preparation:**\n• Max troops ready\n• Heroes leveled and equipped\n• Resources secured\n• Rally assignments confirmed\n\n🏆 **Objectives:**\n• Capture strategic points\n• Defend alliance territory  \n• Support allied rallies\n• Maximize alliance contribution\n\n**FOR THE ALLIANCE!**\n\n@everyone Prepare for war!",
+      "variables_used": ["{alliance_name}", "{alliance_tag}", "{event_time}", "{sender_name}", "{notes}"],
+      "scope": "global",
+      "season": "general",
+      "event_type": "vs_event",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-08 00:00:00"
+    },
+    {
+      "id": "tpl_vs_d5",
+      "name": "[VS-D5] Cross-Server Battle",
+      "content": "🌐 **[VS-D5] CROSS-SERVER BATTLE** 🌐\n\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Battle Start:** {event_time}\n**Commander:** {sender_name}\n\n⚔️ **Cross-Server Competition:**\n• Multiple servers competing\n• Alliance ranking impacts rewards\n• Every contribution counts!\n\n📋 **Objectives:**\n{notes}\n\n🛡️ **Preparation:**\n• Review opposing server strengths\n• Coordinate with alliance members\n• Maximize participation\n• Strategic resource management\n\n🏆 **Let's show them what {server_name} can do!**\n\n@everyone Time to represent!",
+      "variables_used": ["{alliance_name}", "{alliance_tag}", "{event_time}", "{sender_name}", "{notes}", "{server_name}"],
+      "scope": "global",
+      "season": "general",
+      "event_type": "vs_event",
+      "alliance": null,
+      "created_by": "system",
+      "created_at": "2025-11-08 00:00:00"
+    },
+    {
+      "id": "tpl_vs_d6",
+      "name": "[VS-D6] Territory Conquest",
+      "content": "🗺️ **[VS-D6] TERRITORY CONQUEST** 🗺️\n\n**Alliance:** {alliance_name} [{alliance_tag}]\n**Conquest Start:** {event_time}\n**Strategic Commander:** {sender_name}\n\n🎯 **Territory Objectives:**\n{notes}\n\n⚔️ **Battle Strategy:**\n• Identify key strategic points\n• Coordinate capture timings\n• Defend claimed territories\n• Support allied conquests\n\n🏰 **Territory Control:**\n• Hold positions for maximum points\n• Rotate defenders to maintain strength\n• Cut off enemy supply lines\n• Maximize territorial coverage\n\n🏆 **Victory through strategic control!**\n\n@everyone Claim our territory!",
       "variables_used": ["{alliance_name}", "{alliance_tag}", "{event_time}", "{sender_name}", "{notes}"],
       "scope": "global",
       "season": "general",
