@@ -41,6 +41,16 @@ switch ($action) {
             'action' => $filter_action !== 'list' ? $filter_action : ''
         ], $limit, 0);
 
+        // Enrich logs with display names
+        foreach ($logs as &$log) {
+            if (isset($log['user']) && $log['user'] !== 'unknown') {
+                $log['display_name'] = get_user_display_name($log['user']);
+            } else {
+                $log['display_name'] = $log['user'] ?? 'unknown';
+            }
+        }
+        unset($log); // Break reference
+
         echo json_encode([
             'success' => true,
             'logs' => $logs,

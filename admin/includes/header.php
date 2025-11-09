@@ -628,7 +628,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </nav>
             
             <div class="user-info">
-                <span class="user-welcome"><?php echo emailDisplay($user->sub ?? 'User', true); ?></span>
+                <span class="user-welcome">Welcome back, <?php echo htmlspecialchars(get_user_display_name_from_token($user)); ?></span>
                 <span class="user-role">
                     <?php
                     $user_roles = get_user_roles($user);

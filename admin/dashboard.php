@@ -161,7 +161,7 @@ try {
             <span class="title-icon">🏛️</span>
             <?php echo $_ENV['APP_NAME'] ?? 'Last War 1586 Admin'; ?>
         </h1>
-        <p class="dashboard-subtitle">Welcome back, <?php echo htmlspecialchars(explode('@', $user->sub)[0]); ?></p>
+        <p class="dashboard-subtitle">Welcome back, <?php echo htmlspecialchars(get_user_display_name_from_token($user)); ?></p>
         <div class="user-badge">
             <span class="role-badge role-<?php echo strtolower($user->aud); ?>">
                 <?php echo strtoupper($user->aud); ?>

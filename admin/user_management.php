@@ -570,9 +570,10 @@ function sortRolesByHierarchy($roles) {
             <thead>
                 <tr>
                     <th class="sortable" onclick="sortTable(0)">Email <span class="sort-indicator"></span></th>
-                    <th class="sortable" onclick="sortTable(1)">Role <span class="sort-indicator"></span></th>
-                    <th class="sortable" onclick="sortTable(2)">Alliances <span class="sort-indicator"></span></th>
-                    <th class="sortable" onclick="sortTable(3)">Status <span class="sort-indicator"></span></th>
+                    <th class="sortable" onclick="sortTable(1)">In-Game Name <span class="sort-indicator"></span></th>
+                    <th class="sortable" onclick="sortTable(2)">Role <span class="sort-indicator"></span></th>
+                    <th class="sortable" onclick="sortTable(3)">Alliances <span class="sort-indicator"></span></th>
+                    <th class="sortable" onclick="sortTable(4)">Status <span class="sort-indicator"></span></th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -581,6 +582,12 @@ function sortRolesByHierarchy($roles) {
                     <tr>
                         <td>
                             <?php echo emailDisplay($user['email'], true); ?>
+                        </td>
+                        <td>
+                            <?php
+                            $displayName = get_user_display_name($user['email']);
+                            echo htmlspecialchars($displayName);
+                            ?>
                         </td>
                         <td>
                             <?php
@@ -1577,11 +1584,13 @@ function sortTable(columnIndex) {
 
 function getCellValue(row, columnIndex) {
     const cell = row.cells[columnIndex];
-    
+
     switch (columnIndex) {
         case 0: // Email
             return cell.textContent.trim().toLowerCase();
-        case 1: // Role - support multiple role badges
+        case 1: // In-Game Name
+            return cell.textContent.trim().toLowerCase();
+        case 2: // Role - support multiple role badges
             const roleBadges = cell.querySelectorAll('.role-badge');
             const roles = Array.from(roleBadges).map(badge =>
                 badge.textContent.toLowerCase().replace('+ape', '').trim()
@@ -1608,10 +1617,10 @@ function getCellValue(row, columnIndex) {
                 const highestPriority = roleOrder[highest] || -1;
                 return currentPriority > highestPriority ? current : highest;
             }, roles[0]);
-        case 2: // Alliances
+        case 3: // Alliances
             const allianceTags = cell.querySelectorAll('.alliance-tag');
             return Array.from(allianceTags).map(tag => tag.textContent.trim()).join(', ');
-        case 3: // Status
+        case 4: // Status
             const statusDot = cell.querySelector('.status-dot');
             return statusDot ? (statusDot.classList.contains('active') ? 'active' : 'inactive') : '';
         default:

@@ -232,6 +232,22 @@ include 'includes/header.php';
         </div>
     </div>
 
+    <!-- Display Name Preview -->
+    <div class="info-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-left: none; margin-bottom: 2rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <strong style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">You appear as:</strong>
+                <div id="displayNamePreview" style="font-size: 1.5rem; font-weight: 700; margin-top: 0.25rem;">
+                    <?php echo htmlspecialchars(get_user_display_name($user->sub)); ?>
+                </div>
+            </div>
+            <div style="font-size: 3rem; opacity: 0.3;">👤</div>
+        </div>
+        <div style="font-size: 0.85rem; margin-top: 0.75rem; opacity: 0.9;">
+            This is how you appear throughout the admin panel (header, audit logs, announcements, etc.)
+        </div>
+    </div>
+
     <!-- In-Game Information -->
     <form id="profileForm">
         <div class="profile-section">
@@ -381,6 +397,20 @@ include 'includes/header.php';
 </style>
 
 <script>
+// Real-time display name preview
+document.getElementById('inGameName').addEventListener('input', function(e) {
+    const preview = document.getElementById('displayNamePreview');
+    const currentEmail = '<?php echo addslashes($user->sub); ?>';
+    const inGameName = e.target.value.trim();
+
+    if (inGameName) {
+        preview.textContent = inGameName;
+    } else {
+        // Fallback to email local part
+        preview.textContent = currentEmail.split('@')[0];
+    }
+});
+
 // Form submission
 document.getElementById('profileForm').addEventListener('submit', async function(e) {
     e.preventDefault();

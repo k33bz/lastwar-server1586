@@ -540,7 +540,7 @@ include 'includes/header.php';
                     <div>
                         <span class="log-time" data-utc="<?= htmlspecialchars($log['timestamp'] ?? 'Unknown') ?>"><?= htmlspecialchars($log['timestamp'] ?? 'Unknown') ?></span>
                         <span class="log-action <?= htmlspecialchars($log['action'] ?? 'unknown') ?>">[<?= htmlspecialchars($log['action'] ?? 'unknown') ?>]</span>
-                        <span class="log-user" data-email="<?= htmlspecialchars($log['user'] ?? 'unknown') ?>"><?= htmlspecialchars($log['user'] ?? 'unknown') ?></span>
+                        <span class="log-user" data-email="<?= htmlspecialchars($log['user'] ?? 'unknown') ?>"><?= htmlspecialchars(get_user_display_name($log['user'] ?? 'unknown')) ?></span>
                         <span class="log-ip">(<?= htmlspecialchars($log['ip'] ?? 'unknown') ?>)</span>
                     </div>
                     <?php if (!empty($log['details'])): ?>
@@ -670,7 +670,7 @@ include 'includes/header.php';
                 <div>
                     <span class="log-time" data-utc="${escapeHtml(log.timestamp || 'Unknown')}">${escapeHtml(log.timestamp || 'Unknown')}</span>
                     <span class="log-action ${escapeHtml(log.action || 'unknown')}">[${escapeHtml(log.action || 'unknown')}]</span>
-                    <span class="log-user" data-email="${escapeHtml(log.user || 'unknown')}">${escapeHtml(log.user || 'unknown')}</span>
+                    <span class="log-user" data-email="${escapeHtml(log.user || 'unknown')}">${escapeHtml(log.display_name || log.user || 'unknown')}</span>
                     <span class="log-ip">(${escapeHtml(log.ip || 'unknown')})</span>
                 </div>
             `;
