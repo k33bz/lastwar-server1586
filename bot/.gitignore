@@ -1,0 +1,22 @@
+# Bot-specific ignore
+
+# Environment variables
+.env
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+logs/
+
+# PM2
+.pm2/
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# Testing
+.nyc_output/
+coverage/

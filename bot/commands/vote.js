@@ -1,0 +1,350 @@
+/**
+ * Vote Command
+ * Slash command handler for /vote
+ */
+
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { getActiveVotes, getVote } = require('../utils/dataAccess');
+const { createVote, publishVote } = require('../utils/voteManager');
+const { verifyVoteIntegrity, generateVerificationReceipt } = require('../utils/voteIntegrity');
+
+module.exports = {
+  data: new SlashCommandBuilder()
+    .setName('vote')
+    .setDescription('Manage council votes')
+    .addSubcommand(subcommand =>
+      subcommand
+        .setName('create')
+        .setDescription('Create a new vote (President/Admin only)')
+    )
+    .addSubcommand(subcommand =>
+      subcommand
+        .setName('status')
+        .setDescription('Check status of active votes')
+        .addStringOption(option =>
+          option
+            .setName('vote_id')
+            .setDescription('Specific vote ID (optional)')
+            .setRequired(false)
+        )
+    )
+    .addSubcommand(subcommand =>
+      subcommand
+        .setName('verify')
+        .setDescription('Verify vote integrity')
+        .addStringOption(option =>
+          option
+            .setName('vote_id')
+            .setDescription('Vote ID to verify')
+            .setRequired(true)
+        )
+    ),
+
+  async execute(interaction) {
+    const subcommand = interaction.options.getSubcommand();
+
+    try {
+      switch (subcommand) {
+        case 'create':
+          await handleCreate(interaction);
+          break;
+        case 'status':
+          await handleStatus(interaction);
+          break;
+        case 'verify':
+          await handleVerify(interaction);
+          break;
+        default:
+          await interaction.reply({
+            content: '❌ Unknown subcommand',
+            ephemeral: true
+          });
+      }
+    } catch (error) {
+      console.error('[ERROR] Vote command error:', error);
+
+      if (interaction.replied || interaction.deferred) {
+        await interaction.followUp({
+          content: `❌ Error: ${error.message}`,
+          ephemeral: true
+        });
+      } else {
+        await interaction.reply({
+          content: `❌ Error: ${error.message}`,
+          ephemeral: true
+        });
+      }
+    }
+  }
+};
+
+/**
+ * Handle /vote create
+ */
+async function handleCreate(interaction) {
+  // TODO: Add role check for president/admin
+  // For now, allow anyone (you'll add role checking later)
+
+  await interaction.reply({
+    content: '✅ Check your DMs to create the vote!',
+    ephemeral: true
+  });
+
+  try {
+    const dm = await interaction.user.createDM();
+    await initiateVoteCreation(interaction.user, dm, interaction.client);
+  } catch (error) {
+    console.error('[ERROR] Failed to send DM:', error);
+    await interaction.followUp({
+      content: '❌ I couldn\'t send you a DM. Please make sure your DMs are enabled for this server.',
+      ephemeral: true
+    });
+  }
+}
+
+/**
+ * Handle /vote status
+ */
+async function handleStatus(interaction) {
+  const voteId = interaction.options.getString('vote_id');
+
+  if (voteId) {
+    // Show specific vote
+    const vote = await getVote(voteId);
+
+    if (!vote) {
+      return await interaction.reply({
+        content: `❌ Vote \`${voteId}\` not found`,
+        ephemeral: true
+      });
+    }
+
+    const submitted = vote.council_snapshot.voter_details.filter(v => v.vote_submitted).length;
+    const total = vote.council_snapshot.voter_details.length;
+    const endTime = new Date(vote.voting_period.end_time);
+    const timeRemaining = endTime - new Date();
+    const hoursRemaining = Math.max(0, Math.floor(timeRemaining / (1000 * 60 * 60)));
+    const minutesRemaining = Math.max(0, Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60)));
+
+    await interaction.reply({
+      embeds: [{
+        title: `📊 Vote Status: ${vote.vote_details.title}`,
+        fields: [
+          {
+            name: 'Vote ID',
+            value: vote.vote_id,
+            inline: true
+          },
+          {
+            name: 'Status',
+            value: vote.status.toUpperCase(),
+            inline: true
+          },
+          {
+            name: 'Progress',
+            value: `${submitted}/${total} votes submitted`,
+            inline: true
+          },
+          {
+            name: 'Time Remaining',
+            value: vote.status === 'active'
+              ? `${hoursRemaining}h ${minutesRemaining}m`
+              : 'Completed',
+            inline: true
+          }
+        ],
+        color: vote.status === 'active' ? 0x667eea : 0x28a745,
+        timestamp: new Date()
+      }],
+      ephemeral: true
+    });
+  } else {
+    // Show all active votes
+    const activeVotes = await getActiveVotes();
+
+    if (activeVotes.length === 0) {
+      return await interaction.reply({
+        content: '📊 No active votes at this time',
+        ephemeral: true
+      });
+    }
+
+    const fields = activeVotes.map(vote => {
+      const submitted = vote.council_snapshot.voter_details.filter(v => v.vote_submitted).length;
+      const total = vote.council_snapshot.voter_details.length;
+
+      return {
+        name: vote.vote_details.title,
+        value: `**ID:** ${vote.vote_id}\n**Progress:** ${submitted}/${total} votes\n**Created:** ${new Date(vote.created_at).toLocaleString()}`
+      };
+    });
+
+    await interaction.reply({
+      embeds: [{
+        title: '📊 Active Votes',
+        fields: fields,
+        color: 0x667eea,
+        timestamp: new Date()
+      }],
+      ephemeral: true
+    });
+  }
+}
+
+/**
+ * Handle /vote verify
+ */
+async function handleVerify(interaction) {
+  const voteId = interaction.options.getString('vote_id');
+  const vote = await getVote(voteId);
+
+  if (!vote) {
+    return await interaction.reply({
+      content: `❌ Vote \`${voteId}\` not found`,
+      ephemeral: true
+    });
+  }
+
+  const receipt = generateVerificationReceipt(vote);
+  const verification = receipt.verification;
+
+  await interaction.reply({
+    embeds: [{
+      title: '🔐 Vote Integrity Verification',
+      description: verification.valid
+        ? '✅ Vote integrity verified - no tampering detected'
+        : `❌ Vote integrity compromised: ${verification.error}`,
+      fields: [
+        {
+          name: 'Vote ID',
+          value: vote.vote_id,
+          inline: true
+        },
+        {
+          name: 'Status',
+          value: vote.status.toUpperCase(),
+          inline: true
+        },
+        {
+          name: 'Chain Length',
+          value: receipt.chain_length.toString(),
+          inline: true
+        },
+        {
+          name: 'Vote Hash',
+          value: `\`${receipt.vote_hash ? receipt.vote_hash.substring(0, 16) + '...' : 'N/A'}\``,
+          inline: false
+        },
+        {
+          name: 'Verification URL',
+          value: receipt.verification_url,
+          inline: false
+        }
+      ],
+      color: verification.valid ? 0x28a745 : 0xdc3545,
+      timestamp: new Date(receipt.verified_at)
+    }],
+    ephemeral: true
+  });
+}
+
+/**
+ * Initiate vote creation DM flow
+ */
+async function initiateVoteCreation(user, dm, client) {
+  const collector = dm.createMessageCollector({
+    filter: m => m.author.id === user.id,
+    time: 600000 // 10 minutes
+  });
+
+  let voteData = {
+    title: null,
+    description: null,
+    category: null
+  };
+
+  let step = 0;
+
+  const steps = [
+    {
+      prompt: '**📝 Vote Creation - Step 1/3**\n\nWhat is the vote title? (Keep it concise, max 100 characters)',
+      field: 'title',
+      validate: (value) => value.length <= 100
+    },
+    {
+      prompt: '**📝 Vote Creation - Step 2/3**\n\nProvide a detailed description or synopsis:',
+      field: 'description'
+    },
+    {
+      prompt: '**📝 Vote Creation - Step 3/3**\n\nSelect category:\n1️⃣ Rule Change\n2️⃣ Alliance Action\n3️⃣ Server Event\n4️⃣ Other\n\nReply with the number (1-4):',
+      field: 'category',
+      transform: (value) => {
+        const categories = ['rule_change', 'alliance_action', 'server_event', 'other'];
+        const index = parseInt(value) - 1;
+        return categories[index];
+      },
+      validate: (value) => {
+        const num = parseInt(value);
+        return num >= 1 && num <= 4;
+      }
+    }
+  ];
+
+  // Send first prompt
+  await dm.send(steps[step].prompt);
+
+  collector.on('collect', async (message) => {
+    const currentStep = steps[step];
+
+    // Validate input
+    if (currentStep.validate && !currentStep.validate(message.content)) {
+      await dm.send(`❌ Invalid input. ${currentStep.prompt}`);
+      return;
+    }
+
+    // Save response
+    voteData[currentStep.field] = currentStep.transform
+      ? currentStep.transform(message.content)
+      : message.content;
+
+    step++;
+
+    if (step < steps.length) {
+      // Next step
+      await dm.send(steps[step].prompt);
+    } else {
+      // All data collected - create vote
+      try {
+        const vote = await createVote(voteData, user);
+
+        await dm.send({
+          embeds: [{
+            title: '✅ Vote Created Successfully!',
+            fields: [
+              { name: 'Vote ID', value: vote.vote_id },
+              { name: 'Title', value: vote.vote_details.title },
+              { name: 'Duration', value: '24 hours' }
+            ],
+            description: 'Notifying council members now...',
+            color: 0x28a745
+          }]
+        });
+
+        // Post to vote channel and notify council
+        await publishVote(vote, client);
+
+        collector.stop('completed');
+      } catch (error) {
+        console.error('[ERROR] Failed to create vote:', error);
+        await dm.send(`❌ Failed to create vote: ${error.message}\n\nPlease try again with \`/vote create\``);
+        collector.stop('error');
+      }
+    }
+  });
+
+  collector.on('end', async (collected, reason) => {
+    if (reason === 'time') {
+      await dm.send('⏱️ Vote creation timed out. Please start over with `/vote create`.');
+    }
+  });
+}
