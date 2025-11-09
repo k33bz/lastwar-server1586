@@ -157,18 +157,26 @@ try {
 
 <div class="dashboard-header">
     <div class="header-content">
-        <h1 class="dashboard-title">
-            <span class="title-icon">🏛️</span>
-            <?php echo $_ENV['APP_NAME'] ?? 'Last War 1586 Admin'; ?>
-        </h1>
-        <p class="dashboard-subtitle">Welcome back, <?php echo htmlspecialchars(get_user_display_name_from_token($user)); ?></p>
-        <div class="user-badge">
-            <span class="role-badge role-<?php echo strtolower($user->aud); ?>">
-                <?php echo strtoupper($user->aud); ?>
-                <?php if (is_power_editor($user)): ?>
-                    <span class="power-badge">⚡ POWER</span>
-                <?php endif; ?>
-            </span>
+        <div class="header-left">
+            <h1 class="dashboard-title">
+                <span class="title-icon">🏛️</span>
+                <?php echo $_ENV['APP_NAME'] ?? 'Last War 1586 Admin'; ?>
+            </h1>
+            <p class="dashboard-subtitle">Welcome back, <?php echo htmlspecialchars(get_user_display_name_from_token($user)); ?></p>
+        </div>
+        <div class="header-right">
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle dark/light mode (T)">
+                <span class="theme-icon light">☀️</span>
+                <span class="theme-icon dark">🌙</span>
+            </button>
+            <div class="user-badge">
+                <span class="role-badge role-<?php echo strtolower($user->aud); ?>">
+                    <?php echo strtoupper($user->aud); ?>
+                    <?php if (is_power_editor($user)): ?>
+                        <span class="power-badge">⚡ POWER</span>
+                    <?php endif; ?>
+                </span>
+            </div>
         </div>
     </div>
 </div>
@@ -678,6 +686,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add animated number counters to stat cards
     animateStatNumbers();
+
+    // Initialize theme toggle
+    initThemeToggle();
+
+    // Initialize keyboard shortcuts
+    initKeyboardShortcuts(tabButtons);
 });
 
 // Load badge counts for Discord and Season 2 tabs
@@ -751,19 +765,124 @@ function animateStatNumbers() {
         }, stepTime);
     });
 }
+
+// Theme Toggle Functionality
+function initThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) return;
+
+    // Load saved theme from localStorage
+    const savedTheme = localStorage.getItem('dashboardTheme') || 'light';
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+    }
+
+    // Toggle theme on button click
+    themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-theme');
+        const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+        localStorage.setItem('dashboardTheme', currentTheme);
+
+        // Optional: Save to server for persistence across devices
+        // saveUserPreference('theme', currentTheme);
+    });
+}
+
+// Keyboard Shortcuts
+function initKeyboardShortcuts(tabButtons) {
+    document.addEventListener('keydown', function(e) {
+        // Number keys 1-6 for tab switching (when not in input fields)
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        const key = e.key;
+
+        // Tab shortcuts: 1-6
+        if (key >= '1' && key <= '6') {
+            const index = parseInt(key) - 1;
+            if (tabButtons[index]) {
+                e.preventDefault();
+                tabButtons[index].click();
+            }
+        }
+
+        // T for theme toggle
+        if (key === 't' || key === 'T') {
+            e.preventDefault();
+            document.getElementById('themeToggle')?.click();
+        }
+
+        // Escape to close modals (future enhancement)
+        if (key === 'Escape') {
+            // Could close any open modals here
+        }
+    });
+}
+
+// Save user preference to server (optional - for cross-device sync)
+async function saveUserPreference(key, value) {
+    try {
+        const csrfToken = getCsrfToken();
+        await fetch('user_preferences_api.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify({ key, value })
+        });
+    } catch (error) {
+        console.error('Failed to save preference:', error);
+    }
+}
 </script>
 
 <style>
+/* CSS Variables for Theme Support */
+:root {
+    --bg-primary: #f5f5f5;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f8f9fa;
+    --text-primary: #333333;
+    --text-secondary: #6c757d;
+    --text-tertiary: #495057;
+    --border-color: #e9ecef;
+    --shadow-sm: 0 2px 15px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark Theme */
+body.dark-theme {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #3a3a3a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --text-tertiary: #c0c0c0;
+    --border-color: #404040;
+    --shadow-sm: 0 2px 15px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Apply theme variables to body */
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 /* Tab Navigation */
 .dashboard-tabs {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 16px;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-sm);
     margin-bottom: 2rem;
     padding: 1rem;
     position: sticky;
     top: 70px;
     z-index: 100;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .tabs-container {
@@ -794,7 +913,7 @@ function animateStatNumbers() {
     border-radius: 10px;
     font-size: 0.95rem;
     font-weight: 500;
-    color: #6c757d;
+    color: var(--text-secondary);
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -805,8 +924,8 @@ function animateStatNumbers() {
 }
 
 .tab-button:hover {
-    background: #f8f9fa;
-    color: #495057;
+    background: var(--bg-tertiary);
+    color: var(--text-tertiary);
 }
 
 .tab-button.active {
@@ -889,6 +1008,20 @@ function animateStatNumbers() {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.header-left {
+    flex: 1;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .dashboard-title {
@@ -936,6 +1069,52 @@ function animateStatNumbers() {
     font-weight: 700;
 }
 
+/* Theme Toggle */
+.theme-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.theme-icon {
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.theme-icon.light {
+    display: block;
+}
+
+.theme-icon.dark {
+    display: none;
+}
+
+body.dark-theme .theme-icon.light {
+    display: none;
+}
+
+body.dark-theme .theme-icon.dark {
+    display: block;
+}
+
 /* Stats Overview */
 .stats-overview {
     margin-bottom: 3rem;
@@ -948,12 +1127,12 @@ function animateStatNumbers() {
 }
 
 .stat-card {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--bg-secondary);
     backdrop-filter: blur(10px);
     padding: 1.5rem;
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
@@ -975,7 +1154,7 @@ function animateStatNumbers() {
 
 .stat-card:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-lg);
 }
 
 .stat-card:hover::after {
@@ -1148,10 +1327,10 @@ function animateStatNumbers() {
 }
 
 .section-card {
-    background: #f8f9fa;
+    background: var(--bg-tertiary);
     padding: 1.5rem;
     border-radius: 12px;
-    border: 1px solid #e9ecef;
+    border: 1px solid var(--border-color);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
@@ -1164,8 +1343,12 @@ function animateStatNumbers() {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
     transition: left 0.5s ease;
+}
+
+body.dark-theme .section-card::before {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
 }
 
 .section-card:hover::before {
@@ -1174,8 +1357,8 @@ function animateStatNumbers() {
 
 .section-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-    background: #fff;
+    box-shadow: var(--shadow-md);
+    background: var(--bg-secondary);
 }
 
 .section-card.primary { border-left: 4px solid #667eea; }
