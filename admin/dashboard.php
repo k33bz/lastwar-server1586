@@ -192,7 +192,7 @@ try {
         <button class="tab-button" data-tab="discord">
             <span class="tab-icon">💬</span>
             <span class="tab-label">Discord</span>
-            <span class="tab-badge" id="discordBadge" style="display: none;">0</span>
+            <span class="tab-badge" id="discordBadge">0</span>
         </button>
         <?php endif; ?>
 
@@ -200,6 +200,7 @@ try {
         <button class="tab-button" data-tab="season2">
             <span class="tab-icon">❄️</span>
             <span class="tab-label">Season 2</span>
+            <span class="tab-badge" id="season2Badge">0</span>
         </button>
         <?php endif; ?>
 
@@ -207,11 +208,17 @@ try {
         <button class="tab-button" data-tab="security">
             <span class="tab-icon">🛡️</span>
             <span class="tab-label">Security</span>
+            <?php if ($stats['security_status'] === 'critical' || $stats['security_status'] === 'warning'): ?>
+            <span class="tab-badge warning">!</span>
+            <?php endif; ?>
         </button>
 
         <button class="tab-button" data-tab="system">
             <span class="tab-icon">⚙️</span>
             <span class="tab-label">System</span>
+            <?php if ($stats['backup_status'] === 'old' || $stats['backup_status'] === 'none'): ?>
+            <span class="tab-badge warning">!</span>
+            <?php endif; ?>
         </button>
         <?php endif; ?>
     </div>
@@ -651,7 +658,85 @@ document.addEventListener('DOMContentLoaded', function() {
             savedButton.click();
         }
     }
+
+    // Load badge counts
+    loadBadgeCounts();
+
+    // Add animated number counters to stat cards
+    animateStatNumbers();
 });
+
+// Load badge counts for Discord and Season 2 tabs
+async function loadBadgeCounts() {
+    try {
+        // Load Discord pending messages count
+        const discordBadge = document.getElementById('discordBadge');
+        if (discordBadge) {
+            const scheduledResp = await fetch('discord_scheduled_api.php?action=list');
+            const scheduledData = await scheduledResp.json();
+            const pendingScheduled = scheduledData.messages?.filter(m => m.status === 'pending').length || 0;
+
+            const recurringResp = await fetch('discord_recurring_api.php?action=list');
+            const recurringData = await recurringResp.json();
+            const activeRecurring = recurringData.messages?.filter(m => m.enabled).length || 0;
+
+            const total = pendingScheduled + activeRecurring;
+            if (total > 0) {
+                discordBadge.textContent = total;
+                discordBadge.style.display = 'block';
+            } else {
+                discordBadge.style.display = 'none';
+            }
+        }
+
+        // Load Season 2 upcoming events count
+        const season2Badge = document.getElementById('season2Badge');
+        if (season2Badge) {
+            const season2Resp = await fetch('season2_api.php?action=get_upcoming_events&days=7');
+            const season2Data = await season2Resp.json();
+            const upcomingCount = season2Data.events?.length || 0;
+
+            if (upcomingCount > 0) {
+                season2Badge.textContent = upcomingCount;
+                season2Badge.style.display = 'block';
+            } else {
+                season2Badge.style.display = 'none';
+            }
+        }
+    } catch (error) {
+        console.error('Error loading badge counts:', error);
+    }
+}
+
+// Animate stat numbers on page load
+function animateStatNumbers() {
+    const statNumbers = document.querySelectorAll('.stat-number');
+
+    statNumbers.forEach(elem => {
+        const text = elem.textContent.trim();
+        if (text === '—' || text === '✓') return; // Skip non-numeric stats
+
+        const final = parseInt(text.replace(/,/g, ''));
+        if (isNaN(final)) return;
+
+        let current = 0;
+        const increment = Math.ceil(final / 30); // 30 frames
+        const duration = 1000; // 1 second
+        const stepTime = duration / 30;
+
+        elem.textContent = '0';
+
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= final) {
+                elem.textContent = final.toLocaleString();
+                clearInterval(timer);
+            } else {
+                elem.textContent = current.toLocaleString();
+            }
+        }, stepTime);
+    });
+}
 </script>
 
 <style>
@@ -733,10 +818,27 @@ document.addEventListener('DOMContentLoaded', function() {
     font-weight: 700;
     min-width: 20px;
     text-align: center;
+    display: none;
+}
+
+.tab-badge.warning {
+    background: #f39c12;
+    color: white;
+    display: block;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
 }
 
 .tab-button.active .tab-badge {
     background: rgba(255, 255, 255, 0.4);
+}
+
+.tab-button.active .tab-badge.warning {
+    background: #e67e22;
 }
 
 /* Tab Content */
@@ -832,19 +934,38 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .stat-card {
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
     padding: 1.5rem;
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    cursor: pointer;
+}
+
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card:hover::after {
+    opacity: 1;
 }
 
 .stat-card::before {
@@ -1017,12 +1138,30 @@ document.addEventListener('DOMContentLoaded', function() {
     padding: 1.5rem;
     border-radius: 12px;
     border: 1px solid #e9ecef;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.section-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    transition: left 0.5s ease;
+}
+
+.section-card:hover::before {
+    left: 100%;
 }
 
 .section-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    background: #fff;
 }
 
 .section-card.primary { border-left: 4px solid #667eea; }
@@ -1095,16 +1234,41 @@ document.addEventListener('DOMContentLoaded', function() {
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::before {
+    width: 300px;
+    height: 300px;
 }
 
 .btn-icon {
     font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.btn:hover .btn-icon {
+    transform: scale(1.1);
 }
 
 .btn-primary {
@@ -1113,8 +1277,9 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #7688eb 0%, #8558b3 100%);
 }
 
 .btn-secondary {
@@ -1124,7 +1289,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .btn-secondary:hover {
     background: #5a6268;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
 }
 
 .btn-power {
@@ -1133,8 +1299,9 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .btn-power:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(243, 156, 18, 0.5);
+    background: linear-gradient(135deg, #f5a623 0%, #f77c33 100%);
 }
 
 /* Responsive Design */
