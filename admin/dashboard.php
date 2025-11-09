@@ -304,43 +304,6 @@ try {
     </div>
 </div>
 
-    <div class="quick-actions">
-        <h2 class="section-title">
-            <span class="section-icon">⚡</span>
-            Quick Actions
-        </h2>
-        <div class="quick-actions-grid">
-            <?php if ($user->aud !== 'r4'): ?>
-            <a href="alliance_edit.php" class="quick-action-card">
-                <div class="action-icon">✏️</div>
-                <div class="action-title">Alliance Editor</div>
-                <div class="action-desc"><?php echo $user->aud === 'r5' ? 'Update alliance info' : 'View all alliances'; ?></div>
-            </a>
-            <?php endif; ?>
-
-            <?php if ($user->aud === 'admin' || is_power_editor($user)): ?>
-            <a href="alliances_power.php" class="quick-action-card power">
-                <div class="action-icon">⚡</div>
-                <div class="action-title">Power Editor</div>
-                <div class="action-desc">Edit alliance power</div>
-            </a>
-            <?php endif; ?>
-
-            <?php if ($user->aud === 'admin'): ?>
-            <a href="user_management.php" class="quick-action-card">
-                <div class="action-icon">👥</div>
-                <div class="action-title">User Management</div>
-                <div class="action-desc">Manage users & roles</div>
-            </a>
-
-            <a href="security_audit.php" class="quick-action-card">
-                <div class="action-icon">📊</div>
-                <div class="action-title">Audit Logs</div>
-                <div class="action-desc">View system logs</div>
-            </a>
-            <?php endif; ?>
-        </div>
-    </div>
 </div>
 <!-- End Overview Tab -->
 
@@ -539,7 +502,7 @@ try {
                             <span class="btn-icon">🔑</span>
                             JWT Keys
                         </a>
-                        <a href="security_mfa.php" class="btn btn-secondary">
+                        <a href="security_mfa_manage.php" class="btn btn-secondary">
                             <span class="btn-icon">🔐</span>
                             MFA
                         </a>
@@ -569,9 +532,23 @@ try {
             </h2>
 
             <div class="section-cards-grid">
+                <div class="section-card metrics">
+                    <div class="card-header">
+                        <h3>📊 System Metrics</h3>
+                        <span class="card-badge monitoring">Monitoring</span>
+                    </div>
+                    <p>CloudWatch-style metrics and performance monitoring</p>
+                    <div class="action-buttons">
+                        <a href="metrics_dashboard.php" class="btn btn-primary">
+                            <span class="btn-icon">📈</span>
+                            View Metrics
+                        </a>
+                    </div>
+                </div>
+
                 <div class="section-card system">
                     <div class="card-header">
-                        <h3>📊 System Administration</h3>
+                        <h3>⚙️ System Administration</h3>
                         <span class="card-badge system">System</span>
                     </div>
                     <p>System maintenance and testing utilities</p>
@@ -1241,11 +1218,7 @@ body.dark-theme .theme-icon.dark {
     margin: 0 auto;
 }
 
-/* Quick Actions */
-.quick-actions {
-    margin-bottom: 3rem;
-}
-
+/* Section Titles */
 .section-title {
     font-size: 1.5rem;
     font-weight: 600;
@@ -1258,51 +1231,6 @@ body.dark-theme .theme-icon.dark {
 
 .section-icon {
     font-size: 1.8rem;
-}
-
-.quick-actions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-}
-
-.quick-action-card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    text-align: center;
-}
-
-.quick-action-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    border-color: #667eea;
-}
-
-.quick-action-card.power {
-    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-    color: white;
-}
-
-.action-icon {
-    font-size: 2.5rem;
-    margin-bottom: 0.75rem;
-}
-
-.action-title {
-    font-weight: 600;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.action-desc {
-    font-size: 0.85rem;
-    opacity: 0.8;
 }
 
 /* Main Sections */
@@ -1533,10 +1461,6 @@ body.dark-theme .section-card::before {
     }
 
     .stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .quick-actions-grid {
         grid-template-columns: 1fr;
     }
 
