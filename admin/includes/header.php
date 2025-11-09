@@ -550,7 +550,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
                 <!-- Alliances Dropdown -->
                 <div class="nav-dropdown">
-                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['alliance_edit.php', 'alliances_power.php', 'alliance_tags_manager.php', 'council_rotation.php']) ? 'active' : ''; ?>">
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['alliance_edit.php', 'alliances_power.php', 'alliance_tags_manager.php', 'council_rotation.php', 'votes_management.php']) ? 'active' : ''; ?>">
                         Alliances
                     </div>
                     <div class="nav-dropdown-menu">
@@ -563,6 +563,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <?php endif; ?>
                         <?php if (has_role($user, ['admin', 'president'])): ?>
                         <a href="council_rotation.php" class="nav-link <?php echo $current_page === 'council_rotation.php' ? 'active' : ''; ?>">🗳️ Council Rotation</a>
+                        <a href="votes_management.php" class="nav-link <?php echo $current_page === 'votes_management.php' ? 'active' : ''; ?>">📝 Votes</a>
                         <?php endif; ?>
                     </div>
                 </div>
