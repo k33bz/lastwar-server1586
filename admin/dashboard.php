@@ -133,7 +133,7 @@ try {
     // Check for recent backups
     $backup_dir = __DIR__ . '/backups';
     if (is_dir($backup_dir)) {
-        $files = glob($backup_dir . '/alliances_*.json');
+        $files = glob($backup_dir . '/*.json');
         if (!empty($files)) {
             $latest_backup = max(array_map('filemtime', $files));
             $hours_ago = (time() - $latest_backup) / 3600;
