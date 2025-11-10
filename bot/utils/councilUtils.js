@@ -3,7 +3,7 @@
  * Determines current council members based on rotation schedule
  */
 
-const { getRotationSchedule, getAlliances } = require('./dataAccess');
+const { getRotationSchedule, getAlliances, getCouncilData } = require('./dataAccess');
 
 /**
  * Get current council members with voter details
@@ -35,17 +35,31 @@ async function getCurrentCouncilMembers() {
         alliance_tag: tag,
         r5_name: 'Unknown',
         discord_id: null,
-        delegated_to: null,
+        delegated_voters: [],
         vote_submitted: false,
         submission_time: null
       };
+    }
+
+    // Get R4s who can vote (delegation enabled)
+    const delegated_voters = [];
+    if (alliance.r4s && Array.isArray(alliance.r4s)) {
+      alliance.r4s.forEach(r4 => {
+        if (r4.canVote && r4.discordId) {
+          delegated_voters.push({
+            name: r4.name,
+            discord_id: r4.discordId,
+            role: r4.role || 'R4'
+          });
+        }
+      });
     }
 
     return {
       alliance_tag: tag,
       r5_name: alliance.r5?.name || 'Unknown',
       discord_id: alliance.r5?.discordId || null,
-      delegated_to: alliance.r5?.delegated_voter || null,
+      delegated_voters: delegated_voters,  // Array of R4s who can vote
       vote_submitted: false,
       submission_time: null
     };
@@ -66,8 +80,17 @@ async function isEligibleVoter(discordId) {
   const council = await getCurrentCouncilMembers();
 
   return council.voter_details.find(voter => {
-    // Check if user is the R5 or the delegated voter
-    return voter.discord_id === discordId || voter.delegated_to === discordId;
+    // Check if user is the R5
+    if (voter.discord_id === discordId) {
+      return true;
+    }
+
+    // Check if user is a delegated R4 voter
+    if (voter.delegated_voters && Array.isArray(voter.delegated_voters)) {
+      return voter.delegated_voters.some(r4 => r4.discord_id === discordId);
+    }
+
+    return false;
   });
 }
 
@@ -80,7 +103,17 @@ async function getVoterInfo(discordId, vote) {
   }
 
   return vote.council_snapshot.voter_details.find(voter => {
-    return voter.discord_id === discordId || voter.delegated_to === discordId;
+    // Check if user is the R5
+    if (voter.discord_id === discordId) {
+      return true;
+    }
+
+    // Check if user is a delegated R4 voter
+    if (voter.delegated_voters && Array.isArray(voter.delegated_voters)) {
+      return voter.delegated_voters.some(r4 => r4.discord_id === discordId);
+    }
+
+    return false;
   });
 }
 
@@ -128,24 +161,26 @@ function determineOutcome(counts, totalEligible) {
 
 /**
  * Get the current president's Discord ID
- * President is the R5 of the #1 ranked alliance
+ * President is designated in council.json
  */
 async function getPresidentDiscordId() {
-  const rotation = await getRotationSchedule();
+  const councilData = await getCouncilData();
   const alliances = await getAlliances();
 
-  // President is R5 of the #1 alliance (first in top15Snapshot)
-  const presidentAllianceTag = rotation.metadata.top15Snapshot[0];
+  // Get president alliance tag from council.json
+  const presidentAllianceTag = councilData.president?.alliance_tag;
 
   if (!presidentAllianceTag) {
-    throw new Error('No president alliance found in rotation schedule');
+    console.error('[ERROR] No president designated in council.json');
+    return null;
   }
 
   // Find the alliance data
   const presidentAlliance = alliances.find(a => a.tag === presidentAllianceTag);
 
   if (!presidentAlliance) {
-    throw new Error(`President alliance ${presidentAllianceTag} not found in alliances.json`);
+    console.error(`[ERROR] President alliance ${presidentAllianceTag} not found in alliances.json`);
+    return null;
   }
 
   // Get R5 Discord ID

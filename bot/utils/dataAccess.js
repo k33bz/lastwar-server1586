@@ -31,6 +31,17 @@ async function getAlliances() {
 }
 
 /**
+ * Get council data (president, roles, etc.)
+ */
+async function getCouncilData() {
+  const data = await fs.readFile(
+    path.join(DATA_DIR, 'council.json'),
+    'utf8'
+  );
+  return JSON.parse(data);
+}
+
+/**
  * Get all votes
  */
 async function getVotes() {
@@ -119,6 +130,7 @@ async function updateVote(voteId, updates) {
 module.exports = {
   getRotationSchedule,
   getAlliances,
+  getCouncilData,
   getVotes,
   saveVotes,
   getVote,

@@ -220,32 +220,75 @@ bot/
 
 The bot reads/writes these data files (shared with website):
 
+- `../data/council.json` - President designation & roles (read)
 - `../data/rotation-schedule.json` - Current council members (read)
-- `../data/alliances.json` - Alliance & R5 info (read)
+- `../data/alliances.json` - Alliance, R5, & R4 info (read)
 - `../data/discord-votes.json` - Vote records (read/write)
+- `../data/discord-vote-requests.json` - Vote requests (read/write)
 
 ## President Identification
 
-The bot automatically identifies the president as the R5 of the #1 ranked alliance from `rotation-schedule.json`.
+The bot reads the president designation from `council.json` (not auto-derived from rankings).
 
 **Requirements:**
-- The president's alliance must have their R5's `discordId` field populated in `alliances.json`
-- Example:
-  ```json
-  {
-    "tag": "UvvU",
-    "r5": {
-      "name": "쿠치나 ᓚᘏᗢ",
-      "discordId": "123456789012345678"
-    }
-  }
-  ```
+- President alliance must be set in `../data/council.json`
+- President's R5 must have `discordId` field in `alliances.json`
 
-**To get your Discord User ID:**
+**Example council.json:**
+```json
+{
+  "president": {
+    "alliance_tag": "UvvU",
+    "appointed_date": "2025-05-19T00:00:00Z"
+  }
+}
+```
+
+**Example alliances.json (R5 with Discord ID):**
+```json
+{
+  "tag": "UvvU",
+  "r5": {
+    "name": "쿠치나 ᓚᘏᗢ",
+    "discordId": "123456789012345678"
+  }
+}
+```
+
+**To get Discord User ID:**
 1. Enable Developer Mode in Discord (Settings > Advanced > Developer Mode)
 2. Right-click your name anywhere in Discord
 3. Click "Copy User ID"
-4. Paste this ID into the `discordId` field for the president's R5
+4. Paste into `alliances.json`
+
+## R4 Vote Delegation
+
+R5s can delegate voting power to R4 officers.
+
+**Setup:**
+1. Add R4s to alliance in `alliances.json`:
+   ```json
+   {
+     "tag": "UvvU",
+     "r5": { "name": "R5Name", "discordId": "..." },
+     "r4s": [
+       {
+         "name": "R4Name",
+         "discordId": "987654321098765432",
+         "canVote": true,
+         "role": "Deputy"
+       }
+     ]
+   }
+   ```
+
+2. Bot will automatically recognize R4s with `canVote: true`
+
+**Voting Rules:**
+- R5 always has priority to vote
+- R4s with `canVote: true` can vote when R5 is absent
+- Multiple R4s can have delegation, but only ONE vote per alliance
+- R4 cannot override R5's vote
 
 ## Troubleshooting
 
@@ -255,8 +298,14 @@ The bot automatically identifies the president as the R5 of the #1 ranked allian
 - Check file permissions on data directory
 
 ### President can't approve/reject requests
-- Ensure the president's alliance R5 has `discordId` set in `alliances.json`
-- Verify the Discord ID matches exactly (enable Developer Mode to copy User ID)
+- Check `council.json` has correct president alliance tag
+- Ensure president's alliance R5 has `discordId` in `alliances.json`
+- Verify Discord ID matches exactly (enable Developer Mode to copy User ID)
+
+### R4 can't vote despite delegation
+- Verify R4 has `canVote: true` in `alliances.json`
+- Ensure R4's `discordId` is set correctly
+- Check R4 is in an alliance currently on the council
 
 ### Slash commands don't appear
 - Wait 5 minutes (guild commands take time)
