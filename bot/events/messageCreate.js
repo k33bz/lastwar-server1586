@@ -4,9 +4,9 @@
  */
 
 const { getActiveVotes } = require('../utils/dataAccess');
-const { getVoterInfo } = require('../utils/councilUtils');
+const { getVoterInfo, getPresidentDiscordId } = require('../utils/councilUtils');
 const { recordVoteSubmission, finalizeVote, createVote, publishVote } = require('../utils/voteManager');
-const { getRequest, approveRequest, rejectRequest, linkVoteToRequest, getPresidentDiscordId } = require('../utils/voteRequestManager');
+const { getRequest, approveRequest, rejectRequest, linkVoteToRequest } = require('../utils/voteRequestManager');
 
 module.exports = {
   name: 'messageCreate',

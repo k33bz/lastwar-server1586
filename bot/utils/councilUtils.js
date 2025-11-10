@@ -126,11 +126,44 @@ function determineOutcome(counts, totalEligible) {
   }
 }
 
+/**
+ * Get the current president's Discord ID
+ * President is the R5 of the #1 ranked alliance
+ */
+async function getPresidentDiscordId() {
+  const rotation = await getRotationSchedule();
+  const alliances = await getAlliances();
+
+  // President is R5 of the #1 alliance (first in top15Snapshot)
+  const presidentAllianceTag = rotation.metadata.top15Snapshot[0];
+
+  if (!presidentAllianceTag) {
+    throw new Error('No president alliance found in rotation schedule');
+  }
+
+  // Find the alliance data
+  const presidentAlliance = alliances.find(a => a.tag === presidentAllianceTag);
+
+  if (!presidentAlliance) {
+    throw new Error(`President alliance ${presidentAllianceTag} not found in alliances.json`);
+  }
+
+  // Get R5 Discord ID
+  const discordId = presidentAlliance.r5?.discordId || null;
+
+  if (!discordId) {
+    console.warn(`[WARN] President alliance ${presidentAllianceTag} R5 has no Discord ID set`);
+  }
+
+  return discordId;
+}
+
 module.exports = {
   getCurrentCouncilMembers,
   isEligibleVoter,
   getVoterInfo,
   allVotesSubmitted,
   countVotes,
-  determineOutcome
+  determineOutcome,
+  getPresidentDiscordId
 };

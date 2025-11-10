@@ -71,6 +71,8 @@ Discord bot for managing council voting with cryptographic integrity.
    WEBHOOK_SECRET=generate_random_secret_here
    ```
 
+   **Note:** The president's Discord ID is automatically determined from your `alliances.json` file (R5 of the #1 ranked alliance). No manual configuration needed!
+
 ### 4. Install Dependencies
 
 ```bash
@@ -222,12 +224,39 @@ The bot reads/writes these data files (shared with website):
 - `../data/alliances.json` - Alliance & R5 info (read)
 - `../data/discord-votes.json` - Vote records (read/write)
 
+## President Identification
+
+The bot automatically identifies the president as the R5 of the #1 ranked alliance from `rotation-schedule.json`.
+
+**Requirements:**
+- The president's alliance must have their R5's `discordId` field populated in `alliances.json`
+- Example:
+  ```json
+  {
+    "tag": "UvvU",
+    "r5": {
+      "name": "쿠치나 ᓚᘏᗢ",
+      "discordId": "123456789012345678"
+    }
+  }
+  ```
+
+**To get your Discord User ID:**
+1. Enable Developer Mode in Discord (Settings > Advanced > Developer Mode)
+2. Right-click your name anywhere in Discord
+3. Click "Copy User ID"
+4. Paste this ID into the `discordId` field for the president's R5
+
 ## Troubleshooting
 
 ### Bot won't start
 - Check `.env` has correct token
 - Verify Node.js version is 18+
 - Check file permissions on data directory
+
+### President can't approve/reject requests
+- Ensure the president's alliance R5 has `discordId` set in `alliances.json`
+- Verify the Discord ID matches exactly (enable Developer Mode to copy User ID)
 
 ### Slash commands don't appear
 - Wait 5 minutes (guild commands take time)

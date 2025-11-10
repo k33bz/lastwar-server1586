@@ -159,20 +159,6 @@ async function linkVoteToRequest(requestId, voteId) {
   }
 }
 
-/**
- * Get president Discord ID from environment or alliances.json
- */
-async function getPresidentDiscordId() {
-  // First check environment variable
-  if (process.env.PRESIDENT_DISCORD_ID) {
-    return process.env.PRESIDENT_DISCORD_ID;
-  }
-
-  // Otherwise, could load from alliances.json or config
-  // For now, return null to indicate manual configuration needed
-  return null;
-}
-
 module.exports = {
   generateRequestId,
   createVoteRequest,
@@ -180,6 +166,5 @@ module.exports = {
   getRequest,
   approveRequest,
   rejectRequest,
-  linkVoteToRequest,
-  getPresidentDiscordId
+  linkVoteToRequest
 };

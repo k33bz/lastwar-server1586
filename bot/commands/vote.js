@@ -7,7 +7,8 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { getActiveVotes, getVote } = require('../utils/dataAccess');
 const { createVote, publishVote } = require('../utils/voteManager');
 const { verifyVoteIntegrity, generateVerificationReceipt } = require('../utils/voteIntegrity');
-const { createVoteRequest, getPendingRequests, getPresidentDiscordId } = require('../utils/voteRequestManager');
+const { getPresidentDiscordId } = require('../utils/councilUtils');
+const { createVoteRequest, getPendingRequests } = require('../utils/voteRequestManager');
 
 module.exports = {
   data: new SlashCommandBuilder()
