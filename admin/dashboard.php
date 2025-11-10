@@ -185,7 +185,7 @@ try {
             <span class="tab-label">Overview</span>
         </button>
 
-        <?php if ($user->aud !== 'r4'): ?>
+        <?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
         <button class="tab-button" data-tab="alliances">
             <span class="tab-icon">⚔️</span>
             <span class="tab-label">Alliances</span>
@@ -311,7 +311,7 @@ try {
 <!-- End Overview Tab -->
 
 <!-- Alliances Tab -->
-<?php if ($user->aud !== 'r4'): ?>
+<?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
 <div class="tab-content" id="alliances-tab">
     <div class="main-sections">
         <div class="section-group">
