@@ -7,6 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.9.0] - 2025-11-10
+
+**Release Focus:** Discord Bot Integration & Self-Service Profile Management
+
+### Added
+- **Discord ID Self-Service for Admin Users**
+  - Added Discord Integration section to admin user profile page
+  - Users can link their Discord ID directly from profile settings
+  - Validates Discord ID format (17-19 digits)
+  - Role-specific messaging for presidents, R5s, and R4s
+  - Clear step-by-step instructions for obtaining Discord User ID
+  - Bot integration checks admin users first for president role
+
+- **Alliance Profile Self-Service System**
+  - New public page: `/alliance-profile.php`
+  - R5s can link Discord IDs without admin access
+  - R4s can link Discord IDs (with name verification)
+  - API endpoints: `alliance_r5_profile_api.php` and `alliance_r4_profile_api.php`
+  - Updates `alliances.json` directly
+  - No authentication required (self-service)
+  - Shows current Discord ID with real-time updates
+
+- **Votes Management Interface**
+  - Votes listing page (`admin/votes.php`)
+    - Statistics dashboard (active, completed, approved, rejected)
+    - Multi-dimensional filtering (status, category, outcome, search)
+    - Vote progress indicators
+    - Responsive table design
+  - Vote details page (`admin/vote_details.php`)
+    - Full vote information display
+    - Council snapshot with eligible voters
+    - Vote submissions with cryptographic hashes
+    - Integrity verification display
+    - Vote outcome calculation
+    - Timeline of vote events
+
+- **Bot Discord ID Integration**
+  - Bot reads Discord IDs from `admin/users.json`
+  - President detection prioritizes admin "president" role
+  - Fallback to `council.json` + `alliances.json`
+  - Enhanced logging for Discord ID sources
+  - Support for R4 vote delegation
+
+### Fixed
+- **Light/Dark Theme Toggle**
+  - Reduced width from 120px to 60px (icon-only)
+  - Changed to circular slider instead of pill
+  - Removed text labels (now shows only ☀️ and 🌙 icons)
+  - Added complete dark theme CSS (was missing)
+  - Active icon fully opaque, inactive 50% opacity
+  - Theme now works properly with localStorage persistence
+
+- **R4/R5 Navigation Access**
+  - Added role check to Alliances dropdown
+  - R4s and R5s can now see Alliances menu
+  - Ensures proper access to Alliance Editor
+
+### Security
+- **Bot Directory Protection**
+  - Added `.htaccess` to `/bot` directory
+  - Blocks all web access to bot files
+  - Prevents directory listing exposure
+  - Bot only accessible via Node.js process
+
+### Changed
+- Bot authentication now multi-source for Discord IDs
+- President role can be managed via admin panel
+- R4s have explicit navigation visibility
+
+---
+
 ## [3.8.0] - 2025-11-09
 
 **Release Focus:** Dashboard Enhancements, Metrics, and User Experience
