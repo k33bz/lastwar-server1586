@@ -982,7 +982,9 @@ async function loadR4s() {
     const tag = '<?= htmlspecialchars($tag) ?>';
 
     try {
-        const response = await fetch(`../api/r4_api.php?tag=${encodeURIComponent(tag)}`);
+        const response = await fetch(`../api/r4_api.php?tag=${encodeURIComponent(tag)}`, {
+            credentials: 'include'
+        });
         const result = await response.json();
 
         if (result.success) {
@@ -1097,6 +1099,7 @@ async function saveR4(event) {
     try {
         const response = await fetch('../api/r4_api.php', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -1134,6 +1137,7 @@ async function deleteR4(index) {
     try {
         const response = await fetch('../api/r4_api.php', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
