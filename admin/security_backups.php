@@ -435,7 +435,9 @@ include 'includes/header.php';
             openModal('preview-modal');
 
             try {
-                const response = await fetch('backup_restore_api.php?action=preview&filename=' + encodeURIComponent(filename));
+                const response = await fetch('backup_restore_api.php?action=preview&filename=' + encodeURIComponent(filename), {
+                    credentials: 'include'
+                });
                 const data = await response.json();
 
                 if (data.success && data.alliances) {

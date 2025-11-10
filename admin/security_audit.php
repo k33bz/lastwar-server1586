@@ -634,7 +634,9 @@ include 'includes/header.php';
                 if (action) url += 'action=' + encodeURIComponent(action) + '&';
                 url += 'limit=' + limit;
 
-                const response = await fetch(url);
+                const response = await fetch(url, {
+                    credentials: 'include'
+                });
                 const data = await response.json();
 
                 if (data.logs && data.logs.length > 0) {
@@ -712,7 +714,9 @@ include 'includes/header.php';
 
         async function showRawLogs() {
             try {
-                const response = await fetch('audit_log_api.php?action=raw');
+                const response = await fetch('audit_log_api.php?action=raw', {
+                    credentials: 'include'
+                });
                 const data = await response.text();
 
                 document.getElementById('rawLogContent').value = data;
@@ -774,7 +778,9 @@ include 'includes/header.php';
 
             // Fetch user info from server
             try {
-                const response = await fetch('audit_log_api.php?action=get_user_info&email=' + encodeURIComponent(email));
+                const response = await fetch('audit_log_api.php?action=get_user_info&email=' + encodeURIComponent(email), {
+                    credentials: 'include'
+                });
                 const data = await response.json();
 
                 if (data.success) {
