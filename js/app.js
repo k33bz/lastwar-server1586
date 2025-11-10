@@ -988,6 +988,46 @@
 
        bodyHTML += '</div></div>';
 
+       // R4 Officers Section
+       if (alliance.r4s && alliance.r4s.length > 0) {
+           bodyHTML += '<div class="modal-section">';
+           bodyHTML += '<h3 class="modal-section-title">R4 Officers</h3>';
+           bodyHTML += '<div class="modal-r4-list">';
+
+           for (var r = 0; r < alliance.r4s.length; r++) {
+               var r4 = alliance.r4s[r];
+               bodyHTML += '<div class="modal-r4-card">';
+               bodyHTML += '<div class="modal-r4-name">' + r4.name;
+
+               if (r4.canVote) {
+                   bodyHTML += ' <span class="modal-r4-badge vote">✓ Can Vote</span>';
+               }
+               if (r4.role) {
+                   bodyHTML += ' <span class="modal-r4-badge role">' + r4.role + '</span>';
+               }
+
+               bodyHTML += '</div>';
+
+               if (r4.gameId || r4.discordId) {
+                   bodyHTML += '<div class="modal-r4-details">';
+                   if (r4.gameId) {
+                       bodyHTML += 'UID: ' + r4.gameId;
+                   }
+                   if (r4.gameId && r4.discordId) {
+                       bodyHTML += ' | ';
+                   }
+                   if (r4.discordId) {
+                       bodyHTML += 'Discord: ' + r4.discordId;
+                   }
+                   bodyHTML += '</div>';
+               }
+
+               bodyHTML += '</div>';
+           }
+
+           bodyHTML += '</div></div>';
+       }
+
        // Description Section
        if (alliance.info.description) {
            bodyHTML += '<div class="modal-section">';

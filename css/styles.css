@@ -1436,6 +1436,65 @@ h1 {
     border-color: rgba(34, 197, 94, 0.3);
 }
 
+/* R4 Officers Display in Modal */
+.modal-r4-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modal-r4-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.modal-r4-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 215, 0, 0.3);
+    transform: translateX(5px);
+}
+
+.modal-r4-name {
+    color: #fff;
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.modal-r4-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.modal-r4-badge.vote {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.modal-r4-badge.role {
+    background: rgba(88, 101, 242, 0.2);
+    color: #5865f2;
+    border: 1px solid rgba(88, 101, 242, 0.3);
+}
+
+.modal-r4-details {
+    color: #888;
+    font-size: 0.9em;
+    margin-top: 4px;
+}
+
 .modal-description {
     color: #ccc;
     line-height: 1.6;
