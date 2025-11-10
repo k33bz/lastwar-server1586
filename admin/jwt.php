@@ -12,9 +12,12 @@
  *
  * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
  *
- * @version 2.2.0
- * @date 2025-10-31
+ * @version 2.3.0
+ * @date 2025-11-10
  * @changelog
+ *   2.3.0 (2025-11-10) - Added require_jwt_session_api() for API endpoints
+ *                       - API version returns JSON errors instead of HTML redirects
+ *                       - Fixes 404/JSON parse errors in API calls
  *   2.2.0 (2025-10-31) - Added multi-role system support (Database schema v3)
  *                       - Added has_role(), get_user_roles(), get_primary_role() helpers
  *                       - Updated create_magic_link_token() to support roles array
@@ -138,6 +141,55 @@ function require_jwt_session() {
         }
 
         header('Location: login.php?error=' . $error);
+        exit;
+    }
+}
+
+/**
+ * Require valid JWT session for API endpoints
+ *
+ * Similar to require_jwt_session() but returns JSON errors instead of redirecting
+ * Use this for API endpoints that should return JSON responses
+ *
+ * @return object Decoded JWT token
+ * @throws Exception with JSON error response
+ */
+function require_jwt_session_api() {
+    if (!isset($_COOKIE['jwt'])) {
+        http_response_code(401);
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'No session token', 'code' => 'no_session']);
+        exit;
+    }
+
+    try {
+        $token = decode_jwt($_COOKIE['jwt']);
+
+        // Additional validation: check token is not a magic link token
+        if (isset($token->magic) && $token->magic === true) {
+            throw new Exception('Magic link tokens cannot be used as session tokens');
+        }
+
+        return $token;
+    } catch (Exception $e) {
+        // Clear invalid cookie
+        setcookie('jwt', '', time() - 3600, '/admin/', '', true, true);
+
+        // Determine error type for better UX
+        $error_code = 'invalid';
+        if (strpos($e->getMessage(), 'expired') !== false) {
+            $error_code = 'expired';
+        } elseif (strpos($e->getMessage(), 'revoked') !== false) {
+            $error_code = 'revoked';
+        }
+
+        http_response_code(401);
+        header('Content-Type: application/json');
+        echo json_encode([
+            'error' => 'Authentication failed',
+            'code' => $error_code,
+            'message' => $e->getMessage()
+        ]);
         exit;
     }
 }

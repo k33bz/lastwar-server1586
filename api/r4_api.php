@@ -8,8 +8,8 @@ header('Content-Type: application/json');
 require_once __DIR__ . '/../admin/jwt.php';
 require_once __DIR__ . '/../admin/includes/alliance_helper.php';
 
-// Require authentication
-$user = require_jwt_session();
+// Require authentication (use API version for JSON error responses)
+$user = require_jwt_session_api();
 $user_token = (object)[
     'sub' => $user->sub,
     'aud' => $user->aud,
