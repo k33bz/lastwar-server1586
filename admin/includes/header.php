@@ -618,6 +618,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <a href="user_profile.php" class="nav-link <?php echo $current_page === 'user_profile.php' ? 'active' : ''; ?>">👤 My Profile</a>
 
                 <!-- Alliances Dropdown -->
+                <?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
                 <div class="nav-dropdown">
                     <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['alliance_edit.php', 'alliances_power.php', 'alliance_tags_manager.php', 'council_rotation.php', 'votes_management.php']) ? 'active' : ''; ?>">
                         Alliances
@@ -636,6 +637,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <?php endif; ?>
                     </div>
                 </div>
+                <?php endif; ?>
 
                 <!-- Discord Dropdown -->
                 <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
