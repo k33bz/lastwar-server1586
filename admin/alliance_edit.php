@@ -638,16 +638,27 @@ if ($show_all) {
         </div>
 
         <h2>R4 Officers <span style="color: #667eea; font-size: 0.9rem;">✨ New</span></h2>
-        <p style="color: #666; margin-bottom: 1rem;">Manage R4 officers for this alliance. You can designate R4s who can vote on council matters when the R5 is absent.</p>
+        <?php if ($is_r4_only): ?>
+        <p style="color: #666; margin-bottom: 1rem;">R4 officers for this alliance. Only the R5 (alliance leader) can add or remove R4 officers and designate voting permissions.</p>
+        <?php else: ?>
+        <p style="color: #666; margin-bottom: 1rem;">Manage R4 officers for this alliance. You can designate R4s who can vote on council matters when you are absent.</p>
+        <?php endif; ?>
 
         <div id="r4Container">
             <div id="r4List">
                 <!-- R4s will be loaded here via JavaScript -->
             </div>
 
+            <?php if ($is_r4_only): ?>
+            <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #6c757d;">
+                <span style="font-size: 1.2rem;">🔒</span>
+                <span style="color: #495057; font-weight: 500;">Only the R5 can add or remove R4 officers</span>
+            </div>
+            <?php else: ?>
             <button type="button" class="btn-secondary" onclick="showAddR4Form()" style="margin-top: 1rem;">
                 <span style="font-size: 1.2rem;">+</span> Add R4 Officer
             </button>
+            <?php endif; ?>
         </div>
 
         <!-- Add/Edit R4 Modal -->
@@ -965,6 +976,7 @@ function updateSignatureStatus() {
 
 // R4 Management Functions
 let r4Data = [];
+const isR4Only = <?= $is_r4_only ? 'true' : 'false' ?>;
 
 async function loadR4s() {
     const tag = '<?= htmlspecialchars($tag) ?>';
@@ -986,7 +998,10 @@ function renderR4List() {
     const container = document.getElementById('r4List');
 
     if (r4Data.length === 0) {
-        container.innerHTML = '<p style="color: #999; text-align: center; padding: 2rem;">No R4 officers added yet. Click "Add R4 Officer" to get started.</p>';
+        const emptyMessage = isR4Only
+            ? 'No R4 officers have been added yet.'
+            : 'No R4 officers added yet. Click "Add R4 Officer" to get started.';
+        container.innerHTML = `<p style="color: #999; text-align: center; padding: 2rem;">${emptyMessage}</p>`;
         return;
     }
 
@@ -1005,10 +1020,12 @@ function renderR4List() {
                     ${!r4.gameId && !r4.discordId ? '<em>No contact info</em>' : ''}
                 </div>
             </div>
+            ${!isR4Only ? `
             <div class="r4-actions">
                 <button class="btn-edit" onclick="editR4(${index})">Edit</button>
                 <button class="btn-delete" onclick="deleteR4(${index})">Delete</button>
             </div>
+            ` : ''}
         </div>
     `).join('');
 }
