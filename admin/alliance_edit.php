@@ -1031,13 +1031,24 @@ function renderR4List() {
 }
 
 function showAddR4Form() {
+    if (isR4Only) {
+        alert('Only the R5 can add R4 officers.');
+        return;
+    }
+    const form = document.getElementById('r4Form');
+    if (!form) return;
+
     document.getElementById('r4ModalTitle').textContent = 'Add R4 Officer';
     document.getElementById('r4Index').value = '';
-    document.getElementById('r4Form').reset();
+    form.reset();
     document.getElementById('r4Modal').style.display = 'flex';
 }
 
 function editR4(index) {
+    if (isR4Only) {
+        alert('Only the R5 can edit R4 officers.');
+        return;
+    }
     const r4 = r4Data[index];
 
     document.getElementById('r4ModalTitle').textContent = 'Edit R4 Officer';
@@ -1052,8 +1063,10 @@ function editR4(index) {
 }
 
 function closeR4Modal() {
-    document.getElementById('r4Modal').style.display = 'none';
-    document.getElementById('r4Form').reset();
+    const modal = document.getElementById('r4Modal');
+    const form = document.getElementById('r4Form');
+    if (modal) modal.style.display = 'none';
+    if (form) form.reset();
 }
 
 async function saveR4(event) {
@@ -1106,6 +1119,10 @@ async function saveR4(event) {
 }
 
 async function deleteR4(index) {
+    if (isR4Only) {
+        alert('Only the R5 can remove R4 officers.');
+        return;
+    }
     const r4 = r4Data[index];
 
     if (!confirm(`Are you sure you want to remove ${r4.name} as an R4 officer?`)) {
