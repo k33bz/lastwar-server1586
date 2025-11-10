@@ -601,7 +601,9 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load all channels
 async function loadChannels() {
     try {
-        const response = await fetch('discord_channels_api.php?action=list');
+        const response = await fetch('discord_channels_api.php?action=list', {
+            credentials: 'include'
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -759,6 +761,7 @@ async function saveChannel(e) {
     try {
         const response = await fetch('discord_channels_api.php?action=update_channel', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': csrfToken
@@ -792,6 +795,7 @@ async function toggleChannel(channelId, source, alliance, enabled) {
     try {
         const response = await fetch('discord_channels_api.php?action=toggle', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'X-CSRF-Token': csrfToken
             },
@@ -827,6 +831,7 @@ async function testWebhook() {
     try {
         const response = await fetch('discord_channels_api.php?action=test_webhook', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'X-CSRF-Token': csrfToken
             },

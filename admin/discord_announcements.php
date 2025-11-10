@@ -620,7 +620,9 @@ let templates = [];
 // Load templates
 async function loadTemplates() {
     try {
-        const response = await fetch('discord_templates_api.php?action=list');
+        const response = await fetch('discord_templates_api.php?action=list', {
+            credentials: 'include'
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -944,7 +946,9 @@ function insertVariable(variable) {
 // Load available channels
 async function loadChannels() {
     try {
-        const response = await fetch('discord_api.php?action=get_channels');
+        const response = await fetch('discord_api.php?action=get_channels', {
+            credentials: 'include'
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -1079,11 +1083,11 @@ document.getElementById('announcementForm').addEventListener('submit', async fun
 
         const response = await fetch('discord_api.php', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'X-CSRF-Token': csrfToken
             },
-            body: formData,
-            credentials: 'same-origin'
+            body: formData
         });
 
         // Check if response is OK before parsing

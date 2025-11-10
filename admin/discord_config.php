@@ -432,6 +432,7 @@ async function testConnection() {
 
         const response = await fetch('discord_api.php', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'X-CSRF-Token': csrfToken
             },
