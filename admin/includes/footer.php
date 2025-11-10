@@ -21,54 +21,33 @@ $release_date = $version_data['releaseDate'] ?? '2025-10-16';
 $last_updated = $version_data['lastUpdated'] ?? date('Y-m-d');
 ?>
     </main>
-    
+
     <footer class="admin-footer">
         <div class="footer-container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>System Status</h4>
-                    <div class="status-indicators">
-                        <div class="status-item">
-                            <span class="status-dot status-online"></span>
-                            <span>Authentication System</span>
-                        </div>
-                        <div class="status-item">
-                            <span class="status-dot status-online"></span>
-                            <span>Key Rotation</span>
-                        </div>
-                        <div class="status-item">
-                            <span class="status-dot status-online"></span>
-                            <span>Security Monitor</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="footer-section">
-                    <h4>System Info</h4>
-                    <div class="system-info">
-                        <div class="info-item">
-                            <strong>Version:</strong> v<?php echo htmlspecialchars($current_version); ?>
-                        </div>
-                        <div class="info-item">
-                            <strong>Released:</strong> <?php echo date('M j, Y', strtotime($release_date)); ?>
-                        </div>
-                        <div class="info-item">
-                            <strong>Security Level:</strong> <span class="security-high">Enterprise</span>
-                        </div>
-                    </div>
+            <div class="footer-left">
+                <div class="footer-version">
+                    <span class="version-badge">v<?php echo htmlspecialchars($current_version); ?></span>
+                    <span class="status-indicator" title="All systems operational">
+                        <span class="status-dot status-online"></span>
+                        <span class="status-text">Operational</span>
+                    </span>
                 </div>
             </div>
-            
-            <div class="footer-bottom">
-                <div class="copyright">
-                    <p>&copy; <?php echo date('Y'); ?> <?php echo $_ENV['APP_NAME'] ?? 'Admin Panel'; ?>. All rights reserved.</p>
-                </div>
-                <div class="footer-links">
-                    <a href="changelog.php">📋 Changelog</a>
-                    <a href="https://github.com/k33bz/lastwar-server1586" target="_blank">GitHub Repository</a>
-                    <a href="https://github.com/k33bz/lastwar-server1586/issues" target="_blank">Report Issue</a>
-                    <a href="#" onclick="showSecurityInfo()">Security Info</a>
-                </div>
+
+            <div class="footer-center">
+                <span class="copyright">&copy; <?php echo date('Y'); ?> Server 1586</span>
+            </div>
+
+            <div class="footer-right">
+                <nav class="footer-nav">
+                    <a href="changelog.php" title="View changelog">Changelog</a>
+                    <span class="separator">|</span>
+                    <a href="#" onclick="showSecurityInfo(); return false;" title="Security information">Security</a>
+                    <span class="separator">|</span>
+                    <a href="https://github.com/k33bz/lastwar-server1586" target="_blank" rel="noopener" title="View on GitHub">GitHub</a>
+                    <span class="separator">|</span>
+                    <a href="https://github.com/k33bz/lastwar-server1586/issues" target="_blank" rel="noopener" title="Report an issue">Issues</a>
+                </nav>
             </div>
         </div>
     </footer>
@@ -138,133 +117,232 @@ $last_updated = $version_data['lastUpdated'] ?? date('Y-m-d');
 
     <style>
         .admin-footer {
-            background: #2c3e50;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            margin-top: 4rem;
-            padding: 2rem 0 1rem;
+            margin-top: 3rem;
+            padding: 0.75rem 0;
+            border-top: 3px solid #667eea;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
-        
+
         .footer-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 2rem;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-section h4 {
-            color: #ecf0f1;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-        
-        .status-indicators {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .status-item {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
+            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
         }
-        
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-version {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .version-badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             display: inline-block;
         }
-        
+
         .status-online {
             background: #27ae60;
-            box-shadow: 0 0 6px rgba(39, 174, 96, 0.6);
+            box-shadow: 0 0 6px rgba(39, 174, 96, 0.8);
+            animation: pulse 2s ease-in-out infinite;
         }
-        
+
         .status-warning {
             background: #f39c12;
-            box-shadow: 0 0 6px rgba(243, 156, 18, 0.6);
+            box-shadow: 0 0 6px rgba(243, 156, 18, 0.8);
         }
-        
+
         .status-offline {
             background: #e74c3c;
-            box-shadow: 0 0 6px rgba(231, 76, 60, 0.6);
+            box-shadow: 0 0 6px rgba(231, 76, 60, 0.8);
         }
-        
-        .quick-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.95); }
         }
-        
-        .quick-action {
-            color: #bdc3c7;
-            text-decoration: none;
-            padding: 0.5rem;
-            border-radius: 4px;
-            transition: all 0.3s;
-            font-size: 0.9rem;
+
+        .status-text {
+            font-size: 0.8rem;
+            font-weight: 500;
         }
-        
-        .quick-action:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
+
+        .footer-center {
+            flex: 1;
+            text-align: center;
         }
-        
-        .system-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .info-item {
-            font-size: 0.9rem;
-            color: #bdc3c7;
-        }
-        
-        .security-high {
-            color: #27ae60;
-            font-weight: bold;
-        }
-        
-        .footer-bottom {
-            border-top: 1px solid #34495e;
-            padding-top: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        
+
         .copyright {
-            color: #95a5a6;
-            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.8rem;
+            font-weight: 400;
         }
-        
-        .footer-links {
+
+        .footer-right {
             display: flex;
-            gap: 1rem;
+            align-items: center;
         }
-        
-        .footer-links a {
-            color: #bdc3c7;
+
+        .footer-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .footer-nav a {
+            color: rgba(255, 255, 255, 0.85);
             text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
         }
-        
-        .footer-links a:hover {
+
+        .footer-nav a:hover {
             color: white;
+            background: rgba(255, 255, 255, 0.1);
         }
-        
+
+        .footer-nav .separator {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.7rem;
+        }
+
+        /* Dark Mode Support */
+        body.dark-theme .admin-footer {
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+            border-top-color: #667eea;
+        }
+
+        body.dark-theme .version-badge {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .footer-container {
+                justify-content: center;
+            }
+
+            .footer-center {
+                order: 3;
+                flex: 1 1 100%;
+                margin-top: 0.5rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                padding-top: 0.5rem;
+            }
+
+            .footer-left {
+                order: 1;
+            }
+
+            .footer-right {
+                order: 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-footer {
+                padding: 1rem 0;
+            }
+
+            .footer-container {
+                padding: 0 1rem;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .footer-left,
+            .footer-center,
+            .footer-right {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .footer-version {
+                justify-content: center;
+            }
+
+            .footer-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .status-text {
+                display: none; /* Hide "Operational" text on mobile */
+            }
+
+            .footer-center {
+                order: 1;
+                border-top: none;
+                margin-top: 0;
+                padding-top: 0;
+            }
+
+            .footer-left {
+                order: 2;
+            }
+
+            .footer-right {
+                order: 3;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-nav a {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.4rem;
+            }
+
+            .footer-nav .separator {
+                margin: 0 0.1rem;
+            }
+
+            .version-badge {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.6rem;
+            }
+
+            .copyright {
+                font-size: 0.75rem;
+            }
+        }
+
         /* Modal Styles */
         .modal {
             position: fixed;
@@ -361,17 +439,6 @@ $last_updated = $version_data['lastUpdated'] ?? date('Y-m-d');
         .btn-secondary:hover {
             background: #5a6268;
             transform: translateY(-1px);
-        }
-
-        @media (max-width: 768px) {
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                text-align: center;
-            }
         }
     </style>
 
