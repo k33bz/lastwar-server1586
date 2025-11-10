@@ -188,7 +188,9 @@ include 'includes/header.php';
         statusContent.style.display = 'none';
 
         try {
-            const response = await fetch('council_rotation_api.php?action=get_status');
+            const response = await fetch('council_rotation_api.php?action=get_status', {
+                credentials: 'include'
+            });
             const data = await response.json();
 
             if (data.success) {
@@ -240,6 +242,7 @@ include 'includes/header.php';
         try {
             const response = await fetch('council_rotation_api.php?action=regenerate', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')

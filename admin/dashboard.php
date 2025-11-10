@@ -722,11 +722,15 @@ async function loadBadgeCounts() {
         // Load Discord pending messages count
         const discordBadge = document.getElementById('discordBadge');
         if (discordBadge) {
-            const scheduledResp = await fetch('discord_scheduled_api.php?action=list');
+            const scheduledResp = await fetch('discord_scheduled_api.php?action=list', {
+                credentials: 'include'
+            });
             const scheduledData = await scheduledResp.json();
             const pendingScheduled = scheduledData.messages?.filter(m => m.status === 'pending').length || 0;
 
-            const recurringResp = await fetch('discord_recurring_api.php?action=list');
+            const recurringResp = await fetch('discord_recurring_api.php?action=list', {
+                credentials: 'include'
+            });
             const recurringData = await recurringResp.json();
             const activeRecurring = recurringData.messages?.filter(m => m.enabled).length || 0;
 
@@ -742,7 +746,9 @@ async function loadBadgeCounts() {
         // Load Season 2 upcoming events count
         const season2Badge = document.getElementById('season2Badge');
         if (season2Badge) {
-            const season2Resp = await fetch('season2_api.php?action=get_upcoming_events&days=7');
+            const season2Resp = await fetch('season2_api.php?action=get_upcoming_events&days=7', {
+                credentials: 'include'
+            });
             const season2Data = await season2Resp.json();
             const upcomingCount = season2Data.events?.length || 0;
 
@@ -818,6 +824,7 @@ async function saveUserPreference(key, value) {
         const csrfToken = getCsrfToken();
         await fetch('user_preferences_api.php', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': csrfToken

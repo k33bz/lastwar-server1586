@@ -782,7 +782,9 @@ function switchTab(tab) {
 // Categories functions
 async function loadCategories() {
     try {
-        const response = await fetch('alliance_tags_api.php?action=list_categories');
+        const response = await fetch('alliance_tags_api.php?action=list_categories', {
+            credentials: 'include'
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -917,6 +919,7 @@ async function saveCategoryForm(event) {
     try {
         const response = await fetch(`alliance_tags_api.php?action=${action}`, {
             method: 'POST',
+            credentials: 'include',
             body: formData
         });
 
@@ -951,6 +954,7 @@ async function deleteCategory(categoryId) {
     try {
         const response = await fetch('alliance_tags_api.php?action=delete_category', {
             method: 'POST',
+            credentials: 'include',
             body: formData
         });
 
@@ -971,7 +975,9 @@ async function deleteCategory(categoryId) {
 // Tags functions
 async function loadTags() {
     try {
-        const response = await fetch('alliance_tags_api.php?action=list_tags');
+        const response = await fetch('alliance_tags_api.php?action=list_tags', {
+            credentials: 'include'
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -1104,6 +1110,7 @@ async function saveTagForm(event) {
     try {
         const response = await fetch(`alliance_tags_api.php?action=${action}`, {
             method: 'POST',
+            credentials: 'include',
             body: formData
         });
 
@@ -1138,6 +1145,7 @@ async function deleteTag(tagId) {
     try {
         const response = await fetch('alliance_tags_api.php?action=delete_tag', {
             method: 'POST',
+            credentials: 'include',
             body: formData
         });
 
@@ -1158,7 +1166,9 @@ async function deleteTag(tagId) {
 // Suggestions functions
 async function loadSuggestions() {
     try {
-        const response = await fetch('alliance_tags_api.php?action=list_suggestions');
+        const response = await fetch('alliance_tags_api.php?action=list_suggestions', {
+            credentials: 'include'
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -1268,6 +1278,7 @@ async function reviewSuggestionAction(status) {
     try {
         const response = await fetch('alliance_tags_api.php?action=review_suggestion', {
             method: 'POST',
+            credentials: 'include',
             body: formData
         });
 
