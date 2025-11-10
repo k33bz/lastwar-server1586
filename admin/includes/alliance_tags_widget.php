@@ -635,7 +635,9 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
     // Load current alliance tags
     async function loadAllianceTags() {
         try {
-            const response = await fetch(`alliance_tags_api.php?action=get_alliance_tags&tag=${encodeURIComponent(allianceTag)}`);
+            const response = await fetch(`alliance_tags_api.php?action=get_alliance_tags&tag=${encodeURIComponent(allianceTag)}`, {
+                credentials: 'include'
+            });
             const data = await response.json();
 
             if (data.success) {
@@ -652,7 +654,9 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
     // Load all tags data for rendering
     async function loadAllTagsData() {
         try {
-            const response = await fetch('alliance_tags_api.php?action=list_tags');
+            const response = await fetch('alliance_tags_api.php?action=list_tags', {
+                credentials: 'include'
+            });
             const data = await response.json();
 
             if (data.success) {
@@ -707,7 +711,9 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
     async function loadTagSelectionData() {
         try {
             // Load categories
-            const catResponse = await fetch('alliance_tags_api.php?action=list_categories');
+            const catResponse = await fetch('alliance_tags_api.php?action=list_categories', {
+                credentials: 'include'
+            });
             const catData = await catResponse.json();
 
             if (catData.success) {
@@ -721,7 +727,9 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
             }
 
             // Load all tags
-            const tagsResponse = await fetch('alliance_tags_api.php?action=list_tags');
+            const tagsResponse = await fetch('alliance_tags_api.php?action=list_tags', {
+                credentials: 'include'
+            });
             const tagsData = await tagsResponse.json();
 
             if (tagsData.success) {
@@ -812,6 +820,7 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
         try {
             const response = await fetch('alliance_tags_api.php?action=update_alliance_tags', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'X-CSRF-Token': csrfToken
                 },
@@ -853,7 +862,9 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
     // Load categories for suggestion form
     async function loadCategoriesForSuggestion() {
         try {
-            const response = await fetch('alliance_tags_api.php?action=list_categories');
+            const response = await fetch('alliance_tags_api.php?action=list_categories', {
+                credentials: 'include'
+            });
             const data = await response.json();
 
             if (data.success) {
@@ -881,6 +892,7 @@ function render_alliance_tags_widget($alliance_tag, $user_token) {
         try {
             const response = await fetch('alliance_tags_api.php?action=suggest_tag', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'X-CSRF-Token': csrfToken
                 },

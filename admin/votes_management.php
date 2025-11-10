@@ -220,7 +220,9 @@ include 'includes/header.php';
         emptyState.style.display = 'none';
 
         try {
-            const response = await fetch('votes_api.php?action=list');
+            const response = await fetch('votes_api.php?action=list', {
+                credentials: 'include'
+            });
             const data = await response.json();
 
             if (data.success) {
@@ -410,6 +412,7 @@ include 'includes/header.php';
         try {
             const response = await fetch(`votes_api.php?action=${isEdit ? 'update' : 'create'}`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -439,6 +442,7 @@ include 'includes/header.php';
         try {
             const response = await fetch('votes_api.php?action=delete', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -487,6 +491,7 @@ include 'includes/header.php';
         try {
             const response = await fetch('votes_api.php?action=upload_screenshot', {
                 method: 'POST',
+                credentials: 'include',
                 body: formData
             });
 
@@ -517,6 +522,7 @@ include 'includes/header.php';
         try {
             const response = await fetch('votes_api.php?action=delete_screenshot', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')

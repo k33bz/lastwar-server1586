@@ -527,7 +527,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 async function loadConfig() {
     try {
-        const response = await fetch('season2_api.php?action=get_config');
+        const response = await fetch('season2_api.php?action=get_config', {
+            credentials: 'include'
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -550,7 +552,9 @@ async function loadConfig() {
 
 async function loadCalendar() {
     try {
-        const response = await fetch('season2_api.php?action=get_calendar');
+        const response = await fetch('season2_api.php?action=get_calendar', {
+            credentials: 'include'
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -566,7 +570,9 @@ async function loadCalendar() {
 
 async function loadChannels() {
     try {
-        const response = await fetch('discord_api.php?action=get_channels');
+        const response = await fetch('discord_api.php?action=get_channels', {
+            credentials: 'include'
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -708,6 +714,7 @@ async function handleConfigSubmit(e) {
     try {
         const response = await fetch('season2_api.php?action=update_config', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': getCsrfToken()
@@ -772,6 +779,7 @@ async function sendAnnouncement() {
     try {
         const response = await fetch('season2_api.php?action=announce_event', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': getCsrfToken()

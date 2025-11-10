@@ -464,6 +464,7 @@ document.getElementById('profileForm').addEventListener('submit', async function
 
         const response = await fetch('profile_api.php', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'X-CSRF-Token': csrfToken
             },
@@ -517,7 +518,7 @@ async function loadRateLimitInfo() {
 
     try {
         const response = await fetch('discord_rate_limit_api.php?action=get_my_limit', {
-            credentials: 'same-origin'
+            credentials: 'include'
         });
 
         if (!response.ok) {
@@ -619,6 +620,7 @@ async function submitRateLimitRequest() {
         const csrfToken = getCsrfToken();
         const response = await fetch('discord_rate_limit_api.php?action=request_increase', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': csrfToken
@@ -626,8 +628,7 @@ async function submitRateLimitRequest() {
             body: JSON.stringify({
                 requested_limit: requestedLimit,
                 reason: reason
-            }),
-            credentials: 'same-origin'
+            })
         });
 
         if (!response.ok) {
