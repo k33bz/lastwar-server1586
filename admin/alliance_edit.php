@@ -452,6 +452,78 @@ if ($show_all) {
             margin-bottom: 20px;
             display: none;
         }
+        .r4-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .r4-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+        .r4-info {
+            flex: 1;
+        }
+        .r4-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+        .r4-details {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .r4-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        .r4-badge.can-vote {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .r4-badge.role {
+            background: #e7f1ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+        }
+        .r4-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .r4-actions button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        .r4-actions .btn-edit {
+            background: #667eea;
+            color: white;
+        }
+        .r4-actions .btn-edit:hover {
+            background: #5a67d8;
+        }
+        .r4-actions .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+        .r4-actions .btn-delete:hover {
+            background: #c0392b;
+        }
     </style>
 
     <div id="success-message" class="success-message"></div>
@@ -562,6 +634,63 @@ if ($show_all) {
             <div class="form-group">
                 <label>Discord ID <small>(optional)</small></label>
                 <input type="text" name="r5_discord_id" value="<?= htmlspecialchars($r5_discord_id) ?>"<?= $is_r4_only ? ' readonly style="background: #f0f0f0; cursor: not-allowed;"' : '' ?>>
+            </div>
+        </div>
+
+        <h2>R4 Officers <span style="color: #667eea; font-size: 0.9rem;">✨ New</span></h2>
+        <p style="color: #666; margin-bottom: 1rem;">Manage R4 officers for this alliance. You can designate R4s who can vote on council matters when the R5 is absent.</p>
+
+        <div id="r4Container">
+            <div id="r4List">
+                <!-- R4s will be loaded here via JavaScript -->
+            </div>
+
+            <button type="button" class="btn-secondary" onclick="showAddR4Form()" style="margin-top: 1rem;">
+                <span style="font-size: 1.2rem;">+</span> Add R4 Officer
+            </button>
+        </div>
+
+        <!-- Add/Edit R4 Modal -->
+        <div id="r4Modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+            <div style="background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+                <h3 id="r4ModalTitle">Add R4 Officer</h3>
+                <form id="r4Form" onsubmit="saveR4(event)">
+                    <input type="hidden" id="r4Index" value="">
+
+                    <div class="form-group">
+                        <label>R4 Name <span style="color: red;">*</span></label>
+                        <input type="text" id="r4Name" required placeholder="In-game name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Game ID <small>(optional)</small></label>
+                        <input type="text" id="r4GameId" placeholder="Player UID">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Discord ID <small>(optional)</small></label>
+                        <input type="text" id="r4DiscordId" placeholder="18-digit Discord user ID">
+                        <small style="color: #666;">Right-click user in Discord → Copy User ID</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Role <small>(optional)</small></label>
+                        <input type="text" id="r4Role" placeholder="e.g., Recruiter, Deputy, Diplomat">
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; cursor: pointer;">
+                            <input type="checkbox" id="r4CanVote" style="margin-right: 8px;">
+                            <span>Can vote on council matters (delegation)</span>
+                        </label>
+                        <small style="color: #666; margin-left: 28px;">When enabled, this R4 can vote when R5 is absent</small>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <button type="submit" class="btn-primary" style="flex: 1;">Save</button>
+                        <button type="button" class="btn-secondary" onclick="closeR4Modal()" style="flex: 1;">Cancel</button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -834,9 +963,198 @@ function updateSignatureStatus() {
     }
 }
 
+// R4 Management Functions
+let r4Data = [];
+
+async function loadR4s() {
+    const tag = '<?= htmlspecialchars($tag) ?>';
+
+    try {
+        const response = await fetch(`../api/r4_api.php?tag=${encodeURIComponent(tag)}`);
+        const result = await response.json();
+
+        if (result.success) {
+            r4Data = result.r4s || [];
+            renderR4List();
+        }
+    } catch (error) {
+        console.error('Failed to load R4s:', error);
+    }
+}
+
+function renderR4List() {
+    const container = document.getElementById('r4List');
+
+    if (r4Data.length === 0) {
+        container.innerHTML = '<p style="color: #999; text-align: center; padding: 2rem;">No R4 officers added yet. Click "Add R4 Officer" to get started.</p>';
+        return;
+    }
+
+    container.innerHTML = r4Data.map((r4, index) => `
+        <div class="r4-card">
+            <div class="r4-info">
+                <div class="r4-name">
+                    ${escapeHtml(r4.name)}
+                    ${r4.canVote ? '<span class="r4-badge can-vote">✓ Can Vote</span>' : ''}
+                    ${r4.role ? `<span class="r4-badge role">${escapeHtml(r4.role)}</span>` : ''}
+                </div>
+                <div class="r4-details">
+                    ${r4.gameId ? `UID: ${escapeHtml(r4.gameId)}` : ''}
+                    ${r4.gameId && r4.discordId ? ' | ' : ''}
+                    ${r4.discordId ? `Discord: ${escapeHtml(r4.discordId)}` : ''}
+                    ${!r4.gameId && !r4.discordId ? '<em>No contact info</em>' : ''}
+                </div>
+            </div>
+            <div class="r4-actions">
+                <button class="btn-edit" onclick="editR4(${index})">Edit</button>
+                <button class="btn-delete" onclick="deleteR4(${index})">Delete</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function showAddR4Form() {
+    document.getElementById('r4ModalTitle').textContent = 'Add R4 Officer';
+    document.getElementById('r4Index').value = '';
+    document.getElementById('r4Form').reset();
+    document.getElementById('r4Modal').style.display = 'flex';
+}
+
+function editR4(index) {
+    const r4 = r4Data[index];
+
+    document.getElementById('r4ModalTitle').textContent = 'Edit R4 Officer';
+    document.getElementById('r4Index').value = index;
+    document.getElementById('r4Name').value = r4.name || '';
+    document.getElementById('r4GameId').value = r4.gameId || '';
+    document.getElementById('r4DiscordId').value = r4.discordId || '';
+    document.getElementById('r4Role').value = r4.role || '';
+    document.getElementById('r4CanVote').checked = r4.canVote || false;
+
+    document.getElementById('r4Modal').style.display = 'flex';
+}
+
+function closeR4Modal() {
+    document.getElementById('r4Modal').style.display = 'none';
+    document.getElementById('r4Form').reset();
+}
+
+async function saveR4(event) {
+    event.preventDefault();
+
+    const index = document.getElementById('r4Index').value;
+    const isEdit = index !== '';
+    const tag = '<?= htmlspecialchars($tag) ?>';
+
+    const r4 = {
+        name: document.getElementById('r4Name').value,
+        gameId: document.getElementById('r4GameId').value || null,
+        discordId: document.getElementById('r4DiscordId').value || null,
+        role: document.getElementById('r4Role').value || null,
+        canVote: document.getElementById('r4CanVote').checked
+    };
+
+    const payload = {
+        action: isEdit ? 'update' : 'add',
+        alliance_tag: tag,
+        ...r4
+    };
+
+    if (isEdit) {
+        payload.r4_index = parseInt(index);
+    }
+
+    try {
+        const response = await fetch('../api/r4_api.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            closeR4Modal();
+            await loadR4s();
+            showMessage('success', result.message || 'R4 saved successfully');
+        } else {
+            showMessage('error', result.error || 'Failed to save R4');
+        }
+    } catch (error) {
+        console.error('Save failed:', error);
+        showMessage('error', 'Network error: ' + error.message);
+    }
+}
+
+async function deleteR4(index) {
+    const r4 = r4Data[index];
+
+    if (!confirm(`Are you sure you want to remove ${r4.name} as an R4 officer?`)) {
+        return;
+    }
+
+    const tag = '<?= htmlspecialchars($tag) ?>';
+
+    try {
+        const response = await fetch('../api/r4_api.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'delete',
+                alliance_tag: tag,
+                r4_index: index
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            await loadR4s();
+            showMessage('success', result.message || 'R4 removed successfully');
+        } else {
+            showMessage('error', result.error || 'Failed to remove R4');
+        }
+    } catch (error) {
+        console.error('Delete failed:', error);
+        showMessage('error', 'Network error: ' + error.message);
+    }
+}
+
+function showMessage(type, message) {
+    const successMsg = document.getElementById('success-message');
+    const errorMsg = document.getElementById('error-message');
+
+    successMsg.style.display = 'none';
+    errorMsg.style.display = 'none';
+
+    if (type === 'success') {
+        successMsg.textContent = message;
+        successMsg.style.display = 'block';
+        setTimeout(() => { successMsg.style.display = 'none'; }, 5000);
+    } else {
+        errorMsg.textContent = message;
+        errorMsg.style.display = 'block';
+        setTimeout(() => { errorMsg.style.display = 'none'; }, 5000);
+    }
+
+    // Scroll to top to show message
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     updateSignatureStatus();
+    loadR4s();
     
     // Handle form submission
     document.getElementById('alliance-form').addEventListener('submit', function(e) {
