@@ -280,13 +280,15 @@ $current_page = basename($_SERVER['PHP_SELF']);
             position: relative;
             display: flex;
             align-items: center;
-            width: 120px;
+            justify-content: space-between;
+            width: 60px;
             height: 32px;
             background: #e9ecef;
             border-radius: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid #dee2e6;
+            padding: 0 6px;
         }
 
         .toggle-slider:hover {
@@ -294,23 +296,19 @@ $current_page = basename($_SERVER['PHP_SELF']);
         }
 
         .toggle-option {
-            position: absolute;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
+            font-size: 1rem;
             transition: all 0.3s ease;
             z-index: 2;
             pointer-events: none;
+            opacity: 0.5;
         }
 
         .toggle-light {
-            left: 8px;
-            color: #495057;
+            order: 1;
         }
 
         .toggle-dark {
-            right: 8px;
-            color: #495057;
+            order: 2;
         }
 
         .toggle-slider::before {
@@ -318,40 +316,25 @@ $current_page = basename($_SERVER['PHP_SELF']);
             position: absolute;
             top: 2px;
             left: 2px;
-            width: 56px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 12px;
+            border-radius: 50%;
             transition: all 0.3s ease;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             z-index: 1;
         }
 
         .toggle-switch input:checked + .toggle-slider::before {
-            transform: translateX(56px);
-        }
-
-        .toggle-switch input:checked + .toggle-slider .toggle-light {
-            color: #343a40;
-            font-weight: 600;
-        }
-
-        .toggle-switch input:not(:checked) + .toggle-slider .toggle-dark {
-            color: #ffffff;
-            font-weight: 700;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            transform: translateX(28px);
         }
 
         .toggle-switch input:checked + .toggle-slider .toggle-dark {
-            color: #ffffff;
-            font-weight: 700;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            opacity: 1;
         }
 
         .toggle-switch input:not(:checked) + .toggle-slider .toggle-light {
-            color: #ffffff;
-            font-weight: 700;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            opacity: 1;
         }
         
         .main-container {
@@ -452,6 +435,94 @@ $current_page = basename($_SERVER['PHP_SELF']);
             .main-container {
                 padding: 0 1rem;
             }
+        }
+
+        /* Dark Theme */
+        body.dark-theme {
+            background: #1a1a2e;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .admin-header {
+            background: #16213e;
+            border-bottom-color: #0f3460;
+        }
+
+        body.dark-theme .admin-logo {
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .nav-link {
+            color: #a0a0a0;
+        }
+
+        body.dark-theme .nav-link:hover {
+            background-color: #0f3460;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .nav-link.active {
+            background-color: #667eea;
+            color: white;
+        }
+
+        body.dark-theme .nav-dropdown-menu {
+            background: #16213e;
+            border-color: #0f3460;
+        }
+
+        body.dark-theme .nav-dropdown-menu .nav-link:hover {
+            background-color: #0f3460;
+        }
+
+        body.dark-theme .nav-dropdown-menu .nav-link.active {
+            background-color: #0f3460;
+            color: #667eea;
+        }
+
+        body.dark-theme .user-welcome {
+            color: #a0a0a0;
+        }
+
+        body.dark-theme .user-role {
+            background: #0f3460;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .page-header {
+            background: #16213e;
+            border-color: #0f3460;
+        }
+
+        body.dark-theme .page-title {
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .page-description {
+            color: #a0a0a0;
+        }
+
+        body.dark-theme .toggle-slider {
+            background: #0f3460;
+            border-color: #1a1a2e;
+        }
+
+        body.dark-theme .alert-success {
+            background: #1e4620;
+            color: #4ade80;
+            border-color: #22c55e;
+        }
+
+        body.dark-theme .alert-error {
+            background: #4a1e1e;
+            color: #f87171;
+            border-color: #ef4444;
+        }
+
+        body.dark-theme .alert-warning {
+            background: #4a3e1e;
+            color: #fbbf24;
+            border-color: #f59e0b;
         }
     </style>
     
@@ -629,8 +700,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <div class="toggle-switch">
                     <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
                     <label for="theme-toggle" class="toggle-slider">
-                        <span class="toggle-option toggle-light">☀️ Light</span>
-                        <span class="toggle-option toggle-dark">🌙 Dark</span>
+                        <span class="toggle-option toggle-light">☀️</span>
+                        <span class="toggle-option toggle-dark">🌙</span>
                     </label>
                 </div>
             </div>
