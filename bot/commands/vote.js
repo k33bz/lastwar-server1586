@@ -7,6 +7,7 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { getActiveVotes, getVote } = require('../utils/dataAccess');
 const { createVote, publishVote } = require('../utils/voteManager');
 const { verifyVoteIntegrity, generateVerificationReceipt } = require('../utils/voteIntegrity');
+const { createVoteRequest, getPendingRequests, getPresidentDiscordId } = require('../utils/voteRequestManager');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -16,6 +17,11 @@ module.exports = {
       subcommand
         .setName('create')
         .setDescription('Create a new vote (President/Admin only)')
+    )
+    .addSubcommand(subcommand =>
+      subcommand
+        .setName('request')
+        .setDescription('Request a vote to be created (sent to president for approval)')
     )
     .addSubcommand(subcommand =>
       subcommand
@@ -38,6 +44,11 @@ module.exports = {
             .setDescription('Vote ID to verify')
             .setRequired(true)
         )
+    )
+    .addSubcommand(subcommand =>
+      subcommand
+        .setName('requests')
+        .setDescription('View pending vote requests (President only)')
     ),
 
   async execute(interaction) {
@@ -48,11 +59,17 @@ module.exports = {
         case 'create':
           await handleCreate(interaction);
           break;
+        case 'request':
+          await handleRequest(interaction);
+          break;
         case 'status':
           await handleStatus(interaction);
           break;
         case 'verify':
           await handleVerify(interaction);
+          break;
+        case 'requests':
+          await handleRequests(interaction);
           break;
         default:
           await interaction.reply({
@@ -346,5 +363,226 @@ async function initiateVoteCreation(user, dm, client) {
     if (reason === 'time') {
       await dm.send('⏱️ Vote creation timed out. Please start over with `/vote create`.');
     }
+  });
+}
+
+/**
+ * Handle /vote request
+ */
+async function handleRequest(interaction) {
+  await interaction.reply({
+    content: '✅ Check your DMs to submit your vote request!',
+    ephemeral: true
+  });
+
+  try {
+    const dm = await interaction.user.createDM();
+    await initiateVoteRequest(interaction.user, dm, interaction.client);
+  } catch (error) {
+    console.error('[ERROR] Failed to send DM:', error);
+    await interaction.followUp({
+      content: '❌ I couldn\'t send you a DM. Please make sure your DMs are enabled for this server.',
+      ephemeral: true
+    });
+  }
+}
+
+/**
+ * Initiate vote request DM flow
+ */
+async function initiateVoteRequest(user, dm, client) {
+  const collector = dm.createMessageCollector({
+    filter: m => m.author.id === user.id,
+    time: 600000 // 10 minutes
+  });
+
+  let requestData = {
+    title: null,
+    description: null,
+    category: null
+  };
+
+  let step = 0;
+
+  const steps = [
+    {
+      prompt: '**📝 Vote Request - Step 1/3**\n\nWhat is the vote title? (Keep it concise, max 100 characters)',
+      field: 'title',
+      validate: (value) => value.length <= 100
+    },
+    {
+      prompt: '**📝 Vote Request - Step 2/3**\n\nProvide a detailed description or synopsis:',
+      field: 'description'
+    },
+    {
+      prompt: '**📝 Vote Request - Step 3/3**\n\nSelect category:\n1️⃣ Rule Change\n2️⃣ Alliance Action\n3️⃣ Server Event\n4️⃣ Other\n\nReply with the number (1-4):',
+      field: 'category',
+      transform: (value) => {
+        const categories = ['rule_change', 'alliance_action', 'server_event', 'other'];
+        const index = parseInt(value) - 1;
+        return categories[index];
+      },
+      validate: (value) => {
+        const num = parseInt(value);
+        return num >= 1 && num <= 4;
+      }
+    }
+  ];
+
+  // Send first prompt
+  await dm.send(steps[step].prompt);
+
+  collector.on('collect', async (message) => {
+    const currentStep = steps[step];
+
+    // Validate input
+    if (currentStep.validate && !currentStep.validate(message.content)) {
+      await dm.send(`❌ Invalid input. ${currentStep.prompt}`);
+      return;
+    }
+
+    // Save response
+    requestData[currentStep.field] = currentStep.transform
+      ? currentStep.transform(message.content)
+      : message.content;
+
+    step++;
+
+    if (step < steps.length) {
+      // Next step
+      await dm.send(steps[step].prompt);
+    } else {
+      // All data collected - create request
+      try {
+        const request = await createVoteRequest(requestData, user);
+
+        await dm.send({
+          embeds: [{
+            title: '✅ Vote Request Submitted!',
+            fields: [
+              { name: 'Request ID', value: request.request_id },
+              { name: 'Title', value: request.vote_details.title },
+              { name: 'Status', value: 'Pending president approval' }
+            ],
+            description: 'Your vote request has been sent to the president for approval.\n\n**Auto-approval:** If the president doesn\'t respond within 12 hours, the vote will be automatically created.',
+            color: 0x667eea,
+            timestamp: new Date()
+          }]
+        });
+
+        // Notify president
+        await notifyPresidentOfRequest(request, client);
+
+        collector.stop('completed');
+      } catch (error) {
+        console.error('[ERROR] Failed to create vote request:', error);
+        await dm.send(`❌ Failed to submit vote request: ${error.message}\n\nPlease try again with \`/vote request\``);
+        collector.stop('error');
+      }
+    }
+  });
+
+  collector.on('end', async (collected, reason) => {
+    if (reason === 'time') {
+      await dm.send('⏱️ Vote request timed out. Please start over with `/vote request`.');
+    }
+  });
+}
+
+/**
+ * Notify president of new vote request
+ */
+async function notifyPresidentOfRequest(request, client) {
+  const presidentId = await getPresidentDiscordId();
+
+  if (!presidentId) {
+    console.warn('[WARN] PRESIDENT_DISCORD_ID not configured, skipping notification');
+    return;
+  }
+
+  try {
+    const president = await client.users.fetch(presidentId);
+    const dm = await president.createDM();
+
+    await dm.send({
+      embeds: [{
+        title: '🗳️ New Vote Request',
+        description: request.vote_details.description,
+        fields: [
+          {
+            name: 'Request ID',
+            value: request.request_id,
+            inline: true
+          },
+          {
+            name: 'Title',
+            value: request.vote_details.title,
+            inline: true
+          },
+          {
+            name: 'Category',
+            value: request.vote_details.category.replace('_', ' ').toUpperCase(),
+            inline: true
+          },
+          {
+            name: 'Requested By',
+            value: `${request.requested_by.username} (${request.requested_by.tag})`,
+            inline: false
+          },
+          {
+            name: 'How to Approve/Reject',
+            value: 'Reply to this DM with:\n```\napprove: ' + request.request_id + '\nreject: ' + request.request_id + ' [optional reason]\n```',
+            inline: false
+          },
+          {
+            name: '⚠️ Auto-Approval',
+            value: 'This request will be **automatically approved** and the vote created if you don\'t respond within **12 hours**.',
+            inline: false
+          }
+        ],
+        color: 0xffc107,
+        timestamp: new Date(request.created_at)
+      }]
+    });
+
+    console.log(`[REQUEST] Notified president about request ${request.request_id}`);
+  } catch (error) {
+    console.error('[ERROR] Failed to notify president:', error);
+  }
+}
+
+/**
+ * Handle /vote requests (view pending)
+ */
+async function handleRequests(interaction) {
+  // TODO: Add role check for president/admin
+  const pendingRequests = await getPendingRequests();
+
+  if (pendingRequests.length === 0) {
+    return await interaction.reply({
+      content: '📋 No pending vote requests',
+      ephemeral: true
+    });
+  }
+
+  const fields = pendingRequests.map(req => {
+    const age = Math.floor((Date.now() - new Date(req.created_at).getTime()) / (1000 * 60 * 60));
+    const autoApproveIn = Math.max(0, 12 - age);
+
+    return {
+      name: req.vote_details.title,
+      value: `**ID:** ${req.request_id}\n**By:** ${req.requested_by.username}\n**Age:** ${age}h ago\n**Auto-approve in:** ${autoApproveIn}h`
+    };
+  });
+
+  await interaction.reply({
+    embeds: [{
+      title: '📋 Pending Vote Requests',
+      description: `${pendingRequests.length} request(s) awaiting approval`,
+      fields: fields,
+      color: 0xffc107,
+      timestamp: new Date()
+    }],
+    ephemeral: true
   });
 }

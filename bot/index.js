@@ -59,6 +59,9 @@ for (const file of eventFiles) {
 // Start vote monitoring cron job
 require('./jobs/voteMonitor')(client);
 
+// Start request monitoring cron job (auto-approval after 12h)
+require('./jobs/requestMonitor')(client);
+
 // Login to Discord
 client.login(process.env.DISCORD_BOT_TOKEN)
   .then(() => {

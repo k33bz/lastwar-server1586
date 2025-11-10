@@ -5,6 +5,8 @@ Discord bot for managing council voting with cryptographic integrity.
 ## Features
 
 - 🗳️ Council vote creation via `/vote create` command
+- 📝 Vote request system via `/vote request` (anyone can request, president approves)
+- ⏱️ Auto-approval after 12 hours if president doesn't respond
 - 💬 DM-based voting system (private votes)
 - 🔒 Cryptographic hash chain for vote immutability
 - ⏱️ 24-hour voting periods with early close option
@@ -118,7 +120,7 @@ In Discord:
 
 ## Usage
 
-### Creating a Vote
+### Creating a Vote (President/Admin Only)
 
 1. User with permissions runs `/vote create`
 2. Bot DMs them with 3 questions:
@@ -127,6 +129,31 @@ In Discord:
    - Category (rule change, alliance action, server event, other)
 3. Bot creates vote and notifies all council members
 4. Vote is posted in the configured channel
+
+### Requesting a Vote (Anyone Can Request)
+
+1. Any user runs `/vote request`
+2. Bot DMs them with 3 questions (same as vote creation)
+3. Request is sent to the president for approval
+4. President receives DM with request details
+5. President can:
+   - **Approve:** Reply with `approve: request_id`
+   - **Reject:** Reply with `reject: request_id optional reason`
+6. **Auto-approval:** If president doesn't respond within 12 hours, vote is automatically created
+7. Requester is notified of approval/rejection/auto-approval
+
+### Viewing Pending Requests (President Only)
+
+```
+/vote requests
+```
+
+Shows all pending vote requests with:
+- Request ID
+- Title
+- Requester
+- Age
+- Time until auto-approval
 
 ### Voting
 
