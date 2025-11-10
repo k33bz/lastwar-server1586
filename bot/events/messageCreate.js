@@ -17,8 +17,10 @@ module.exports = {
     // Only handle DMs
     if (!message.channel.isDMBased()) return;
 
+    // Get message content once
+    const content = message.content.toLowerCase().trim();
+
     // Check for approve/reject commands (president only)
-    const content = message.content.trim();
     const approveMatch = content.match(/^approve:\s*(votereq_\d+_[a-z0-9]+)$/i);
     const rejectMatch = content.match(/^reject:\s*(votereq_\d+_[a-z0-9]+)\s*(.*)$/i);
 
@@ -48,7 +50,6 @@ module.exports = {
     }
 
     // Parse vote command
-    const content = message.content.toLowerCase().trim();
     const voteMatch = content.match(/^vote:\s*(yes|no|abstain)$/);
 
     if (!voteMatch) {
