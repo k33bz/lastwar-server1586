@@ -24,6 +24,7 @@ try {
     }
 
     $in_game_name = $_POST['in_game_name'] ?? '';
+    $discord_id = $_POST['discord_id'] ?? '';
     $new_email = $_POST['email'] ?? '';
     $current_email = $user->sub;
 
@@ -37,6 +38,14 @@ try {
         throw new Exception('Invalid in-game name: ' . $name_validation['error']);
     }
     $in_game_name = $name_validation['sanitized'];
+
+    // Validate Discord ID (optional but must be valid if provided)
+    if (!empty($discord_id)) {
+        // Discord IDs are 17-19 digit numbers
+        if (!preg_match('/^[0-9]{17,19}$/', $discord_id)) {
+            throw new Exception('Invalid Discord ID format. Must be 17-19 digits.');
+        }
+    }
 
     // Validate email
     if (empty($new_email)) {
@@ -76,6 +85,14 @@ try {
             // Update in-game name
             $user_entry['in_game_name'] = $in_game_name;
 
+            // Update Discord ID
+            if (!empty($discord_id)) {
+                $user_entry['discord_id'] = $discord_id;
+            } elseif (isset($user_entry['discord_id'])) {
+                // Remove Discord ID if cleared
+                unset($user_entry['discord_id']);
+            }
+
             // Update email if changed
             if ($email_changed) {
                 $user_entry['email'] = $new_email;
@@ -98,6 +115,7 @@ try {
     // Log the update
     log_audit_event('user_profile_updated', $current_email, [
         'in_game_name' => $in_game_name,
+        'discord_id' => !empty($discord_id) ? 'Updated' : 'Cleared',
         'email_changed' => $email_changed,
         'new_email' => $email_changed ? $new_email : null
     ]);

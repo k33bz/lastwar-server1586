@@ -270,6 +270,42 @@ include 'includes/header.php';
             </div>
         </div>
 
+        <!-- Discord Integration -->
+        <div class="profile-section">
+            <h3>💬 Discord Integration</h3>
+
+            <div class="info-box">
+                <strong>🔗 Link Your Discord Account</strong>
+                <p>
+                    Link your Discord account to enable voting bot features and role-based permissions.
+                    <?php if (in_array('president', $roles)): ?>
+                    <br><strong>As President, this is required to create and manage council votes.</strong>
+                    <?php elseif (in_array('r5', $roles) || in_array('r4', $roles)): ?>
+                    <br><strong>This allows you to vote on council proposals via Discord DMs.</strong>
+                    <?php endif; ?>
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label for="discordId">Discord User ID</label>
+                <input
+                    type="text"
+                    id="discordId"
+                    name="discord_id"
+                    value="<?php echo htmlspecialchars($user_data['discord_id'] ?? ''); ?>"
+                    placeholder="199257650154831872"
+                    pattern="[0-9]{17,19}"
+                    maxlength="19"
+                >
+                <div class="help-text">
+                    <strong>How to get your Discord User ID:</strong><br>
+                    1. Open Discord → Settings → Advanced → Enable "Developer Mode"<br>
+                    2. Right-click your name anywhere in Discord → "Copy User ID"<br>
+                    3. Paste the 18-digit number here
+                </div>
+            </div>
+        </div>
+
         <!-- Account Settings -->
         <div class="profile-section">
             <h3>⚙️ Account Settings</h3>
@@ -423,6 +459,7 @@ document.getElementById('profileForm').addEventListener('submit', async function
         const csrfToken = getCsrfToken();
         const formData = new FormData();
         formData.append('in_game_name', document.getElementById('inGameName').value.trim());
+        formData.append('discord_id', document.getElementById('discordId').value.trim());
         formData.append('email', document.getElementById('email').value.trim());
 
         const response = await fetch('profile_api.php', {

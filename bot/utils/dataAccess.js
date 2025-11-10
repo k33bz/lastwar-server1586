@@ -42,6 +42,17 @@ async function getCouncilData() {
 }
 
 /**
+ * Get admin users (for Discord ID lookups and role verification)
+ */
+async function getAdminUsers() {
+  const data = await fs.readFile(
+    path.join(DATA_DIR, '../admin/users.json'),
+    'utf8'
+  );
+  return JSON.parse(data);
+}
+
+/**
  * Get all votes
  */
 async function getVotes() {
@@ -131,6 +142,7 @@ module.exports = {
   getRotationSchedule,
   getAlliances,
   getCouncilData,
+  getAdminUsers,
   getVotes,
   saveVotes,
   getVote,

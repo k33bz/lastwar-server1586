@@ -3,7 +3,7 @@
  * Determines current council members based on rotation schedule
  */
 
-const { getRotationSchedule, getAlliances, getCouncilData } = require('./dataAccess');
+const { getRotationSchedule, getAlliances, getCouncilData, getAdminUsers } = require('./dataAccess');
 
 /**
  * Get current council members with voter details
@@ -161,9 +161,28 @@ function determineOutcome(counts, totalEligible) {
 
 /**
  * Get the current president's Discord ID
- * President is designated in council.json
+ * First checks admin users with "president" role, then falls back to council.json + alliances
  */
 async function getPresidentDiscordId() {
+  try {
+    // First, check admin users for anyone with "president" role and Discord ID
+    const adminUsers = await getAdminUsers();
+
+    if (adminUsers && adminUsers.users) {
+      const presidentUser = adminUsers.users.find(user =>
+        user.roles && user.roles.includes('president') && user.discord_id
+      );
+
+      if (presidentUser && presidentUser.discord_id) {
+        console.log(`[INFO] President Discord ID found in admin users: ${presidentUser.email}`);
+        return presidentUser.discord_id;
+      }
+    }
+  } catch (error) {
+    console.warn('[WARN] Could not read admin users, falling back to alliance data:', error.message);
+  }
+
+  // Fallback: Use council.json + alliances.json
   const councilData = await getCouncilData();
   const alliances = await getAlliances();
 
