@@ -32,11 +32,9 @@ def run_tests():
     print("=" * 60)
     print()
 
-    # For now, just verify critical files exist
+    # Verify critical files exist (React architecture)
     critical_files = [
         'index.html',
-        'js/app.js',
-        'css/styles.css',
         'data/alliances.json',
         'data/rules.json',
         'data/amendments.json',
@@ -44,7 +42,8 @@ def run_tests():
         'data/council.js',
         'data/power-history.csv',
         'data/server-info.json',
-        'data/signature-history.json'
+        'data/signature-history.json',
+        'data/version.json',
     ]
 
     passed = 0
@@ -59,6 +58,29 @@ def run_tests():
         else:
             print(f"  ✗ {file_path} - NOT FOUND")
             failed += 1
+
+    # Check for React build artifacts (assets directory)
+    assets_dir = PROJECT_ROOT / 'assets'
+    if assets_dir.exists() and assets_dir.is_dir():
+        js_files = list(assets_dir.glob('*.js'))
+        css_files = list(assets_dir.glob('*.css'))
+
+        if js_files:
+            print(f"  ✓ assets/*.js ({len(js_files)} file(s))")
+            passed += 1
+        else:
+            print(f"  ✗ assets/*.js - NO JS FILES FOUND")
+            failed += 1
+
+        if css_files:
+            print(f"  ✓ assets/*.css ({len(css_files)} file(s))")
+            passed += 1
+        else:
+            print(f"  ✗ assets/*.css - NO CSS FILES FOUND")
+            failed += 1
+    else:
+        print(f"  ✗ assets/ directory - NOT FOUND")
+        failed += 2
 
     print()
     print("=" * 60)
