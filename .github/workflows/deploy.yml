@@ -26,7 +26,7 @@ jobs:
       - name: Validate JSON files
         run: |
           echo "Validating version.json..."
-          python -m json.tool version.json > /dev/null
+          python -m json.tool data/version.json > /dev/null
           echo "version.json is valid"
 
           echo "Validating alliances.json..."
@@ -55,6 +55,28 @@ jobs:
 
       - name: Validate CSV files
         run: python scripts/validate-csv.py
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install React dependencies
+        run: npm ci
+        working-directory: client
+
+      - name: Build React client
+        run: npm run build
+        working-directory: client
+
+      - name: Deploy React build to root
+        run: |
+          echo "Copying React build to root directory..."
+          cp client/dist/index.html index.html
+          cp -r client/dist/assets assets
+          echo "React build deployed to root"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -120,6 +142,7 @@ jobs:
           echo "All tests passed!"
           echo "All JSON files validated"
           echo "CSV files validated"
+          echo "React client built successfully"
           echo "PHP unit tests passed"
           echo "Ready for deployment"
 
@@ -180,20 +203,20 @@ jobs:
           echo "Waiting 10 seconds for FTP sync..."
           sleep 10
 
-          # Verify version.json is accessible
-          echo "Checking version.json accessibility..."
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" ${APP_URL}/version.json)
+          # Verify API is accessible (version.json is now in /data and accessed via /api)
+          echo "Checking API accessibility..."
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" ${APP_URL}/api/version.php)
 
           if [ "$RESPONSE" = "200" ]; then
-            echo "version.json is accessible (HTTP $RESPONSE)"
+            echo "API is accessible (HTTP $RESPONSE)"
 
             # Fetch and display version
-            VERSION_DATA=$(curl -s ${APP_URL}/version.json)
-            VERSION=$(echo $VERSION_DATA | python -c "import json, sys; print(json.load(sys.stdin)['version'])")
+            VERSION_DATA=$(curl -s ${APP_URL}/api/version.php)
+            VERSION=$(echo $VERSION_DATA | python -c "import json, sys; print(json.load(sys.stdin)['data']['version'])")
             echo "Deployed version: $VERSION"
 
             # Verify it matches local version
-            LOCAL_VERSION=$(python -c "import json; print(json.load(open('version.json'))['version'])")
+            LOCAL_VERSION=$(python -c "import json; print(json.load(open('data/version.json'))['version'])")
             if [ "$VERSION" = "$LOCAL_VERSION" ]; then
               echo "Version match confirmed!"
             else
@@ -201,7 +224,7 @@ jobs:
               exit 1
             fi
           else
-            echo "Error: version.json returned HTTP $RESPONSE"
+            echo "Error: API returned HTTP $RESPONSE"
             echo "Deployment verification failed!"
             exit 1
           fi
@@ -248,13 +271,13 @@ jobs:
       - name: Check version for key rotation
         id: check_version
         run: |
-          # Get current version from version.json
-          CURRENT_VERSION=$(python -c "import json; print(json.load(open('version.json'))['version'])")
+          # Get current version from data/version.json
+          CURRENT_VERSION=$(python -c "import json; print(json.load(open('data/version.json'))['version'])")
           echo "Current version: $CURRENT_VERSION"
 
           # Get previous version from git history
           git fetch origin mainline --depth=2
-          PREV_VERSION=$(git show HEAD~1:version.json 2>/dev/null | python -c "import json, sys; print(json.load(sys.stdin)['version'])" || echo "0.0.0")
+          PREV_VERSION=$(git show HEAD~1:data/version.json 2>/dev/null | python -c "import json, sys; print(json.load(sys.stdin)['version'])" || echo "0.0.0")
           echo "Previous version: $PREV_VERSION"
 
           # Extract major.minor from versions

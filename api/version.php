@@ -24,7 +24,7 @@ handle_preflight();
 validate_method('GET');
 
 // Path to version data
-$data_file = __DIR__ . '/../version.json';
+$data_file = __DIR__ . '/../data/version.json';
 
 // Read version data
 $version = read_json_safe($data_file);
