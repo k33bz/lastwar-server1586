@@ -4,6 +4,26 @@
         "content": [
             "All Top 15 Alliances are part of the Non-Aggression Pact (NAP15). NAP15 alliance members are protected anywhere on the map.",
             "Check Alliance > Settings > Alliance List > Alliance Rankings for the most updated NAP15 list."
+        ],
+        "amendments": [
+            {
+                "version": "1.1",
+                "date": "2025-10-05",
+                "changes": [
+                    {
+                        "type": "add",
+                        "text": "Some protections will also apply to non-NAP15 alliance members located inside of a territory touching the Capitol."
+                    },
+                    {
+                        "type": "add",
+                        "text": "NAP15 alliance members are protected anywhere on the map, but protection for members of alliances outside the Top 15 will not apply to individual alliance members located outside of these territories. However, Enemy Buster Days should be focused on plundering from opponent servers rather than attacking 1586 users."
+                    },
+                    {
+                        "type": "add",
+                        "text": "<strong>Example:</strong> If 80 members of an alliance are in a territory touching the Capitol and 20 are across the border in a different territory not touching the Capitol, the relevant NAP15 rules will only apply to the 80 members in the Capitol-adjacent territory."
+                    }
+                ]
+            }
         ]
     },
     {
@@ -12,7 +32,8 @@
             "Bases belonging to NAP15 members or non-NAP15 members in a territory touching the Capitol cannot be hit or ashed",
             "NAP15 members are protected anywhere on the map",
             "Non-NAP15 bases outside protected territories may be attacked"
-        ]
+        ],
+        "amendments": []
     },
     {
         "title": "Resource Protection",
@@ -20,7 +41,8 @@
             "Trains, trucks, tasks, and resource tiles cannot be attacked except:",
             "Tiles in the mud during Capitol War (or Fridays 10:00 AM - 6:00 PM ET if no Capitol War)",
             "When both sides mutually agree (must be posted in alliance chat)"
-        ]
+        ],
+        "amendments": []
     },
     {
         "title": "Information Security",
@@ -28,7 +50,8 @@
             "Coordinates of NAP15 bases, trains, trucks, or tiles may NOT be shared with outside servers",
             "No agreements with other servers to attack NAP15 resources",
             "Cross-server agreements giving resources/territory to outsiders require Council approval"
-        ]
+        ],
+        "amendments": []
     },
     {
         "title": "Discipline System",
@@ -38,7 +61,8 @@
             "<strong>Multiple violations:</strong> 1 week in jail",
             "<strong>Outside server agreements:</strong> Alliance loses buffs for 3 days",
             "<strong>Refusing punishment:</strong> Triple discipline on R5/R4"
-        ]
+        ],
+        "amendments": []
     },
     {
         "title": "Insults & Malicious Language",
@@ -47,6 +71,70 @@
             "<strong>First offense:</strong> 3 days to 2 weeks in Jail Alliance",
             "<strong>Second offense:</strong> Ban from NAP15 protections",
             "<strong>Threatening language:</strong> Immediate ban from NAP15"
+        ],
+        "amendments": [
+            {
+                "version": "1.2",
+                "date": "2025-10-05",
+                "changes": [
+                    {
+                        "type": "add",
+                        "text": "<strong>Don't Be a Dick Clause - General Principle:</strong> All NAP15 members are expected to act with basic respect and good faith toward fellow server members. While competition is part of the game, intentionally antagonistic, petty, or disruptive behavior undermines server unity and cooperation"
+                    },
+                    {
+                        "type": "add",
+                        "text": "<strong>Prohibited Behavior:</strong> Deliberate trolling or baiting of other players in World Chat, alliance chats, or DMs"
+                    },
+                    {
+                        "type": "add",
+                        "text": "Exploiting technicalities in server rules to harass or disadvantage others while staying \"technically legal\""
+                    },
+                    {
+                        "type": "add",
+                        "text": "Repeated petty grievances or manufacturing conflicts to create drama"
+                    },
+                    {
+                        "type": "add",
+                        "text": "Passive-aggressive behavior such as purposely blocking paths, camping in alliance hives, or other actions designed to frustrate without direct rule violations"
+                    },
+                    {
+                        "type": "add",
+                        "text": "Refusal to communicate in good faith when resolving disputes"
+                    },
+                    {
+                        "type": "add",
+                        "text": "Spreading rumors or misinformation about other alliances or players"
+                    },
+                    {
+                        "type": "add",
+                        "text": "Celebrating or gloating excessively after discipline actions against others"
+                    },
+                    {
+                        "type": "add",
+                        "text": "Interfering with gameplay in ways not explicitly prohibited but clearly meant to annoy (e.g., repeatedly scouting the same base, following players around unnecessarily)"
+                    },
+                    {
+                        "type": "add",
+                        "text": "<strong>\"Don't Be a Dick\" Discipline:</strong> First offense → Warning from alliance leadership and notification to Council"
+                    },
+                    {
+                        "type": "add",
+                        "text": "Second offense → 3-7 days in Jail Alliance"
+                    },
+                    {
+                        "type": "add",
+                        "text": "Third offense → 1-2 weeks in Jail Alliance"
+                    },
+                    {
+                        "type": "add",
+                        "text": "Continued violations → Ban from NAP15 protections"
+                    },
+                    {
+                        "type": "add",
+                        "text": "<strong>Spirit of the Rule:</strong> When in doubt, ask yourself: \"Am I doing this to achieve a legitimate game objective, or am I just being a dick?\" If it's the latter, don't do it. This clause is intentionally broad to address behaviors that may not fit other specific rules but clearly violate the spirit of server cooperation"
+                    }
+                ]
+            }
         ]
     },
     {
@@ -57,6 +145,54 @@
             "Offended and Accused parties don't vote in disciplinary matters",
             "Top 3 alliances break ties",
             "24-hour response window or vote is forfeited"
+        ],
+        "amendments": [
+            {
+                "version": "1.1",
+                "date": "2025-10-05",
+                "changes": [
+                    {
+                        "type": "add",
+                        "text": "Votes will be cast by the R5s (or designee) of the Top 5 Alliances in a separate R5 channel, plus 2 weekly rotating alliances from the Top 6–15"
+                    },
+                    {
+                        "type": "remove",
+                        "text": "R5s (or designees) from Top 5 alliances + 2 rotating from Top 6-15"
+                    },
+                    {
+                        "type": "add",
+                        "text": "Each R5 eligible for voting may delegate to an R4. If an R5 chooses to delegate to an R4, the council should be notified via the 1586 Council Discord channel"
+                    },
+                    {
+                        "type": "add",
+                        "text": "If the topic is disciplinary, the Offended Party and Accused Party alliances do not vote"
+                    },
+                    {
+                        "type": "remove",
+                        "text": "Offended and Accused parties don't vote in disciplinary matters"
+                    },
+                    {
+                        "type": "add",
+                        "text": "In the event of a tie, the Top 3 alliances break it"
+                    },
+                    {
+                        "type": "remove",
+                        "text": "Top 3 alliances break ties"
+                    },
+                    {
+                        "type": "add",
+                        "text": "<strong>Example:</strong> If the 2nd and 5th ranked alliances cannot vote due to involvement in a disciplinary issue, the 1st, 3rd, and 4th alliances cast the tie-breaking vote"
+                    },
+                    {
+                        "type": "add",
+                        "text": "If a voting member or delegate does not respond within 24 hours, they forfeit their vote"
+                    },
+                    {
+                        "type": "remove",
+                        "text": "24-hour response window or vote is forfeited"
+                    }
+                ]
+            }
         ]
     },
     {
@@ -66,7 +202,8 @@
             "New Top 3 alliances must hold rank for 7 consecutive days",
             "New Top 15 alliances must hold rank for 7 consecutive days for NAP15 eligibility",
             "New R5s must ratify rules within 7 days or lose NAP15 protections"
-        ]
+        ],
+        "amendments": []
     },
     {
         "title": "Jail Alliance",
@@ -75,7 +212,8 @@
             "Jail members protected under NAP15 but don't rotate in Council",
             "Continued violations while in jail result in permanent ban from NAP15",
             "Punishment follows members to new alliances if they leave"
-        ]
+        ],
+        "amendments": []
     },
     {
         "title": "Conflict Resolution Process",
@@ -87,6 +225,7 @@
             "If refused, escalate to Council with documentation",
             "Council votes and Server President enforces outcome",
             "Agreed actions must be communicated in alliance chats"
-        ]
+        ],
+        "amendments": []
     }
 ]

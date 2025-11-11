@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "last_updated": "2025-11-04T00:00:00Z",
+  "description": "Global and cross-alliance Discord channels (admin-managed only). Alliance-specific channels are configured in alliances.json by R5/R4.",
+  "global_channels": [
+    {
+      "id": "example_global_channel_123",
+      "name": "server-announcements",
+      "server_id": "example_server_id_456",
+      "server_name": "Last War Server 1586",
+      "alliance": "*",
+      "type": "global",
+      "enabled": false,
+      "description": "Server-wide announcements (all alliances) - Example: replace with real channel ID",
+      "created_at": "2025-11-04T00:00:00Z",
+      "created_by": "admin"
+    },
+    {
+      "id": "example_nap15_channel_789",
+      "name": "nap15-coordination",
+      "server_id": "example_server_id_456",
+      "server_name": "Last War Server 1586",
+      "alliance": "*",
+      "type": "cross-alliance",
+      "enabled": false,
+      "description": "NAP15 cross-alliance coordination - Example: replace with real channel ID",
+      "created_at": "2025-11-04T00:00:00Z",
+      "created_by": "admin"
+    }
+  ]
+}

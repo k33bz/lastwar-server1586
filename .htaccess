@@ -9,8 +9,13 @@
     </FilesMatch>
 </IfModule>
 
-# Add JSON MIME type handler
+# MIME Type Handlers
 AddType application/json .json
+AddType text/csv .csv
+AddType image/svg+xml .svg
+AddType font/woff2 .woff2
+AddType font/woff .woff
+AddDefaultCharset UTF-8
 
 # Enable Rewrite Engine
 RewriteEngine On
@@ -24,10 +29,39 @@ RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
+# CORS Headers (Cross-Origin Resource Sharing)
+<IfModule mod_headers.c>
+    # Allow requests from your domain and localhost for development
+    SetEnvIf Origin "^https://www\.lastwar1586\.online$" ORIGIN_MATCH=$0
+    SetEnvIf Origin "^http://localhost:[0-9]+$" ORIGIN_MATCH=$0
+    Header always set Access-Control-Allow-Origin "%{ORIGIN_MATCH}e" env=ORIGIN_MATCH
+
+    # Allow specific HTTP methods
+    Header always set Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+
+    # Allow specific headers
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept, Origin"
+
+    # Expose specific headers to the client
+    Header always set Access-Control-Expose-Headers "Content-Length, X-Request-Id"
+
+    # Allow credentials (cookies, authorization headers)
+    Header always set Access-Control-Allow-Credentials "true"
+
+    # Cache preflight requests for 24 hours
+    Header always set Access-Control-Max-Age "86400"
+</IfModule>
+
+# Handle OPTIONS preflight requests
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ $1 [R=200,L]
+</IfModule>
+
 # Security Headers
 <IfModule mod_headers.c>
     # Prevent clickjacking
-    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Frame-Options "DENY"
 
     # Prevent MIME type sniffing
     Header always set X-Content-Type-Options "nosniff"
@@ -37,6 +71,12 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
     # Referrer Policy
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Permissions Policy - Disable unnecessary browser features
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+
+    # Content Security Policy (CSP)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.lastwar1586.online; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
 </IfModule>
 
 # Cache Control for Static Assets
@@ -60,11 +100,18 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
     # JSON data (short cache)
     ExpiresByType application/json "access plus 5 minutes"
+
+    # CSV data (short cache)
+    ExpiresByType text/csv "access plus 5 minutes"
+
+    # Fonts (long cache - versioned)
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
 </IfModule>
 
 # Gzip Compression
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json text/csv image/svg+xml font/woff2 font/woff
 </IfModule>
 
 # Custom Error Pages (optional)
@@ -74,7 +121,16 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 # Default Document
 DirectoryIndex index.html
 
-# Allow access to JSON files
-<FilesMatch "\.(json)$">
-    Require all granted
+# SECURITY: Block direct access to /data directory (contains PII)
+# All data must be accessed through API endpoints only
+<Directory ~ "^.*/data">
+    Require all denied
+</Directory>
+
+# Alternative: Block /data directory access via rewrite
+RewriteRule ^data/ - [F,L]
+
+# Deny access to sensitive files
+<FilesMatch "\.(env|log|bak|backup|sql|sh|py)$">
+    Require all denied
 </FilesMatch>

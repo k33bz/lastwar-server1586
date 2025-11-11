@@ -1,0 +1,175 @@
+/* Server 1586 Custom Theme - Based on Last War Logo Colors */
+@layer theme {
+  /* Light Theme */
+  [data-theme="server1586"] {
+    color-scheme: light;
+
+    /* Primitive Colors (Do not change between light and dark) */
+    --white: oklch(100% 0 0);
+    --black: oklch(0% 0 0);
+    --snow: oklch(0.9911 0 0);
+    --eclipse: oklch(0.20 0.02 240); /* Dark navy from logo */
+
+    /* Spacing & Layout */
+    --spacing: 0.25rem;
+    --border-width: 1px;
+    --field-border-width: var(--border-width);
+    --disabled-opacity: 0.5;
+    --ring-offset-width: 2px;
+    --cursor-interactive: pointer;
+    --cursor-disabled: not-allowed;
+
+    /* Radius */
+    --radius: 0.75rem;
+    --field-radius: calc(var(--radius) * 1.5);
+
+    /* Base Colors */
+    --background: oklch(0.99 0.01 200); /* Very light with cyan hint */
+    --foreground: oklch(0.20 0.02 240); /* Dark navy text */
+
+    /* Surface: Used for non-overlay components (cards, accordions) */
+    --surface: var(--white);
+    --surface-foreground: var(--foreground);
+
+    /* Overlay: Used for floating/overlay components (tooltips, popovers, modals) */
+    --overlay: var(--white);
+    --overlay-foreground: var(--foreground);
+
+    --muted: oklch(0.60 0.02 240);
+    --scrollbar: oklch(0.85 0.03 200);
+
+    --default: oklch(0.94 0.02 200);
+    --default-foreground: oklch(0.20 0.02 240);
+
+    /* Primary/Accent Color - Cyan from "LAST" (#4DD0E1) */
+    --accent: oklch(0.78 0.10 200);
+    --accent-foreground: oklch(0.15 0.02 240);
+
+    /* Form Field Defaults */
+    --field-background: var(--white);
+    --field-foreground: oklch(0.20 0.02 240);
+    --field-placeholder: var(--muted);
+    --field-border: oklch(0.85 0.02 200);
+
+    /* Status Colors */
+    /* Success - Keep green */
+    --success: oklch(0.60 0.15 160);
+    --success-foreground: var(--white);
+
+    /* Warning - Yellow/Gold from "1586" (#FFD54F) */
+    --warning: oklch(0.85 0.14 85);
+    --warning-foreground: oklch(0.20 0.02 240);
+
+    /* Danger - Orange/Red from "WAR" (#FF6644) */
+    --danger: oklch(0.68 0.20 35);
+    --danger-foreground: var(--white);
+
+    /* Info - Cyan (same as accent) */
+    --info: oklch(0.78 0.10 200);
+    --info-foreground: oklch(0.15 0.02 240);
+
+    /* Component Colors */
+    --segment: var(--white);
+    --segment-foreground: var(--foreground);
+
+    /* Misc */
+    --border: oklch(0.90 0.005 250);
+    --divider: oklch(0.92 0.004 250);
+    --focus: var(--accent);
+    --link: var(--accent);
+
+    /* Shadows */
+    --surface-shadow:
+      0 2px 4px 0 rgba(70, 115, 142, 0.08),
+      0 1px 2px 0 rgba(70, 115, 142, 0.12),
+      0 0 1px 0 rgba(70, 115, 142, 0.12);
+    --overlay-shadow:
+      0 4px 16px 0 rgba(70, 115, 142, 0.12),
+      0 8px 24px 0 rgba(70, 115, 142, 0.15);
+    --field-shadow:
+      0 2px 4px 0 rgba(70, 115, 142, 0.04),
+      0 1px 2px 0 rgba(70, 115, 142, 0.06),
+      0 0 1px 0 rgba(70, 115, 142, 0.06);
+
+    /* Skeleton Default Global Animation */
+    --skeleton-animation: shimmer;
+  }
+
+  /* Dark Theme */
+  [data-theme="server1586-dark"] {
+    color-scheme: dark;
+
+    /* Base Colors - Dark navy from logo */
+    --background: oklch(0.18 0.03 240); /* Dark navy background */
+    --foreground: oklch(0.95 0.01 200); /* Light cyan-tinted text */
+
+    /* Surface: Used for non-overlay components */
+    --surface: oklch(0.25 0.03 240);
+    --surface-foreground: var(--foreground);
+
+    /* Overlay: Used for floating/overlay components */
+    --overlay: oklch(0.28 0.03 240);
+    --overlay-foreground: var(--foreground);
+
+    --muted: oklch(0.65 0.02 200);
+    --scrollbar: oklch(0.40 0.03 240);
+
+    --default: oklch(0.32 0.03 240);
+    --default-foreground: oklch(0.95 0.01 200);
+
+    /* Primary/Accent Color - Orange from logo "WAR" and flame */
+    --accent: oklch(0.72 0.22 35);
+    --accent-foreground: var(--white);
+
+    /* Form Field Defaults */
+    --field-background: oklch(0.25 0.03 240);
+    --field-foreground: var(--foreground);
+    --field-placeholder: var(--muted);
+    --field-border: oklch(0.35 0.03 240);
+
+    /* Status Colors - Vibrant for dark mode */
+    --success: oklch(0.65 0.16 160);
+    --success-foreground: oklch(0.10 0.02 160);
+
+    /* Warning - Bright yellow/gold from "1586" */
+    --warning: oklch(0.88 0.16 85);
+    --warning-foreground: oklch(0.15 0.02 240);
+
+    /* Danger - Bright orange/red from "WAR" */
+    --danger: oklch(0.72 0.22 35);
+    --danger-foreground: var(--white);
+
+    /* Info - Orange (same as accent) */
+    --info: oklch(0.72 0.22 35);
+    --info-foreground: var(--white);
+
+    /* Component Colors */
+    --segment: oklch(0.35 0.02 250);
+    --segment-foreground: var(--foreground);
+
+    /* Misc */
+    --border: oklch(0.30 0.02 250);
+    --divider: oklch(0.25 0.02 250);
+    --focus: var(--accent);
+    --link: var(--accent);
+
+    /* Shadows - Minimal for dark mode */
+    --surface-shadow: 0 0 0 0 transparent inset;
+    --overlay-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.4);
+    --field-shadow: 0 0 0 0 transparent inset;
+  }
+}
+
+/* Make info color available to Tailwind */
+@theme inline {
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-hover: color-mix(
+    in oklab,
+    var(--color-info) 90%,
+    var(--color-info-foreground) 10%
+  );
+  --color-info-soft: color-mix(in oklab, var(--color-info) 15%, transparent);
+  --color-info-soft-foreground: var(--color-info);
+  --color-info-soft-hover: color-mix(in oklab, var(--color-info) 20%, transparent);
+}

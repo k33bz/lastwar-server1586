@@ -188,3 +188,25 @@ admin/nul
 .kiro/.env
 .kiro/settings/github-token.json
 admin/discord_rate_limits.json
+
+# Public Site - React/Vite Build Files
+client/dist/
+client/node_modules/
+client/.vite/
+client/.turbo/
+
+# Public Site - Development
+client/*.log
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+
+# Public Site - Editor
+client/.vscode/
+client/.idea/
+
+# Root built assets (deployed from client/dist)
+# These should be built from source, not committed
+# Uncomment if you want to track them in git:
+# !index.html
+# !assets/

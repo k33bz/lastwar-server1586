@@ -1,19 +1,46 @@
 {
-  "president": {
-    "alliance_tag": "UvvU",
-    "appointed_date": "2025-05-19T00:00:00Z",
-    "notes": "President of Server 1586 Council"
-  },
-  "history": [
+  "members": [
     {
-      "alliance_tag": "UvvU",
-      "start_date": "2025-05-19T00:00:00Z",
-      "end_date": null,
-      "current": true
+      "tag": "ORCE",
+      "name": "Omega Force",
+      "seat": "permanent"
+    },
+    {
+      "tag": "STR8",
+      "name": "STR8 SAVAGE",
+      "seat": "permanent"
+    },
+    {
+      "tag": "UvvU",
+      "name": "veni vidi vici",
+      "seat": "permanent"
+    },
+    {
+      "tag": "EPIC",
+      "name": "KarmaKings",
+      "seat": "permanent"
+    },
+    {
+      "tag": "NKOT",
+      "name": "NKOT",
+      "seat": "permanent"
+    },
+    {
+      "tag": "404a",
+      "name": "Not Found",
+      "seat": "rotating",
+      "startDate": "2025-11-11"
+    },
+    {
+      "tag": "FLM",
+      "name": "Fortis Legio Magna",
+      "seat": "rotating",
+      "startDate": "2025-11-11"
     }
   ],
   "metadata": {
-    "last_updated": "2025-11-09T00:00:00Z",
-    "updated_by": "system"
+    "lastUpdated": "2025-11-11T01:57:32.790295",
+    "weekStart": "2025-11-11",
+    "notes": "Council voting members for NAP15"
   }
 }

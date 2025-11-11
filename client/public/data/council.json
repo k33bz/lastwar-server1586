@@ -1,0 +1,19 @@
+{
+  "president": {
+    "alliance_tag": "UvvU",
+    "appointed_date": "2025-05-19T00:00:00Z",
+    "notes": "President of Server 1586 Council"
+  },
+  "history": [
+    {
+      "alliance_tag": "UvvU",
+      "start_date": "2025-05-19T00:00:00Z",
+      "end_date": null,
+      "current": true
+    }
+  ],
+  "metadata": {
+    "last_updated": "2025-11-09T00:00:00Z",
+    "updated_by": "system"
+  }
+}

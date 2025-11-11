@@ -1,0 +1,46 @@
+{
+  "serverId": 1586,
+  "name": "Last War Server 1586",
+  "region": "Global",
+  "openDate": "2025-05-19",
+
+  "discord": {
+    "serverName": "Last War Server 1586",
+    "inviteUrl": "https://discord.gg/e53v2Dnp",
+    "logoUrl": "images/server-logo.png",
+    "description": "Official Discord server for Last War Server 1586",
+    "memberCount": null,
+    "features": [
+      "NAP15 Coordination",
+      "Event Planning",
+      "Alliance Diplomacy",
+      "Server News & Updates"
+    ]
+  },
+
+  "nap15": {
+    "active": true,
+    "startDate": "2025-05-19",
+    "memberCount": 15,
+    "version": "1.2"
+  },
+
+  "council": {
+    "permanentSeats": 5,
+    "rotatingSeats": 2,
+    "rotationFrequency": "Weekly",
+    "rotationDay": "Sunday",
+    "rotationTime": "22:00 EDT"
+  },
+
+  "contact": {
+    "admin": "Server Admin",
+    "discordAdmin": "Contact via Discord",
+    "website": "https://www.lastwar1586.online"
+  },
+
+  "metadata": {
+    "lastUpdated": "2025-10-29T12:00:00Z",
+    "version": "1.0"
+  }
+}

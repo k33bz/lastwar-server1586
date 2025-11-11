@@ -1,4 +1,133 @@
 {
-  "version": "1.0.0",
-  "messages": []
+    "version": "1.0.0",
+    "messages": [
+        {
+            "id": "msg_5c1db065e9613a9e",
+            "type": "instant",
+            "message": {
+                "embeds": [
+                    {
+                        "title": "Temperature Alert",
+                        "description": "\u2744\ufe0f **[S02] TEMPERATURE ALERT** \u2744\ufe0f\r\n\r\n**Current Temp:** -9000\r\n**Action Required:** Keep furnaces fueled with coal!\r\n\r\n\u26a0\ufe0f Frozen bases lose functionality\r\n\ud83d\udd25 Use High-Heat Furnaces to stay warm\r\n\ud83c\udfed Check Alliance Furnace coverage\r\n\r\n**Reminder:** Base temperature ranges from -15\u00b0C to -80\u00b0C. Don't let your base freeze!",
+                        "color": 3447003,
+                        "timestamp": "2025-11-07T00:10:09-05:00",
+                        "footer": {
+                            "text": "[UvvU] StackOVerflowError [R4] (ADMIN) \u2022 Last War 1586 Bot"
+                        }
+                    }
+                ],
+                "allowed_mentions": {
+                    "parse": []
+                }
+            },
+            "preview": "\u2744\ufe0f **[S02] TEMPERATURE ALERT** \u2744\ufe0f\r\n\r\n**Current Temp:** -9000\r\n**Action Required:** Keep furnaces fueled with coal!\r\n\r\n\u26a0\ufe0f Frozen bases lose functionality\r\n\ud83d\udd25 Use High-Heat Furnaces to sta",
+            "targets": [
+                "1379480229587845141"
+            ],
+            "sent_by": "matthewkastro@gmail.com",
+            "sent_at": "2025-11-07T00:10:10-05:00",
+            "status": "success",
+            "success_count": 1,
+            "total_count": 1,
+            "discord_message_ids": {
+                "1379480229587845141": "1436221165684260937"
+            }
+        },
+        {
+            "id": "msg_767e7ccd7b31cd35",
+            "type": "instant",
+            "message": {
+                "embeds": [
+                    {
+                        "title": "Rare Soil Coordination",
+                        "description": "\ud83c\udf0d **[S02] RARE SOIL WAR** \ud83c\udf0d\r\n\r\n**Alliance:** No Alliance []\r\n**Coordinator:** matthewkastro@gmail.com\r\n**Target Cities\/Dig Sites:** -100,9000\r\n**Time:** now\r\n\r\n\ud83d\udc8e Rare Soil determines our final alliance ranking!\r\n\ud83c\udfaf Max: 6 cities + 4 dig sites per player\r\n\u23f0 36-hour protection after capture\r\n\ud83d\udcca 2 capture limit per day\r\n\r\nnone\r\n\r\n@everyone Let's secure our territory!",
+                        "color": 3447003,
+                        "timestamp": "2025-11-07T00:11:06-05:00",
+                        "footer": {
+                            "text": "[UvvU] StackOVerflowError [R4] (ADMIN) \u2022 Last War 1586 Bot"
+                        }
+                    }
+                ],
+                "allowed_mentions": {
+                    "parse": []
+                }
+            },
+            "preview": "\ud83c\udf0d **[S02] RARE SOIL WAR** \ud83c\udf0d\r\n\r\n**Alliance:** No Alliance []\r\n**Coordinator:** matthewkastro@gmail.com\r\n**Target Cities\/Dig Sites:** -100,9000\r\n**Time:** now\r\n\r\n\ud83d\udc8e Rare Soil determines our fina",
+            "targets": [
+                "1379480229587845141"
+            ],
+            "sent_by": "matthewkastro@gmail.com",
+            "sent_at": "2025-11-07T00:11:06-05:00",
+            "status": "success",
+            "success_count": 1,
+            "total_count": 1,
+            "discord_message_ids": {
+                "1379480229587845141": "1436221404126253138"
+            }
+        },
+        {
+            "id": "msg_da4bc3debe079390",
+            "type": "instant",
+            "message": {
+                "embeds": [
+                    {
+                        "title": "Emperor Boreas Battle",
+                        "description": "\ud83d\udc51 **[S02] EMPEROR BOREAS BATTLE** \ud83d\udc51\r\n\r\n**Rally Leader:** [UvvU] StackOVerflowError [R4]\r\n**Alliance:** No Alliance []\r\n**Rally Time:** 11\/07\/2025 00:34\r\n\r\n\u2744\ufe0f **Mission:** Defeat Emperor Boreas!\r\n\ud83c\udfaf **Objective:** Primary season goal\r\n\ud83c\udfc6 **Rewards:** Major alliance ranking boost\r\n\r\n**Preparation Required:**\r\n\u2022 Max furnace heat for virus resistance\r\n\u2022 Upgraded military structures\r\n\u2022 Full hero lineup\r\n\u2022 Coordinate with alliance members\r\n\r\n\r\n--everyone This is the BIG ONE! Let's take down Boreas!",
+                        "color": 3447003,
+                        "timestamp": "2025-11-07T00:34:40-05:00",
+                        "footer": {
+                            "text": "[UvvU] StackOVerflowError [R4] (ADMIN) \u2022 Last War 1586 Bot"
+                        }
+                    }
+                ],
+                "allowed_mentions": {
+                    "parse": []
+                }
+            },
+            "preview": "\ud83d\udc51 **[S02] EMPEROR BOREAS BATTLE** \ud83d\udc51\r\n\r\n**Rally Leader:** [UvvU] StackOVerflowError [R4]\r\n**Alliance:** No Alliance []\r\n**Rally Time:** 11\/07\/2025 00:34\r\n\r\n\u2744\ufe0f **Mission:** Defeat Emperor Bore",
+            "targets": [
+                "1379480229587845141"
+            ],
+            "sent_by": "matthewkastro@gmail.com",
+            "sent_at": "2025-11-07T00:34:41-05:00",
+            "status": "success",
+            "success_count": 1,
+            "total_count": 1,
+            "discord_message_ids": {
+                "1379480229587845141": "1436227336122011691"
+            }
+        },
+        {
+            "id": "msg_516c5df5494fb4bd",
+            "type": "instant",
+            "message": {
+                "embeds": [
+                    {
+                        "title": "Rally Announcement",
+                        "description": "\ud83c\udfaf **RALLY ALERT** \ud83c\udfaf\r\n\r\n**Rally Leader:** [UvvU] StackOVerflowError [R4]\r\n**Alliance:** No Alliance []\r\n**Target:** x:123 y:456\r\n**Time:** 11\/08\/2025 21:38\r\n\r\n\r\n--everyone Get ready!",
+                        "color": 3447003,
+                        "timestamp": "2025-11-07T00:38:44-05:00",
+                        "footer": {
+                            "text": "[UvvU] StackOVerflowError [R4] (ADMIN) \u2022 Last War 1586 Bot"
+                        }
+                    }
+                ],
+                "allowed_mentions": {
+                    "parse": []
+                }
+            },
+            "preview": "\ud83c\udfaf **RALLY ALERT** \ud83c\udfaf\r\n\r\n**Rally Leader:** [UvvU] StackOVerflowError [R4]\r\n**Alliance:** No Alliance []\r\n**Target:** x:123 y:456\r\n**Time:** 11\/08\/2025 21:38\r\n\r\n\r\n--everyone Get ready!",
+            "targets": [
+                "1379480229587845141"
+            ],
+            "sent_by": "matthewkastro@gmail.com",
+            "sent_at": "2025-11-07T00:38:44-05:00",
+            "status": "success",
+            "success_count": 1,
+            "total_count": 1,
+            "discord_message_ids": {
+                "1379480229587845141": "1436228358307581954"
+            }
+        }
+    ]
 }

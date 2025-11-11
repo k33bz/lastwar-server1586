@@ -25,7 +25,7 @@ if (file_exists(__DIR__ . '/config.php')) {
 }
 
 // Load version data
-$version_file = __DIR__ . '/../version.json';
+$version_file = __DIR__ . '/../data/version.json';
 $version_data = file_exists($version_file) ? json_decode(file_get_contents($version_file), true) : null;
 $current_version = $version_data['version'] ?? '3.0.0';
 $release_date = $version_data['releaseDate'] ?? '2025-10-16';

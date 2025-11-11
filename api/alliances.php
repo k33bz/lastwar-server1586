@@ -45,5 +45,8 @@ foreach ($alliances as $index => &$alliance) {
 }
 unset($alliance); // Break reference
 
+// SECURITY: Strip PII before sending to public
+$sanitized_alliances = strip_alliance_pii($alliances);
+
 // Return with ETag support for efficient caching
-api_success_with_etag($alliances, 60);
+api_success_with_etag($sanitized_alliances, 60);

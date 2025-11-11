@@ -97,7 +97,7 @@ class MigrationManager {
     private $admin_email;
 
     public function __construct($admin_email = 'system') {
-        $this->version_file = __DIR__ . '/../version.json';
+        $this->version_file = __DIR__ . '/../data/version.json';
         $this->data_dir = __DIR__ . '/../data/';
         $this->admin_dir = __DIR__ . '/';
         $this->admin_email = $admin_email;

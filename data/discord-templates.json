@@ -1,0 +1,38 @@
+{
+  "version": "1.0.0",
+  "templates": [
+    {
+      "id": "ke-reminder",
+      "name": "Kingdom Event Reminder",
+      "event_type": "vs_event",
+      "season": "general",
+      "content": "🏰 **Kingdom Event Alert** 🏰\n\n{alliance} - KE starts in {countdown}!\n\nRemember:\n- Join your assigned rally\n- Follow R4 instructions\n- Use your boosts wisely\n\nGood luck! 💪",
+      "variables": ["alliance", "countdown"],
+      "created_by": "system",
+      "created_at": "2025-11-04T00:00:00Z",
+      "scope": "global"
+    },
+    {
+      "id": "daily-reset",
+      "name": "Daily Reset Reminder",
+      "event_type": "general",
+      "season": "general",
+      "content": "⏰ **Daily Reset in 1 Hour** ⏰\n\nDon't forget:\n- [ ] Claim your dailies\n- [ ] Use stamina\n- [ ] Complete alliance tasks\n- [ ] Check store reset",
+      "variables": [],
+      "created_by": "system",
+      "created_at": "2025-11-04T00:00:00Z",
+      "scope": "global"
+    },
+    {
+      "id": "svs-prep",
+      "name": "SVS Preparation",
+      "event_type": "vs_event",
+      "season": "general",
+      "content": "⚔️ **SVS Preparation** ⚔️\n\n{alliance} - Server vs Server in {countdown}\n\n**Checklist:**\n- Stock up on speedups\n- Prepare troops\n- Clear hospital\n- Join Discord voice channel\n\nLet's dominate! 🔥",
+      "variables": ["alliance", "countdown"],
+      "created_by": "system",
+      "created_at": "2025-11-04T00:00:00Z",
+      "scope": "global"
+    }
+  ]
+}

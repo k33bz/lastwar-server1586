@@ -26,7 +26,7 @@ if (!defined('ADMIN_INIT')) {
  * @return array ['needed' => bool, 'current' => string, 'installed' => string]
  */
 function check_version_migration_needed() {
-    $version_file = __DIR__ . '/../version.json';
+    $version_file = __DIR__ . '/../data/version.json';
     $installed_file = __DIR__ . '/.installed_version';
 
     // Get current code version

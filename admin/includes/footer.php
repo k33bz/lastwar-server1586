@@ -11,7 +11,7 @@ if (!isset($user)) {
 }
 
 // Load version data from centralized version.json
-$version_file = __DIR__ . '/../../version.json';
+$version_file = __DIR__ . '/../../data/version.json';
 $version_data = null;
 if (file_exists($version_file)) {
     $version_data = json_decode(file_get_contents($version_file), true);

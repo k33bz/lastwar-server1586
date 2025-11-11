@@ -1,345 +1,255 @@
 # Server 1586 - Last War Alliance Website
 
-[![GitHub Release](https://img.shields.io/github/v/release/k33bz/lastwar-server1586)](https://github.com/k33bz/lastwar-server1586/releases)
-[![Deploy Status](https://github.com/k33bz/lastwar-server1586/actions/workflows/deploy.yml/badge.svg)](https://github.com/k33bz/lastwar-server1586/actions/workflows/deploy.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/k33bz/Server1586-clean)](https://github.com/k33bz/Server1586-clean/releases)
 [![License](https://img.shields.io/badge/license-Private-red)](LICENSE)
 
 Official website for Server 1586 alliance management, council voting, and server rules.
 
-**Live Website**: [https://www.example.com](https://www.example.com)
-**GitHub Repository**: [https://github.com/username/your-repo](https://github.com/username/your-repo)
+**Live Website**: [https://www.lastwar1586.online](https://www.lastwar1586.online)
+**GitHub Repository**: [https://github.com/k33bz/Server1586-clean](https://github.com/k33bz/Server1586-clean)
 
-**Version**: 3.3.1
-**Last Updated**: October 30, 2025
-
-> **Note**: The website automatically redirects HTTP to HTTPS and adds www. prefix for security and consistency.
+**Version**: 3.7.0
+**Last Updated**: November 11, 2025
 
 ---
 
 ## 📋 Table of Contents
 
 - [Features](#features)
+- [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Quick Start](#quick-start)
-- [Documentation Index](#documentation-index)
-- [Setup & Installation](#setup--installation)
-- [Deployment](#deployment)
-- [Council Rotation System](#council-rotation-system)
-- [Data Management](#data-management)
 - [Development](#development)
-- [Contributing](#contributing)
+- [Deployment](#deployment)
+- [Data Management](#data-management)
+- [Scripts](#scripts)
+- [Documentation](#documentation)
 
 ---
 
 ## ✨ Features
 
-### Public Website
-- **Alliance Rankings**: Display top 15 alliances with podium design for top 3
-- **Council Voting System**: Rotating council members (ranks 6-15) with automatic weekly rotation
-- **Server Rules**: Collapsible rules section with amendment history tracking
-- **Timezone Support**: Displays rotation times in multiple timezones with automatic DST detection
-- **Responsive Design**: Mobile-friendly interface with optimized layouts
-- **Fair Rotation Algorithm**: Ensures all alliances get equal representation over time
-- **Power Trends Chart**: Time-based alliance power visualization with accurate date spacing
-- **Alliance Data Schema**: Comprehensive documentation for expandable alliance profiles
+### Public Website (React + HeroUI v3)
+- **Modern UI Framework**: Built with React 18, TypeScript, and HeroUI v3 (Alpha)
+- **Alliance Rankings**: Interactive display with top 3 podium and complete NAP15 grid
+- **Power Trends Chart**: Time-series visualization using Chart.js with alliance power tracking
+- **Council Voting System**: Rotating council members (ranks 6-15) with 5-week cycle
+- **Server Rules**: Expandable sections with diff view toggle for amendments
+- **Responsive Design**: Mobile-first design with Tailwind CSS v4
+- **Dark Mode**: Theme toggle with cyan (light) and orange (dark) accent colors
+- **Floating Navigation**: Back-to-top button and theme toggle
+- **Dynamic Data**: JSON-based data fetching with TypeScript interfaces
 
-### Admin Panel (v3.3.1)
-- **JWT Authentication**: Passwordless magic link login system
-- **Role-Based Access**: Admin, R5, R4, and Power Editor (APE) roles
-- **Multi-Factor Authentication**: TOTP support with backup codes
-- **Secret Key Rotation**: Automatic 90-day JWT key rotation with emergency rotation
-- **CSRF Protection**: Cross-site request forgery protection for all API endpoints
-- **Security Monitoring**: Real-time threat detection and IP blocking
-- **Audit Logging**: Comprehensive security event tracking with real-time viewer
-- **Backup & Restore**: Automatic backups with point-in-time recovery
-- **Email Masking**: PII protection for user data
-- **Alliance Management**: Full CRUD operations for alliance data
-- **Testing Infrastructure**: 40 automated tests with pre-push validation
+### Admin Panel (PHP - Separate)
+- JWT Authentication
+- Role-Based Access Control
+- Discord Integration
+- Alliance Management
+- Security Monitoring
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+- **React 18**: Modern React with hooks and TypeScript
+- **TypeScript 5.6**: Type-safe development
+- **Vite 7.2**: Lightning-fast build tool
+- **HeroUI v3**: Component library (Alpha v3.0.0-beta.1)
+- **Tailwind CSS v4**: Utility-first CSS framework
+- **Chart.js 4.4**: Power trends visualization
+- **React Router**: Client-side routing
+
+### Build & Development
+- **ESLint**: Code quality and consistency
+- **Vitest**: Unit testing framework
+- **npm**: Package management
+
+### Data Layer
+- **JSON**: Static data files for alliances, rules, council
+- **CSV**: Historical power trend data
+- **TypeScript Interfaces**: Strongly typed data structures
 
 ---
 
 ## 📁 Project Structure
 
 ```
-Server1586/
-├── index.html              # Main public website entry point
-├── index.php               # PHP redirect handler
-├── login.php               # Public login page
-├── logout.php              # Public logout handler
-├── css/
-│   └── styles.css          # Main stylesheet (v1.3.2)
-├── js/
-│   └── app.js              # Main application logic (v2.0.0)
-├── data/
-│   ├── alliances.json      # Alliance data (power-based ranking)
-│   ├── rules.json          # Server rules
-│   ├── amendments.json     # Rule amendment history
-│   ├── rotation-schedule.json  # Pre-generated rotation schedule
-│   ├── council.js          # Council utility functions (v2.0.0)
-│   ├── power-history.csv   # Alliance power trends over time
-│   ├── server-info.json    # Server Discord and metadata
-│   ├── signature-history.json  # R5 leadership tracking
-│   └── ALLIANCE_SCHEMA.md  # Alliance data structure documentation
-├── admin/                  # PHP Admin Panel (v3.3.1)
-│   ├── config.php          # Environment and dependency loading
-│   ├── jwt.php             # JWT token management
-│   ├── mailer.php          # Email functionality
-│   ├── dashboard.php       # Main admin interface
-│   ├── security_*.php      # Security management tools
-│   ├── *_api.php           # API endpoints for data management
-│   ├── users.json          # User permissions and roles
-│   ├── includes/           # Shared PHP components
-│   ├── tests/              # Unit test suite (40 tests)
-│   ├── vendor/             # Composer dependencies
-│   ├── .env                # Environment configuration (NOT in git)
-│   └── composer.json       # PHP dependencies
-├── scripts/
-│   ├── deploy-ftp.py       # FTP deployment script
-│   ├── deploy-public-only.py  # Public site deployment (static only)
-│   ├── update-rotation-schedule.py  # Schedule generator (v2.2.0)
-│   ├── run-tests.py        # Unit test runner
-│   └── README.md           # Scripts documentation
-├── .github/
-│   └── workflows/
-│       └── deploy.yml      # GitHub Actions CI/CD workflow
-├── images/                 # Static assets and logos
-├── .ftpignore             # FTP deployment exclusions
-├── .gitignore             # Git exclusions
-└── README.md              # This file
+Server1586-clean/
+├── client/                    # React frontend application
+│   ├── src/
+│   │   ├── components/        # React components
+│   │   │   ├── AllianceGrid.tsx
+│   │   │   ├── AlliancePodium.tsx
+│   │   │   ├── BackToTop.tsx
+│   │   │   ├── CouncilMembers.tsx
+│   │   │   ├── DiscordBanner.tsx
+│   │   │   ├── FloatingThemeToggle.tsx
+│   │   │   ├── Header.tsx
+│   │   │   ├── PowerTrends.tsx
+│   │   │   ├── ServerRules.tsx
+│   │   │   └── Signatories.tsx
+│   │   ├── hooks/             # Custom React hooks
+│   │   │   └── useApi.ts      # Data fetching hook
+│   │   ├── styles/            # Styling
+│   │   │   └── custom-theme.css
+│   │   ├── HomePage.tsx       # Main page component
+│   │   ├── main.tsx           # React entry point
+│   │   └── types.ts           # TypeScript type definitions
+│   ├── dist/                  # Build output
+│   ├── public/                # Static assets
+│   ├── package.json           # npm dependencies
+│   ├── tsconfig.json          # TypeScript configuration
+│   └── vite.config.ts         # Vite configuration
+│
+├── data/                      # JSON/CSV data files
+│   ├── alliances.json         # Alliance data (power-based ranking)
+│   ├── council.json           # Current council members
+│   ├── rotation-schedule.json # Pre-generated rotation schedule
+│   ├── rules.json             # Server rules with amendments
+│   ├── server-info.json       # Server metadata and Discord
+│   ├── signatories.json       # R5 signature tracking
+│   ├── power-history.csv      # Alliance power trends
+│   └── version.json           # Site version info
+│
+├── scripts/                   # Python automation scripts
+│   ├── update_rotation_schedule.py
+│   └── update_niki.py
+│
+├── docs/                      # Documentation
+│   ├── HEROUI_MIGRATION.md
+│   └── MIGRATION_SUMMARY.md
+│
+├── temp/                      # Temporary files (not in git)
+│
+├── admin/                     # PHP Admin Panel (separate system)
+│
+├── assets/                    # Built static assets
+├── images/                    # Static images and logos
+├── index.html                 # Production entry point
+├── .gitignore                 # Git exclusions
+├── CLAUDE.md                  # Development workflow guide
+├── DEPLOYMENT.md              # Deployment instructions
+└── README.md                  # This file
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### For Users
-- **Live Website**: [https://www.example.com](https://www.example.com)
-- **Admin Login**: [https://www.example.com/admin/login.php](https://www.example.com/admin/login.php)
-
-### For Developers
-- **Frontend Setup**: See [Setup & Installation](#setup--installation) below
-- **Admin Panel Setup**: See [admin/README.md](admin/README.md)
-- **Deployment Guide**: See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
-
-### For Contributors
-- **Development Guide**: See [docs/CLAUDE.md](docs/CLAUDE.md)
-- **Complete Documentation**: See [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md)
-
----
-
-## 📚 Documentation Index
-
-> **📍 You are here:** README.md → Main project overview
->
-> **📖 Full Documentation:** [docs/README.md](docs/README.md) - Complete documentation index
-
-### 🎯 Quick Navigation
-
-**I want to...**
-- 👨‍💻 **Develop locally** → [docs/admin/setup-local-env.md](docs/admin/setup-local-env.md)
-- 🚀 **Deploy to production** → [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
-- 🔐 **Setup admin panel** → [admin/README.md](admin/README.md)
-- 📖 **Browse all docs** → [docs/README.md](docs/README.md)
-- 📋 **See what changed** → [docs/CHANGELOG.md](docs/CHANGELOG.md)
-
-### 📚 Core Documentation
-
-| Document | Description | Audience |
-|----------|-------------|----------|
-| **[README.md](README.md)** | This file - Project overview | Everyone |
-| **[docs/README.md](docs/README.md)** | Complete documentation index | Everyone |
-| **[docs/CLAUDE.md](docs/CLAUDE.md)** | Developer guide & architecture | Developers |
-| **[docs/CHANGELOG.md](docs/CHANGELOG.md)** | Version history & changes | Everyone |
-| **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** | Comprehensive deployment guide | DevOps |
-
-### 🔧 Component Documentation
-
-| Component | Documentation | Description |
-|-----------|---------------|-------------|
-| **Admin Panel** | [admin/README.md](admin/README.md) | Admin system overview |
-| **Admin Guides** | [docs/admin/](docs/admin/) | Complete admin documentation |
-| **Automation Scripts** | [scripts/README.md](scripts/README.md) | Deployment & schedule scripts |
-| **Data Schemas** | [docs/schemas/](docs/schemas/) | Data structure documentation |
-
-### 🛠️ Setup & Configuration
-
-| Task | Documentation | Quick Link |
-|------|---------------|------------|
-| **Local Development** | [docs/admin/setup-local-env.md](docs/admin/setup-local-env.md) | PHP + Composer setup |
-| **Environment Config** | [docs/admin/ENV-CONFIG.md](docs/admin/ENV-CONFIG.md) | `.env` variables |
-| **GitHub Actions** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#1-automated-cicd-github-actions) | CI/CD pipeline |
-| **Production Deployment** | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Complete deployment guide |
-| **Git Hooks** | [docs/GIT_HOOKS.md](docs/GIT_HOOKS.md) | Quality gates & automation |
-| **GitHub Releases** | [docs/GITHUB_RELEASES.md](docs/GITHUB_RELEASES.md) | Release management |
-
-### 🔐 Security & Admin Features
-
-| Feature | Documentation | Description |
-|---------|---------------|-------------|
-| **Admin Features** | [docs/admin/ADMIN_FUNCTIONALITY.md](docs/admin/ADMIN_FUNCTIONALITY.md) | Feature overview |
-| **Multi-Role System** | [docs/admin/MULTI_ROLE_IMPLEMENTATION.md](docs/admin/MULTI_ROLE_IMPLEMENTATION.md) | Role management |
-| **Alliance Management** | [docs/admin/ALLIANCE_MANAGEMENT_GUIDE.md](docs/admin/ALLIANCE_MANAGEMENT_GUIDE.md) | CRUD operations |
-| **JWT Key Rotation** | [docs/admin/SECRET_KEY_ROTATION_SETUP.md](docs/admin/SECRET_KEY_ROTATION_SETUP.md) | Security key management |
-| **User Roles** | [docs/admin/USER-PERSONAS.md](docs/admin/USER-PERSONAS.md) | RBAC system |
-
----
-
-## 🚀 Setup & Installation
-
 ### Prerequisites
 
-- **Python 3.7+** (for deployment and schedule generation)
-- **Web Server** (for local development - use `python -m http.server`)
+- **Node.js 18+** and **npm**
+- **Python 3.7+** (for data management scripts)
 
-### Local Development
+### Development Setup
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
-   cd Server1586
+   git clone https://github.com/k33bz/Server1586-clean.git
+   cd Server1586-clean
    ```
 
-2. **Start local web server** (frontend):
+2. **Install dependencies**:
    ```bash
-   python -m http.server 8000
+   cd client
+   npm install
    ```
 
-3. **Setup admin panel** (optional):
+3. **Start development server**:
    ```bash
-   cd admin
-   composer install
-   cp .env.example .env
-   # Edit .env with your configuration
-   php -S localhost:8080
+   npm run dev
    ```
 
 4. **Open in browser**:
    ```
-   Frontend: http://localhost:8000
-   Admin Panel: http://localhost:8080
+   http://localhost:5173
    ```
 
-### Install Dependencies
+### Quick Commands
 
-**Python** (for deployment and schedule management):
 ```bash
-pip install pywin32
+# Development server with hot reload
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Type checking
+npm run type-check
+
+# Linting
+npm run lint
 ```
 
-**PHP** (for admin panel):
-```bash
-cd admin && composer install
-```
+---
+
+## 💻 Development
+
+### File Structure
+
+**Components** (`client/src/components/`)
+- `AlliancePodium.tsx` - Top 3 alliances display
+- `AllianceGrid.tsx` - NAP15 alliance cards grid
+- `CouncilMembers.tsx` - Council voting members with rotation
+- `PowerTrends.tsx` - Chart.js power visualization
+- `ServerRules.tsx` - Rules with diff toggle
+- `FloatingThemeToggle.tsx` - Dark/light mode switcher
+- `BackToTop.tsx` - Scroll-to-top button
+
+**Hooks** (`client/src/hooks/`)
+- `useApi.ts` - Generic data fetching hook with loading/error states
+
+**Styling** (`client/src/styles/`)
+- `custom-theme.css` - HeroUI theme customization (light/dark modes)
+
+### Theme Customization
+
+The site uses a custom HeroUI v3 theme:
+
+**Light Mode**: Cyan accent (`oklch(0.78 0.10 200)`)
+**Dark Mode**: Orange accent (`oklch(0.72 0.22 35)`)
+
+Edit `client/src/styles/custom-theme.css` to modify colors, spacing, shadows, etc.
+
+### Adding New Components
+
+1. Create component in `client/src/components/`
+2. Import HeroUI components: `import { Card, Button } from '@heroui/react'`
+3. Use TypeScript interfaces from `client/src/types.ts`
+4. Follow HeroUI v3 compound component patterns
 
 ---
 
 ## 🌐 Deployment
 
-### Quick Deployment Options
-
-**Option 1: Download Release (Easiest)**
-```bash
-# Download the latest public site ZIP from GitHub Releases
-# Extract and upload to your web server
-```
-📥 **[Download Latest Release](https://github.com/k33bz/lastwar-server1586/releases/latest)** - Pre-packaged ZIP (~80 KB)
-
-**Option 2: Deploy from Repository**
-```bash
-python scripts/deploy-public-only.py
-```
-Deploys only the static website (no admin panel). Perfect for hosting on any static file server.
-
-📘 **[Deployment Guide](docs/DEPLOYMENT.md#4-public-site-only-deployment)** - See "Public Site Only" section
-
-**Option 3: Full Site with Admin Panel**
-```bash
-git push origin mainline  # Automated CI/CD
-# OR
-python scripts/deploy-ftp.py  # Manual deployment
-```
-Deploys complete site including admin panel backend.
-
-📘 **[Full Deployment Guide](docs/DEPLOYMENT.md)** - CI/CD + Admin panel deployment
-
----
-
-### Automated CI/CD Deployment (Recommended)
-
-The website uses **GitHub Actions** for automated deployment. Every push to `mainline` triggers:
-1. ✅ Unit tests validation
-2. ✅ JSON/CSV format validation
-3. 🚀 Automatic FTP deployment to production
-
-**No manual deployment needed!** Just push to GitHub:
+### Production Build
 
 ```bash
-git add .
-git commit -m "Your changes"
-git push origin mainline
+cd client
+npm run build
 ```
 
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#github-actions-setup) for complete CI/CD setup instructions.
+This creates optimized files in `client/dist/`:
+- `index.html` - Entry point
+- `assets/` - JS, CSS bundles
 
-### Manual Deployment
-
-**Public Site Only (170 KB):**
-```bash
-python scripts/deploy-public-only.py
-```
-- Deploys: HTML, CSS, JS, and data files
-- No dependencies required
-- Works on any static host (Netlify, GitHub Pages, S3, etc.)
-
-**Full Site with Admin:**
-```bash
-python scripts/deploy-ftp.py
-```
-- Deploys: Public site + admin panel + backend
-- Requires: PHP server, Composer, database
-
-The deployment script automatically:
-- ✅ Retrieves credentials from Windows Credential Manager (local) or environment variables (CI)
-- ✅ Uploads only production files (respects `.ftpignore`)
-- ✅ Creates remote directories as needed
-- ✅ Shows deployment summary
-
-See [docs/PUBLIC_SITE_DEPLOYMENT.md](docs/PUBLIC_SITE_DEPLOYMENT.md) for static site hosting options.
-
----
-
-## 🗳️ Council Rotation System
-
-### How It Works
-
-- **Permanent Members**: Top 5 alliances (ranks 1-5) have permanent council seats
-- **Rotating Members**: 2 alliances from ranks 6-15 rotate weekly
-- **Rotation Time**: Every Monday at 02:00 UTC (Sunday 10:00 PM EDT)
-- **Fair Distribution**: Algorithm ensures all alliances rotate equally over 52 weeks
-
-### Rotation Schedule
-
-The rotation schedule is pre-generated and stored in `data/rotation-schedule.json`. It uses alliance tags (e.g., "STR8", "EPIC") instead of ranks, so it remains stable when rankings change.
-
-#### Update Rotation Schedule
-
-When alliance rankings change, regenerate the schedule:
+### Deploy to Root
 
 ```bash
-python scripts/update-rotation-schedule.py
+# From project root
+cp client/dist/index.html index.html
+cp -r client/dist/assets/* assets/
 ```
 
-The script:
-- Reads current top 15 alliances from `data/alliances.json`
-- Preserves historical rotation data
-- Generates next 52 weeks with fair distribution
-- Looks back 10 weeks to ensure fairness
-- Prevents back-to-back rotations (configurable minimum gap, default: 2 weeks)
-- Handles new alliances gracefully (no catch-up bunching)
+### Deployment Options
 
-**Configuration**: Edit `MIN_WEEKS_BETWEEN_ROTATIONS` in the script to adjust the minimum gap between rotations for the same alliance (default: 2 = no consecutive weeks).
-
-See [scripts/README.md](scripts/README.md) for detailed schedule management documentation.
+1. **GitHub Pages**: Push `index.html` and `assets/` to gh-pages branch
+2. **Netlify/Vercel**: Connect to GitHub repo, auto-deploy on push
+3. **cPanel/FTP**: Upload `index.html`, `assets/`, `data/`, `images/`
 
 ---
 
@@ -347,101 +257,143 @@ See [scripts/README.md](scripts/README.md) for detailed schedule management docu
 
 ### Alliance Data (`data/alliances.json`)
 
-**v2.0.0 Breaking Change**: Rank fields have been removed. Ranks are now calculated dynamically based on power.
-
 Update alliance information (ranks calculated automatically by power):
 
 ```json
 [
   {
-    "tag": "UvvU",
-    "name": "veni vidi vici",
-    "power": 7804360932,
-    "r5": "R5 Name",
-    "signed": true
+    "tag": "ORCE",
+    "name": "Omega Force",
+    "r5": {
+      "name": "Ali Ω",
+      "gameId": null,
+      "discordId": null
+    },
+    "power": 8783088512,
+    "signed": false
   }
 ]
 ```
 
-**Key Changes**:
-- ❌ No more `"rank"` field in JSON
-- ✅ Ranks calculated dynamically from `"power"` field
-- ✅ Eliminates rank/power mismatches
-- ✅ Single source of truth (power determines rank)
+**Key Points**:
+- Ranks are calculated dynamically from `power` field
+- No `rank` field needed in JSON
+- Single source of truth (power determines rank)
+
+### Council Rotation (`data/rotation-schedule.json`)
+
+Update rotation schedule when top 15 alliances change:
+
+```bash
+python scripts/update_rotation_schedule.py
+```
+
+The script:
+- Reads current top 15 from `alliances.json`
+- Generates 100-week rotation schedule
+- Uses 5-week cycle for ranks 6-15 (2 alliances per week)
+- Preserves historical rotation data
 
 ### Server Rules (`data/rules.json`)
 
-Modify server rules:
+Rules now include embedded amendments:
 
 ```json
 [
   {
-    "category": "Category Name",
-    "description": "Rule description",
-    "items": ["Item 1", "Item 2"]
+    "title": "NAP15 Overview",
+    "content": ["Rule text..."],
+    "amendments": [
+      {
+        "version": "1.1",
+        "date": "2025-10-05",
+        "changes": [
+          {
+            "type": "add",
+            "text": "New rule text..."
+          }
+        ]
+      }
+    ]
   }
 ]
 ```
 
-### Rule Amendments (`data/amendments.json`)
+**Amendment Types**:
+- `add` - New rule (shown in normal view)
+- `remove` - Deleted rule (shown in diff view only)
+- `modify` - Changed rule (shown in diff view only)
 
-Track rule changes:
+### Power History (`data/power-history.csv`)
 
-```json
-[
-  {
-    "date": "2025-10-05",
-    "version": "1.2",
-    "title": "Amendment Title",
-    "changes": ["Change 1", "Change 2"]
-  }
-]
+CSV format for power trends chart:
+
+```csv
+datetime,ORCE,STR8,UvvU,EPIC,NKOT,...
+2025-11-11 01:27:00,8783088512,6775724571,6481396612,...
 ```
+
+Add new rows to track power over time. Chart.js automatically visualizes the data.
+
+---
+
+## 📜 Scripts
+
+### Update Rotation Schedule
+
+```bash
+python scripts/update_rotation_schedule.py
+```
+
+Generates `data/rotation-schedule.json` with:
+- Current week calculation based on epoch (May 19, 2025)
+- 100-week schedule
+- Fair 5-week rotation cycle for ranks 6-15
+
+### Update Alliance Data
+
+```bash
+python scripts/update_niki.py
+```
+
+Example script for updating specific alliance information.
 
 ### After Data Updates
 
-1. **Regenerate rotation schedule** (if alliances changed):
+1. **Rebuild frontend** (if needed):
    ```bash
-   python scripts/update-rotation-schedule.py
+   cd client && npm run build
    ```
 
-2. **Deploy to production**:
+2. **Deploy** to production:
    ```bash
-   python scripts/deploy-ftp.py
+   cp client/dist/index.html index.html
+   cp -r client/dist/assets/* assets/
    ```
 
 ---
 
-## 💻 Development
+## 📚 Documentation
 
-### Code Structure
+### Core Documentation
+- **[CLAUDE.md](CLAUDE.md)** - Development workflow guidelines
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Deployment instructions
+- **[docs/HEROUI_MIGRATION.md](docs/HEROUI_MIGRATION.md)** - HeroUI v3 migration guide
+- **[docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md)** - Migration summary
 
-- **HTML**: Single-page application in `index.html`
-- **CSS**: Responsive design with mobile breakpoints in `css/styles.css`
-- **JavaScript**: Vanilla JS, no frameworks/dependencies in `js/app.js`
-- **Data**: JSON files for all dynamic content
+### Version Information
 
-### Version Control
+Current version information is stored in `data/version.json` and displayed in the footer.
 
-The project uses semantic versioning:
-- **Major** (X.0.0): Breaking changes or major redesigns
-- **Minor** (1.X.0): New features or significant updates
-- **Patch** (1.0.X): Bug fixes or minor improvements
-
-Current versions:
-- Website: **3.0.0**
-- Admin Panel: **3.0.0**
-- JavaScript: **2.0.0**
-- CSS: **1.3.2**
-- Council: **2.0.0**
-- Schedule Script: **2.2.0**
-
-### Key Technologies
-
-- Pure HTML5, CSS3, JavaScript (ES5 for compatibility)
-- No build process required
-- No external dependencies
-- Works with file:// protocol (with CORS limitations)
+**Update Version**:
+```bash
+# Edit data/version.json
+{
+  "version": "3.7.0",
+  "releaseDate": "2025-11-06",
+  "lastUpdated": "2025-11-11"
+}
+```
 
 ---
 
@@ -449,60 +401,45 @@ Current versions:
 
 ### Making Changes
 
-1. **Edit files locally** using any text editor
-2. **Test locally** using `python -m http.server`
-3. **Update version numbers** in affected files
-4. **Update CHANGELOG** in file headers
-5. **Commit to git** (excluded files: see `.gitignore`)
-6. **Deploy to production** using `python scripts/deploy-ftp.py`
+1. **Create feature branch**:
+   ```bash
+   git checkout -b feature/your-feature
+   ```
 
-### Important Notes
+2. **Make changes** in `client/src/`
 
-- ⚠️ **Never commit credentials** - they're stored in Windows Credential Manager
-- ⚠️ **Test before deployment** - verify locally first
-- ⚠️ **Update version metadata** in `index.html` for tracking
-- ✅ **Use `.ftpignore`** to exclude non-production files from deployment
+3. **Test locally**:
+   ```bash
+   npm run dev
+   ```
 
----
+4. **Build for production**:
+   ```bash
+   npm run build
+   ```
 
-## 📖 Additional Documentation
+5. **Commit and push**:
+   ```bash
+   git add .
+   git commit -m "feat: your feature description"
+   git push origin feature/your-feature
+   ```
 
-- **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** - Complete deployment guide (CI/CD + manual)
-- **[docs/CHANGELOG.md](docs/CHANGELOG.md)** - Version history and implementation summaries
-- **[docs/CLAUDE.md](docs/CLAUDE.md)** - Comprehensive developer documentation
-- **[scripts/README.md](scripts/README.md)** - Schedule generation documentation
-- **[scripts/DEPLOY-README.md](scripts/DEPLOY-README.md)** - Manual deployment guide
+### Git Workflow
 
----
-
-## 📄 License
-
-This project is private and intended for Server 1586 alliance management only.
-
----
-
-## 🔗 Links
-
-- **Live Website**: [https://www.example.com](https://www.example.com)
-- **GitHub Repository**: [https://github.com/username/your-repo](https://github.com/username/your-repo)
-- **Server**: Last War - Server 1586
-
----
-
-## 📞 Contact
-
-For questions or issues, contact the server administrators.
-
----
+Follow the guidelines in [CLAUDE.md](CLAUDE.md):
+- Use LM Studio for commit message review
+- Never use `SKIP_LMSTUDIO=1`
+- Create GitHub issues for bugs
+- Reference issue numbers in commits
 
 ---
 
 ## 📞 Support & Contact
 
-For questions, issues, or contributions:
-- **GitHub Issues**: [Report bugs or request features](https://github.com/username/your-repo/issues)
-- **Server Discord**: [Join your server Discord](https://discord.gg/your-invite)
-- **Admin Contact**: Contact server administrators
+- **GitHub Issues**: [Report bugs or request features](https://github.com/k33bz/Server1586-clean/issues)
+- **GitHub Repository**: [https://github.com/k33bz/Server1586-clean](https://github.com/k33bz/Server1586-clean)
+- **Server**: Last War - Server 1586
 
 ---
 
@@ -512,4 +449,19 @@ This project is private and intended for Server 1586 alliance management only.
 
 ---
 
-**Version**: 3.3.0 | **Last Updated**: October 29, 2025 | **Maintained by**: Server 1586 Council
+## 🎨 Built With
+
+- **React** - UI framework
+- **TypeScript** - Type safety
+- **Vite** - Build tool
+- **HeroUI v3** - Component library
+- **Tailwind CSS v4** - Styling
+- **Chart.js** - Data visualization
+- **Claude Code** - AI-assisted development
+- **Kiro** - Development enhancement
+
+---
+
+**Version**: 3.7.0 | **Last Updated**: November 11, 2025 | **Maintained by**: Server 1586 Council
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code) · Enhanced by [Kiro](https://kiro.dev/)

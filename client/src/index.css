@@ -1,0 +1,51 @@
+/* Tailwind CSS v4 - Must be first */
+@import "tailwindcss";
+
+/* HeroUI v3 styles - Must be after Tailwind */
+@import "@heroui/styles";
+
+/* Server 1586 Custom Theme */
+@import "./styles/custom-theme.css" layer(theme);
+
+/* Custom theme overrides */
+:root {
+  /* Base typography */
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+
+  /* Light mode (default) */
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(0.15 0 0);
+
+  /* Ensure proper text rendering */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"],
+.dark {
+  --background: oklch(0.09 0.02 264);
+  --foreground: oklch(0.98 0 0);
+
+  /* Fix contrast issues from original site */
+  --color-secondary: oklch(0.65 0.02 264); /* Better than #888 */
+  --color-muted: oklch(0.55 0.02 264); /* Better than #aaa */
+}
+
+/* Body styles */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Improve focus visibility for accessibility */
+*:focus-visible {
+  outline: 2px solid oklch(0.6 0.2 260);
+  outline-offset: 2px;
+}

@@ -1,0 +1,34 @@
+[
+    {
+        "id": "identity",
+        "name": "Alliance Identity & Playstyle",
+        "icon": "🎯",
+        "description": "Tags that define the vibe and expectations of your alliance",
+        "order": 1,
+        "active": true
+    },
+    {
+        "id": "gameplay",
+        "name": "Gameplay Focus & Strengths",
+        "icon": "🛡️",
+        "description": "Tags highlighting what your alliance excels at or prioritizes",
+        "order": 2,
+        "active": true
+    },
+    {
+        "id": "performance",
+        "name": "Performance Metrics",
+        "icon": "📊",
+        "description": "Tags reflecting alliance strength and competitive appeal",
+        "order": 3,
+        "active": true
+    },
+    {
+        "id": "dynamics",
+        "name": "Alliance Dynamics & Culture",
+        "icon": "🔄",
+        "description": "Tags describing how the alliance operates socially and structurally",
+        "order": 4,
+        "active": true
+    }
+]

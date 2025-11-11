@@ -42,7 +42,7 @@ echo "   discord_announcements.php: " . (file_exists(__DIR__ . '/discord_announc
 echo "   discord_config.php: " . (file_exists(__DIR__ . '/discord_config.php') ? 'EXISTS ✓' : 'MISSING ✗') . "\n";
 
 echo "\n4. Version:\n";
-$version_file = dirname(__DIR__) . '/version.json';
+$version_file = dirname(__DIR__) . '/data/version.json';
 if (file_exists($version_file)) {
     $version_data = json_decode(file_get_contents($version_file), true);
     echo "   Code Version: " . ($version_data['version'] ?? 'unknown') . "\n";

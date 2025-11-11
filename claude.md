@@ -1,5 +1,15 @@
 # Claude Code Workflow Guidelines
 
+## Project Status
+
+**HeroUI v3 Migration: ✅ COMPLETE**
+- Public site migrated to React with HeroUI v3
+- Old site backed up to `old-site-backup/`
+- Production build deployed and tested
+- See `DEPLOYMENT.md` for details
+
+---
+
 ## Bug Tracking & Documentation
 
 ### ✅ DO: Use GitHub Issues
@@ -53,8 +63,35 @@ git commit -m "fix(admin): Description of fix"
 # SKIP_LMSTUDIO=1 git commit  ❌
 ```
 
+## Frontend Development
+
+### React Application (NEW)
+```bash
+cd client
+npm run dev        # Development server at http://localhost:5173
+npm run build      # Production build to client/dist/
+npm run preview    # Preview production at http://localhost:4173
+```
+
+### Deploying Changes
+```bash
+cd client
+npm run build
+cp dist/index.html ../index.html
+cp -r dist/assets ../assets
+```
+
+### Key Files
+- `client/src/` - React components and source code
+- `client/public/data/` - JSON data files
+- `client/public/images/` - Alliance logos
+- `DEPLOYMENT.md` - Deployment guide
+- `HEROUI_MIGRATION.md` - Migration documentation
+
 ## Notes
 - Use TodoWrite tool for task tracking during active work
 - Use GitHub issues for permanent bug/feature tracking
 - Keep this file updated with workflow preferences
 - LM Studio is running on localhost:1234 - always use it!
+- HeroUI v3 components use `onPress` instead of `onClick`
+- Use compound components pattern (e.g., `Card.Header`, `Card.Content`)

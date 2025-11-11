@@ -30,5 +30,8 @@ if ($server_info === null) {
     api_error('Failed to load server information', 500);
 }
 
+// SECURITY: Strip PII before sending to public
+$sanitized_server_info = strip_server_info_pii($server_info);
+
 // Server info rarely changes, cache for 1 hour
-api_success_with_etag($server_info, 3600);
+api_success_with_etag($sanitized_server_info, 3600);
