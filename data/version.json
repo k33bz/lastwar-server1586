@@ -138,9 +138,17 @@
       ]
     },
     "power_trends": {
-      "version": "1.9.5",
-      "date": "2025-10-28",
-      "description": "Interactive power trends chart with alliance slider and hover highlighting"
+      "version": "2.0.0",
+      "date": "2025-11-11",
+      "description": "Interactive power trends chart with iOS-style dual-range slider using rc-slider library",
+      "changes": [
+        "Replaced custom dual-range slider with rc-slider library",
+        "iOS-style slider with smooth animations and scale effects",
+        "Improved accessibility with keyboard navigation support",
+        "Enhanced hover and drag interactions",
+        "Dark mode support with theme-aware styling",
+        "Fixed z-index and pointer-events issues with previous implementation"
+      ]
     },
     "public_api": {
       "version": "1.0.0",
@@ -179,5 +187,5 @@
   },
   "changelog": "docs/CHANGELOG.md",
   "migration_docs": "admin/MIGRATION_SYSTEM.md",
-  "lastUpdated": "2025-11-09"
+  "lastUpdated": "2025-11-11"
 }

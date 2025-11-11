@@ -85,9 +85,12 @@ The Server 1586 public website is a modern, single-page application (SPA) built 
 - **React Aria**: Accessibility primitives (used by HeroUI)
 
 ### Data Visualization
-- **Chart.js 4.4.6**: Canvas-based charting library
-- **react-chartjs-2 5.3.0**: React wrapper for Chart.js
+- **Chart.js 4.5.1**: Canvas-based charting library
+- **react-chartjs-2 5.3.1**: React wrapper for Chart.js
 - **chartjs-adapter-date-fns 3.0.0**: Time-scale adapter
+
+### UI Controls
+- **rc-slider 11.1.9**: Accessible dual-range slider component
 
 ### Development Tools
 - **ESLint**: Code linting
@@ -147,10 +150,12 @@ HomePage.tsx
 **Purpose**: Visualize alliance power over time
 **Features**:
 - Chart.js line chart
-- Rank range slider (select which alliances to show)
+- Dual-range slider using rc-slider (select rank range to display)
+- iOS-style slider with smooth animations and hover effects
 - Season 1 filter (Sep 29 - Nov 23, 2025)
 - Time-based x-axis with proper date spacing
 - Dynamic color assignment
+- Dark mode support
 
 #### `ServerRules.tsx`
 **Purpose**: Display server rules with amendment tracking

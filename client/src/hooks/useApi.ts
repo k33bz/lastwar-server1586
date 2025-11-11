@@ -18,14 +18,24 @@ export function useApi<T>(endpoint: string) {
       try {
         setLoading(true);
 
-        // Convert endpoint to API path
-        // Examples:
-        //   alliances.json -> /api/alliances.php
-        //   version.json -> /api/version.php
-        //   power-history.csv -> /api/power-history.php
-        const apiPath = `/api/${endpoint.replace(/\.(json|csv)$/, '.php')}`;
+        // In development, fetch from public/data directory
+        // In production, use API endpoints
+        const isDevelopment = import.meta.env.DEV;
 
-        const response = await fetch(apiPath);
+        let fetchPath: string;
+        if (isDevelopment) {
+          // Development: fetch directly from public/data
+          fetchPath = `/data/${endpoint}`;
+        } else {
+          // Production: use API endpoints
+          // Examples:
+          //   alliances.json -> /api/alliances.php
+          //   version.json -> /api/version.php
+          //   power-history.csv -> /api/power-history.php
+          fetchPath = `/api/${endpoint.replace(/\.(json|csv)$/, '.php')}`;
+        }
+
+        const response = await fetch(fetchPath);
         if (!response.ok) {
           throw new Error(`Failed to fetch ${endpoint}: ${response.status} ${response.statusText}`);
         }
@@ -33,7 +43,7 @@ export function useApi<T>(endpoint: string) {
         // Check content type to determine parsing method
         const contentType = response.headers.get('content-type');
 
-        if (contentType?.includes('text/csv')) {
+        if (contentType?.includes('text/csv') || endpoint.endsWith('.csv')) {
           // For CSV responses, return raw text
           const text = await response.text();
           setData(text as unknown as T);
@@ -41,9 +51,9 @@ export function useApi<T>(endpoint: string) {
           // For JSON responses, parse and extract data field
           const json = await response.json();
 
-          // API responses are wrapped in {success, timestamp, data}
-          // Extract the data field
-          if (json.success && json.data !== undefined) {
+          // In production, API responses are wrapped in {success, timestamp, data}
+          // In development, we get raw JSON from files
+          if (!isDevelopment && json.success && json.data !== undefined) {
             setData(json.data);
           } else {
             setData(json);

@@ -173,3 +173,42 @@
   --color-info-soft-foreground: var(--color-info);
   --color-info-soft-hover: color-mix(in oklab, var(--color-info) 20%, transparent);
 }
+
+/* rc-slider Custom Styling - iOS Feel */
+.power-trends-slider .rc-slider-rail {
+  border-radius: 4px;
+}
+
+.power-trends-slider .rc-slider-track {
+  border-radius: 4px;
+}
+
+.power-trends-slider .rc-slider-handle {
+  cursor: grab;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.power-trends-slider .rc-slider-handle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+}
+
+.power-trends-slider .rc-slider-handle-dragging {
+  cursor: grabbing;
+  transform: scale(1.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.power-trends-slider .rc-slider-handle:focus,
+.power-trends-slider .rc-slider-handle:active {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Dark mode adjustments for rc-slider */
+.dark .power-trends-slider .rc-slider-rail {
+  background-color: rgb(75, 85, 99) !important;
+}
+
+.dark .power-trends-slider .rc-slider-handle {
+  background-color: oklch(0.95 0.01 200) !important;
+}

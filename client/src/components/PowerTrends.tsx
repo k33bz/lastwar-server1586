@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Card, Slider, Tabs } from '@heroui/react';
+import { Card, Tabs } from '@heroui/react';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -41,8 +43,12 @@ export function PowerTrends() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // SECURITY: Fetch from API endpoint instead of direct /data/ access
-    fetch('/api/power-history.php')
+    // In development, fetch from public/data directory
+    // In production, use API endpoint
+    const isDevelopment = import.meta.env.DEV;
+    const fetchPath = isDevelopment ? '/data/power-history.csv' : '/api/power-history.php';
+
+    fetch(fetchPath)
       .then(response => response.text())
       .then(csv => {
         // Parse CSV with proper handling of quoted fields and commas
@@ -272,39 +278,46 @@ export function PowerTrends() {
         <div className="mb-6">
           <div className="flex flex-col gap-6">
             {/* Alliance Rank Range Selector */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <label className="text-sm font-semibold">
-                  Alliance Rank Range
-                </label>
-                <span className="text-accent font-bold text-lg">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-semibold">Alliance Rank Range</label>
+                <span className="text-accent font-bold text-base">
                   Ranks {rangeValue[0]} - {rangeValue[1]}
                 </span>
               </div>
-              <Slider
-                className="w-full mb-2"
-                value={rangeValue}
-                onChange={(value) => setRangeValue(value as number[])}
-                minValue={1}
-                maxValue={sortedAlliances.length}
-                step={1}
-                aria-label="Alliance rank range to display"
-              >
-                <Slider.Track className="h-2 bg-gray-300 dark:bg-gray-600 rounded-full">
-                  {({state}) => (
-                    <>
-                      <Slider.Fill className="bg-accent h-full rounded-full" />
-                      {state.values.map((_, i) => (
-                        <Slider.Thumb
-                          key={i}
-                          index={i}
-                          className="w-5 h-5 bg-white dark:bg-gray-200 border-2 border-accent rounded-full shadow-lg cursor-pointer hover:scale-110 transition-transform"
-                        />
-                      ))}
-                    </>
-                  )}
-                </Slider.Track>
-              </Slider>
+
+              {/* rc-slider Range Component */}
+              <div className="px-2 py-4">
+                <Slider
+                  range
+                  min={1}
+                  max={sortedAlliances.length}
+                  value={rangeValue}
+                  onChange={(value) => setRangeValue(value as number[])}
+                  allowCross={false}
+                  styles={{
+                    track: {
+                      backgroundColor: 'var(--accent)',
+                      height: 8,
+                    },
+                    rail: {
+                      backgroundColor: 'rgb(209, 213, 219)',
+                      height: 8,
+                    },
+                    handle: {
+                      backgroundColor: 'white',
+                      border: '2px solid var(--accent)',
+                      opacity: 1,
+                      width: 24,
+                      height: 24,
+                      marginTop: -8,
+                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1)',
+                    },
+                  }}
+                  className="power-trends-slider"
+                />
+              </div>
+
               <div className="flex justify-between text-xs opacity-60 px-1">
                 <span>Rank 1</span>
                 <span>Rank {sortedAlliances.length}</span>
