@@ -78,18 +78,22 @@ Unified system for managing Discord council votes through both web admin and Dis
 
 ### Workflow
 1. **Council Member (R5/R4/APE)**: Submits vote proposal via web or Discord
-2. **President/Admin**: Reviews and approves/rejects via web or Discord
+2. **President/Admin**: Reviews and approves/rejects via web or Discord (or auto-approved after 12h)
 3. **System**: Auto-creates vote when approved
-4. **Discord Bot**: Publishes vote to Discord channel and notifies voters
-5. **Auto-approval**: Requests auto-approve after 12 hours if no response
+4. **Discord Bot**: Polls every minute for new web-created votes and publishes to Discord
+5. **Voters**: Receive DM notification, submit votes via Discord
+6. **Finalization**: Vote closes after 24h or all votes submitted
+7. **Results**: Posted to Discord channel + DM notifications sent to all voters
 
 ### Key Files
 - `admin/discord_votes_api.php` - REST API with 9 endpoints
 - `admin/discord_vote_proposals.php` - Council member proposal interface
-- `admin/president_vote_approvals.php` - President approval dashboard
+- `admin/discord_vote_approvals.php` - President approval dashboard
 - `bot/commands/vote.js` - Discord bot vote command handler
-- `bot/utils/voteManager.js` - Vote creation and management
+- `bot/utils/voteManager.js` - Vote creation, management, and notifications
 - `bot/utils/councilUtils.js` - Council member utilities
+- `bot/jobs/voteMonitor.js` - Polls for unpublished votes & finalizes expired votes
+- `bot/jobs/requestMonitor.js` - Auto-approves requests after 12 hours
 - `data/discord-votes.json` - Shared vote data (bot & web)
 - `data/discord-vote-requests.json` - Shared request data (bot & web)
 
@@ -108,10 +112,29 @@ GET  /admin/discord_votes_api.php?action=get_requests
 GET  /admin/discord_votes_api.php?action=get_votes
 ```
 
-### Critical Bug Fixed (Commit 0be1633)
-**Issue**: Both API and bot referenced non-existent `top15Snapshot` field instead of `top5Permanent` in rotation-schedule.json
-**Impact**: Vote creation would fail completely
-**Fix**: Updated both `admin/discord_votes_api.php` and `bot/utils/councilUtils.js`
+### Bot Monitoring & Automation
+**Vote Monitor** (runs every minute):
+- Polls for web-created votes with null `vote_message_id`
+- Automatically publishes to Discord channel
+- Sends DM notifications to all eligible voters
+- Finalizes votes when 24-hour deadline expires
+
+**Request Monitor** (runs every 15 minutes):
+- Auto-approves vote requests after 12 hours
+- Creates vote automatically upon approval
+- Publishes vote to Discord
+- Notifies requester of auto-approval
+
+**Vote Notifications**:
+- Initial DM when vote is created (with voting instructions)
+- Result DM when vote finalizes (shows outcome + individual vote)
+- Channel posts for vote announcement and results
+
+### Critical Bugs Fixed
+**Commit 0be1633**: rotation-schedule.json field reference
+- **Issue**: API and bot referenced non-existent `top15Snapshot` instead of `top5Permanent`
+- **Impact**: Vote creation would fail completely
+- **Fix**: Updated `admin/discord_votes_api.php` and `bot/utils/councilUtils.js`
 
 ## Frontend Development
 
