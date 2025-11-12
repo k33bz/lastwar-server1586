@@ -4,8 +4,8 @@ import { AllianceGrid } from './components/AllianceGrid';
 import { CouncilMembers } from './components/CouncilMembers';
 import { ServerRules } from './components/ServerRules';
 import { Signatories } from './components/Signatories';
-import { PowerTrends } from './components/PowerTrends';
-import { PowerDistribution } from './components/PowerDistribution';
+import { PowerTrendsEnhanced } from './components/PowerTrendsEnhanced';
+import { PowerDistributionEnhanced } from './components/PowerDistributionEnhanced';
 import { CouncilRotation } from './components/CouncilRotation';
 import { SignatureStatus } from './components/SignatureStatus';
 import { BackToTop } from './components/BackToTop';
@@ -133,11 +133,11 @@ export function HomePage() {
 
           {/* Power Analytics Tab */}
           <Tabs.Panel id="power-trends">
-            <PowerDistribution />
+            <PowerDistributionEnhanced />
 
             <Separator className="my-12" />
 
-            <PowerTrends />
+            <PowerTrendsEnhanced />
           </Tabs.Panel>
         </Tabs>
 
