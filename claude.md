@@ -8,6 +8,14 @@
 - Production build deployed and tested
 - See `DEPLOYMENT.md` for details
 
+**Discord Vote Management System: ✅ COMPLETE**
+- Unified API for bot and admin site (`admin/discord_votes_api.php`)
+- Council member proposal interface (`admin/discord_vote_proposals.php`)
+- President approval dashboard (`admin/president_vote_approvals.php`)
+- Bot authorization security fix (only admin/president can create votes)
+- Navigation links with role-based access control
+- Critical bug fix: `top5Permanent` field reference (commit 0be1633)
+
 ---
 
 ## Bug Tracking & Documentation
@@ -62,6 +70,48 @@ git commit -m "fix(admin): Description of fix"
 # DON'T use:
 # SKIP_LMSTUDIO=1 git commit  ❌
 ```
+
+## Discord Vote Management System
+
+### Overview
+Unified system for managing Discord council votes through both web admin and Discord bot.
+
+### Workflow
+1. **Council Member (R5/R4/APE)**: Submits vote proposal via web or Discord
+2. **President/Admin**: Reviews and approves/rejects via web or Discord
+3. **System**: Auto-creates vote when approved
+4. **Discord Bot**: Publishes vote to Discord channel and notifies voters
+5. **Auto-approval**: Requests auto-approve after 12 hours if no response
+
+### Key Files
+- `admin/discord_votes_api.php` - REST API with 9 endpoints
+- `admin/discord_vote_proposals.php` - Council member proposal interface
+- `admin/president_vote_approvals.php` - President approval dashboard
+- `bot/commands/vote.js` - Discord bot vote command handler
+- `bot/utils/voteManager.js` - Vote creation and management
+- `bot/utils/councilUtils.js` - Council member utilities
+- `data/discord-votes.json` - Shared vote data (bot & web)
+- `data/discord-vote-requests.json` - Shared request data (bot & web)
+
+### Access Control
+- **R5/R4/APE**: Can submit vote proposals
+- **President/Admin**: Can create votes directly, approve/reject requests
+- **Authorization**: Bot checks `admin/users.json` for Discord user permissions
+
+### API Endpoints
+```
+POST /admin/discord_votes_api.php?action=create_request   (R5/R4/APE/President/Admin)
+POST /admin/discord_votes_api.php?action=create_vote      (President/Admin)
+POST /admin/discord_votes_api.php?action=approve_request  (President/Admin)
+POST /admin/discord_votes_api.php?action=reject_request   (President/Admin)
+GET  /admin/discord_votes_api.php?action=get_requests
+GET  /admin/discord_votes_api.php?action=get_votes
+```
+
+### Critical Bug Fixed (Commit 0be1633)
+**Issue**: Both API and bot referenced non-existent `top15Snapshot` field instead of `top5Permanent` in rotation-schedule.json
+**Impact**: Vote creation would fail completely
+**Fix**: Updated both `admin/discord_votes_api.php` and `bot/utils/councilUtils.js`
 
 ## Frontend Development
 
