@@ -1,7 +1,11 @@
 <?php
 /**
  * User Profile API
+ * Version: 1.0.1
  * Handles user profile updates
+ *
+ * Changelog:
+ * - 1.0.1: Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  */
 
 require_once 'jwt.php';
@@ -12,7 +16,7 @@ require_once 'includes/input_validator.php';
 header('Content-Type: application/json');
 
 try {
-    $user = require_jwt_session();
+    $user = require_jwt_session_api();
 
     // CSRF Protection
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -4,8 +4,12 @@
  *
  * Handles Season 2 configuration, calendar generation, and event announcements
  *
- * @version 1.0.0
- * @date 2025-11-07
+ * @version 1.0.1
+ * @date 2025-11-12
+ *
+ * Changelog:
+ * - 1.0.1: Fixed authentication to use require_jwt_session_api() for proper JSON error responses
+ * - 1.0.0: Initial implementation
  */
 
 error_reporting(E_ALL);
@@ -28,7 +32,7 @@ try {
     exit();
 }
 
-$user = require_jwt_session();
+$user = require_jwt_session_api();
 
 // Admin only for configuration, R4+ for viewing
 $action = $_GET['action'] ?? $_POST['action'] ?? '';

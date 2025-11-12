@@ -1,10 +1,13 @@
 <?php
 /**
  * Discord Votes API
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * Unified API for managing Discord bot votes and vote requests
  * Used by both admin site and Discord bot for consistency
+ *
+ * Changelog:
+ * - 1.0.1: Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  *
  * Endpoints:
  * - POST ?action=create_request - Submit vote request (R5, R4, APE, President, Admin)
@@ -27,7 +30,7 @@ require_once 'audit_logger.php';
 require_once 'json_helpers.php';
 
 // Require authentication
-$user = require_jwt_session();
+$user = require_jwt_session_api();
 
 // CSRF protection for POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

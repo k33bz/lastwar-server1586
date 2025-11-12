@@ -1,9 +1,12 @@
 <?php
 /**
  * System Metrics API
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * Provides CloudWatch-style metrics for monitoring system activity
+ *
+ * Changelog:
+ * - 1.0.1: Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  *
  * Metrics tracked:
  * - Discord messages sent (by type: announcements, scheduled, recurring)
@@ -20,7 +23,7 @@ require_once 'includes/csrf.php';
 
 header('Content-Type: application/json');
 
-$user = require_jwt_session();
+$user = require_jwt_session_api();
 
 // Only admins can view metrics
 if (!has_role($user, ['admin'])) {

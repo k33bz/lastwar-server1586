@@ -10,9 +10,10 @@
  *
  * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
  *
- * @version 1.0.0
- * @date 2025-10-15
+ * @version 1.0.1
+ * @date 2025-11-12
  * @changelog
+ *   1.0.1 (2025-11-12) - Fixed authentication to use require_admin_session_api() for proper JSON error responses
  *   1.0.0 (2025-10-15) - Initial implementation with export support
  */
 
@@ -22,7 +23,7 @@ require_once __DIR__ . '/jwt.php';
 require_once __DIR__ . '/audit_logger.php';
 
 // Require admin session
-$user = require_admin_session();
+$user = require_admin_session_api();
 
 header('Content-Type: application/json');
 

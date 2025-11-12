@@ -213,6 +213,26 @@ function require_admin_session() {
 }
 
 /**
+ * Require admin-level authentication for API endpoints
+ * Returns JSON error responses instead of HTML redirects
+ *
+ * @return object Decoded JWT token with admin role
+ * @throws exits with JSON response on failure
+ */
+function require_admin_session_api() {
+    $token = require_jwt_session_api();
+
+    if ($token->aud !== 'admin') {
+        http_response_code(403);
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Access denied. Admin privileges required.', 'code' => 'forbidden']);
+        exit;
+    }
+
+    return $token;
+}
+
+/**
  * Check if user has access to a specific alliance
  *
  * @param object $token Decoded JWT token

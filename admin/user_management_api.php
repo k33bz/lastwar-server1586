@@ -1,7 +1,11 @@
 <?php
 /**
  * User Management API
+ * Version: 1.0.1
  * Handles AJAX requests for user CRUD operations
+ *
+ * Changelog:
+ * - 1.0.1: Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  *
  * Documentation:
  * - User Personas (Roles): https://github.com/k33bz/lastwar-server1586/blob/mainline/admin/USER-PERSONAS.md
@@ -19,7 +23,7 @@ require_once 'audit_logger.php';
 header('Content-Type: application/json');
 
 try {
-    $user = require_jwt_session();
+    $user = require_jwt_session_api();
 
     // Check if user has admin access
     if ($user->aud !== 'admin') {

@@ -18,9 +18,10 @@
  * - add: Add new alliance
  * - delete: Remove alliance
  *
- * @version 2.3.0
- * @date 2025-10-28
+ * @version 2.3.1
+ * @date 2025-11-12
  * @changelog
+ *   2.3.1 (2025-11-12) - Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  *   2.3.0 (2025-10-28) - Added datetime picker support (Issue #32)
  *                       - Accept optional timestamp parameter in update action
  *                       - Pass timestamp to CSV helpers for accurate historical data
@@ -60,7 +61,7 @@ try {
 }
 
 // Require admin or power editor authentication
-$user = require_jwt_session();
+$user = require_jwt_session_api();
 
 if (!is_power_editor($user)) {
     http_response_code(403);

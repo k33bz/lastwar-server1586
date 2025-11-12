@@ -9,9 +9,10 @@
  *
  * GitHub Issue: https://github.com/k33bz/lastwar-server1586/issues/59
  *
- * @version 1.1.0
- * @date 2025-11-07
+ * @version 1.1.1
+ * @date 2025-11-12
  * @changelog
+ *   1.1.1 (2025-11-12) - Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  *   1.1.0 (2025-11-07) - Added auto-delete message support
  *                       - Accept delete_after_hours parameter for instant messages
  *                       - Track sent messages for automatic cleanup
@@ -73,7 +74,7 @@ try {
 }
 
 try {
-    $user = require_jwt_session();
+    $user = require_jwt_session_api();
 
     // Check if Discord is enabled
     if (!DISCORD_ENABLED) {

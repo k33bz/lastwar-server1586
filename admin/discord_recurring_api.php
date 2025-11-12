@@ -1,11 +1,12 @@
 <?php
 /**
  * Discord Recurring Messages API
- * Version: 1.1.0 (Phase 3 - Recurring messaging)
+ * Version: 1.1.1 (Phase 3 - Recurring messaging)
  *
  * Handles CRUD operations for recurring Discord messages
  *
  * Changelog:
+ *   1.1.1 (2025-11-12) - Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  *   1.1.0 (2025-11-07) - Added auto-delete message support
  *                       - Store delete_after_hours in recurring message objects
  *   1.0.0 (2025-11-04) - Initial implementation
@@ -18,7 +19,7 @@ require_once 'includes/csrf.php';
 
 header('Content-Type: application/json');
 
-$user = require_jwt_session();
+$user = require_jwt_session_api();
 
 // CSRF Protection for POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

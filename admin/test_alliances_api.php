@@ -9,7 +9,7 @@ try {
     require_once __DIR__ . '/json_helpers.php';
 
     // Require authentication for security
-    $user = require_jwt_session();
+    $user = require_jwt_session_api();
 
     $alliances_file = __DIR__ . '/../data/alliances.json';
 

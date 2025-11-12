@@ -9,15 +9,18 @@
  *
  * GitHub Issues: https://github.com/k33bz/lastwar-server1586/issues
  *
- * @version 1.0.0
- * @date 2025-10-16
+ * @version 1.0.1
+ * @date 2025-11-12
+ *
+ * Changelog:
+ * - 1.0.1: Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  */
 
 // Require JWT authentication
 require_once 'jwt.php';
 require_once 'includes/csrf.php';
 
-$user = require_jwt_session();
+$user = require_jwt_session_api();
 
 // CSRF Protection (only for state-changing operations)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

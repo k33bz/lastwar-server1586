@@ -1,11 +1,12 @@
 <?php
 /**
  * Discord Scheduled Messages API
- * Version: 1.1.0 (Phase 2 - Scheduled messaging)
+ * Version: 1.1.1 (Phase 2 - Scheduled messaging)
  *
  * Handles CRUD operations for scheduled Discord messages
  *
  * Changelog:
+ *   1.1.1 (2025-11-12) - Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  *   1.1.0 (2025-11-07) - Added auto-delete message support
  *                       - Store delete_after_hours in scheduled message objects
  *   1.0.1 (2025-11-07) - Added comprehensive error handling
@@ -64,7 +65,7 @@ try {
 }
 
 try {
-    $user = require_jwt_session();
+    $user = require_jwt_session_api();
 } catch (Throwable $e) {
     http_response_code(500);
     echo json_encode([

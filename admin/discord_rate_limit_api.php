@@ -1,9 +1,12 @@
 <?php
 /**
  * Discord Rate Limit Management API
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * Handles user rate limit requests and admin approvals
+ *
+ * Changelog:
+ * - 1.0.1: Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  */
 
 error_reporting(E_ALL);
@@ -27,7 +30,7 @@ try {
 }
 
 try {
-    $user = require_jwt_session();
+    $user = require_jwt_session_api();
 } catch (Throwable $e) {
     http_response_code(500);
     echo json_encode([

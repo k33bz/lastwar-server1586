@@ -1,13 +1,14 @@
 <?php
 /**
  * Discord Message Templates API
- * Version: 1.0.1
+ * Version: 1.0.2
  *
  * Handles CRUD operations for Discord message templates with variable support
  * Templates can be global (all alliances) or alliance-specific
  * Similar to tags system with submission/approval workflow
  *
  * Changelog:
+ *   1.0.2 (2025-11-12) - Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  *   1.0.1 (2025-11-06) - Added error handling and logging for 500 errors
  *   1.0.0 (2025-11-05) - Initial implementation
  */
@@ -37,7 +38,7 @@ try {
 header('Content-Type: application/json');
 
 try {
-    $user = require_jwt_session();
+    $user = require_jwt_session_api();
 } catch (Throwable $e) {
     http_response_code(500);
     echo json_encode([

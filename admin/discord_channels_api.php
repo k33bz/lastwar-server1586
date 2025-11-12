@@ -1,11 +1,12 @@
 <?php
 /**
  * Discord Channel Management API
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * Centralized management for Discord channels across alliances and global channels
  *
  * Changelog:
+ *   1.0.1 (2025-11-12) - Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  *   1.0.0 (2025-11-09) - Initial implementation
  */
 
@@ -16,7 +17,7 @@ require_once 'includes/csrf.php';
 
 header('Content-Type: application/json');
 
-$user = require_jwt_session();
+$user = require_jwt_session_api();
 
 // CSRF Protection for POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
