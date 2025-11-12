@@ -4,7 +4,7 @@
  */
 
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { getActiveVotes, getVote } = require('../utils/dataAccess');
+const { getActiveVotes, getVote, getAdminUsers } = require('../utils/dataAccess');
 const { createVote, publishVote } = require('../utils/voteManager');
 const { verifyVoteIntegrity, generateVerificationReceipt } = require('../utils/voteIntegrity');
 const { getPresidentDiscordId } = require('../utils/councilUtils');
@@ -97,11 +97,50 @@ module.exports = {
 };
 
 /**
+ * Check if a Discord user has admin or president role
+ * @param {string} discordId - Discord user ID
+ * @returns {Promise<boolean>} - True if user has admin or president role
+ */
+async function isAdminOrPresident(discordId) {
+  try {
+    const adminUsers = await getAdminUsers();
+
+    if (!adminUsers || !adminUsers.users) {
+      console.warn('[WARN] No admin users found');
+      return false;
+    }
+
+    const user = adminUsers.users.find(u => u.discord_id === discordId);
+
+    if (!user) {
+      return false;
+    }
+
+    // Check if user has admin or president role
+    if (user.roles && Array.isArray(user.roles)) {
+      return user.roles.includes('admin') || user.roles.includes('president');
+    }
+
+    return false;
+  } catch (error) {
+    console.error('[ERROR] Failed to check admin status:', error);
+    return false;
+  }
+}
+
+/**
  * Handle /vote create
  */
 async function handleCreate(interaction) {
-  // TODO: Add role check for president/admin
-  // For now, allow anyone (you'll add role checking later)
+  // Check if user has permission to create votes
+  const hasPermission = await isAdminOrPresident(interaction.user.id);
+
+  if (!hasPermission) {
+    return await interaction.reply({
+      content: '❌ Only admins and the president can create votes directly.\n\n💡 Use `/vote request` to submit a vote request for approval.',
+      ephemeral: true
+    });
+  }
 
   await interaction.reply({
     content: '✅ Check your DMs to create the vote!',
@@ -556,7 +595,16 @@ async function notifyPresidentOfRequest(request, client) {
  * Handle /vote requests (view pending)
  */
 async function handleRequests(interaction) {
-  // TODO: Add role check for president/admin
+  // Check if user has permission to view requests
+  const hasPermission = await isAdminOrPresident(interaction.user.id);
+
+  if (!hasPermission) {
+    return await interaction.reply({
+      content: '❌ Only admins and the president can view pending vote requests.',
+      ephemeral: true
+    });
+  }
+
   const pendingRequests = await getPendingRequests();
 
   if (pendingRequests.length === 0) {
