@@ -1,7 +1,7 @@
 <?php
 /**
  * Council Rotation Schedule API
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * Regenerates the council rotation schedule for future weeks while preserving past history.
  * Based on scripts/update-rotation-schedule.py algorithm.
@@ -16,6 +16,12 @@
  * 7. Update rotation-schedule.json file
  *
  * Access: Admin and President roles only
+ *
+ * Changelog:
+ * v1.0.1 (2025-11-12) - Fixed authentication to use require_jwt_session_api()
+ *   - Changed from require_jwt_session() to require_jwt_session_api()
+ *   - Ensures JSON error responses instead of HTML redirects
+ * v1.0.0 - Initial version
  */
 
 require_once 'jwt.php';
@@ -25,7 +31,7 @@ require_once 'includes/csrf.php';
 
 header('Content-Type: application/json');
 
-$user = require_jwt_session();
+$user = require_jwt_session_api();
 
 // Require admin or president role
 if (!has_role($user, ['admin', 'president'])) {
