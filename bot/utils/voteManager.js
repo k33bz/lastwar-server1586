@@ -306,8 +306,11 @@ async function finalizeVote(voteId, reason, client) {
 
   console.log(`[VOTE] Finalized vote ${voteId}: ${outcome.toUpperCase()} (${counts.yes} yes, ${counts.no} no, ${counts.abstain} abstain)`);
 
-  // Post results to Discord
+  // Post results to Discord channel
   await postVoteResults(vote, client);
+
+  // Notify voters via DM
+  await notifyVotersOfResults(vote, client);
 
   // Send to website
   await sendToWebsite(vote);
@@ -397,6 +400,79 @@ async function postVoteResults(vote, client) {
   }
 }
 
+/**
+ * Notify voters of final results via DM
+ */
+async function notifyVotersOfResults(vote, client) {
+  console.log(`[VOTE] Sending result notifications for vote ${vote.vote_id}...`);
+
+  const outcomeEmoji = vote.results.outcome === 'approved' ? '✅' : vote.results.outcome === 'rejected' ? '❌' : '⚖️';
+  const outcomeColor = vote.results.outcome === 'approved' ? 0x28a745 : vote.results.outcome === 'rejected' ? 0xdc3545 : 0xffc107;
+
+  // Get list of all Discord IDs who received the vote
+  const notifiedDiscordIds = vote.discord_metadata.notification_dm_ids || [];
+
+  for (const discordId of notifiedDiscordIds) {
+    try {
+      const user = await client.users.fetch(discordId);
+      const dm = await user.createDM();
+
+      // Find if this voter submitted a vote
+      const submission = vote.submissions.find(s => s.submitted_by.discord_id === discordId);
+      const voterInfo = vote.council_snapshot.voter_details.find(v =>
+        v.discord_id === discordId || v.delegated_voters?.some(dv => dv.discord_id === discordId)
+      );
+
+      await dm.send({
+        embeds: [{
+          title: `${outcomeEmoji} Vote Results: ${vote.vote_details.title}`,
+          description: `**Final Outcome: ${vote.results.outcome.toUpperCase()}**`,
+          fields: [
+            {
+              name: 'Your Vote',
+              value: submission ? `You voted: **${submission.vote_choice.toUpperCase()}**` : '⚠️ You did not vote',
+              inline: false
+            },
+            {
+              name: 'Results',
+              value: [
+                `✅ Yes: ${vote.results.yes_count}`,
+                `❌ No: ${vote.results.no_count}`,
+                `⚪ Abstain: ${vote.results.abstain_count}`,
+                `⭕ Absent: ${vote.results.absent_count}`
+              ].join('\n'),
+              inline: false
+            },
+            {
+              name: 'Vote ID',
+              value: vote.vote_id,
+              inline: true
+            },
+            {
+              name: 'Finalized',
+              value: new Date(vote.results.finalized_at).toLocaleString(),
+              inline: true
+            }
+          ],
+          color: outcomeColor,
+          timestamp: new Date(vote.results.finalized_at),
+          footer: {
+            text: vote.results.finalization_reason === 'all_votes_submitted' ?
+              'All votes submitted (early close)' :
+              '24-hour deadline reached'
+          }
+        }]
+      });
+
+      console.log(`[VOTE] Notified ${user.tag} of results for vote ${vote.vote_id}`);
+    } catch (error) {
+      console.error(`[ERROR] Failed to notify Discord user ${discordId} of results:`, error.message);
+    }
+  }
+
+  console.log(`[VOTE] Result notifications sent for vote ${vote.vote_id}`);
+}
+
 module.exports = {
   generateVoteId,
   createVote,
@@ -404,5 +480,6 @@ module.exports = {
   notifyVoters,
   recordVoteSubmission,
   finalizeVote,
-  postVoteResults
+  postVoteResults,
+  notifyVotersOfResults
 };
