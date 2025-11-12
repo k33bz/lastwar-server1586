@@ -6,9 +6,11 @@ interface RotationSchedule {
   epoch: string;
   currentWeekNumber: number;
   metadata: {
-    top5Permanent: string[];
-    rotatingPool: string[];
-    cycleDuration: number;
+    top3Snapshot: string[];
+    top15Snapshot: string[];
+    lastGeneratedDate: string;
+    changesDetected: boolean;
+    changeNotes: string | null;
   };
   schedule: Array<{
     weekNumber: number;
@@ -49,6 +51,14 @@ export function CouncilRotation() {
     .filter(week => week.weekNumber >= currentWeek && week.weekNumber < currentWeek + 5)
     .slice(0, 5);
 
+  // Top 5 are permanent council members
+  const top5Permanent = rotation.metadata.top15Snapshot.slice(0, 5);
+
+  // Calculate cycle duration based on unique rotating pairs
+  const uniquePairs = new Set(
+    rotation.schedule.slice(0, 10).map(w => w.rotatingMembers.join(','))
+  ).size;
+
   return (
     <Card variant="secondary" className="p-6">
       <Card.Header>
@@ -65,7 +75,7 @@ export function CouncilRotation() {
             <span className="text-sm font-semibold text-accent">👑 Permanent Council Members (Top 5)</span>
           </div>
           <div className="flex flex-wrap gap-2">
-            {rotation.metadata.top5Permanent.map(tag => (
+            {top5Permanent.map(tag => (
               <span key={tag} className="px-3 py-1 bg-accent text-white rounded-md font-semibold text-sm">
                 {tag}
               </span>
@@ -136,7 +146,7 @@ export function CouncilRotation() {
         <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
           <p className="text-sm">
             <strong>ℹ️ How it works:</strong> The top 5 alliances are permanent council members.
-            Ranks 6-15 rotate weekly in pairs, cycling through every {rotation.metadata.cycleDuration} weeks.
+            Ranks 6-15 rotate weekly in pairs, cycling through every {uniquePairs} weeks.
             This ensures all top alliances get council representation while maintaining stability.
           </p>
         </div>
