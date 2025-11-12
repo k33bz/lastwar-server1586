@@ -1,15 +1,18 @@
 <?php
 /**
  * Votes Management API
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * Handles CRUD operations for council votes with screenshot uploads
  * Allows presidents to record votes and make them public
  *
  * Access: Admin and President roles only
  *
- * @version 1.0.0
- * @date 2025-11-08
+ * Changelog:
+ * v1.0.1 (2025-11-12) - Fixed authentication to use require_jwt_session_api()
+ *   - Changed from require_jwt_session() to require_jwt_session_api()
+ *   - Ensures JSON error responses instead of HTML redirects
+ * v1.0.0 (2025-11-08) - Initial version
  */
 
 error_reporting(E_ALL);
@@ -35,7 +38,7 @@ try {
 header('Content-Type: application/json');
 
 try {
-    $user = require_jwt_session();
+    $user = require_jwt_session_api();
 } catch (Throwable $e) {
     http_response_code(500);
     echo json_encode([
