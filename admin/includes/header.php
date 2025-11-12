@@ -1,10 +1,17 @@
 <?php
 /**
  * Admin Panel Shared Header
- * Version: 1.4.0
+ * Version: 1.5.0
  * Provides consistent navigation and security checks
  *
  * Changelog:
+ * v1.5.0 (2025-11-12) - Added Content Security Policy (CSP) headers
+ *   - Implemented comprehensive CSP to prevent XSS attacks
+ *   - Nonce-based inline script/style approval
+ *   - Restricts all external resource loading
+ *   - Blocks clickjacking with frame-ancestors
+ *   - Prevents plugin execution
+ *   - Upgrade insecure requests to HTTPS
  * v1.4.0 (2025-11-12) - Added generic notification system with header badge
  *   - Notification bell icon with unread count badge
  *   - Dropdown menu showing recent notifications
@@ -48,6 +55,10 @@ require_once __DIR__ . '/csrf.php';
 // Include email utilities
 require_once __DIR__ . '/email_utils.php';
 
+// Include and initialize CSP (Content Security Policy)
+require_once __DIR__ . '/csp.php';
+$csp_nonce = init_csp(); // Initialize CSP and get nonce for inline scripts/styles
+
 // Get current page for navigation highlighting
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
@@ -71,7 +82,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <link rel="stylesheet" href="includes/styles.css">
 
     <!-- Page-specific Styles -->
-    <style>
+    <style <?php echo csp_nonce(); ?>>
         * {
             margin: 0;
             padding: 0;
@@ -1037,8 +1048,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
             }
         }
     </style>
-    
-    <script>
+
+    <script <?php echo csp_nonce(); ?>>
         // Token expiration countdown
         const tokenExp = <?php echo isset($user->exp) ? $user->exp : 'null'; ?>;
         
