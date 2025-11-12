@@ -1,10 +1,18 @@
 <?php
 /**
  * Admin Panel Shared Header
- * Version: 1.2.0
+ * Version: 1.3.0
  * Provides consistent navigation and security checks
  *
  * Changelog:
+ * v1.3.0 (2025-11-12) - Refactored navigation to separate governance from Discord
+ *   - Created new "Server Management" dropdown for all governance/voting operations
+ *   - Moved Council Rotation, Council Proposals, Vote Approvals, and Votes to Server Management
+ *   - Removed voting pages from Discord dropdown (not Discord-specific features)
+ *   - Added Channels and Rate Limits to Discord dropdown
+ *   - Renamed Votes to "Votes History" for clarity
+ *   - Discord dropdown now only contains bot management (announcements, channels, config)
+ *   - Improved logical organization: voting is server governance, not a Discord feature
  * v1.2.0 (2025-10-17) - Fixed dropdown menu hover behavior
  *   - Added invisible bridge between trigger and menu to prevent closing
  *   - Added smooth fade-in/fade-out transitions
@@ -823,7 +831,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <!-- Alliances Dropdown -->
                 <?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
                 <div class="nav-dropdown">
-                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['alliance_edit.php', 'alliances_power.php', 'alliance_tags_manager.php', 'council_rotation.php', 'votes_management.php']) ? 'active' : ''; ?>">
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['alliance_edit.php', 'alliances_power.php', 'alliance_tags_manager.php']) ? 'active' : ''; ?>">
                         Alliances
                     </div>
                     <div class="nav-dropdown-menu">
@@ -834,18 +842,33 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <?php if ($user->aud === 'admin'): ?>
                         <a href="alliance_tags_manager.php" class="nav-link <?php echo $current_page === 'alliance_tags_manager.php' ? 'active' : ''; ?>">Tag Manager</a>
                         <?php endif; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <!-- Server Management Dropdown (Governance & Voting) -->
+                <?php if (has_role($user, ['admin', 'r5', 'r4', 'president', 'ape'])): ?>
+                <div class="nav-dropdown">
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['council_rotation.php', 'discord_vote_proposals.php', 'president_vote_approvals.php', 'votes_management.php']) ? 'active' : ''; ?>">
+                        🏛️ Server Management
+                    </div>
+                    <div class="nav-dropdown-menu">
                         <?php if (has_role($user, ['admin', 'president'])): ?>
-                        <a href="council_rotation.php" class="nav-link <?php echo $current_page === 'council_rotation.php' ? 'active' : ''; ?>">🗳️ Council Rotation</a>
-                        <a href="votes_management.php" class="nav-link <?php echo $current_page === 'votes_management.php' ? 'active' : ''; ?>">📝 Votes</a>
+                        <a href="council_rotation.php" class="nav-link <?php echo $current_page === 'council_rotation.php' ? 'active' : ''; ?>">Council Rotation</a>
+                        <?php endif; ?>
+                        <a href="discord_vote_proposals.php" class="nav-link <?php echo $current_page === 'discord_vote_proposals.php' ? 'active' : ''; ?>">Council Proposals</a>
+                        <?php if (has_role($user, ['admin', 'president'])): ?>
+                        <a href="president_vote_approvals.php" class="nav-link <?php echo $current_page === 'president_vote_approvals.php' ? 'active' : ''; ?>">Vote Approvals</a>
+                        <a href="votes_management.php" class="nav-link <?php echo $current_page === 'votes_management.php' ? 'active' : ''; ?>">Votes History</a>
                         <?php endif; ?>
                     </div>
                 </div>
                 <?php endif; ?>
 
-                <!-- Discord Dropdown -->
+                <!-- Discord Dropdown (Bot Management Only) -->
                 <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && has_role($user, ['admin', 'r5', 'r4', 'president', 'ape'])): ?>
                 <div class="nav-dropdown">
-                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['discord_announcements.php', 'discord_scheduled.php', 'discord_recurring.php', 'discord_templates.php', 'discord_config.php', 'discord_vote_proposals.php', 'president_vote_approvals.php']) ? 'active' : ''; ?>">
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['discord_announcements.php', 'discord_scheduled.php', 'discord_recurring.php', 'discord_templates.php', 'discord_channels.php', 'discord_rate_limits.php', 'discord_config.php']) ? 'active' : ''; ?>">
                         Discord
                     </div>
                     <div class="nav-dropdown-menu">
@@ -853,13 +876,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <a href="discord_scheduled.php" class="nav-link <?php echo $current_page === 'discord_scheduled.php' ? 'active' : ''; ?>">Scheduled Messages</a>
                         <a href="discord_recurring.php" class="nav-link <?php echo $current_page === 'discord_recurring.php' ? 'active' : ''; ?>">Recurring Messages</a>
                         <a href="discord_templates.php" class="nav-link <?php echo $current_page === 'discord_templates.php' ? 'active' : ''; ?>">Message Templates</a>
-                        <?php if (has_role($user, ['admin', 'r5', 'r4', 'ape'])): ?>
-                        <a href="discord_vote_proposals.php" class="nav-link <?php echo $current_page === 'discord_vote_proposals.php' ? 'active' : ''; ?>">🗳️ Council Proposals</a>
-                        <?php endif; ?>
-                        <?php if (has_role($user, ['admin', 'president'])): ?>
-                        <a href="president_vote_approvals.php" class="nav-link <?php echo $current_page === 'president_vote_approvals.php' ? 'active' : ''; ?>">👑 Vote Approvals</a>
-                        <?php endif; ?>
                         <?php if ($user->aud === 'admin'): ?>
+                        <a href="discord_channels.php" class="nav-link <?php echo $current_page === 'discord_channels.php' ? 'active' : ''; ?>">Channels</a>
+                        <a href="discord_rate_limits.php" class="nav-link <?php echo $current_page === 'discord_rate_limits.php' ? 'active' : ''; ?>">Rate Limits</a>
                         <a href="discord_config.php" class="nav-link <?php echo $current_page === 'discord_config.php' ? 'active' : ''; ?>">Configuration</a>
                         <?php endif; ?>
                     </div>
