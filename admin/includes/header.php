@@ -843,9 +843,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php endif; ?>
 
                 <!-- Discord Dropdown -->
-                <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
+                <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && has_role($user, ['admin', 'r5', 'r4', 'president', 'ape'])): ?>
                 <div class="nav-dropdown">
-                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['discord_announcements.php', 'discord_scheduled.php', 'discord_recurring.php', 'discord_templates.php', 'discord_config.php']) ? 'active' : ''; ?>">
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['discord_announcements.php', 'discord_scheduled.php', 'discord_recurring.php', 'discord_templates.php', 'discord_config.php', 'discord_vote_proposals.php', 'president_vote_approvals.php']) ? 'active' : ''; ?>">
                         Discord
                     </div>
                     <div class="nav-dropdown-menu">
@@ -853,6 +853,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <a href="discord_scheduled.php" class="nav-link <?php echo $current_page === 'discord_scheduled.php' ? 'active' : ''; ?>">Scheduled Messages</a>
                         <a href="discord_recurring.php" class="nav-link <?php echo $current_page === 'discord_recurring.php' ? 'active' : ''; ?>">Recurring Messages</a>
                         <a href="discord_templates.php" class="nav-link <?php echo $current_page === 'discord_templates.php' ? 'active' : ''; ?>">Message Templates</a>
+                        <?php if (has_role($user, ['admin', 'r5', 'r4', 'ape'])): ?>
+                        <a href="discord_vote_proposals.php" class="nav-link <?php echo $current_page === 'discord_vote_proposals.php' ? 'active' : ''; ?>">🗳️ Council Proposals</a>
+                        <?php endif; ?>
+                        <?php if (has_role($user, ['admin', 'president'])): ?>
+                        <a href="president_vote_approvals.php" class="nav-link <?php echo $current_page === 'president_vote_approvals.php' ? 'active' : ''; ?>">👑 Vote Approvals</a>
+                        <?php endif; ?>
                         <?php if ($user->aud === 'admin'): ?>
                         <a href="discord_config.php" class="nav-link <?php echo $current_page === 'discord_config.php' ? 'active' : ''; ?>">Configuration</a>
                         <?php endif; ?>
