@@ -1,0 +1,81 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2025-11-12 16:00:00",
+  "notifications": [
+    {
+      "id": "notif_test001_1731441600",
+      "type": "amendment_vote",
+      "priority": "high",
+      "title": "New Rule Amendment: Vote Required",
+      "message": "Amendment v1.3 requires your approval - voting deadline in 24 hours",
+      "recipient_type": "role",
+      "recipients": ["admin", "president", "r5"],
+      "action_url": "rules_ratification.php?id=prop_001",
+      "action_text": "Review & Vote",
+      "created_at": "2025-11-12 15:30:00",
+      "created_by": "system@server1586.local",
+      "expires_at": "2025-11-13 15:30:00",
+      "read_by": []
+    },
+    {
+      "id": "notif_test002_1731441660",
+      "type": "discord_template_approval",
+      "priority": "medium",
+      "title": "Discord Template Pending Approval",
+      "message": "ORCE submitted a new message template for approval",
+      "recipient_type": "role",
+      "recipients": ["admin", "president"],
+      "action_url": "discord_templates.php?pending=true",
+      "action_text": "Review Templates",
+      "created_at": "2025-11-12 14:00:00",
+      "created_by": "system@server1586.local",
+      "expires_at": "",
+      "read_by": []
+    },
+    {
+      "id": "notif_test003_1731441720",
+      "type": "council_rotation",
+      "priority": "high",
+      "title": "Council Rotation Update",
+      "message": "New council rotation schedule has been published for Season 2",
+      "recipient_type": "broadcast",
+      "recipients": [],
+      "action_url": "council_rotation.php",
+      "action_text": "View Schedule",
+      "created_at": "2025-11-12 12:00:00",
+      "created_by": "admin@server1586.local",
+      "expires_at": "",
+      "read_by": []
+    },
+    {
+      "id": "notif_test004_1731441780",
+      "type": "vote_result",
+      "priority": "medium",
+      "title": "Vote Results: Alliance Power Cap",
+      "message": "The vote on alliance power caps has concluded - view the results",
+      "recipient_type": "role",
+      "recipients": ["admin", "president", "r5", "r4"],
+      "action_url": "votes_management.php?id=vote_123",
+      "action_text": "View Results",
+      "created_at": "2025-11-12 10:00:00",
+      "created_by": "system@server1586.local",
+      "expires_at": "",
+      "read_by": []
+    },
+    {
+      "id": "notif_test005_1731441840",
+      "type": "system_alert",
+      "priority": "low",
+      "title": "System Maintenance Scheduled",
+      "message": "Routine maintenance will occur on Nov 15 at 2:00 AM UTC",
+      "recipient_type": "broadcast",
+      "recipients": [],
+      "action_url": "",
+      "action_text": "",
+      "created_at": "2025-11-12 08:00:00",
+      "created_by": "system@server1586.local",
+      "expires_at": "2025-11-15 02:00:00",
+      "read_by": []
+    }
+  ]
+}

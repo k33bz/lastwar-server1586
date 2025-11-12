@@ -1,10 +1,18 @@
 <?php
 /**
  * Admin Panel Shared Header
- * Version: 1.3.0
+ * Version: 1.4.0
  * Provides consistent navigation and security checks
  *
  * Changelog:
+ * v1.4.0 (2025-11-12) - Added generic notification system with header badge
+ *   - Notification bell icon with unread count badge
+ *   - Dropdown menu showing recent notifications
+ *   - Auto-refresh every 60 seconds
+ *   - Mark as read / Mark all read functionality
+ *   - Priority indicators (high/medium/low)
+ *   - Mobile-responsive design
+ *   - Dark theme support
  * v1.3.0 (2025-11-12) - Refactored navigation to separate governance from Discord
  *   - Created new "Server Management" dropdown for all governance/voting operations
  *   - Moved Council Rotation, Council Proposals, Vote Approvals, and Votes to Server Management
@@ -735,6 +743,299 @@ $current_page = basename($_SERVER['PHP_SELF']);
             background: #0f3460;
             color: #e0e0e0;
         }
+
+        /* Notification System Styles */
+        .notification-container {
+            position: relative;
+            margin-right: 1rem;
+        }
+
+        .notification-bell {
+            position: relative;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-bell:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #dc3545;
+            color: white;
+            font-size: 0.625rem;
+            font-weight: 700;
+            padding: 0.15rem 0.35rem;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .notification-dropdown {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: 0;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            width: 400px;
+            max-height: 500px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notification-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0s;
+        }
+
+        .notification-dropdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .notification-dropdown-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .mark-all-read-btn {
+            background: transparent;
+            border: none;
+            color: #667eea;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .mark-all-read-btn:hover {
+            background-color: #f8f9fa;
+            color: #5568d3;
+        }
+
+        .notification-list {
+            overflow-y: auto;
+            max-height: 400px;
+            flex: 1;
+        }
+
+        .notification-item {
+            padding: 1rem;
+            border-bottom: 1px solid #f8f9fa;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+        .notification-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .notification-item.unread {
+            background-color: #e7f3ff;
+        }
+
+        .notification-item.unread:hover {
+            background-color: #d0e7ff;
+        }
+
+        .notification-item.priority-high {
+            border-left: 4px solid #dc3545;
+        }
+
+        .notification-item.priority-medium {
+            border-left: 4px solid #ffc107;
+        }
+
+        .notification-item.priority-low {
+            border-left: 4px solid #28a745;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-message {
+            font-size: 0.8125rem;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .notification-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #adb5bd;
+        }
+
+        .notification-time {
+            font-style: italic;
+        }
+
+        .notification-action {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .notification-action:hover {
+            color: #5568d3;
+            text-decoration: underline;
+        }
+
+        .notification-dropdown-footer {
+            padding: 0.75rem;
+            border-top: 1px solid #e9ecef;
+            text-align: center;
+        }
+
+        .view-all-link {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .view-all-link:hover {
+            color: #5568d3;
+            text-decoration: underline;
+        }
+
+        .notification-loading,
+        .notification-empty {
+            padding: 2rem;
+            text-align: center;
+            color: #adb5bd;
+            font-size: 0.875rem;
+        }
+
+        /* Dark theme - Notifications */
+        body.dark-theme .notification-bell:hover {
+            background-color: #0f3460;
+        }
+
+        body.dark-theme .notification-dropdown {
+            background: #16213e;
+            border-color: #0f3460;
+        }
+
+        body.dark-theme .notification-dropdown-header {
+            border-color: #0f3460;
+        }
+
+        body.dark-theme .notification-dropdown-header h3 {
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .mark-all-read-btn {
+            color: #818cf8;
+        }
+
+        body.dark-theme .mark-all-read-btn:hover {
+            background-color: #0f3460;
+            color: #a5b4fc;
+        }
+
+        body.dark-theme .notification-item {
+            border-color: #0f3460;
+        }
+
+        body.dark-theme .notification-item:hover {
+            background-color: #0f3460;
+        }
+
+        body.dark-theme .notification-item.unread {
+            background-color: #1a2642;
+        }
+
+        body.dark-theme .notification-item.unread:hover {
+            background-color: #0f3460;
+        }
+
+        body.dark-theme .notification-title {
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .notification-message {
+            color: #a0a0a0;
+        }
+
+        body.dark-theme .notification-footer {
+            color: #6c757d;
+        }
+
+        body.dark-theme .notification-action {
+            color: #818cf8;
+        }
+
+        body.dark-theme .notification-action:hover {
+            color: #a5b4fc;
+        }
+
+        body.dark-theme .notification-dropdown-footer {
+            border-color: #0f3460;
+        }
+
+        body.dark-theme .view-all-link {
+            color: #818cf8;
+        }
+
+        body.dark-theme .view-all-link:hover {
+            color: #a5b4fc;
+        }
+
+        body.dark-theme .notification-loading,
+        body.dark-theme .notification-empty {
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            .notification-dropdown {
+                width: 90vw;
+                max-width: 400px;
+                right: -50px;
+            }
+
+            .notification-container {
+                margin-right: 0.5rem;
+            }
+        }
     </style>
     
     <script>
@@ -804,7 +1105,246 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     document.body.classList.add('dark-theme');
                 }
             }
+
+            // Initialize notification system
+            initNotificationSystem();
         });
+
+        // Notification System
+        let notificationDropdownOpen = false;
+        let notificationsLoaded = false;
+
+        function initNotificationSystem() {
+            // Fetch initial unread count
+            updateNotificationCount();
+
+            // Auto-refresh every 60 seconds
+            setInterval(updateNotificationCount, 60000);
+
+            // Toggle dropdown on bell click
+            document.getElementById('notification-bell').addEventListener('click', toggleNotificationDropdown);
+
+            // Mark all read button
+            document.getElementById('mark-all-read-btn').addEventListener('click', markAllNotificationsRead);
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                const container = document.querySelector('.notification-container');
+                if (!container.contains(e.target) && notificationDropdownOpen) {
+                    closeNotificationDropdown();
+                }
+            });
+        }
+
+        async function updateNotificationCount() {
+            try {
+                const response = await fetch('notifications_api.php?action=get_unread_count', {
+                    credentials: 'same-origin',
+                    headers: {
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch notification count');
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const badge = document.getElementById('notification-badge');
+                    const markAllBtn = document.getElementById('mark-all-read-btn');
+
+                    if (data.count > 0) {
+                        badge.textContent = data.count > 9 ? '9+' : data.count;
+                        badge.style.display = 'block';
+                        if (markAllBtn) markAllBtn.style.display = 'block';
+                    } else {
+                        badge.style.display = 'none';
+                        if (markAllBtn) markAllBtn.style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching notification count:', error);
+            }
+        }
+
+        async function toggleNotificationDropdown() {
+            if (notificationDropdownOpen) {
+                closeNotificationDropdown();
+            } else {
+                openNotificationDropdown();
+            }
+        }
+
+        async function openNotificationDropdown() {
+            const dropdown = document.getElementById('notification-dropdown');
+            dropdown.classList.add('show');
+            notificationDropdownOpen = true;
+
+            // Load notifications if not already loaded
+            if (!notificationsLoaded) {
+                await loadNotifications();
+            }
+        }
+
+        function closeNotificationDropdown() {
+            const dropdown = document.getElementById('notification-dropdown');
+            dropdown.classList.remove('show');
+            notificationDropdownOpen = false;
+        }
+
+        async function loadNotifications() {
+            const listContainer = document.getElementById('notification-list');
+            listContainer.innerHTML = '<div class="notification-loading">Loading notifications...</div>';
+
+            try {
+                const response = await fetch('notifications_api.php?action=get_notifications&per_page=10', {
+                    credentials: 'same-origin',
+                    headers: {
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch notifications');
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    notificationsLoaded = true;
+                    renderNotifications(data.notifications);
+                } else {
+                    listContainer.innerHTML = '<div class="notification-empty">Failed to load notifications</div>';
+                }
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+                listContainer.innerHTML = '<div class="notification-empty">Error loading notifications</div>';
+            }
+        }
+
+        function renderNotifications(notifications) {
+            const listContainer = document.getElementById('notification-list');
+
+            if (notifications.length === 0) {
+                listContainer.innerHTML = '<div class="notification-empty">No notifications</div>';
+                return;
+            }
+
+            listContainer.innerHTML = '';
+
+            notifications.forEach(notification => {
+                const item = document.createElement('div');
+                item.className = `notification-item ${!notification.is_read ? 'unread' : ''} priority-${notification.priority}`;
+                item.dataset.notificationId = notification.id;
+
+                const timeAgo = getTimeAgo(notification.created_at);
+
+                item.innerHTML = `
+                    <div class="notification-title">${escapeHtml(notification.title)}</div>
+                    <div class="notification-message">${escapeHtml(notification.message)}</div>
+                    <div class="notification-footer">
+                        <span class="notification-time">${timeAgo}</span>
+                        ${notification.action_url ? `<a href="${escapeHtml(notification.action_url)}" class="notification-action">${escapeHtml(notification.action_text || 'View')}</a>` : ''}
+                    </div>
+                `;
+
+                item.addEventListener('click', function(e) {
+                    // If clicking the action link, let it navigate naturally
+                    if (e.target.classList.contains('notification-action')) {
+                        markNotificationRead(notification.id);
+                        return;
+                    }
+
+                    // Otherwise, mark as read and navigate if there's an action URL
+                    markNotificationRead(notification.id);
+                    if (notification.action_url) {
+                        window.location.href = notification.action_url;
+                    }
+                });
+
+                listContainer.appendChild(item);
+            });
+        }
+
+        async function markNotificationRead(notificationId) {
+            try {
+                const response = await fetch('notifications_api.php?action=mark_read', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    },
+                    body: JSON.stringify({ notification_id: notificationId })
+                });
+
+                if (response.ok) {
+                    // Update UI
+                    const item = document.querySelector(`[data-notification-id="${notificationId}"]`);
+                    if (item) {
+                        item.classList.remove('unread');
+                    }
+
+                    // Update count
+                    updateNotificationCount();
+                }
+            } catch (error) {
+                console.error('Error marking notification as read:', error);
+            }
+        }
+
+        async function markAllNotificationsRead() {
+            try {
+                const response = await fetch('notifications_api.php?action=mark_all_read', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    }
+                });
+
+                if (response.ok) {
+                    // Remove unread class from all items
+                    document.querySelectorAll('.notification-item.unread').forEach(item => {
+                        item.classList.remove('unread');
+                    });
+
+                    // Update count
+                    updateNotificationCount();
+
+                    // Reload notifications
+                    notificationsLoaded = false;
+                    await loadNotifications();
+                }
+            } catch (error) {
+                console.error('Error marking all notifications as read:', error);
+            }
+        }
+
+        function getTimeAgo(dateString) {
+            const now = new Date();
+            const past = new Date(dateString);
+            const diffMs = now - past;
+            const diffSecs = Math.floor(diffMs / 1000);
+            const diffMins = Math.floor(diffSecs / 60);
+            const diffHours = Math.floor(diffMins / 60);
+            const diffDays = Math.floor(diffHours / 24);
+
+            if (diffSecs < 60) return 'Just now';
+            if (diffMins < 60) return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+            if (diffDays < 7) return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+
+            return past.toLocaleDateString();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
     </script>
 
     <!-- Shared JavaScript Utilities -->
@@ -925,6 +1465,28 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </div>
                 <?php endif; ?>
             </nav>
+
+            <!-- Notification Bell -->
+            <div class="notification-container">
+                <button class="notification-bell" id="notification-bell" aria-label="Notifications">
+                    🔔
+                    <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
+                </button>
+
+                <!-- Notification Dropdown -->
+                <div class="notification-dropdown" id="notification-dropdown">
+                    <div class="notification-dropdown-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read-btn" id="mark-all-read-btn" style="display: none;">Mark all read</button>
+                    </div>
+                    <div class="notification-list" id="notification-list">
+                        <div class="notification-loading">Loading notifications...</div>
+                    </div>
+                    <div class="notification-dropdown-footer">
+                        <a href="notifications.php" class="view-all-link">View All Notifications</a>
+                    </div>
+                </div>
+            </div>
 
             <div class="theme-toggle-container">
                 <div class="toggle-switch">
