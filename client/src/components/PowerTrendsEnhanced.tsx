@@ -48,6 +48,12 @@ export function PowerTrendsEnhanced() {
   const sectionRef = useRef<HTMLElement>(null);
   const { isFullscreen, toggleFullscreen } = useFullscreen(sectionRef);
 
+  // Chart ref for hover interactions
+  const chartRef = useRef<ChartJS<'line'>>(null);
+
+  // Track which dataset is being hovered (closest to cursor)
+  const hoveredDatasetRef = useRef<number>(-1);
+
   useEffect(() => {
     // In development, fetch from public/data directory
     // In production, use API endpoint
@@ -194,9 +200,46 @@ export function PowerTrendsEnhanced() {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
-      mode: 'nearest',
+      mode: 'index', // Show all datasets at the x-axis point
       axis: 'x',
       intersect: false,
+    },
+    onHover: (event, activeElements, chart) => {
+      // Find which dataset is closest to the cursor
+      if (activeElements.length === 0) {
+        if (hoveredDatasetRef.current !== -1) {
+          hoveredDatasetRef.current = -1;
+          chart.update('none'); // Force tooltip update
+        }
+        return;
+      }
+
+      const canvasPosition = chart.canvas.getBoundingClientRect();
+      const mouseY = event.native ? (event.native as MouseEvent).clientY - canvasPosition.top : 0;
+
+      let closestDatasetIndex = -1;
+      let closestDistance = Infinity;
+
+      // Check distance from cursor to each data point
+      activeElements.forEach((element) => {
+        const dataset = chart.data.datasets[element.datasetIndex];
+        const meta = chart.getDatasetMeta(element.datasetIndex);
+        const point = meta.data[element.index];
+
+        if (point) {
+          const distance = Math.abs(mouseY - point.y);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestDatasetIndex = element.datasetIndex;
+          }
+        }
+      });
+
+      // Only update if the hovered dataset changed
+      if (hoveredDatasetRef.current !== closestDatasetIndex) {
+        hoveredDatasetRef.current = closestDatasetIndex;
+        chart.update('none'); // Force tooltip update without animation
+      }
     },
     plugins: {
       legend: {
@@ -215,7 +258,7 @@ export function PowerTrendsEnhanced() {
         display: false,
       },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
         padding: 12,
         titleFont: {
           size: 14,
@@ -225,6 +268,18 @@ export function PowerTrendsEnhanced() {
           size: 13,
         },
         callbacks: {
+          // Highlight the closest data point
+          labelTextColor: (context) => {
+            // Use the tracked hovered dataset
+            const hoveredIndex = hoveredDatasetRef.current;
+
+            // Bright white for the hovered dataset, grey for others
+            if (context.datasetIndex === hoveredIndex) {
+              return 'rgb(255, 255, 255)'; // Bright white
+            } else {
+              return 'rgb(120, 120, 120)'; // Grey
+            }
+          },
           label: (context) => {
             const value = context.parsed.y ?? 0;
             if (value === 0) return `${context.dataset.label}: No data`;
@@ -371,7 +426,7 @@ export function PowerTrendsEnhanced() {
 
         {/* Chart - Taller in fullscreen */}
         <div className={isFullscreen ? 'h-[600px] mb-6' : 'h-96 mb-6'}>
-          <Chart type="line" data={chartData} options={options} />
+          <Chart ref={chartRef} type="line" data={chartData} options={options} />
         </div>
 
         {/* Stats */}
