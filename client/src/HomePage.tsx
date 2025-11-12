@@ -5,6 +5,9 @@ import { CouncilMembers } from './components/CouncilMembers';
 import { ServerRules } from './components/ServerRules';
 import { Signatories } from './components/Signatories';
 import { PowerTrends } from './components/PowerTrends';
+import { PowerDistribution } from './components/PowerDistribution';
+import { CouncilRotation } from './components/CouncilRotation';
+import { SignatureStatus } from './components/SignatureStatus';
 import { BackToTop } from './components/BackToTop';
 import { FloatingThemeToggle } from './components/FloatingThemeToggle';
 import { useApi } from './hooks/useApi';
@@ -101,6 +104,10 @@ export function HomePage() {
                 <Separator className="my-12" />
 
                 <AllianceGrid alliances={alliances} />
+
+                <Separator className="my-12" />
+
+                <PowerDistribution />
               </>
             )}
           </Tabs.Panel>
@@ -113,11 +120,19 @@ export function HomePage() {
 
             <Separator className="my-12" />
 
+            <SignatureStatus />
+
+            <Separator className="my-12" />
+
             <CouncilMembers />
 
             <Separator className="my-12" />
 
             <Signatories />
+
+            <Separator className="my-12" />
+
+            <CouncilRotation />
           </Tabs.Panel>
 
           {/* Power Trends Tab */}
