@@ -87,7 +87,7 @@ export function HomePage() {
                 <Tabs.Indicator />
               </Tabs.Tab>
               <Tabs.Tab id="power-trends">
-                📊 Power Trends
+                📊 Power Analytics
                 <Tabs.Indicator />
               </Tabs.Tab>
             </Tabs.List>
@@ -104,10 +104,6 @@ export function HomePage() {
                 <Separator className="my-12" />
 
                 <AllianceGrid alliances={alliances} />
-
-                <Separator className="my-12" />
-
-                <PowerDistribution />
               </>
             )}
           </Tabs.Panel>
@@ -135,8 +131,12 @@ export function HomePage() {
             <CouncilRotation />
           </Tabs.Panel>
 
-          {/* Power Trends Tab */}
+          {/* Power Analytics Tab */}
           <Tabs.Panel id="power-trends">
+            <PowerDistribution />
+
+            <Separator className="my-12" />
+
             <PowerTrends />
           </Tabs.Panel>
         </Tabs>
