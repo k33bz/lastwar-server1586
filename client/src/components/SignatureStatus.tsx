@@ -47,21 +47,91 @@ export function SignatureStatus() {
     );
   }
 
-  // Calculate signature statistics
-  const totalAlliances = signatureData.alliances.length;
-  const signedAlliances = signatureData.alliances.filter(alliance => {
-    const currentR5 = alliance.r5History.find(r5 => r5.current);
-    return currentR5 && currentR5.signatures.length > 0;
-  });
-  const signedCount = signedAlliances.length;
-  const unsignedCount = totalAlliances - signedCount;
-  const adoptionRate = ((signedCount / totalAlliances) * 100).toFixed(1);
+  const currentVersion = signatureData.currentRulesVersion;
 
-  // Get unsigned alliances
+  // Helper function to get version difference (how many versions behind)
+  const getVersionDistance = (signedVersion: string): number => {
+    const current = parseFloat(currentVersion);
+    const signed = parseFloat(signedVersion);
+    return current - signed;
+  };
+
+  // Helper function to get color based on version distance
+  const getVersionColor = (signedVersion: string | null): {
+    bg: string;
+    border: string;
+    text: string;
+    status: string;
+  } => {
+    if (!signedVersion) {
+      return {
+        bg: 'bg-red-50 dark:bg-red-900/10',
+        border: 'border-red-500/30',
+        text: 'text-red-600 dark:text-red-400',
+        status: 'Not Signed'
+      };
+    }
+
+    const distance = getVersionDistance(signedVersion);
+
+    if (distance === 0) {
+      // Current version - green
+      return {
+        bg: 'bg-green-50 dark:bg-green-900/10',
+        border: 'border-green-500/30',
+        text: 'text-green-600 dark:text-green-400',
+        status: 'Current'
+      };
+    } else if (distance === 0.1) {
+      // 0.1 versions behind - yellow-green
+      return {
+        bg: 'bg-lime-50 dark:bg-lime-900/10',
+        border: 'border-lime-500/30',
+        text: 'text-lime-600 dark:text-lime-400',
+        status: 'Slightly Outdated'
+      };
+    } else if (distance === 0.2) {
+      // 0.2 versions behind - yellow
+      return {
+        bg: 'bg-yellow-50 dark:bg-yellow-900/10',
+        border: 'border-yellow-500/30',
+        text: 'text-yellow-600 dark:text-yellow-400',
+        status: 'Outdated'
+      };
+    } else {
+      // 0.3+ versions behind - orange/red
+      return {
+        bg: 'bg-orange-50 dark:bg-orange-900/10',
+        border: 'border-orange-500/30',
+        text: 'text-orange-600 dark:text-orange-400',
+        status: 'Very Outdated'
+      };
+    }
+  };
+
+  // Calculate signature statistics (only count current version as "signed")
+  const totalAlliances = signatureData.alliances.length;
+  const currentVersionAlliances = signatureData.alliances.filter(alliance => {
+    const currentR5 = alliance.r5History.find(r5 => r5.current);
+    const latestSignature = currentR5?.signatures[currentR5.signatures.length - 1];
+    return latestSignature && latestSignature.version === currentVersion;
+  });
+  const signedCount = currentVersionAlliances.length;
+
+  const outdatedAlliances = signatureData.alliances.filter(alliance => {
+    const currentR5 = alliance.r5History.find(r5 => r5.current);
+    const latestSignature = currentR5?.signatures[currentR5.signatures.length - 1];
+    return latestSignature && latestSignature.version !== currentVersion;
+  });
+  const outdatedCount = outdatedAlliances.length;
+
   const unsignedAlliances = signatureData.alliances.filter(alliance => {
     const currentR5 = alliance.r5History.find(r5 => r5.current);
     return !currentR5 || currentR5.signatures.length === 0;
   });
+  const unsignedCount = unsignedAlliances.length;
+
+  const adoptionRate = ((signedCount / totalAlliances) * 100).toFixed(1);
 
   return (
     <Card variant="secondary" className="p-6">
@@ -74,23 +144,29 @@ export function SignatureStatus() {
 
       <Card.Content className="mt-6">
         {/* Summary Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {/* Adoption Rate */}
           <div className="p-4 bg-accent/10 border-2 border-accent/30 rounded-lg text-center">
             <div className="text-3xl font-bold text-accent">{adoptionRate}%</div>
-            <div className="text-sm opacity-75 mt-1">Adoption Rate</div>
+            <div className="text-sm opacity-75 mt-1">Current Version</div>
           </div>
 
-          {/* Signed */}
+          {/* Current Version Signed */}
           <div className="p-4 bg-green-50 dark:bg-green-900/20 border-2 border-green-500/30 rounded-lg text-center">
             <div className="text-3xl font-bold text-green-600 dark:text-green-400">{signedCount}</div>
-            <div className="text-sm opacity-75 mt-1">Signed</div>
+            <div className="text-sm opacity-75 mt-1">Up to Date</div>
+          </div>
+
+          {/* Outdated */}
+          <div className="p-4 bg-orange-50 dark:bg-orange-900/20 border-2 border-orange-500/30 rounded-lg text-center">
+            <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">{outdatedCount}</div>
+            <div className="text-sm opacity-75 mt-1">Outdated</div>
           </div>
 
           {/* Unsigned */}
           <div className="p-4 bg-red-50 dark:bg-red-900/20 border-2 border-red-500/30 rounded-lg text-center">
             <div className="text-3xl font-bold text-red-600 dark:text-red-400">{unsignedCount}</div>
-            <div className="text-sm opacity-75 mt-1">Unsigned</div>
+            <div className="text-sm opacity-75 mt-1">Not Signed</div>
           </div>
         </div>
 
@@ -101,17 +177,23 @@ export function SignatureStatus() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {signatureData.alliances.map((alliance) => {
               const currentR5 = alliance.r5History.find(r5 => r5.current);
-              const hasSigned = currentR5 && currentR5.signatures.length > 0;
-              const latestSignature = hasSigned ? currentR5.signatures[currentR5.signatures.length - 1] : null;
+              const latestSignature = currentR5?.signatures[currentR5.signatures.length - 1];
+              const colorScheme = getVersionColor(latestSignature?.version || null);
+
+              const isCurrent = latestSignature?.version === currentVersion;
+              const isOutdated = latestSignature && latestSignature.version !== currentVersion;
+
+              // Icon based on status
+              const getStatusIcon = () => {
+                if (isCurrent) return '✅';
+                if (isOutdated) return '⚠️';
+                return '❌';
+              };
 
               return (
                 <div
                   key={alliance.tag}
-                  className={`p-4 rounded-lg border-2 transition-all ${
-                    hasSigned
-                      ? 'bg-green-50 dark:bg-green-900/10 border-green-500/30'
-                      : 'bg-red-50 dark:bg-red-900/10 border-red-500/30'
-                  }`}
+                  className={`p-4 rounded-lg border-2 transition-all ${colorScheme.bg} ${colorScheme.border}`}
                 >
                   {/* Alliance Info */}
                   <div className="flex items-start justify-between mb-2">
@@ -125,27 +207,36 @@ export function SignatureStatus() {
 
                     {/* Status Icon */}
                     <div className="text-2xl ml-2 flex-shrink-0">
-                      {hasSigned ? '✅' : '❌'}
+                      {getStatusIcon()}
                     </div>
                   </div>
 
                   {/* Signature Details */}
-                  {hasSigned && latestSignature ? (
-                    <div className="text-xs opacity-75 space-y-1">
-                      <div className="flex justify-between">
-                        <span>Version:</span>
-                        <span className="font-semibold">v{latestSignature.version}</span>
+                  {latestSignature ? (
+                    <div className="text-xs space-y-1">
+                      <div className="flex justify-between items-center">
+                        <span className="opacity-75">Version:</span>
+                        <span className={`font-semibold ${colorScheme.text}`}>
+                          v{latestSignature.version}
+                          {isOutdated && ' (old)'}
+                        </span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Signed:</span>
-                        <span className="font-semibold">
+                        <span className="opacity-75">Status:</span>
+                        <span className={`font-semibold ${colorScheme.text}`}>
+                          {colorScheme.status}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="opacity-75">Signed:</span>
+                        <span className="font-semibold opacity-75">
                           {new Date(latestSignature.signedAt).toLocaleDateString()}
                         </span>
                       </div>
                     </div>
                   ) : (
-                    <div className="text-xs font-semibold text-red-600 dark:text-red-400">
-                      Not Signed
+                    <div className={`text-xs font-semibold ${colorScheme.text}`}>
+                      {colorScheme.status}
                     </div>
                   )}
                 </div>
@@ -154,13 +245,31 @@ export function SignatureStatus() {
           </div>
         </div>
 
-        {/* Unsigned Alliances Alert */}
-        {unsignedCount > 0 && (
-          <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+        {/* Outdated Signatures Alert */}
+        {outdatedCount > 0 && (
+          <div className="mt-6 p-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-500/30 rounded-lg">
             <div className="flex items-start gap-3">
               <span className="text-2xl">⚠️</span>
               <div>
-                <p className="font-semibold text-sm">Pending Signatures</p>
+                <p className="font-semibold text-sm">Outdated Signatures</p>
+                <p className="text-sm opacity-75 mt-1">
+                  The following alliances need to update their signatures to v{currentVersion}:{' '}
+                  <span className="font-semibold">
+                    {outdatedAlliances.map(a => a.tag).join(', ')}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Unsigned Alliances Alert */}
+        {unsignedCount > 0 && (
+          <div className="mt-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-500/30 rounded-lg">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">❌</span>
+              <div>
+                <p className="font-semibold text-sm">Not Signed</p>
                 <p className="text-sm opacity-75 mt-1">
                   The following alliances have not yet signed the NAP15 rules:{' '}
                   <span className="font-semibold">
