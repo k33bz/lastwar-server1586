@@ -20,7 +20,7 @@ async function getCurrentCouncilMembers() {
   }
 
   // Top 5 are permanent members
-  const permanentMembers = rotation.metadata.top15Snapshot.slice(0, 5);
+  const permanentMembers = rotation.metadata.top5Permanent;
   const rotatingMembers = schedule.rotatingMembers;
 
   const councilTags = [...permanentMembers, ...rotatingMembers];

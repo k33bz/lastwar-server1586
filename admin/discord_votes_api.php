@@ -588,7 +588,7 @@ function getCurrentCouncilMembers() {
     }
 
     // Top 5 are permanent
-    $permanentMembers = array_slice($rotation['metadata']['top15Snapshot'], 0, 5);
+    $permanentMembers = $rotation['metadata']['top5Permanent'];
     $rotatingMembers = $schedule['rotatingMembers'];
 
     $councilTags = array_merge($permanentMembers, $rotatingMembers);
