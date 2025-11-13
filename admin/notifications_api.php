@@ -131,7 +131,7 @@ try {
         // GET: Get unread notification count
         case 'get_unread_count':
             $data = read_notifications($notifications_file);
-            $notifications = get_user_notifications($data, $user->email, $user->aud, true);
+            $notifications = get_user_notifications($data, $user->sub, $user->aud, true);
 
             echo json_encode([
                 'success' => true,
@@ -147,7 +147,7 @@ try {
             $unread_only = isset($_GET['unread_only']) && $_GET['unread_only'] === 'true';
 
             $data = read_notifications($notifications_file);
-            $all_notifications = get_user_notifications($data, $user->email, $user->aud, $unread_only);
+            $all_notifications = get_user_notifications($data, $user->sub, $user->aud, $unread_only);
 
             // Paginate
             $total = count($all_notifications);
@@ -192,8 +192,8 @@ try {
                         $notification['read_by'] = [];
                     }
 
-                    if (!in_array($user->email, $notification['read_by'])) {
-                        $notification['read_by'][] = $user->email;
+                    if (!in_array($user->sub, $notification['read_by'])) {
+                        $notification['read_by'][] = $user->sub;
                     }
 
                     break;
@@ -208,7 +208,7 @@ try {
 
             log_audit('notification_marked_read', [
                 'notification_id' => $notification_id,
-                'user' => $user->email
+                'user' => $user->sub
             ]);
 
             echo json_encode([
@@ -228,7 +228,7 @@ try {
             $marked_count = 0;
 
             foreach ($data['notifications'] as &$notification) {
-                if (!is_notification_visible($notification, $user->email, $user->aud)) {
+                if (!is_notification_visible($notification, $user->sub, $user->aud)) {
                     continue;
                 }
 
@@ -237,8 +237,8 @@ try {
                     $notification['read_by'] = [];
                 }
 
-                if (!in_array($user->email, $notification['read_by'])) {
-                    $notification['read_by'][] = $user->email;
+                if (!in_array($user->sub, $notification['read_by'])) {
+                    $notification['read_by'][] = $user->sub;
                     $marked_count++;
                 }
             }
@@ -247,7 +247,7 @@ try {
 
             log_audit('all_notifications_marked_read', [
                 'count' => $marked_count,
-                'user' => $user->email
+                'user' => $user->sub
             ]);
 
             echo json_encode([
@@ -307,7 +307,7 @@ try {
                 'action_url' => $input['action_url'] ?? '',
                 'action_text' => $input['action_text'] ?? 'View',
                 'created_at' => date('Y-m-d H:i:s'),
-                'created_by' => $user->email,
+                'created_by' => $user->sub,
                 'expires_at' => $input['expires_at'] ?? '',
                 'read_by' => []
             ];
@@ -325,7 +325,7 @@ try {
                 'notification_id' => $notification_id,
                 'type' => $notification['type'],
                 'recipient_type' => $notification['recipient_type'],
-                'created_by' => $user->email
+                'created_by' => $user->sub
             ]);
 
             echo json_encode([
