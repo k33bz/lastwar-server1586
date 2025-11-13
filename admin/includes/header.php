@@ -57,7 +57,7 @@ require_once __DIR__ . '/email_utils.php';
 
 // Include and initialize CSP (Content Security Policy)
 require_once __DIR__ . '/csp.php';
-$csp_nonce = init_csp(); // Initialize CSP and get nonce for inline scripts/styles
+$csp_nonce = init_csp(true); // Initialize CSP in report-only mode (monitors but doesn't block)
 
 // Get current page for navigation highlighting
 $current_page = basename($_SERVER['PHP_SELF']);
