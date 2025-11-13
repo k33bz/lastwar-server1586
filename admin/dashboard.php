@@ -682,6 +682,20 @@ try {
                         </a>
                     </div>
                 </div>
+
+                <div class="section-card system">
+                    <div class="card-header">
+                        <h3>🔄 Migration History</h3>
+                        <span class="card-badge system">Version</span>
+                    </div>
+                    <p>Track system version changes, migrations, and backups</p>
+                    <div class="action-buttons">
+                        <a href="migration_history.php" class="btn btn-primary">
+                            <span class="btn-icon">🔄</span>
+                            View History
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 

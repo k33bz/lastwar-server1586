@@ -9,9 +9,10 @@
       "css": "1.5.0"
     },
     "admin": {
-      "version": "3.7.0",
-      "php": "3.7.0",
+      "version": "3.8.0",
+      "php": "3.8.0",
       "migration_system": "1.0.0",
+      "migration_tracking": "1.0.0",
       "user_management": "2.0.0",
       "discord_integration": "4.0.0"
     },
