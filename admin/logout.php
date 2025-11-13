@@ -35,5 +35,17 @@ if ($user_email) {
 
 // Redirect to login
 header('Location: login.php');
+
+// Fallback if header redirect fails
+echo '<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="0;url=login.php">
+    <title>Logging out...</title>
+</head>
+<body>
+    <p>Logging out... <a href="login.php">Click here if not redirected</a></p>
+</body>
+</html>';
 exit;
 ?>
