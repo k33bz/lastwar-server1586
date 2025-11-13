@@ -161,6 +161,89 @@ function get_recent_audit_logs($limit = 10) {
 }
 
 /**
+ * Get audit logs with filtering support
+ *
+ * @param array $filters Filters to apply (user, action)
+ * @param int $limit Number of logs to return
+ * @param int $offset Offset for pagination
+ * @return array Array of filtered log entries
+ */
+function get_audit_logs($filters = [], $limit = 100, $offset = 0) {
+    $audit_file = AUDIT_LOG_FILE;
+    $logs = [];
+
+    if (file_exists($audit_file)) {
+        $data = json_decode(file_get_contents($audit_file), true);
+        $raw_logs = $data['logs'] ?? [];
+
+        // Normalize log entries to handle inconsistent field names
+        foreach ($raw_logs as $log) {
+            $normalized_log = [
+                'id' => $log['id'] ?? 'unknown',
+                'timestamp' => $log['timestamp'] ?? 'unknown',
+                'action' => $log['action'] ?? 'unknown',
+                'user' => $log['user'] ?? $log['user_email'] ?? 'unknown',
+                'ip' => $log['ip'] ?? $log['ip_address'] ?? 'unknown',
+                'user_agent' => $log['user_agent'] ?? 'unknown',
+                'details' => $log['details'] ?? []
+            ];
+            $logs[] = $normalized_log;
+        }
+
+        // Apply filters
+        if (!empty($filters['user'])) {
+            $logs = array_filter($logs, function($log) use ($filters) {
+                return stripos($log['user'], $filters['user']) !== false;
+            });
+        }
+
+        if (!empty($filters['action'])) {
+            $logs = array_filter($logs, function($log) use ($filters) {
+                return $log['action'] === $filters['action'];
+            });
+        }
+
+        // Sort by timestamp (newest first)
+        usort($logs, function($a, $b) {
+            return strtotime($b['timestamp']) - strtotime($a['timestamp']);
+        });
+
+        // Apply limit and offset
+        $logs = array_slice($logs, $offset, $limit);
+    }
+
+    return $logs;
+}
+
+/**
+ * Get user display name from email
+ *
+ * @param string $email User email
+ * @return string Display name or email if not found
+ */
+function get_user_display_name($email) {
+    try {
+        $users_file = __DIR__ . '/users.json';
+        if (!file_exists($users_file)) {
+            return $email;
+        }
+
+        $data = json_decode(file_get_contents($users_file), true);
+        $users = $data['users'] ?? [];
+
+        foreach ($users as $user) {
+            if ($user['email'] === $email) {
+                return $user['name'] ?? $email;
+            }
+        }
+
+        return $email;
+    } catch (Exception $e) {
+        return $email;
+    }
+}
+
+/**
  * Get alliance backups with metadata
  *
  * @param int $limit Number of backups to return
