@@ -41,6 +41,22 @@ if (file_exists($alliances_file)) {
     $alliances = $alliances_data ?? [];
 }
 
+// Helper function to extract alliances from per-server format (v3.8.0+)
+function get_user_alliances($user, $server = '1586') {
+    // New format (v3.8.0+): servers > 1586 > alliances
+    if (isset($user['servers'][$server]['alliances'])) {
+        return $user['servers'][$server]['alliances'];
+    }
+
+    // Old format (pre-v3.8.0): flat alliances array
+    if (isset($user['alliances'])) {
+        return $user['alliances'];
+    }
+
+    // No alliances found
+    return [];
+}
+
 // Function to check if user has active JWT token
 function isUserTokenActive($email) {
     // Use the JWT system's built-in active session tracking
@@ -613,10 +629,12 @@ function sortRolesByHierarchy($roles) {
                         </td>
                         <td>
                             <div class="alliance-tags">
-                                <?php if (in_array('*', $user['alliances'])): ?>
+                                <?php
+                                $user_alliances = get_user_alliances($user);
+                                if (in_array('*', $user_alliances)): ?>
                                     <span class="alliance-tag alliance-all">ALL</span>
                                 <?php else: ?>
-                                    <?php foreach ($user['alliances'] as $alliance_tag): ?>
+                                    <?php foreach ($user_alliances as $alliance_tag): ?>
                                         <span class="alliance-tag"><?php echo htmlspecialchars($alliance_tag); ?></span>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
@@ -1004,14 +1022,23 @@ function openEditModal(email) {
         if (checkbox) checkbox.checked = true;
     });
 
-    // Handle alliances
-    const hasAllAlliances = user.alliances.includes('*');
+    // Handle alliances - extract from per-server format (v3.8.0+)
+    let userAlliances = [];
+    if (user.servers && user.servers['1586'] && user.servers['1586'].alliances) {
+        // New format: servers > 1586 > alliances
+        userAlliances = user.servers['1586'].alliances;
+    } else if (user.alliances) {
+        // Old format: flat alliances array
+        userAlliances = user.alliances;
+    }
+
+    const hasAllAlliances = userAlliances.includes('*');
     document.getElementById('editAllianceAll').checked = hasAllAlliances;
 
     // Set individual alliance checkboxes
     const allianceCheckboxes = document.querySelectorAll('input[name="alliances[]"]');
     allianceCheckboxes.forEach(cb => {
-        cb.checked = user.alliances.includes(cb.value);
+        cb.checked = userAlliances.includes(cb.value);
         cb.disabled = hasAllAlliances;
     });
 

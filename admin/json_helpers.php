@@ -255,14 +255,17 @@ function update_user($email, $alliances, $role, $powereditor = false) {
 /**
  * Add user to users.json with multi-role support
  *
+ * NOTE: As of v3.8.0, uses per-server permission structure
+ *
  * @param string $email User email
- * @param array $alliances Alliance tags user can access
+ * @param array $alliances Alliance tags user can access (for default server 1586)
  * @param array $roles Array of roles (e.g., ['r5', 'ape'])
+ * @param string $server Server ID (defaults to '1586')
  * @return bool Success status
  */
-function add_user_multi_role($email, $alliances, $roles) {
+function add_user_multi_role($email, $alliances, $roles, $server = '1586') {
     try {
-        return update_json_file(USERS_FILE, function(&$data) use ($email, $alliances, $roles) {
+        return update_json_file(USERS_FILE, function(&$data) use ($email, $alliances, $roles, $server) {
             $email = strtolower(trim($email));
 
             // Check if user already exists
@@ -272,11 +275,30 @@ function add_user_multi_role($email, $alliances, $roles) {
                 }
             }
 
-            // Add new user with roles array
+            // Determine primary role (first non-ape role, or 'none' if only ape)
+            $primary_role = 'none';
+            $has_ape = in_array('ape', $roles);
+            foreach ($roles as $role) {
+                if ($role !== 'ape' && $role !== 'none') {
+                    $primary_role = $role;
+                    break;
+                }
+            }
+
+            // Build per-server structure (v3.8.0+)
+            $servers = [
+                $server => [
+                    'alliances' => $alliances,
+                    'ape' => $has_ape
+                ]
+            ];
+
+            // Add new user with per-server permissions
             $data['users'][] = [
                 'email' => $email,
-                'alliances' => $alliances,
-                'roles' => $roles
+                'role' => $primary_role, // For backwards compatibility
+                'roles' => $roles,       // For multi-role support
+                'servers' => $servers    // Per-server permissions (v3.8.0+)
             ];
 
             return true;
@@ -290,24 +312,47 @@ function add_user_multi_role($email, $alliances, $roles) {
 /**
  * Update user in users.json with multi-role support
  *
+ * NOTE: As of v3.8.0, uses per-server permission structure
+ *
  * @param string $email User email
- * @param array $alliances New alliance tags
+ * @param array $alliances New alliance tags (for default server 1586)
  * @param array $roles Array of roles (e.g., ['r5', 'ape'])
+ * @param string $server Server ID (defaults to '1586')
  * @return bool Success status
  */
-function update_user_multi_role($email, $alliances, $roles) {
+function update_user_multi_role($email, $alliances, $roles, $server = '1586') {
     try {
-        return update_json_file(USERS_FILE, function(&$data) use ($email, $alliances, $roles) {
+        return update_json_file(USERS_FILE, function(&$data) use ($email, $alliances, $roles, $server) {
             $email = strtolower(trim($email));
             $found = false;
 
             foreach ($data['users'] as &$user) {
                 if (strtolower($user['email']) === $email) {
-                    $user['alliances'] = $alliances;
+                    // Determine primary role
+                    $primary_role = 'none';
+                    $has_ape = in_array('ape', $roles);
+                    foreach ($roles as $role) {
+                        if ($role !== 'ape' && $role !== 'none') {
+                            $primary_role = $role;
+                            break;
+                        }
+                    }
+
+                    // Update roles
+                    $user['role'] = $primary_role; // For backwards compatibility
                     $user['roles'] = $roles;
 
+                    // Update per-server permissions (v3.8.0+)
+                    if (!isset($user['servers'])) {
+                        $user['servers'] = [];
+                    }
+                    $user['servers'][$server] = [
+                        'alliances' => $alliances,
+                        'ape' => $has_ape
+                    ];
+
                     // Remove old format fields if they exist
-                    unset($user['role']);
+                    unset($user['alliances']);
                     unset($user['powereditor']);
 
                     $found = true;
