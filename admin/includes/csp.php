@@ -72,12 +72,14 @@ function apply_csp_headers(string $nonce, bool $report_only = false): void {
         // Default source: only allow from same origin
         "default-src 'self'",
 
-        // Scripts: self + nonce for inline scripts
+        // Scripts: self + nonce for inline scripts + unsafe-hashes for event handlers
         // 'unsafe-inline' is fallback for browsers that don't support nonces
-        "script-src 'self' 'nonce-{$nonce}' 'unsafe-inline'",
+        // 'unsafe-hashes' allows inline event handlers (onclick, etc.)
+        "script-src 'self' 'nonce-{$nonce}' 'unsafe-inline' 'unsafe-hashes'",
 
-        // Styles: self + nonce for inline styles
-        "style-src 'self' 'nonce-{$nonce}' 'unsafe-inline'",
+        // Styles: self + nonce for inline styles + unsafe-hashes for style attributes
+        // 'unsafe-hashes' allows inline style attributes
+        "style-src 'self' 'nonce-{$nonce}' 'unsafe-inline' 'unsafe-hashes'",
 
         // Images: self + data URIs (for base64 images)
         "img-src 'self' data:",
