@@ -204,9 +204,13 @@ include 'includes/header.php';
 
                 // Rotating pool
                 const poolList = document.getElementById('rotatingPool');
-                poolList.innerHTML = data.rotating_pool_tags.map(tag =>
-                    `<span class="pool-tag">${tag}</span>`
-                ).join('');
+                if (Array.isArray(data.rotating_pool_tags) && data.rotating_pool_tags.length > 0) {
+                    poolList.innerHTML = data.rotating_pool_tags.map(tag =>
+                        `<span class="pool-tag">${tag}</span>`
+                    ).join('');
+                } else {
+                    poolList.innerHTML = '<span style="color: #999;">No rotating pool data</span>';
+                }
 
                 statusLoading.classList.remove('active');
                 statusContent.style.display = 'block';
