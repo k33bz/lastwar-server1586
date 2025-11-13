@@ -222,7 +222,6 @@ export function PowerTrendsEnhanced() {
 
       // Check distance from cursor to each data point
       activeElements.forEach((element) => {
-        const dataset = chart.data.datasets[element.datasetIndex];
         const meta = chart.getDatasetMeta(element.datasetIndex);
         const point = meta.data[element.index];
 
