@@ -112,21 +112,21 @@ export function SignatureStatus() {
   // Calculate signature statistics (only count current version as "signed")
   const totalAlliances = signatureData.alliances.length;
   const currentVersionAlliances = signatureData.alliances.filter(alliance => {
-    const currentR5 = alliance.r5History.find(r5 => r5.current);
+    const currentR5 = alliance.r5History?.find(r5 => r5.current);
     const latestSignature = currentR5?.signatures[currentR5.signatures.length - 1];
     return latestSignature && latestSignature.version === currentVersion;
   });
   const signedCount = currentVersionAlliances.length;
 
   const outdatedAlliances = signatureData.alliances.filter(alliance => {
-    const currentR5 = alliance.r5History.find(r5 => r5.current);
+    const currentR5 = alliance.r5History?.find(r5 => r5.current);
     const latestSignature = currentR5?.signatures[currentR5.signatures.length - 1];
     return latestSignature && latestSignature.version !== currentVersion;
   });
   const outdatedCount = outdatedAlliances.length;
 
   const unsignedAlliances = signatureData.alliances.filter(alliance => {
-    const currentR5 = alliance.r5History.find(r5 => r5.current);
+    const currentR5 = alliance.r5History?.find(r5 => r5.current);
     return !currentR5 || currentR5.signatures.length === 0;
   });
   const unsignedCount = unsignedAlliances.length;
@@ -176,7 +176,7 @@ export function SignatureStatus() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {signatureData.alliances.map((alliance) => {
-              const currentR5 = alliance.r5History.find(r5 => r5.current);
+              const currentR5 = alliance.r5History?.find(r5 => r5.current);
               const latestSignature = currentR5?.signatures[currentR5.signatures.length - 1];
               const colorScheme = getVersionColor(latestSignature?.version || null);
 
