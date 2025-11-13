@@ -56,3 +56,7 @@ Options -Indexes
     # Block access to git files
     RewriteRule ^\.git - [F,L]
 </IfModule>
+
+# Custom Error Pages
+ErrorDocument 404 /admin/error_404.php
+ErrorDocument 403 /admin/error_404.php
