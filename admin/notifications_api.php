@@ -20,7 +20,7 @@ ini_set('log_errors', '1');
 header('Content-Type: application/json');
 
 require_once __DIR__ . '/jwt.php';
-require_once __DIR__ . '/audit_log.php';
+require_once __DIR__ . '/audit_logger.php';
 
 // Require valid JWT session
 $user = require_jwt_session_api();
