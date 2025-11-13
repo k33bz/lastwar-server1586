@@ -22,14 +22,18 @@ validate_method('GET');
 $data_file = __DIR__ . '/../data/signature-history.json';
 
 // Read signature history
-$signatures = read_json_safe($data_file);
+$signature_data = read_json_safe($data_file);
 
-if ($signatures === null) {
+if ($signature_data === null) {
     api_error('Failed to load signature history', 500);
 }
 
-// Filter by server (multi-server support v3.8.0+)
-$signatures = filter_by_server($signatures);
+// Filter alliances by server (multi-server support v3.8.0+)
+// Note: signature-history.json has structure: { currentRulesVersion, lastUpdated, alliances: [...] }
+// We need to filter only the alliances array, not the whole object
+if (isset($signature_data['alliances']) && is_array($signature_data['alliances'])) {
+    $signature_data['alliances'] = filter_by_server($signature_data['alliances']);
+}
 
 // Return with caching
-api_success_with_etag($signatures, 60);
+api_success_with_etag($signature_data, 60);
