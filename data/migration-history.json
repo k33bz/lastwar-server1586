@@ -1,0 +1,59 @@
+{
+  "currentVersion": "3.8.0",
+  "migrations": [
+    {
+      "version": "3.0.0",
+      "timestamp": "2025-10-01T00:00:00Z",
+      "type": "initial",
+      "description": "Initial system setup",
+      "changes": [
+        "Initialized alliance tracking system",
+        "Created admin panel",
+        "Set up JWT authentication"
+      ],
+      "backupTaken": false,
+      "backupPath": null,
+      "performedBy": "system",
+      "status": "completed"
+    },
+    {
+      "version": "3.7.0",
+      "timestamp": "2025-10-15T00:00:00Z",
+      "type": "feature",
+      "description": "Council rotation and governance features",
+      "changes": [
+        "Added council rotation schedule system",
+        "Implemented Discord vote management",
+        "Added signature tracking for NAP15 rules"
+      ],
+      "backupTaken": false,
+      "backupPath": null,
+      "performedBy": "admin",
+      "status": "completed"
+    },
+    {
+      "version": "3.8.0",
+      "timestamp": "2025-11-13T00:00:00Z",
+      "type": "major",
+      "description": "Multi-server support implementation",
+      "changes": [
+        "Migrated all data files to multi-server format",
+        "Updated all API endpoints for multi-server support",
+        "Added server parameter to React client",
+        "Updated admin APIs for multi-server access"
+      ],
+      "backupTaken": false,
+      "backupPath": null,
+      "performedBy": "admin",
+      "status": "completed",
+      "notes": "WARNING: No backup was taken before this migration. Future migrations must include pre-migration backups."
+    }
+  ],
+  "pendingMigrations": [],
+  "lastBackup": null,
+  "backupPolicy": {
+    "requireBackupBeforeMigration": true,
+    "retentionDays": 30,
+    "autoBackupEnabled": true
+  }
+}
