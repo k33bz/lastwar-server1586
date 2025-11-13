@@ -78,117 +78,102 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [3.8.0] - 2025-11-09
+## [3.8.0] - 2025-11-13
 
-**Release Focus:** Dashboard Enhancements, Metrics, and User Experience
+**Release Focus:** Multi-Server Support Infrastructure & Migration Tracking
 
 ### Added
-- **President Tab Navigation**
-  - New dedicated tab for president operations
-  - Voting management access
-  - Council rotation schedule access
-  - Visible to admins and presidents
-  - Keyboard shortcut: Press 5
+- **Multi-Server Support Infrastructure (v1.0.0)**
+  - Simple data-layer approach with 'server' field tagging
+  - Server field added to alliances, votes, notifications, and other data files
+  - User permissions converted to per-server structure
+  - APIs filter data by `?server=` parameter
+  - Admin panel displays all servers with `[1586] [TAG]` prefix format
+  - Public sites deploy separately with `SERVER_ID` environment variable
+  - Single admin panel serves all servers
+  - Database schema upgraded to v4
+  - Migration: 3.8.0 (`admin/migrate.php` - `migrateToV3_8()`)
+  - Deployment model: Separate public sites per server, unified admin panel
+  - Data isolation via server parameter filtering at query time
+  - Complete implementation guide: `MULTI_SERVER_MIGRATION.md`
 
-- **CloudWatch-Style Metrics Dashboard**
-  - System metrics monitoring with Chart.js visualization
-  - Discord messages tracking (announcements, scheduled, recurring)
-  - Login attempts monitoring (successful vs failed)
-  - Data operations tracking (creates, updates, deletes)
-  - User activity breakdown by role (admin, R5, R4)
-  - Backup operations monitoring (manual, auto, restores)
-  - Top 10 actions display
-  - Time range selector: 1h, 24h, 7d, 30d, 90d
-  - Auto-refresh every 60 seconds
-  - Responsive grid layout with dark mode support
+- **Migration History Tracking System (v1.0.0)**
+  - Migration history viewer at `admin/migration_history.php`
+  - Complete migration timeline with visual indicators
+  - Color-coded migration types (major, feature, minor, initial)
+  - Backup status tracking for each migration
+  - System information display (PHP version, directory permissions)
+  - Manual backup creation with file manifest
+  - API endpoints via `admin/migration_history_api.php`:
+    - `get_history` - Complete migration history
+    - `get_current` - Current system version
+    - `create_backup` - Manual backup before migrations
+    - `add_migration` - Record completed migrations
+  - Backup policy enforcement (requires backup before migration)
+  - 30-day backup retention policy
+  - Migration history JSON database at `data/migration-history.json`
+  - Added migration history card to dashboard System & Tools tab
 
-- **Enhanced MFA Management Page**
-  - Comprehensive MFA information and setup instructions
-  - "What is MFA?" educational content
-  - Recommended authenticator apps list
-  - Security best practices section
-  - MFA adoption statistics dashboard
-  - User MFA status table showing:
-    - Enable/disable status with color-coded badges
-    - Last used timestamps (relative time)
-    - Backup codes remaining count with warnings
-    - Enable dates
-  - Best practices cards for admins
-
-- **Discord Channel Management System**
-  - Centralized channel configuration interface
-  - Unified view of alliance and global channels
-  - Multi-dimensional filtering (alliance, type, source, status, search)
-  - Live webhook testing functionality
-  - Toggle enable/disable for channels
-  - Full channel editing with validation
-  - Card-based responsive UI
-  - Real-time filtering without page reloads
-  - Role-based access control (R4/R5 see their alliances, admins see all)
-
-- **Dark Mode Toggle**
-  - Light/dark theme switching with sun/moon icon
-  - CSS custom properties for theme-aware colors
-  - Smooth transitions between themes (0.3s ease)
-  - localStorage persistence across page reloads
-  - Keyboard shortcut: Press 'T' to toggle
-  - Prepared for server-side preference sync
-  - All components theme-aware (tabs, cards, sections)
-
-- **Keyboard Shortcuts**
-  - Number keys 1-6: Switch between dashboard tabs
-  - Key 'T': Toggle dark/light theme
-  - Shortcuts disabled in input fields (no interference)
-  - Visual feedback with tab activation animations
-
-### Changed
-- **Dashboard Footer Cleanup**
-  - Removed "Quick Actions" section from Overview tab
-  - Cleaner, less cluttered layout
-  - Reduced redundancy (actions available in tabs)
-
-- **Security Tab Icon**
-  - Changed from 👑 (crown) to 🛡️ (shield)
-  - More appropriate for security functions
+- **Dashboard Reorganization**
+  - Renamed "President" tab to "Governance" with Discord Governance section
+  - Renamed "Security" tab to "Admin & Security" with separated admin/security sections
+  - Renamed "System" tab to "System & Tools" with de-emphasized dev tools
+  - Moved magic link management to Admin & Security tab
+  - Added migration history to System & Tools section
+  - Clearer conceptual boundaries for all functionality
 
 ### Fixed
-- **Backup Detection**
-  - Corrected glob pattern from `/alliances_*.json` to `/*.json`
-  - Dashboard now correctly displays recent backup timestamps
-  - Backup status indicators (recent/ok/old) work properly
-  - Fixes "Never" showing when backups exist
+- **SignatureStatus Component** (`client/src/components/SignatureStatus.tsx`)
+  - Added optional chaining for `r5History` access (lines 115, 122, 129, 179)
+  - Prevents "can't access property 'find'" errors
+  - Handles alliances without r5History field gracefully
+
+- **Missing ORCE Logo**
+  - Created placeholder logo at `client/public/images/discord-logos/ORCE.png`
+  - 512x512 purple background with white "ORCE" text
+  - Resolves 404 error for top 5 permanent council member
+
+### Changed
+- **Version Updates**
+  - Admin version: 3.7.0 → 3.8.0
+  - Admin PHP version: 3.7.0 → 3.8.0
+  - Added `migration_tracking` component v1.0.0
+  - Release date: 2025-11-13
+
+### Migration
+- **v3.7.0 to v3.8.0 Migration** (Schema v3 → v4)
+  - WARNING: No backup taken before this migration
+  - Migrated all data files to multi-server format
+  - Updated all API endpoints for multi-server support
+  - Added server parameter to React client
+  - Updated admin APIs for multi-server access
+  - Future migrations MUST include pre-migration backups
+
+### Known Issues
+- **Council Rotation JSON Parse Error**
+  - Admin panel `council_rotation_api.php` may need multi-server format updates
+  - Public API endpoint (`/api/rotation-schedule.php`) works correctly
+  - Needs investigation for multi-server compatibility
 
 ### Technical
 - **New Files Created:**
-  - `admin/metrics_api.php` - Metrics data aggregation from audit logs
-  - `admin/metrics_dashboard.php` - Metrics visualization dashboard
-  - `admin/security_mfa_manage.php` - Enhanced MFA management interface
-  - `admin/discord_channels_api.php` - Channel management REST API
-  - `admin/discord_channels.php` - Channel management UI
+  - `data/migration-history.json` - Migration tracking database
+  - `admin/migration_history_api.php` - Migration history API (267 lines)
+  - `admin/migration_history.php` - Migration history UI (600+ lines)
+  - `MULTI_SERVER_MIGRATION.md` - Complete multi-server implementation guide
 
-- **API Endpoints Added:**
-  - `metrics_api.php?action=discord_messages` - Discord message metrics
-  - `metrics_api.php?action=login_attempts` - Login attempt tracking
-  - `metrics_api.php?action=data_operations` - CRUD operation stats
-  - `metrics_api.php?action=user_activity` - User activity by role
-  - `metrics_api.php?action=backups` - Backup operation tracking
-  - `metrics_api.php?action=summary` - Overall statistics
-  - `discord_channels_api.php?action=list` - Get all channels
-  - `discord_channels_api.php?action=test_webhook` - Test Discord webhook
-  - `discord_channels_api.php?action=update_channel` - Update channel properties
-  - `discord_channels_api.php?action=toggle` - Enable/disable channels
+- **Modified Files:**
+  - `admin/dashboard.php` - Tab reorganization + migration history card
+  - `admin/migrate.php` - Added `migrateToV3_8()` for multi-server schema
+  - `data/version.json` - Updated to v3.8.0 with new components
+  - `client/src/components/SignatureStatus.tsx` - Optional chaining fixes
+  - `client/public/images/discord-logos/ORCE.png` - Created placeholder logo
 
-- **Theme System:**
-  - CSS variables for all colors (light/dark variants)
-  - Body class: `dark-theme` when dark mode active
-  - localStorage key: `dashboardTheme` (light|dark)
-  - Glassmorphism effects adapt to theme
-
-- **User Preferences Architecture:**
-  - Recommendation: Extend users.json with preferences field
-  - Simple implementation for <50KB per user
-  - Easy backup/restore (all in one file)
-  - Atomic read/write operations
+- **Database Schema:**
+  - Schema version: v3 → v4
+  - All data files tagged with 'server' field
+  - User permissions now per-server structure
+  - Backward compatible with single-server deployments
 
 ---
 
