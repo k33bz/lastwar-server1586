@@ -150,6 +150,7 @@ include 'includes/header.php';
 </div>
 
 <script src="includes/chart.umd.min.js"></script>
+<script src="includes/chartjs-adapter-date-fns.bundle.min.js"></script>
 <script>
 // Chart.js configuration
 Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
