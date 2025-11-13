@@ -1065,7 +1065,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 countdownEl.style.color = '#ff6b6b';
                 // Auto-redirect to login after a short delay
                 setTimeout(() => {
-                    window.location.href = '../logout.php';
+                    window.location.href = 'logout.php';
                 }, 2000);
                 return;
             }
@@ -1527,7 +1527,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     endforeach;
                     ?>
                 </span>
-                <a href="../logout.php" class="logout-btn">
+                <a href="logout.php" class="logout-btn">
                     Logout <span class="token-countdown" id="token-countdown"></span>
                 </a>
             </div>
