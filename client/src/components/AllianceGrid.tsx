@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, Avatar, Chip } from '@heroui/react';
 import { AllianceDetailModal } from './AllianceDetailModal';
 import type { Alliance } from '../types';
@@ -8,6 +9,7 @@ interface AllianceGridProps {
 }
 
 export function AllianceGrid({ alliances }: AllianceGridProps) {
+  const { t } = useTranslation('public');
   const [selectedAlliance, setSelectedAlliance] = useState<{ alliance: Alliance; rank: number } | null>(null);
   // Sort by power and skip top 3
   const rankedAlliances = [...alliances]
@@ -27,7 +29,7 @@ export function AllianceGrid({ alliances }: AllianceGridProps) {
   return (
     <>
       <section className="mb-12">
-        <h2 className="text-3xl font-bold text-center mb-8">NAP15 Alliances</h2>
+        <h2 className="text-3xl font-bold text-center mb-8">{t('alliances.title')}</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {rankedAlliances.map((alliance, index) => {
@@ -68,12 +70,12 @@ export function AllianceGrid({ alliances }: AllianceGridProps) {
 
               <Card.Content className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm opacity-60">Power:</span>
+                  <span className="text-sm opacity-60">{t('alliances.power')}:</span>
                   <span className="font-bold">{formatPower(alliance.power)}</span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-sm opacity-60">R5:</span>
+                  <span className="text-sm opacity-60">{t('alliances.r5')}:</span>
                   <span className="text-sm font-semibold truncate max-w-[60%]">
                     {alliance.r5.name}
                   </span>
@@ -82,7 +84,7 @@ export function AllianceGrid({ alliances }: AllianceGridProps) {
                 <div className="flex flex-wrap gap-2 mt-3">
                   {alliance.signed && (
                     <Chip color="success" size="sm">
-                      Signed
+                      {t('alliances.signed')}
                     </Chip>
                   )}
                   {alliance.crossServer?.hasPartner && (

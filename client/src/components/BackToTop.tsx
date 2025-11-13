@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@heroui/react';
 
 export function BackToTop() {
+  const { t } = useTranslation('common');
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export function BackToTop() {
           onPress={scrollToTop}
           variant="primary"
           className="fixed bottom-8 right-8 z-50 shadow-lg"
-          aria-label="Back to top"
+          aria-label={t('common.backToTop')}
         >
           <svg
             className="w-5 h-5"
@@ -50,7 +52,7 @@ export function BackToTop() {
               d="M5 10l7-7m0 0l7 7m-7-7v18"
             />
           </svg>
-          Top
+          {t('common.backToTop')}
         </Button>
       )}
     </>
