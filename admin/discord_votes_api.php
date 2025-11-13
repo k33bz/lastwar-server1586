@@ -28,6 +28,7 @@
 require_once 'jwt.php';
 require_once 'audit_logger.php';
 require_once 'json_helpers.php';
+require_once 'admin_api_helpers.php';
 
 // Require authentication
 $user = require_jwt_session_api();
@@ -462,6 +463,21 @@ function handleGetRequests($user) {
         $requests = array_values($requests); // Re-index
     }
 
+    // Optional server filtering (v3.8.0+)
+    $server_id = get_server_id_admin();
+    if ($server_id !== null) {
+        $requests = filter_by_server_admin($requests, $server_id);
+    }
+
+    // Add server prefixes for display (v3.8.0+)
+    $requests = array_map(function($req) {
+        if (isset($req['server'])) {
+            $req['server_label'] = "[{$req['server']}]";
+            $req['display_question'] = "[{$req['server']}] " . ($req['question'] ?? '');
+        }
+        return $req;
+    }, $requests);
+
     echo json_encode([
         'success' => true,
         'requests' => $requests
@@ -501,10 +517,26 @@ function handleGetVotes($user) {
 
     $votesFile = __DIR__ . '/../data/discord-votes.json';
     $data = json_read($votesFile);
+    $votes = $data['votes'] ?? [];
+
+    // Optional server filtering (v3.8.0+)
+    $server_id = get_server_id_admin();
+    if ($server_id !== null) {
+        $votes = filter_by_server_admin($votes, $server_id);
+    }
+
+    // Add server prefixes for display (v3.8.0+)
+    $votes = array_map(function($vote) {
+        if (isset($vote['server'])) {
+            $vote['server_label'] = "[{$vote['server']}]";
+            $vote['display_question'] = "[{$vote['server']}] " . ($vote['question'] ?? '');
+        }
+        return $vote;
+    }, $votes);
 
     echo json_encode([
         'success' => true,
-        'votes' => $data['votes'] ?? []
+        'votes' => $votes
     ]);
 }
 
