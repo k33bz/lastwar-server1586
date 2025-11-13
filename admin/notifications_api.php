@@ -21,6 +21,7 @@ header('Content-Type: application/json');
 
 require_once __DIR__ . '/jwt.php';
 require_once __DIR__ . '/audit_logger.php';
+require_once __DIR__ . '/admin_api_helpers.php';
 
 // Require valid JWT session
 $user = require_jwt_session_api();
@@ -54,11 +55,18 @@ function write_notifications($file, $data) {
 }
 
 // Helper function to check if notification is visible to user
-function is_notification_visible($notification, $user_email, $user_role) {
+function is_notification_visible($notification, $user_email, $user_role, $user) {
     // Check if expired
     if (isset($notification['expires_at']) && !empty($notification['expires_at'])) {
         $expires = strtotime($notification['expires_at']);
         if ($expires !== false && $expires < time()) {
+            return false;
+        }
+    }
+
+    // Check server access (v3.8.0+)
+    if (isset($notification['server'])) {
+        if (!user_has_server_access($user, $notification['server'])) {
             return false;
         }
     }
@@ -89,11 +97,11 @@ function is_notification_visible($notification, $user_email, $user_role) {
 }
 
 // Helper function to get user's unread notifications
-function get_user_notifications($data, $user_email, $user_role, $unread_only = false) {
+function get_user_notifications($data, $user_email, $user_role, $user, $unread_only = false) {
     $user_notifications = [];
 
     foreach ($data['notifications'] as $notification) {
-        if (!is_notification_visible($notification, $user_email, $user_role)) {
+        if (!is_notification_visible($notification, $user_email, $user_role, $user)) {
             continue;
         }
 
@@ -105,7 +113,15 @@ function get_user_notifications($data, $user_email, $user_role, $unread_only = f
             continue;
         }
 
-        $user_notifications[] = array_merge($notification, ['is_read' => $is_read]);
+        // Add server prefix for display (v3.8.0+)
+        $display_notification = $notification;
+        if (isset($notification['server'])) {
+            $server = $notification['server'];
+            $display_notification['server_label'] = "[$server]";
+            $display_notification['display_title'] = "[$server] " . ($notification['title'] ?? '');
+        }
+
+        $user_notifications[] = array_merge($display_notification, ['is_read' => $is_read]);
     }
 
     // Sort by priority (high > medium > low) then by created date (newest first)
@@ -131,7 +147,7 @@ try {
         // GET: Get unread notification count
         case 'get_unread_count':
             $data = read_notifications($notifications_file);
-            $notifications = get_user_notifications($data, $user->sub, $user->aud, true);
+            $notifications = get_user_notifications($data, $user->sub, $user->aud, $user, true);
 
             echo json_encode([
                 'success' => true,
@@ -147,7 +163,7 @@ try {
             $unread_only = isset($_GET['unread_only']) && $_GET['unread_only'] === 'true';
 
             $data = read_notifications($notifications_file);
-            $all_notifications = get_user_notifications($data, $user->sub, $user->aud, $unread_only);
+            $all_notifications = get_user_notifications($data, $user->sub, $user->aud, $user, $unread_only);
 
             // Paginate
             $total = count($all_notifications);

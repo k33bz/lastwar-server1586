@@ -24,6 +24,7 @@ try {
     require_once 'audit_logger.php';
     require_once 'json_helpers.php';
     require_once 'includes/csrf.php';
+    require_once 'admin_api_helpers.php';
 } catch (Throwable $e) {
     header('Content-Type: application/json');
     http_response_code(500);
@@ -74,16 +75,23 @@ function save_votes($file, $data) {
     return file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) !== false;
 }
 
-// Helper: Get all alliance tags
+// Helper: Get all alliance tags with server prefixes (v3.8.0+)
 function get_alliance_tags() {
     $alliances_file = __DIR__ . '/../data/alliances.json';
     if (!file_exists($alliances_file)) {
         return [];
     }
     $alliances = json_decode(file_get_contents($alliances_file), true) ?? [];
+
+    // No server filtering - show ALL servers (admin default behavior)
     $tags = [];
     foreach ($alliances as $alliance) {
-        $tags[] = $alliance['tag'];
+        $tag = $alliance['tag'];
+        // Add server prefix for display (v3.8.0+)
+        if (isset($alliance['server'])) {
+            $tag = add_server_prefix($tag, $alliance['server']);
+        }
+        $tags[] = $tag;
     }
     return $tags;
 }
@@ -128,6 +136,21 @@ function handle_list() {
     // Presidents and admins can view all details
 
     $votes = load_votes($votes_file);
+
+    // Optional server filtering (v3.8.0+)
+    $server_id = get_server_id_admin();
+    if ($server_id !== null) {
+        $votes = filter_by_server_admin($votes, $server_id);
+    }
+
+    // Add server prefixes for display (v3.8.0+)
+    $votes = array_map(function($vote) {
+        if (isset($vote['server'])) {
+            $vote['server_label'] = "[{$vote['server']}]";
+            $vote['display_topic'] = "[{$vote['server']}] " . ($vote['topic'] ?? '');
+        }
+        return $vote;
+    }, $votes);
 
     // Sort by vote_date descending (most recent first)
     usort($votes, function($a, $b) {
