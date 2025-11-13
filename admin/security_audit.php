@@ -12,6 +12,7 @@
 
 // Require JWT authentication
 require_once 'jwt.php';
+require_once 'json_helpers.php';
 
 $user = require_jwt_session();
 
