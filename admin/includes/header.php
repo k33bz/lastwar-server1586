@@ -1474,6 +1474,19 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <a href="security_backups.php" class="nav-link <?php echo $current_page === 'security_backups.php' ? 'active' : ''; ?>">Backups</a>
                     </div>
                 </div>
+
+                <!-- System Dropdown -->
+                <div class="nav-dropdown">
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['migrate.php', 'metrics_dashboard.php', 'changelog.php', 'notifications.php']) ? 'active' : ''; ?>">
+                        ⚙️ System
+                    </div>
+                    <div class="nav-dropdown-menu">
+                        <a href="migrate.php" class="nav-link <?php echo $current_page === 'migrate.php' ? 'active' : ''; ?>">Migration</a>
+                        <a href="metrics_dashboard.php" class="nav-link <?php echo $current_page === 'metrics_dashboard.php' ? 'active' : ''; ?>">Metrics</a>
+                        <a href="notifications.php" class="nav-link <?php echo $current_page === 'notifications.php' ? 'active' : ''; ?>">Notifications</a>
+                        <a href="changelog.php" class="nav-link <?php echo $current_page === 'changelog.php' ? 'active' : ''; ?>">Changelog</a>
+                    </div>
+                </div>
                 <?php endif; ?>
             </nav>
 
