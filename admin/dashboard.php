@@ -209,16 +209,16 @@ try {
         <?php endif; ?>
 
         <?php if (has_role($user, ['admin', 'president'])): ?>
-        <button class="tab-button" data-tab="president">
+        <button class="tab-button" data-tab="governance">
             <span class="tab-icon">👑</span>
-            <span class="tab-label">President</span>
+            <span class="tab-label">Governance</span>
         </button>
         <?php endif; ?>
 
         <?php if ($user->aud === 'admin'): ?>
-        <button class="tab-button" data-tab="security">
-            <span class="tab-icon">🛡️</span>
-            <span class="tab-label">Security</span>
+        <button class="tab-button" data-tab="admin">
+            <span class="tab-icon">🔐</span>
+            <span class="tab-label">Admin & Security</span>
             <?php if ($stats['security_status'] === 'critical' || $stats['security_status'] === 'warning'): ?>
             <span class="tab-badge warning">!</span>
             <?php endif; ?>
@@ -226,7 +226,7 @@ try {
 
         <button class="tab-button" data-tab="system">
             <span class="tab-icon">⚙️</span>
-            <span class="tab-label">System</span>
+            <span class="tab-label">System & Tools</span>
             <?php if ($stats['backup_status'] === 'old' || $stats['backup_status'] === 'none'): ?>
             <span class="tab-badge warning">!</span>
             <?php endif; ?>
@@ -461,14 +461,14 @@ try {
 <?php endif; ?>
 <!-- End Season 2 Tab -->
 
-<!-- President Tab -->
+<!-- Governance Tab -->
 <?php if (has_role($user, ['admin', 'president'])): ?>
-<div class="tab-content" id="president-tab">
+<div class="tab-content" id="governance-tab">
     <div class="main-sections">
         <div class="section-group">
             <h2 class="section-title">
                 <span class="section-icon">👑</span>
-                President Operations
+                Governance & Leadership
             </h2>
 
             <div class="section-cards-grid">
@@ -499,23 +499,46 @@ try {
                         </a>
                     </div>
                 </div>
+
+                <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED): ?>
+                <div class="section-card president">
+                    <div class="card-header">
+                        <h3>💬 Discord Governance</h3>
+                        <span class="card-badge discord">Discord</span>
+                    </div>
+                    <p>Council vote proposals and presidential approvals</p>
+                    <div class="action-buttons">
+                        <a href="discord_vote_proposals.php" class="btn btn-primary">
+                            <span class="btn-icon">📝</span>
+                            Vote Proposals
+                        </a>
+                        <?php if (has_role($user, ['admin', 'president'])): ?>
+                        <a href="president_vote_approvals.php" class="btn btn-secondary">
+                            <span class="btn-icon">✓</span>
+                            Approvals
+                        </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 <?php endif; ?>
-<!-- End President Tab -->
+<!-- End Governance Tab -->
 
-<!-- Security Tab (Admin Only) -->
+<!-- Admin & Security Tab (Admin Only) -->
 <?php if ($user->aud === 'admin'): ?>
-<div class="tab-content" id="security-tab">
+<div class="tab-content" id="admin-tab">
     <div class="main-sections">
+        <!-- Administration Section -->
         <div class="section-group">
             <h2 class="section-title">
-                <span class="section-icon">🛡️</span>
-                Administrative Control
+                <span class="section-icon">👥</span>
+                Administration
             </h2>
-            
+
             <div class="section-cards-grid">
                 <div class="section-card admin">
                     <div class="card-header">
@@ -534,27 +557,79 @@ try {
                         </a>
                     </div>
                 </div>
-                
+
+                <div class="section-card communication">
+                    <div class="card-header">
+                        <h3>📧 Access Management</h3>
+                        <span class="card-badge communication">Email</span>
+                    </div>
+                    <p>Email management and magic link generation for user access</p>
+                    <div class="action-buttons">
+                        <a href="send_magic_link.php" class="btn btn-primary">
+                            <span class="btn-icon">📧</span>
+                            Send Magic Link
+                        </a>
+                        <a href="generate_magic_link.php" class="btn btn-secondary">
+                            <span class="btn-icon">🔗</span>
+                            Generate Links
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Section -->
+        <div class="section-group">
+            <h2 class="section-title">
+                <span class="section-icon">🛡️</span>
+                Security & Monitoring
+            </h2>
+
+            <div class="section-cards-grid">
                 <div class="section-card security">
                     <div class="card-header">
-                        <h3>🛡️ Security & Monitoring</h3>
+                        <h3>📡 Security Monitor</h3>
                         <span class="card-badge security">Security</span>
                     </div>
-                    <p>Monitor system security, manage authentication, and audit logs</p>
+                    <p>Real-time security monitoring and threat detection</p>
                     <div class="action-buttons">
                         <a href="security_monitor.php" class="btn btn-primary">
                             <span class="btn-icon">📡</span>
-                            Monitor
+                            Security Monitor
                         </a>
-                        <a href="security_keys.php" class="btn btn-secondary">
+                    </div>
+                </div>
+
+                <div class="section-card security">
+                    <div class="card-header">
+                        <h3>🔑 Authentication</h3>
+                        <span class="card-badge security">Security</span>
+                    </div>
+                    <p>Manage JWT keys, MFA settings, and test tokens</p>
+                    <div class="action-buttons">
+                        <a href="security_keys.php" class="btn btn-primary">
                             <span class="btn-icon">🔑</span>
-                            JWT Keys
+                            JWT Key Rotation
                         </a>
                         <a href="security_mfa_manage.php" class="btn btn-secondary">
                             <span class="btn-icon">🔐</span>
-                            MFA
+                            MFA Management
                         </a>
-                        <a href="security_audit.php" class="btn btn-secondary">
+                        <a href="generate_test_token.php" class="btn btn-secondary">
+                            <span class="btn-icon">🎫</span>
+                            Test Tokens
+                        </a>
+                    </div>
+                </div>
+
+                <div class="section-card security">
+                    <div class="card-header">
+                        <h3>📋 Audit & Backup</h3>
+                        <span class="card-badge security">Security</span>
+                    </div>
+                    <p>Security audit logs and system backups</p>
+                    <div class="action-buttons">
+                        <a href="security_audit.php" class="btn btn-primary">
                             <span class="btn-icon">📋</span>
                             Audit Logs
                         </a>
@@ -568,24 +643,24 @@ try {
         </div>
     </div>
 </div>
-<!-- End Security Tab -->
+<!-- End Admin & Security Tab -->
 
-<!-- System Tab (Admin Only) -->
+<!-- System & Tools Tab (Admin Only) -->
 <div class="tab-content" id="system-tab">
     <div class="main-sections">
         <div class="section-group">
             <h2 class="section-title">
-                <span class="section-icon">⚙️</span>
-                System Administration
+                <span class="section-icon">📊</span>
+                System Monitoring
             </h2>
 
             <div class="section-cards-grid">
                 <div class="section-card metrics">
                     <div class="card-header">
-                        <h3>📊 System Metrics</h3>
+                        <h3>📈 Performance Metrics</h3>
                         <span class="card-badge monitoring">Monitoring</span>
                     </div>
-                    <p>CloudWatch-style metrics and performance monitoring</p>
+                    <p>CloudWatch-style metrics and performance monitoring dashboard</p>
                     <div class="action-buttons">
                         <a href="metrics_dashboard.php" class="btn btn-primary">
                             <span class="btn-icon">📈</span>
@@ -596,34 +671,49 @@ try {
 
                 <div class="section-card system">
                     <div class="card-header">
-                        <h3>⚙️ System Administration</h3>
+                        <h3>🔧 System Health</h3>
                         <span class="card-badge system">System</span>
                     </div>
-                    <p>System maintenance and testing utilities</p>
+                    <p>Check system dependencies and configuration status</p>
                     <div class="action-buttons">
                         <a href="test_dependencies.php" class="btn btn-primary">
                             <span class="btn-icon">🔧</span>
                             System Check
                         </a>
-                        <a href="generate_test_token.php" class="btn btn-secondary">
-                            <span class="btn-icon">🔑</span>
-                            Generate Test Token
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-group">
+            <h2 class="section-title">
+                <span class="section-icon">🧪</span>
+                Development & Testing
+            </h2>
+
+            <div class="section-cards-grid">
+                <div class="section-card development">
+                    <div class="card-header">
+                        <h3>🧪 API Testing</h3>
+                        <span class="card-badge dev">Dev</span>
+                    </div>
+                    <p>Test API endpoints and data integrity</p>
+                    <div class="action-buttons">
+                        <a href="test_alliances_api.php" class="btn btn-primary">
+                            <span class="btn-icon">🧪</span>
+                            Test Alliances API
                         </a>
                     </div>
                 </div>
 
                 <div class="section-card development">
                     <div class="card-header">
-                        <h3>🔧 Development Tools</h3>
+                        <h3>🔨 Maintenance Tools</h3>
                         <span class="card-badge dev">Dev</span>
                     </div>
-                    <p>Testing and development utilities</p>
+                    <p>Testing utilities and log maintenance</p>
                     <div class="action-buttons">
-                        <a href="test_alliances_api.php" class="btn btn-primary">
-                            <span class="btn-icon">🧪</span>
-                            Test API
-                        </a>
-                        <a href="test_audit_init.php" class="btn btn-secondary">
+                        <a href="test_audit_init.php" class="btn btn-primary">
                             <span class="btn-icon">🔍</span>
                             Test Audit
                         </a>
@@ -633,41 +723,26 @@ try {
                         </a>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <div class="section-group">
-            <h2 class="section-title">
-                <span class="section-icon">📧</span>
-                Communication & Access
-            </h2>
-            
-            <div class="section-card communication">
-                <div class="card-header">
-                    <h3>Magic Link Management</h3>
-                    <span class="card-badge communication">Email</span>
-                </div>
-                <p>Email management and magic link generation</p>
-                <div class="action-buttons">
-                    <a href="send_magic_link.php" class="btn btn-primary">
-                        <span class="btn-icon">📧</span>
-                        Send Magic Link
-                    </a>
-                    <a href="generate_magic_link.php" class="btn btn-secondary">
-                        <span class="btn-icon">🔗</span>
-                        Generate Links
-                    </a>
-                    <a href="callback.php" class="btn btn-secondary">
-                        <span class="btn-icon">🔄</span>
-                        OAuth Callback
-                    </a>
+
+                <div class="section-card development">
+                    <div class="card-header">
+                        <h3>🔄 OAuth Integration</h3>
+                        <span class="card-badge dev">Dev</span>
+                    </div>
+                    <p>OAuth callback handler for testing authentication flows</p>
+                    <div class="action-buttons">
+                        <a href="callback.php" class="btn btn-primary">
+                            <span class="btn-icon">🔄</span>
+                            OAuth Callback
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <?php endif; ?>
-<!-- End System Tab -->
+<!-- End System & Tools Tab -->
 
 <!-- R5 & R4 users see the same tab structure as admins (just with limited tabs) -->
 
