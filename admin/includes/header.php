@@ -1473,19 +1473,22 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </div>
                 </div>
 
-                <!-- Security Dropdown -->
+                <!-- Security Dropdown (Admin Only) -->
+                <?php if ($user->aud === 'admin'): ?>
                 <div class="nav-dropdown">
-                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['security_monitor.php', 'security_audit.php', 'audit_log_viewer.php', 'security_keys.php', 'security_mfa.php', 'security_backups.php']) ? 'active' : ''; ?>">
-                        Security
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['security_monitor.php', 'security_keys.php', 'security_mfa_manage.php', 'security_audit.php', 'security_backups.php', 'generate_test_token.php']) ? 'active' : ''; ?>">
+                        🔐 Security
                     </div>
                     <div class="nav-dropdown-menu">
-                        <a href="security_monitor.php" class="nav-link <?php echo $current_page === 'security_monitor.php' ? 'active' : ''; ?>">Monitor</a>
-                        <a href="security_audit.php" class="nav-link <?php echo $current_page === 'security_audit.php' || $current_page === 'audit_log_viewer.php' ? 'active' : ''; ?>">Audit Logs</a>
-                        <a href="security_keys.php" class="nav-link <?php echo $current_page === 'security_keys.php' ? 'active' : ''; ?>">JWT Keys</a>
-                        <a href="security_mfa.php" class="nav-link <?php echo $current_page === 'security_mfa.php' ? 'active' : ''; ?>">MFA</a>
+                        <a href="security_monitor.php" class="nav-link <?php echo $current_page === 'security_monitor.php' ? 'active' : ''; ?>">Security Monitor</a>
+                        <a href="security_keys.php" class="nav-link <?php echo $current_page === 'security_keys.php' ? 'active' : ''; ?>">JWT Key Rotation</a>
+                        <a href="security_mfa_manage.php" class="nav-link <?php echo $current_page === 'security_mfa_manage.php' ? 'active' : ''; ?>">MFA Management</a>
+                        <a href="security_audit.php" class="nav-link <?php echo $current_page === 'security_audit.php' ? 'active' : ''; ?>">Audit Logs</a>
                         <a href="security_backups.php" class="nav-link <?php echo $current_page === 'security_backups.php' ? 'active' : ''; ?>">Backups</a>
+                        <a href="generate_test_token.php" class="nav-link <?php echo $current_page === 'generate_test_token.php' ? 'active' : ''; ?>">Generate Test Token</a>
                     </div>
                 </div>
+                <?php endif; ?>
 
                 <!-- System Dropdown -->
                 <div class="nav-dropdown">
