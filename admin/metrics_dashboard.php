@@ -149,7 +149,7 @@ include 'includes/header.php';
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="includes/chart.umd.min.js"></script>
 <script>
 // Chart.js configuration
 Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
