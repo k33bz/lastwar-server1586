@@ -216,34 +216,6 @@ function get_audit_logs($filters = [], $limit = 100, $offset = 0) {
 }
 
 /**
- * Get user display name from email
- *
- * @param string $email User email
- * @return string Display name or email if not found
- */
-function get_user_display_name($email) {
-    try {
-        $users_file = __DIR__ . '/users.json';
-        if (!file_exists($users_file)) {
-            return $email;
-        }
-
-        $data = json_decode(file_get_contents($users_file), true);
-        $users = $data['users'] ?? [];
-
-        foreach ($users as $user) {
-            if ($user['email'] === $email) {
-                return $user['name'] ?? $email;
-            }
-        }
-
-        return $email;
-    } catch (Exception $e) {
-        return $email;
-    }
-}
-
-/**
  * Get alliance backups with metadata
  *
  * @param int $limit Number of backups to return
