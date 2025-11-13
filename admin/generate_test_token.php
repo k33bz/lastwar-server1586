@@ -105,11 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 
+// Include breadcrumbs helper (needed before header for help functions)
+require_once 'includes/breadcrumbs.php';
+
 // Include shared header
 include 'includes/header.php';
-
-// Include breadcrumbs helper
-require_once 'includes/breadcrumbs.php';
 ?>
 
 <?php echo render_breadcrumbs(); ?>

@@ -1126,6 +1126,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
         let notificationsLoaded = false;
 
         function initNotificationSystem() {
+            // Check if notification bell exists (not all pages have it)
+            const notificationBell = document.getElementById('notification-bell');
+            if (!notificationBell) {
+                return; // Exit if notification system not present on this page
+            }
+
             // Fetch initial unread count
             updateNotificationCount();
 
@@ -1133,10 +1139,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
             setInterval(updateNotificationCount, 60000);
 
             // Toggle dropdown on bell click
-            document.getElementById('notification-bell').addEventListener('click', toggleNotificationDropdown);
+            notificationBell.addEventListener('click', toggleNotificationDropdown);
 
             // Mark all read button
-            document.getElementById('mark-all-read-btn').addEventListener('click', markAllNotificationsRead);
+            const markAllBtn = document.getElementById('mark-all-read-btn');
+            if (markAllBtn) {
+                markAllBtn.addEventListener('click', markAllNotificationsRead);
+            }
 
             // Close dropdown when clicking outside
             document.addEventListener('click', function(e) {
@@ -1166,13 +1175,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     const badge = document.getElementById('notification-badge');
                     const markAllBtn = document.getElementById('mark-all-read-btn');
 
-                    if (data.count > 0) {
-                        badge.textContent = data.count > 9 ? '9+' : data.count;
-                        badge.style.display = 'block';
-                        if (markAllBtn) markAllBtn.style.display = 'block';
-                    } else {
-                        badge.style.display = 'none';
-                        if (markAllBtn) markAllBtn.style.display = 'none';
+                    // Only update if badge element exists
+                    if (badge) {
+                        if (data.count > 0) {
+                            badge.textContent = data.count > 9 ? '9+' : data.count;
+                            badge.style.display = 'block';
+                            if (markAllBtn) markAllBtn.style.display = 'block';
+                        } else {
+                            badge.style.display = 'none';
+                            if (markAllBtn) markAllBtn.style.display = 'none';
+                        }
                     }
                 }
             } catch (error) {
