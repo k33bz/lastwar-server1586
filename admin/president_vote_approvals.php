@@ -398,4 +398,11 @@ document.getElementById('rejectionModal').addEventListener('click', (e) => {
 });
 </script>
 
+<?php
+// Render help drawer
+require_once 'includes/help_drawer.php';
+$help_config = require 'includes/help_content/president_approvals_help.php';
+render_help_drawer($help_config);
+?>
+
 <?php include 'includes/footer.php'; ?>

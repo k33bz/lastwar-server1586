@@ -1244,4 +1244,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<?php
+// Render help drawer
+require_once 'includes/help_drawer.php';
+$token = $user; // Use the JWT token for role-aware content
+$help_config = require 'includes/help_content/alliance_edit_help.php';
+render_help_drawer($help_config);
+?>
+
 <?php include 'includes/footer.php'; ?>
