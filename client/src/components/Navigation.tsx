@@ -1,5 +1,7 @@
 import { Button, Link } from '@heroui/react';
+import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from './ThemeToggle';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface NavigationProps {
   isOpen: boolean;
@@ -7,16 +9,18 @@ interface NavigationProps {
 }
 
 export function Navigation({ isOpen, onClose }: NavigationProps) {
+  const { t } = useTranslation('common');
+
   const navLinks = [
-    { href: '#top', label: '🏠 Home' },
-    { href: '#podium', label: '🏆 Top 3 Alliances' },
-    { href: '#alliances', label: '⚔️ NAP15 Alliances' },
-    { href: '#council', label: '🗳️ Council Voting' },
-    { href: '/votes', label: '📝 Council Votes' },
-    { href: '#rules', label: '📜 Server Rules' },
-    { href: '#amendments', label: '📝 Amendments' },
-    { href: '#power-trends', label: '📊 Power Trends' },
-    { href: '#signatories', label: '✍️ Signatories' },
+    { href: '#top', icon: '🏠', label: t('navigation.home') },
+    { href: '#podium', icon: '🏆', label: t('navigation.topAlliances') },
+    { href: '#alliances', icon: '⚔️', label: t('navigation.alliances') },
+    { href: '#council', icon: '🗳️', label: t('navigation.council') },
+    { href: '/votes', icon: '📝', label: t('navigation.votes') },
+    { href: '#rules', icon: '📜', label: t('navigation.rules') },
+    { href: '#amendments', icon: '📝', label: t('navigation.amendments') },
+    { href: '#power-trends', icon: '📊', label: t('navigation.powerTrends') },
+    { href: '#signatories', icon: '✍️', label: t('navigation.signatories') },
   ];
 
   return (
@@ -39,13 +43,13 @@ export function Navigation({ isOpen, onClose }: NavigationProps) {
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-bold">Navigation</h3>
+          <h3 className="text-lg font-bold">{t('navigation.menu')}</h3>
           <Button
             variant="ghost"
             size="sm"
             isIconOnly
             onPress={onClose}
-            aria-label="Close menu"
+            aria-label={t('navigation.closeMenu')}
           >
             <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="18" y1="6" x2="6" y2="18"/>
@@ -60,10 +64,11 @@ export function Navigation({ isOpen, onClose }: NavigationProps) {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="flex items-center px-4 py-3 hover:bg-accent/10 transition-colors"
+                className="flex items-center gap-2 px-4 py-3 hover:bg-accent/10 transition-colors"
                 onPress={onClose}
               >
-                {link.label}
+                <span>{link.icon}</span>
+                <span>{link.label}</span>
               </Link>
             </li>
           ))}
@@ -72,10 +77,11 @@ export function Navigation({ isOpen, onClose }: NavigationProps) {
         {/* Footer */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700">
           <div className="flex flex-col gap-3">
+            <LanguageSwitcher />
             <ThemeToggle />
             <div className="text-center">
-              <p className="text-sm font-semibold">Server 1586</p>
-              <p className="text-xs opacity-60">v3.3.1</p>
+              <p className="text-sm font-semibold">{t('server.name')}</p>
+              <p className="text-xs opacity-60">{t('server.version', { version: '3.8.0' })}</p>
             </div>
           </div>
         </div>

@@ -1,0 +1,46 @@
+{
+  "navigation": {
+    "home": "홈",
+    "topAlliances": "상위 3개 동맹",
+    "alliances": "NAP15 동맹",
+    "council": "의회 투표",
+    "votes": "의회 투표 기록",
+    "rules": "서버 규칙",
+    "amendments": "규칙 수정",
+    "powerTrends": "파워 추세",
+    "signatories": "서명자",
+    "menu": "메뉴",
+    "closeMenu": "메뉴 닫기"
+  },
+  "server": {
+    "name": "서버 1586",
+    "version": "v{{version}}"
+  },
+  "theme": {
+    "light": "라이트 모드",
+    "dark": "다크 모드",
+    "toggle": "테마 전환"
+  },
+  "language": {
+    "select": "언어 선택",
+    "current": "현재 언어"
+  },
+  "common": {
+    "loading": "로딩 중...",
+    "error": "오류",
+    "success": "성공",
+    "close": "닫기",
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "편집",
+    "view": "보기",
+    "backToTop": "맨 위로",
+    "adminLogin": "관리자 로그인"
+  },
+  "errors": {
+    "loadingData": "데이터 로딩 오류",
+    "networkError": "네트워크 오류. 다시 시도해주세요.",
+    "notFound": "찾을 수 없음"
+  }
+}

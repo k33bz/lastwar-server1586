@@ -1,0 +1,46 @@
+{
+  "navigation": {
+    "home": "Home",
+    "topAlliances": "Top 3 Alliances",
+    "alliances": "NAP15 Alliances",
+    "council": "Council Voting",
+    "votes": "Council Votes",
+    "rules": "Server Rules",
+    "amendments": "Amendments",
+    "powerTrends": "Power Trends",
+    "signatories": "Signatories",
+    "menu": "Navigation",
+    "closeMenu": "Close menu"
+  },
+  "server": {
+    "name": "Server 1586",
+    "version": "v{{version}}"
+  },
+  "theme": {
+    "light": "Light Mode",
+    "dark": "Dark Mode",
+    "toggle": "Toggle theme"
+  },
+  "language": {
+    "select": "Select Language",
+    "current": "Current Language"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "backToTop": "Back to Top",
+    "adminLogin": "Admin Login"
+  },
+  "errors": {
+    "loadingData": "Error loading data",
+    "networkError": "Network error. Please try again.",
+    "notFound": "Not found"
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "header": {
+    "title": "Last War 서버 1586",
+    "subtitle": "동맹 순위 및 서버 규칙",
+    "discord": "Discord에 참여하기"
+  },
+  "podium": {
+    "title": "상위 3개 동맹",
+    "rank": "{{rank}}위",
+    "power": "파워 {{power}}",
+    "r5": "R5: {{name}}",
+    "signed": "NAP15 서명함",
+    "notSigned": "서명 안함"
+  },
+  "alliances": {
+    "title": "NAP15 동맹",
+    "rank": "순위",
+    "tag": "태그",
+    "name": "동맹 이름",
+    "power": "파워",
+    "r5": "R5",
+    "status": "상태",
+    "signed": "✅ 서명함",
+    "notSigned": "❌ 서명 안함",
+    "details": "상세 정보"
+  },
+  "allianceModal": {
+    "title": "동맹 상세 정보",
+    "tag": "태그",
+    "name": "이름",
+    "power": "총 파워",
+    "rank": "현재 순위",
+    "r5": "R5 리더",
+    "discord": "Discord 서버",
+    "founded": "설립일",
+    "motto": "모토",
+    "r4Officers": "R4 장교",
+    "napStatus": "NAP15 상태",
+    "signed": "서명함",
+    "notSigned": "서명 안함",
+    "visitDiscord": "Discord 방문",
+    "close": "닫기"
+  },
+  "council": {
+    "title": "의회 투표 멤버",
+    "subtitle": "5개 고정 의석 (상위 5개) + 2개 순환 의석 (6-15위)",
+    "permanent": "고정 멤버",
+    "rotating": "순환 멤버",
+    "currentWeek": "이번 주",
+    "nextRotation": "다음 교체",
+    "weekOf": "{{date}} 주",
+    "rotatesEvery": "매주 일요일 오후 10시 EDT에 교체"
+  },
+  "councilRotation": {
+    "title": "의회 순환 일정",
+    "week": "{{number}}주차",
+    "startDate": "시작: {{date}}",
+    "rotatingMembers": "순환 멤버",
+    "allWeeks": "모든 주",
+    "upcomingWeeks": "다가오는 주"
+  },
+  "rules": {
+    "title": "서버 규칙",
+    "version": "버전 {{version}}",
+    "lastUpdated": "마지막 업데이트: {{date}}",
+    "showChanges": "변경사항 표시",
+    "hideChanges": "변경사항 숨기기",
+    "categories": {
+      "nap": "NAP (불가침 조약) 규칙",
+      "general": "일반 서버 규칙",
+      "enforcement": "시행 및 위반"
+    }
+  },
+  "amendments": {
+    "title": "규칙 수정",
+    "subtitle": "서버 규칙 변경 이력",
+    "version": "버전 {{version}}",
+    "date": "{{date}}",
+    "changes": "변경사항",
+    "added": "추가됨",
+    "removed": "삭제됨",
+    "showAll": "모든 수정 표시",
+    "hideAll": "수정 숨기기"
+  },
+  "powerTrends": {
+    "title": "동맹 파워 추세",
+    "subtitle": "시간에 따른 역사적 파워 순위",
+    "topAlliances": "상위 {{count}}개 동맹",
+    "date": "날짜",
+    "power": "파워",
+    "rank": "순위",
+    "selectRange": "기간 선택",
+    "last7Days": "최근 7일",
+    "last30Days": "최근 30일",
+    "last90Days": "최근 90일",
+    "allTime": "전체 기간"
+  },
+  "powerDistribution": {
+    "title": "파워 분포",
+    "subtitle": "현재 동맹 파워 분석",
+    "totalPower": "서버 총 파워",
+    "averagePower": "평균 동맹 파워",
+    "topPercentage": "상위 3개가 전체 파워의 {{percent}}% 보유"
+  },
+  "signatories": {
+    "title": "NAP15 서명자",
+    "subtitle": "NAP15 협약에 서명한 동맹",
+    "totalSigned": "총 {{total}}개 중 {{count}}개 동맹이 서명",
+    "currentR5": "현재 R5",
+    "signedDate": "서명일: {{date}}",
+    "notSigned": "서명 안함",
+    "history": "리더 이력"
+  },
+  "votes": {
+    "title": "의회 투표 기록",
+    "subtitle": "과거 및 현재 의회 투표 기록",
+    "active": "진행 중인 투표",
+    "completed": "완료된 투표",
+    "votingEnds": "투표 종료: {{date}}",
+    "votingEnded": "투표 종료됨: {{date}}",
+    "results": "결과",
+    "yes": "찬성",
+    "no": "반대",
+    "abstain": "기권",
+    "viewDetails": "상세 보기"
+  },
+  "footer": {
+    "about": "서버 1586 소개",
+    "description": "공정한 거버넌스와 체계적인 동맹 관리를 갖춘 Last War 서버 커뮤니티입니다.",
+    "quickLinks": "빠른 링크",
+    "resources": "자료",
+    "discord": "Discord 커뮤니티",
+    "github": "GitHub 저장소",
+    "issues": "문제 보고",
+    "documentation": "문서",
+    "copyright": "© {{year}} 서버 1586. 제작:",
+    "claudeCode": "Claude Code"
+  }
+}

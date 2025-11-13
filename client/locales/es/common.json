@@ -1,0 +1,46 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "topAlliances": "Top 3 Alianzas",
+    "alliances": "Alianzas NAP15",
+    "council": "Votación del Consejo",
+    "votes": "Votos del Consejo",
+    "rules": "Reglas del Servidor",
+    "amendments": "Enmiendas",
+    "powerTrends": "Tendencias de Poder",
+    "signatories": "Firmantes",
+    "menu": "Navegación",
+    "closeMenu": "Cerrar menú"
+  },
+  "server": {
+    "name": "Servidor 1586",
+    "version": "v{{version}}"
+  },
+  "theme": {
+    "light": "Modo Claro",
+    "dark": "Modo Oscuro",
+    "toggle": "Cambiar tema"
+  },
+  "language": {
+    "select": "Seleccionar Idioma",
+    "current": "Idioma Actual"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "view": "Ver",
+    "backToTop": "Volver Arriba",
+    "adminLogin": "Acceso Admin"
+  },
+  "errors": {
+    "loadingData": "Error al cargar datos",
+    "networkError": "Error de red. Por favor, intenta de nuevo.",
+    "notFound": "No encontrado"
+  }
+}

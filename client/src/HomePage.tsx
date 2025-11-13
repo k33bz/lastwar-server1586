@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { DiscordBanner } from './components/DiscordBanner';
 import { AlliancePodium } from './components/AlliancePodium';
 import { AllianceGrid } from './components/AllianceGrid';
@@ -21,6 +22,8 @@ interface VersionInfo {
 }
 
 export function HomePage() {
+  const { t } = useTranslation(['common', 'public']);
+
   // Fetch data
   const { data: alliances, loading: alliancesLoading, error: alliancesError } = useApi<Alliance[]>('alliances.json');
   const { data: serverInfo, loading: serverInfoLoading, error: serverInfoError } = useApi<ServerInfo>('server-info.json');
@@ -34,8 +37,8 @@ export function HomePage() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-surface to-surface-secondary">
         <Card variant="tertiary" className="p-8 text-center">
           <Spinner size="lg" className="mb-4" />
-          <p className="text-lg font-semibold">Loading Server 1586...</p>
-          <p className="text-sm opacity-75 mt-2">Fetching alliance data</p>
+          <p className="text-lg font-semibold">{t('common:common.loading')} {t('common:server.name')}...</p>
+          <p className="text-sm opacity-75 mt-2">{t('common:errors.loadingData')}</p>
         </Card>
       </div>
     );
@@ -46,14 +49,14 @@ export function HomePage() {
       <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-surface to-surface-secondary">
         <Card variant="quaternary" className="max-w-lg p-6 border-2 border-red-500/20">
           <Card.Header>
-            <Card.Title className="text-red-500">Failed to Load Data</Card.Title>
+            <Card.Title className="text-red-500">{t('common:errors.loadingData')}</Card.Title>
             <Card.Description className="text-red-400">
               {error.message}
             </Card.Description>
           </Card.Header>
           <Card.Content className="mt-4">
             <p className="text-sm opacity-75">
-              Please check that the data files are accessible and try refreshing the page.
+              {t('common:errors.networkError')}
             </p>
           </Card.Content>
         </Card>

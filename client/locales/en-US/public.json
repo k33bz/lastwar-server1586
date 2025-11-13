@@ -1,0 +1,144 @@
+{
+  "header": {
+    "title": "Last War Server 1586",
+    "subtitle": "Alliance Rankings & Server Rules",
+    "discord": "Join our Discord"
+  },
+  "tabs": {
+    "rankings": "Rankings",
+    "rulesNap": "Rules & NAP15",
+    "powerAnalytics": "Power Analytics"
+  },
+  "podium": {
+    "title": "Top 3 Alliances",
+    "rank": "Rank {{rank}}",
+    "power": "{{power}} Power",
+    "r5": "R5: {{name}}",
+    "signed": "Signed NAP15",
+    "notSigned": "Not Signed"
+  },
+  "alliances": {
+    "title": "NAP15 Alliances",
+    "rank": "Rank",
+    "tag": "Tag",
+    "name": "Alliance Name",
+    "power": "Power",
+    "r5": "R5",
+    "status": "Status",
+    "signed": "✅ Signed",
+    "notSigned": "❌ Not Signed",
+    "details": "View Details"
+  },
+  "allianceModal": {
+    "title": "Alliance Details",
+    "tag": "Tag",
+    "name": "Name",
+    "power": "Total Power",
+    "rank": "Current Rank",
+    "r5": "R5 Leader",
+    "discord": "Discord Server",
+    "founded": "Founded",
+    "motto": "Motto",
+    "r4Officers": "R4 Officers",
+    "napStatus": "NAP15 Status",
+    "signed": "Signed",
+    "notSigned": "Not Signed",
+    "visitDiscord": "Visit Discord",
+    "close": "Close"
+  },
+  "council": {
+    "title": "Council Voting Members",
+    "subtitle": "5 permanent seats (Top 5) + 2 rotating seats (Ranks 6-15)",
+    "permanent": "Permanent Members",
+    "rotating": "Rotating Members",
+    "currentWeek": "Current Week",
+    "nextRotation": "Next Rotation",
+    "weekOf": "Week of {{date}}",
+    "rotatesEvery": "Rotates every Sunday at 10:00 PM EDT"
+  },
+  "councilRotation": {
+    "title": "Council Rotation Schedule",
+    "week": "Week {{number}}",
+    "startDate": "Starts: {{date}}",
+    "rotatingMembers": "Rotating Members",
+    "allWeeks": "All Weeks",
+    "upcomingWeeks": "Upcoming Weeks"
+  },
+  "rules": {
+    "title": "Server Rules",
+    "version": "Version {{version}}",
+    "lastUpdated": "Last updated: {{date}}",
+    "showChanges": "Show Changes",
+    "hideChanges": "Hide Changes",
+    "categories": {
+      "nap": "NAP (Non-Aggression Pact) Rules",
+      "general": "General Server Rules",
+      "enforcement": "Enforcement & Violations"
+    }
+  },
+  "amendments": {
+    "title": "Rule Amendments",
+    "subtitle": "History of changes to server rules",
+    "version": "Version {{version}}",
+    "date": "{{date}}",
+    "changes": "Changes",
+    "added": "Added",
+    "removed": "Removed",
+    "showAll": "Show All Amendments",
+    "hideAll": "Hide Amendments"
+  },
+  "powerTrends": {
+    "title": "Alliance Power Trends",
+    "subtitle": "Historical power rankings over time",
+    "topAlliances": "Top {{count}} Alliances",
+    "date": "Date",
+    "power": "Power",
+    "rank": "Rank",
+    "selectRange": "Select Time Range",
+    "last7Days": "Last 7 Days",
+    "last30Days": "Last 30 Days",
+    "last90Days": "Last 90 Days",
+    "allTime": "All Time"
+  },
+  "powerDistribution": {
+    "title": "Power Distribution",
+    "subtitle": "Current alliance power breakdown",
+    "totalPower": "Total Server Power",
+    "averagePower": "Average Alliance Power",
+    "topPercentage": "Top 3 hold {{percent}}% of total power"
+  },
+  "signatories": {
+    "title": "NAP15 Signatories",
+    "subtitle": "Alliances that have signed the NAP15 agreement",
+    "totalSigned": "{{count}} of {{total}} alliances signed",
+    "currentR5": "Current R5",
+    "signedDate": "Signed: {{date}}",
+    "notSigned": "Not signed",
+    "history": "Leadership History"
+  },
+  "votes": {
+    "title": "Council Vote History",
+    "subtitle": "Past and current council voting records",
+    "active": "Active Votes",
+    "completed": "Completed Votes",
+    "votingEnds": "Voting ends: {{date}}",
+    "votingEnded": "Voting ended: {{date}}",
+    "results": "Results",
+    "yes": "Yes",
+    "no": "No",
+    "abstain": "Abstain",
+    "viewDetails": "View Details"
+  },
+  "footer": {
+    "about": "About Server 1586",
+    "description": "A Last War server community with fair governance and organized alliance management.",
+    "quickLinks": "Quick Links",
+    "resources": "Resources",
+    "discord": "Discord Community",
+    "github": "GitHub Repository",
+    "issues": "Report Issues",
+    "documentation": "Documentation",
+    "copyright": "© {{year}} Server 1586. Built with",
+    "claudeCode": "Claude Code"
+  }
+}

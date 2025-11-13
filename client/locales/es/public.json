@@ -1,0 +1,139 @@
+{
+  "header": {
+    "title": "Last War Servidor 1586",
+    "subtitle": "Clasificación de Alianzas y Reglas del Servidor",
+    "discord": "Únete a nuestro Discord"
+  },
+  "podium": {
+    "title": "Top 3 Alianzas",
+    "rank": "Rango {{rank}}",
+    "power": "{{power}} Poder",
+    "r5": "R5: {{name}}",
+    "signed": "Firmó NAP15",
+    "notSigned": "No Firmado"
+  },
+  "alliances": {
+    "title": "Alianzas NAP15",
+    "rank": "Rango",
+    "tag": "Etiqueta",
+    "name": "Nombre de Alianza",
+    "power": "Poder",
+    "r5": "R5",
+    "status": "Estado",
+    "signed": "✅ Firmado",
+    "notSigned": "❌ No Firmado",
+    "details": "Ver Detalles"
+  },
+  "allianceModal": {
+    "title": "Detalles de la Alianza",
+    "tag": "Etiqueta",
+    "name": "Nombre",
+    "power": "Poder Total",
+    "rank": "Rango Actual",
+    "r5": "Líder R5",
+    "discord": "Servidor Discord",
+    "founded": "Fundada",
+    "motto": "Lema",
+    "r4Officers": "Oficiales R4",
+    "napStatus": "Estado NAP15",
+    "signed": "Firmado",
+    "notSigned": "No Firmado",
+    "visitDiscord": "Visitar Discord",
+    "close": "Cerrar"
+  },
+  "council": {
+    "title": "Miembros Votantes del Consejo",
+    "subtitle": "5 asientos permanentes (Top 5) + 2 asientos rotativos (Rangos 6-15)",
+    "permanent": "Miembros Permanentes",
+    "rotating": "Miembros Rotativos",
+    "currentWeek": "Semana Actual",
+    "nextRotation": "Próxima Rotación",
+    "weekOf": "Semana del {{date}}",
+    "rotatesEvery": "Rota cada domingo a las 10:00 PM EDT"
+  },
+  "councilRotation": {
+    "title": "Calendario de Rotación del Consejo",
+    "week": "Semana {{number}}",
+    "startDate": "Comienza: {{date}}",
+    "rotatingMembers": "Miembros Rotativos",
+    "allWeeks": "Todas las Semanas",
+    "upcomingWeeks": "Próximas Semanas"
+  },
+  "rules": {
+    "title": "Reglas del Servidor",
+    "version": "Versión {{version}}",
+    "lastUpdated": "Última actualización: {{date}}",
+    "showChanges": "Mostrar Cambios",
+    "hideChanges": "Ocultar Cambios",
+    "categories": {
+      "nap": "Reglas NAP (Pacto de No Agresión)",
+      "general": "Reglas Generales del Servidor",
+      "enforcement": "Aplicación y Violaciones"
+    }
+  },
+  "amendments": {
+    "title": "Enmiendas a las Reglas",
+    "subtitle": "Historial de cambios en las reglas del servidor",
+    "version": "Versión {{version}}",
+    "date": "{{date}}",
+    "changes": "Cambios",
+    "added": "Agregado",
+    "removed": "Eliminado",
+    "showAll": "Mostrar Todas las Enmiendas",
+    "hideAll": "Ocultar Enmiendas"
+  },
+  "powerTrends": {
+    "title": "Tendencias de Poder de Alianzas",
+    "subtitle": "Clasificación histórica de poder a lo largo del tiempo",
+    "topAlliances": "Top {{count}} Alianzas",
+    "date": "Fecha",
+    "power": "Poder",
+    "rank": "Rango",
+    "selectRange": "Seleccionar Rango de Tiempo",
+    "last7Days": "Últimos 7 Días",
+    "last30Days": "Últimos 30 Días",
+    "last90Days": "Últimos 90 Días",
+    "allTime": "Todo el Tiempo"
+  },
+  "powerDistribution": {
+    "title": "Distribución de Poder",
+    "subtitle": "Desglose actual del poder de alianzas",
+    "totalPower": "Poder Total del Servidor",
+    "averagePower": "Poder Promedio de Alianza",
+    "topPercentage": "El Top 3 tiene el {{percent}}% del poder total"
+  },
+  "signatories": {
+    "title": "Firmantes de NAP15",
+    "subtitle": "Alianzas que han firmado el acuerdo NAP15",
+    "totalSigned": "{{count}} de {{total}} alianzas firmaron",
+    "currentR5": "R5 Actual",
+    "signedDate": "Firmado: {{date}}",
+    "notSigned": "No firmado",
+    "history": "Historial de Liderazgo"
+  },
+  "votes": {
+    "title": "Historial de Votos del Consejo",
+    "subtitle": "Registros de votación del consejo pasados y actuales",
+    "active": "Votos Activos",
+    "completed": "Votos Completados",
+    "votingEnds": "La votación termina: {{date}}",
+    "votingEnded": "La votación terminó: {{date}}",
+    "results": "Resultados",
+    "yes": "Sí",
+    "no": "No",
+    "abstain": "Abstención",
+    "viewDetails": "Ver Detalles"
+  },
+  "footer": {
+    "about": "Acerca del Servidor 1586",
+    "description": "Una comunidad de servidor Last War con gobernanza justa y gestión organizada de alianzas.",
+    "quickLinks": "Enlaces Rápidos",
+    "resources": "Recursos",
+    "discord": "Comunidad Discord",
+    "github": "Repositorio GitHub",
+    "issues": "Reportar Problemas",
+    "documentation": "Documentación",
+    "copyright": "© {{year}} Servidor 1586. Construido con",
+    "claudeCode": "Claude Code"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "navigation": {
+    "home": "Startseite",
+    "topAlliances": "Top 3 Allianzen",
+    "alliances": "NAP15 Allianzen",
+    "council": "Ratsabstimmung",
+    "votes": "Ratsstimmen",
+    "rules": "Serverregeln",
+    "amendments": "Änderungen",
+    "powerTrends": "Macht-Trends",
+    "signatories": "Unterzeichner",
+    "menu": "Navigation",
+    "closeMenu": "Menü schließen"
+  },
+  "server": {
+    "name": "Server 1586",
+    "version": "v{{version}}"
+  },
+  "theme": {
+    "light": "Heller Modus",
+    "dark": "Dunkler Modus",
+    "toggle": "Thema wechseln"
+  },
+  "language": {
+    "select": "Sprache auswählen",
+    "current": "Aktuelle Sprache"
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "close": "Schließen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "view": "Ansehen",
+    "backToTop": "Nach oben",
+    "adminLogin": "Admin-Login"
+  },
+  "errors": {
+    "loadingData": "Fehler beim Laden der Daten",
+    "networkError": "Netzwerkfehler. Bitte versuchen Sie es erneut.",
+    "notFound": "Nicht gefunden"
+  }
+}

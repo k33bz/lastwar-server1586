@@ -1,0 +1,139 @@
+{
+  "header": {
+    "title": "Last War Server 1586",
+    "subtitle": "Allianz-Rankings und Serverregeln",
+    "discord": "Tritt unserem Discord bei"
+  },
+  "podium": {
+    "title": "Top 3 Allianzen",
+    "rank": "Rang {{rank}}",
+    "power": "{{power}} Macht",
+    "r5": "R5: {{name}}",
+    "signed": "NAP15 unterzeichnet",
+    "notSigned": "Nicht unterzeichnet"
+  },
+  "alliances": {
+    "title": "NAP15 Allianzen",
+    "rank": "Rang",
+    "tag": "Tag",
+    "name": "Allianzname",
+    "power": "Macht",
+    "r5": "R5",
+    "status": "Status",
+    "signed": "✅ Unterzeichnet",
+    "notSigned": "❌ Nicht unterzeichnet",
+    "details": "Details ansehen"
+  },
+  "allianceModal": {
+    "title": "Allianz-Details",
+    "tag": "Tag",
+    "name": "Name",
+    "power": "Gesamtmacht",
+    "rank": "Aktueller Rang",
+    "r5": "R5-Anführer",
+    "discord": "Discord-Server",
+    "founded": "Gegründet",
+    "motto": "Motto",
+    "r4Officers": "R4-Offiziere",
+    "napStatus": "NAP15-Status",
+    "signed": "Unterzeichnet",
+    "notSigned": "Nicht unterzeichnet",
+    "visitDiscord": "Discord besuchen",
+    "close": "Schließen"
+  },
+  "council": {
+    "title": "Rats-Abstimmungsmitglieder",
+    "subtitle": "5 permanente Sitze (Top 5) + 2 rotierende Sitze (Ränge 6-15)",
+    "permanent": "Permanente Mitglieder",
+    "rotating": "Rotierende Mitglieder",
+    "currentWeek": "Aktuelle Woche",
+    "nextRotation": "Nächste Rotation",
+    "weekOf": "Woche vom {{date}}",
+    "rotatesEvery": "Rotiert jeden Sonntag um 22:00 Uhr EDT"
+  },
+  "councilRotation": {
+    "title": "Rats-Rotationsplan",
+    "week": "Woche {{number}}",
+    "startDate": "Beginnt: {{date}}",
+    "rotatingMembers": "Rotierende Mitglieder",
+    "allWeeks": "Alle Wochen",
+    "upcomingWeeks": "Kommende Wochen"
+  },
+  "rules": {
+    "title": "Serverregeln",
+    "version": "Version {{version}}",
+    "lastUpdated": "Zuletzt aktualisiert: {{date}}",
+    "showChanges": "Änderungen anzeigen",
+    "hideChanges": "Änderungen ausblenden",
+    "categories": {
+      "nap": "NAP (Nichtangriffspakt) Regeln",
+      "general": "Allgemeine Serverregeln",
+      "enforcement": "Durchsetzung & Verstöße"
+    }
+  },
+  "amendments": {
+    "title": "Regel-Änderungen",
+    "subtitle": "Historie der Änderungen an den Serverregeln",
+    "version": "Version {{version}}",
+    "date": "{{date}}",
+    "changes": "Änderungen",
+    "added": "Hinzugefügt",
+    "removed": "Entfernt",
+    "showAll": "Alle Änderungen anzeigen",
+    "hideAll": "Änderungen ausblenden"
+  },
+  "powerTrends": {
+    "title": "Allianz-Macht-Trends",
+    "subtitle": "Historische Macht-Rankings im Zeitverlauf",
+    "topAlliances": "Top {{count}} Allianzen",
+    "date": "Datum",
+    "power": "Macht",
+    "rank": "Rang",
+    "selectRange": "Zeitraum auswählen",
+    "last7Days": "Letzte 7 Tage",
+    "last30Days": "Letzte 30 Tage",
+    "last90Days": "Letzte 90 Tage",
+    "allTime": "Gesamte Zeit"
+  },
+  "powerDistribution": {
+    "title": "Macht-Verteilung",
+    "subtitle": "Aktuelle Aufschlüsselung der Allianz-Macht",
+    "totalPower": "Gesamte Servermacht",
+    "averagePower": "Durchschnittliche Allianzmacht",
+    "topPercentage": "Top 3 halten {{percent}}% der Gesamtmacht"
+  },
+  "signatories": {
+    "title": "NAP15-Unterzeichner",
+    "subtitle": "Allianzen, die das NAP15-Abkommen unterzeichnet haben",
+    "totalSigned": "{{count}} von {{total}} Allianzen haben unterzeichnet",
+    "currentR5": "Aktueller R5",
+    "signedDate": "Unterzeichnet: {{date}}",
+    "notSigned": "Nicht unterzeichnet",
+    "history": "Führungs-Historie"
+  },
+  "votes": {
+    "title": "Rats-Abstimmungshistorie",
+    "subtitle": "Vergangene und aktuelle Rats-Abstimmungsdatensätze",
+    "active": "Aktive Abstimmungen",
+    "completed": "Abgeschlossene Abstimmungen",
+    "votingEnds": "Abstimmung endet: {{date}}",
+    "votingEnded": "Abstimmung beendet: {{date}}",
+    "results": "Ergebnisse",
+    "yes": "Ja",
+    "no": "Nein",
+    "abstain": "Enthaltung",
+    "viewDetails": "Details ansehen"
+  },
+  "footer": {
+    "about": "Über Server 1586",
+    "description": "Eine Last War Server-Community mit fairer Governance und organisiertem Allianz-Management.",
+    "quickLinks": "Schnelllinks",
+    "resources": "Ressourcen",
+    "discord": "Discord-Community",
+    "github": "GitHub-Repository",
+    "issues": "Probleme melden",
+    "documentation": "Dokumentation",
+    "copyright": "© {{year}} Server 1586. Erstellt mit",
+    "claudeCode": "Claude Code"
+  }
+}
