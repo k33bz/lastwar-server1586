@@ -1,3 +1,13 @@
 {
-  "migrations": []
+    "migrations": [
+        {
+            "from_version": "3.4.0",
+            "to_version": "3.7.0",
+            "migrations_run": [
+                "3.5.0"
+            ],
+            "timestamp": "2025-11-12T21:15:04-05:00",
+            "admin_email": "matthewkastro@gmail.com"
+        }
+    ]
 }

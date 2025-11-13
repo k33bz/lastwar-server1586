@@ -247,6 +247,7 @@ class MigrationManager {
             '3.3.0' => 'migrateToV3_3',    // Add backup/restore support
             '3.4.0' => 'migrateToV3_4',    // Multi-role system (roles array)
             '3.5.0' => 'migrateToV3_5',    // Discord integration
+            '3.8.0' => 'migrateToV3_8',    // Multi-server support
             // Add future migrations here
         ];
 
@@ -572,6 +573,183 @@ class MigrationManager {
         $this->log("   ✓ Discord integration files ready");
         $this->log("   ℹ️  Configure channels in data/alliances.json under discord.channels");
         $this->log("   ℹ️  Visit /admin/discord_config.php to verify bot connection");
+    }
+
+    /**
+     * Migration: v3.8.0 - Multi-Server Support
+     */
+    private function migrateToV3_8() {
+        $this->log("   - Migrating data to multi-server format...");
+
+        $default_server = '1586';
+        $this->log("   - Default server: {$default_server}");
+
+        // Files to migrate
+        $data_files = [
+            'alliances.json' => 'root',
+            'discord-votes.json' => 'votes',
+            'discord-vote-requests.json' => 'requests',
+            'notifications.json' => 'notifications',
+            'signature-history.json' => 'signatures'
+        ];
+
+        $total_migrated = 0;
+        $total_skipped = 0;
+
+        foreach ($data_files as $filename => $record_path) {
+            $file_path = $this->data_dir . $filename;
+
+            if (!file_exists($file_path)) {
+                $this->log("   ⚠️  {$filename} not found, skipping");
+                continue;
+            }
+
+            $this->log("   - Processing {$filename}...");
+
+            // Backup before modifying
+            $this->backupFile($file_path);
+
+            // Read file
+            $data = json_decode(file_get_contents($file_path), true);
+
+            if ($data === null) {
+                $this->log("   ❌ Invalid JSON in {$filename}");
+                continue;
+            }
+
+            $modified = false;
+
+            // Get records based on structure
+            $records = &$data;
+            if ($record_path !== 'root' && isset($data[$record_path])) {
+                $records = &$data[$record_path];
+            }
+
+            // Add server field to each record
+            if (is_array($records)) {
+                $migrated_count = 0;
+                $skipped_count = 0;
+
+                foreach ($records as &$record) {
+                    if (is_array($record)) {
+                        if (!isset($record['server'])) {
+                            $record['server'] = $default_server;
+                            $migrated_count++;
+                            $modified = true;
+                        } else {
+                            $skipped_count++;
+                        }
+                    }
+                }
+                unset($record);
+
+                $total_migrated += $migrated_count;
+                $total_skipped += $skipped_count;
+
+                if ($migrated_count > 0) {
+                    $this->log("      ✓ Added 'server' field to {$migrated_count} record(s)");
+                }
+                if ($skipped_count > 0) {
+                    $this->log("      ℹ️  Skipped {$skipped_count} record(s) (already migrated)");
+                }
+            }
+
+            // Save if modified
+            if ($modified) {
+                file_put_contents($file_path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+                $this->log("      ✓ Saved {$filename}");
+            } else {
+                $this->log("      ℹ️  No changes needed for {$filename}");
+            }
+        }
+
+        // Migrate users.json to per-server permissions
+        $this->log("   - Migrating users.json to per-server permissions...");
+        $users_file = $this->admin_dir . 'users.json';
+
+        if (file_exists($users_file)) {
+            $this->backupFile($users_file);
+            $users_data = json_decode(file_get_contents($users_file), true);
+
+            $user_migrated = 0;
+            $user_skipped = 0;
+
+            if (isset($users_data['users'])) {
+                foreach ($users_data['users'] as &$user) {
+                    // Check if already migrated
+                    if (isset($user['servers'])) {
+                        $user_skipped++;
+                        continue;
+                    }
+
+                    // Convert flat permissions to server-based
+                    $servers = [];
+
+                    if (isset($user['alliances']) || isset($user['roles'])) {
+                        $alliances = $user['alliances'] ?? [];
+
+                        // Check if user has 'ape' role
+                        $has_ape = false;
+                        if (isset($user['roles']) && is_array($user['roles'])) {
+                            $has_ape = in_array('ape', $user['roles']);
+                        }
+
+                        $servers[$default_server] = [
+                            'alliances' => $alliances,
+                            'ape' => $has_ape
+                        ];
+
+                        $user['servers'] = $servers;
+                        unset($user['alliances']);
+
+                        $user_migrated++;
+                    }
+                }
+                unset($user);
+
+                if ($user_migrated > 0) {
+                    file_put_contents($users_file, json_encode($users_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+                    $this->log("      ✓ Migrated {$user_migrated} user(s) to per-server permissions");
+                    $total_migrated += $user_migrated;
+                }
+                if ($user_skipped > 0) {
+                    $this->log("      ℹ️  Skipped {$user_skipped} user(s) (already migrated)");
+                    $total_skipped += $user_skipped;
+                }
+            }
+        }
+
+        // Migrate rotation-schedule.json (special handling - wrap entire structure)
+        $rotation_file = $this->data_dir . 'rotation-schedule.json';
+        if (file_exists($rotation_file)) {
+            $this->log("   - Processing rotation-schedule.json...");
+            $this->backupFile($rotation_file);
+
+            $rotation_data = json_decode(file_get_contents($rotation_file), true);
+
+            if (!isset($rotation_data['server'])) {
+                // Wrap entire structure with server metadata
+                $wrapped = [
+                    'server' => $default_server,
+                    'data' => $rotation_data
+                ];
+
+                file_put_contents($rotation_file, json_encode($wrapped, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+                $this->log("      ✓ Wrapped rotation schedule with server metadata");
+                $total_migrated++;
+            } else {
+                $this->log("      ℹ️  Already migrated");
+                $total_skipped++;
+            }
+        }
+
+        $this->log("   ✓ Multi-server migration complete!");
+        $this->log("      Total records migrated: {$total_migrated}");
+        $this->log("      Total records skipped: {$total_skipped}");
+        $this->log("   ℹ️  Data structure now supports multiple servers");
+        $this->log("   ℹ️  Users have per-server alliance permissions");
+        $this->log("   ℹ️  All records tagged with 'server' field (default: {$default_server})");
+        $this->log("   ℹ️  See MULTI_SERVER_MIGRATION.md for next steps");
     }
 
     /**

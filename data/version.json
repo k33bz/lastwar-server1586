@@ -1,6 +1,6 @@
 {
-  "version": "3.7.0",
-  "releaseDate": "2025-11-06",
+  "version": "3.8.0",
+  "releaseDate": "2025-11-13",
   "components": {
     "frontend": {
       "version": "3.1.0",
@@ -183,9 +183,35 @@
         "Created production .env management guide (docs/PRODUCTION-ENV-SETUP.md)"
       ],
       "impact": "Eliminates mass user logouts caused by key rotation overwrites during deployment"
+    },
+    "multi_server_support": {
+      "version": "1.0.0",
+      "date": "2025-11-13",
+      "description": "Infrastructure for supporting multiple Last War servers (1586, 9999, etc.) with minimal code changes",
+      "database_schema": "v4",
+      "migration": "3.8.0",
+      "approach": "Simple data-layer changes with server field tagging",
+      "changes": [
+        "Add 'server' field to all JSON records (alliances, votes, notifications, etc.)",
+        "Convert user permissions to per-server structure",
+        "APIs filter data by ?server= parameter",
+        "Admin panel shows all servers with [1586] [ORCE] prefix format",
+        "Public sites deploy separately with SERVER_ID environment variable",
+        "Single admin panel serves all servers",
+        "Automatic migration via version upgrade system"
+      ],
+      "files": [
+        "admin/migrate.php - Added migrateToV3_8() method",
+        "MULTI_SERVER_MIGRATION.md - Complete implementation guide"
+      ],
+      "deployment_model": {
+        "public_sites": "Each server deploys own copy with config",
+        "admin_panel": "Single instance serves all servers",
+        "data_isolation": "Filtered by server parameter at query time"
+      }
     }
   },
   "changelog": "docs/CHANGELOG.md",
   "migration_docs": "admin/MIGRATION_SYSTEM.md",
-  "lastUpdated": "2025-11-11"
+  "lastUpdated": "2025-11-13"
 }

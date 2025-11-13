@@ -1,3 +1,15 @@
 {
-    "tracked_messages": []
+    "tracked_messages": [
+        {
+            "id": "msg_ae6c32203a608b77",
+            "discord_message_id": "1438369630463852646",
+            "channel_id": "1379480229587845141",
+            "sent_at": "2025-11-13 03:27:23",
+            "delete_after_hours": 1,
+            "delete_at": "2025-11-13 09:27:23",
+            "deleted": false,
+            "message_type": "instant",
+            "created_by": "matthewkastro@gmail.com"
+        }
+    ]
 }
