@@ -4,6 +4,11 @@
     "subtitle": "동맹 순위 및 서버 규칙",
     "discord": "Discord에 참여하기"
   },
+  "tabs": {
+    "rankings": "순위",
+    "rulesNap": "규칙 및 NAP15",
+    "powerAnalytics": "파워 분석"
+  },
   "podium": {
     "title": "상위 3개 동맹",
     "rank": "{{rank}}위",

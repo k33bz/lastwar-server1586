@@ -4,6 +4,11 @@
     "subtitle": "Clasificación de Alianzas y Reglas del Servidor",
     "discord": "Únete a nuestro Discord"
   },
+  "tabs": {
+    "rankings": "Clasificaciones",
+    "rulesNap": "Reglas y NAP15",
+    "powerAnalytics": "Análisis de Poder"
+  },
   "podium": {
     "title": "Top 3 Alianzas",
     "rank": "Rango {{rank}}",

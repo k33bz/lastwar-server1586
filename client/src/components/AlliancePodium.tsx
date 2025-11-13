@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, Avatar, Chip } from '@heroui/react';
 import { AllianceDetailModal } from './AllianceDetailModal';
 import type { Alliance } from '../types';
@@ -8,6 +9,7 @@ interface AlliancePodiumProps {
 }
 
 export function AlliancePodium({ alliances }: AlliancePodiumProps) {
+  const { t } = useTranslation('public');
   const [selectedAlliance, setSelectedAlliance] = useState<{ alliance: Alliance; rank: number } | null>(null);
   // Sort by power and take top 3
   const topThree = [...alliances]
@@ -50,7 +52,7 @@ export function AlliancePodium({ alliances }: AlliancePodiumProps) {
   return (
     <>
       <section className="mb-12">
-        <h2 className="text-3xl font-bold text-center mb-12">Top 3 Alliances</h2>
+        <h2 className="text-3xl font-bold text-center mb-12">{t('podium.title')}</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {podiumOrder.map((alliance) => {
@@ -91,18 +93,18 @@ export function AlliancePodium({ alliances }: AlliancePodiumProps) {
 
               <Card.Content className="space-y-3">
                 <div>
-                  <div className="text-sm opacity-60 mb-1">Alliance Power</div>
+                  <div className="text-sm opacity-60 mb-1">{t('alliances.power')}</div>
                   <div className="text-2xl font-bold">{formatPower(alliance.power)}</div>
                 </div>
 
                 <div>
-                  <div className="text-sm opacity-60 mb-1">R5 Leader</div>
+                  <div className="text-sm opacity-60 mb-1">{t('alliances.r5')}</div>
                   <div className="font-semibold">{alliance.r5.name}</div>
                 </div>
 
                 {alliance.signed && (
                   <Chip color="success" size="sm">
-                    NAP15 Signed
+                    {t('podium.signed')}
                   </Chip>
                 )}
 

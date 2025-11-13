@@ -82,15 +82,15 @@ export function HomePage() {
           <Tabs.ListContainer className="mb-8">
             <Tabs.List aria-label="Server sections" className="flex justify-center">
               <Tabs.Tab id="rankings">
-                🏆 Rankings
+                🏆 {t('public:tabs.rankings')}
                 <Tabs.Indicator />
               </Tabs.Tab>
               <Tabs.Tab id="rules">
-                📜 Rules & NAP15
+                📜 {t('public:tabs.rulesNap')}
                 <Tabs.Indicator />
               </Tabs.Tab>
               <Tabs.Tab id="power-trends">
-                📊 Power Analytics
+                📊 {t('public:tabs.powerAnalytics')}
                 <Tabs.Indicator />
               </Tabs.Tab>
             </Tabs.List>
