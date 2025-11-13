@@ -4,59 +4,39 @@
  *
  * Returns the council rotation schedule for public display
  * Serves data from data/rotation-schedule.json with PII stripped
+ * Multi-server support added in v3.8.0
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @created 2025-11-12
  */
 
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET');
-header('Access-Control-Allow-Headers: Content-Type');
+require_once __DIR__ . '/api_helpers.php';
 
-// Handle OPTIONS preflight
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(204);
-    exit;
-}
+// Handle CORS preflight
+handle_preflight();
 
 // Only allow GET requests
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-    http_response_code(405);
-    echo json_encode([
-        'success' => false,
-        'error' => 'Method not allowed',
-        'timestamp' => date('Y-m-d H:i:s')
-    ]);
-    exit;
+validate_method('GET');
+
+// Get server ID for filtering
+$server_id = get_server_id();
+
+// Path to rotation schedule data
+$data_file = __DIR__ . '/../data/rotation-schedule.json';
+
+// Read rotation schedule
+$schedule_data = read_json_safe($data_file);
+
+if ($schedule_data === null) {
+    api_error('Failed to load rotation schedule', 500);
 }
 
-try {
-    $data_file = __DIR__ . '/../data/rotation-schedule.json';
+// Unwrap schedule for the requested server (v3.8.0+)
+$schedule_data = unwrap_rotation_schedule($schedule_data, $server_id);
 
-    if (!file_exists($data_file)) {
-        throw new Exception('Rotation schedule data not found');
-    }
-
-    $content = file_get_contents($data_file);
-    $data = json_decode($content, true);
-
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        throw new Exception('Invalid JSON in rotation schedule data');
-    }
-
-    // Return data in expected API format
-    echo json_encode([
-        'success' => true,
-        'timestamp' => date('Y-m-d H:i:s'),
-        'data' => $data
-    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => $e->getMessage(),
-        'timestamp' => date('Y-m-d H:i:s')
-    ]);
+if ($schedule_data === null) {
+    api_error('Schedule not found for server ' . $server_id, 404);
 }
+
+// Return with caching
+api_success_with_etag($schedule_data, 60);

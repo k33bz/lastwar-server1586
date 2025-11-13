@@ -269,3 +269,67 @@ function strip_server_info_pii($server_info) {
 
     return $sanitized;
 }
+
+/**
+ * Get server ID from query parameter
+ *
+ * Returns the server ID from ?server= query parameter, defaults to '1586' for backwards compatibility
+ * Multi-server support added in v3.8.0
+ *
+ * @return string Server ID (e.g., '1586', '9999')
+ */
+function get_server_id() {
+    return $_GET['server'] ?? '1586'; // Default to 1586 for backwards compatibility
+}
+
+/**
+ * Filter array data by server field
+ *
+ * Filters an array of records to only include those matching the requested server
+ * Used for multi-server data isolation
+ *
+ * @param array $data Array of records with 'server' field
+ * @param string $server_id Server ID to filter by
+ * @return array Filtered records
+ */
+function filter_by_server($data, $server_id = null) {
+    if ($server_id === null) {
+        $server_id = get_server_id();
+    }
+
+    return array_values(array_filter($data, function($record) use ($server_id) {
+        // If record doesn't have server field, include it for backwards compatibility
+        if (!isset($record['server'])) {
+            return true;
+        }
+        return $record['server'] === $server_id;
+    }));
+}
+
+/**
+ * Unwrap rotation schedule data if needed
+ *
+ * Handles both old format (raw data) and new format (wrapped with server metadata)
+ * Returns the inner data structure for the requested server
+ *
+ * @param array $schedule_data Raw rotation schedule data
+ * @param string $server_id Server ID to filter by
+ * @return array|null Schedule data for the server, or null if not found
+ */
+function unwrap_rotation_schedule($schedule_data, $server_id = null) {
+    if ($server_id === null) {
+        $server_id = get_server_id();
+    }
+
+    // Check if data is wrapped with server metadata (new format)
+    if (isset($schedule_data['server']) && isset($schedule_data['data'])) {
+        // New format: { "server": "1586", "data": {...} }
+        if ($schedule_data['server'] === $server_id) {
+            return $schedule_data['data'];
+        }
+        return null; // Different server, no match
+    }
+
+    // Old format: just the raw data (backwards compatible)
+    return $schedule_data;
+}

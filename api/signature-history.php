@@ -4,59 +4,32 @@
  *
  * Returns the signature history for server rules
  * Serves data from data/signature-history.json with PII stripped
+ * Multi-server support added in v3.8.0
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @created 2025-11-12
  */
 
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET');
-header('Access-Control-Allow-Headers: Content-Type');
+require_once __DIR__ . '/api_helpers.php';
 
-// Handle OPTIONS preflight
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(204);
-    exit;
-}
+// Handle CORS preflight
+handle_preflight();
 
 // Only allow GET requests
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-    http_response_code(405);
-    echo json_encode([
-        'success' => false,
-        'error' => 'Method not allowed',
-        'timestamp' => date('Y-m-d H:i:s')
-    ]);
-    exit;
+validate_method('GET');
+
+// Path to signature history data
+$data_file = __DIR__ . '/../data/signature-history.json';
+
+// Read signature history
+$signatures = read_json_safe($data_file);
+
+if ($signatures === null) {
+    api_error('Failed to load signature history', 500);
 }
 
-try {
-    $data_file = __DIR__ . '/../data/signature-history.json';
+// Filter by server (multi-server support v3.8.0+)
+$signatures = filter_by_server($signatures);
 
-    if (!file_exists($data_file)) {
-        throw new Exception('Signature history data not found');
-    }
-
-    $content = file_get_contents($data_file);
-    $data = json_decode($content, true);
-
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        throw new Exception('Invalid JSON in signature history data');
-    }
-
-    // Return data in expected API format
-    echo json_encode([
-        'success' => true,
-        'timestamp' => date('Y-m-d H:i:s'),
-        'data' => $data
-    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => $e->getMessage(),
-        'timestamp' => date('Y-m-d H:i:s')
-    ]);
-}
+// Return with caching
+api_success_with_etag($signatures, 60);

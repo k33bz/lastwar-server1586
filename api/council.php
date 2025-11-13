@@ -27,16 +27,28 @@ validate_method('GET');
 $alliances_file = __DIR__ . '/../data/alliances.json';
 $schedule_file = __DIR__ . '/../data/rotation-schedule.json';
 
+// Get server ID for filtering
+$server_id = get_server_id();
+
 // Read alliances data
 $alliances = read_json_safe($alliances_file);
 if ($alliances === null) {
     api_error('Failed to load alliance data', 500);
 }
 
+// Filter alliances by server (multi-server support v3.8.0+)
+$alliances = filter_by_server($alliances, $server_id);
+
 // Read rotation schedule
 $schedule_data = read_json_safe($schedule_file);
 if ($schedule_data === null) {
     api_error('Failed to load rotation schedule', 500);
+}
+
+// Unwrap schedule for the requested server
+$schedule_data = unwrap_rotation_schedule($schedule_data, $server_id);
+if ($schedule_data === null) {
+    api_error('Schedule not found for server ' . $server_id, 404);
 }
 
 // Sort alliances by power

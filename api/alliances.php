@@ -33,6 +33,9 @@ if ($alliances === null) {
     api_error('Failed to load alliance data', 500);
 }
 
+// Filter by server (multi-server support v3.8.0+)
+$alliances = filter_by_server($alliances);
+
 // Calculate ranks dynamically from power
 // Sort by power descending
 usort($alliances, function($a, $b) {

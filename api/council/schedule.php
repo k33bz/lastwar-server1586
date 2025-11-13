@@ -25,6 +25,7 @@ validate_method('GET');
 
 // Get query parameters
 $weeks_ahead = min((int)($_GET['weeks'] ?? 5), 52);
+$server_id = get_server_id();
 
 // Path to rotation schedule
 $data_file = __DIR__ . '/../../data/rotation-schedule.json';
@@ -34,6 +35,13 @@ $schedule_data = read_json_safe($data_file);
 
 if ($schedule_data === null) {
     api_error('Failed to load rotation schedule', 500);
+}
+
+// Unwrap schedule for the requested server (v3.8.0+)
+$schedule_data = unwrap_rotation_schedule($schedule_data, $server_id);
+
+if ($schedule_data === null) {
+    api_error('Schedule not found for server ' . $server_id, 404);
 }
 
 // Calculate current week number

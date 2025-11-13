@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { buildApiUrl } from '../config/server';
 
 /**
  * Custom hook for fetching data from API endpoints
@@ -7,6 +8,11 @@ import { useState, useEffect } from 'react';
  * - Strip PII (Discord IDs, email addresses, etc.)
  * - Provide only public-safe information
  * - Block direct access to /data/ directory
+ *
+ * MULTI-SERVER SUPPORT (v3.8.0+):
+ * - Automatically includes server parameter in production API calls
+ * - Server ID is configured via VITE_SERVER_ID environment variable
+ * - Defaults to server 1586 for backwards compatibility
  */
 export function useApi<T>(endpoint: string) {
   const [data, setData] = useState<T | null>(null);
@@ -19,7 +25,7 @@ export function useApi<T>(endpoint: string) {
         setLoading(true);
 
         // In development, fetch from public/data directory
-        // In production, use API endpoints
+        // In production, use API endpoints with server parameter
         const isDevelopment = import.meta.env.DEV;
 
         let fetchPath: string;
@@ -27,12 +33,13 @@ export function useApi<T>(endpoint: string) {
           // Development: fetch directly from public/data
           fetchPath = `/data/${endpoint}`;
         } else {
-          // Production: use API endpoints
+          // Production: use API endpoints with server parameter
           // Examples:
-          //   alliances.json -> /api/alliances.php
+          //   alliances.json -> /api/alliances.php?server=1586
           //   version.json -> /api/version.php
-          //   power-history.csv -> /api/power-history.php
-          fetchPath = `/api/${endpoint.replace(/\.(json|csv)$/, '.php')}`;
+          //   power-history.csv -> /api/power-history.php?server=1586
+          const apiEndpoint = `/api/${endpoint.replace(/\.(json|csv)$/, '.php')}`;
+          fetchPath = buildApiUrl(apiEndpoint);
         }
 
         const response = await fetch(fetchPath);
