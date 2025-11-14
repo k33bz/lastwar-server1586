@@ -16,6 +16,17 @@
     "name": "서버 1586",
     "version": "v{{version}}"
   },
+  "discord": {
+    "joinButton": "Discord 참여",
+    "serverName": "Last War 서버 1586",
+    "description": "Last War 서버 1586 공식 Discord 서버",
+    "features": {
+      "nap15": "NAP15 조율",
+      "events": "이벤트 계획",
+      "diplomacy": "동맹 외교",
+      "news": "서버 소식 및 업데이트"
+    }
+  },
   "theme": {
     "light": "라이트 모드",
     "dark": "다크 모드",

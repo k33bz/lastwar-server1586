@@ -31,6 +31,7 @@ Official website for Server 1586 alliance management, council voting, and server
 
 ### Public Website (React + HeroUI v3)
 - **Modern UI Framework**: Built with React 18, TypeScript, and HeroUI v3 (Alpha)
+- **Internationalization**: Full i18n support with 5 languages (English, Spanish, Portuguese, German, Korean)
 - **Alliance Rankings**: Interactive display with top 3 podium and complete NAP15 grid
 - **Power Trends Chart**: Time-series visualization using Chart.js with alliance power tracking
 - **Council Voting System**: Rotating council members (ranks 6-15) with 5-week cycle
@@ -59,6 +60,7 @@ Official website for Server 1586 alliance management, council voting, and server
 - **Tailwind CSS v4**: Utility-first CSS framework
 - **Chart.js 4.4**: Power trends visualization
 - **React Router**: Client-side routing
+- **i18next**: Internationalization with 5 language support
 
 ### Build & Development
 - **ESLint**: Code quality and consistency
@@ -221,6 +223,67 @@ Edit `client/src/styles/custom-theme.css` to modify colors, spacing, shadows, et
 2. Import HeroUI components: `import { Card, Button } from '@heroui/react'`
 3. Use TypeScript interfaces from `client/src/types.ts`
 4. Follow HeroUI v3 compound component patterns
+
+### Internationalization (i18n)
+
+The site supports 5 languages with full translation coverage:
+
+**Supported Languages**:
+- English (en-US) - Default
+- Spanish (es)
+- Portuguese (pt)
+- German (de)
+- Korean (ko)
+
+**Translation Structure**:
+```
+client/
+├── locales/
+│   ├── en-US/
+│   │   ├── common.json    # Navigation, UI elements, errors
+│   │   └── public.json    # Page content, alliances, rules
+│   ├── es/
+│   ├── pt/
+│   ├── de/
+│   └── ko/
+└── public/data/
+    ├── rules-en-US.json   # Server rules by language
+    ├── rules-es.json
+    ├── rules-pt.json
+    ├── rules-de.json
+    └── rules-ko.json
+```
+
+**Using Translations in Components**:
+```typescript
+import { useTranslation } from 'react-i18next';
+
+function MyComponent() {
+  const { t } = useTranslation(['common', 'public']);
+
+  return (
+    <div>
+      <h1>{t('public:header.title')}</h1>
+      <p>{t('common:navigation.home')}</p>
+      <span>{t('public:podium.power', { power: '1.5B' })}</span>
+    </div>
+  );
+}
+```
+
+**Translation Tools**:
+- `translate_locale.py` - Translate locale files using LM Studio
+- `translate_rules.py` - Translate server rules using LM Studio
+
+**Adding New Translation Keys**:
+1. Add key to `en-US/common.json` or `en-US/public.json`
+2. Run translation script: `python translate_locale.py <lang>`
+3. Review and commit translations
+
+**Important Notes**:
+- Keep interpolation variables in English: `{{year}}`, `{{date}}`, `{{count}}`
+- Use `t()` function for all user-facing text
+- Discord banner and alliance modal are fully translated
 
 ---
 

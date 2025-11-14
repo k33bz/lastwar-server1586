@@ -16,6 +16,17 @@
     "name": "Server 1586",
     "version": "v{{version}}"
   },
+  "discord": {
+    "joinButton": "Discord beitreten",
+    "serverName": "Last War Server 1586",
+    "description": "Offizieller Discord-Server für Last War Server 1586",
+    "features": {
+      "nap15": "NAP15-Koordination",
+      "events": "Eventplanung",
+      "diplomacy": "Allianz-Diplomatie",
+      "news": "Server-News und Updates"
+    }
+  },
   "theme": {
     "light": "Heller Modus",
     "dark": "Dunkler Modus",
