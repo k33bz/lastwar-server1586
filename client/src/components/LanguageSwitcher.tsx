@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Popover, PopoverTrigger, PopoverContent } from '@heroui/react';
+import { Button, Popover } from '@heroui/react';
 import { supportedLanguages } from '../i18n';
 
 export function LanguageSwitcher() {
@@ -15,8 +15,8 @@ export function LanguageSwitcher() {
   };
 
   return (
-    <Popover isOpen={isOpen} onOpenChange={setIsOpen} placement="bottom">
-      <PopoverTrigger>
+    <Popover isOpen={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger>
         <Button
           variant="ghost"
           size="sm"
@@ -26,8 +26,8 @@ export function LanguageSwitcher() {
           <span className="text-lg">{currentLanguage.flag}</span>
           <span className="hidden sm:inline">{currentLanguage.nativeName}</span>
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-64">
+      </Popover.Trigger>
+      <Popover.Content placement="bottom" className="w-64">
         <div className="p-2">
           <div className="text-sm font-semibold mb-2 px-2">{t('language.select')}</div>
           <div className="space-y-1">
@@ -55,7 +55,7 @@ export function LanguageSwitcher() {
             ))}
           </div>
         </div>
-      </PopoverContent>
+      </Popover.Content>
     </Popover>
   );
 }
