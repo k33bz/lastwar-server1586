@@ -12,7 +12,7 @@ require_once 'jwt.php';
 $user = require_admin_session();
 
 // Set page title for header
-$page_title = "Alliance Tags Manager";
+$page_title = __('pages.alliance_tags_manager.title');
 
 // Include shared header
 include 'includes/header.php';
@@ -1338,4 +1338,9 @@ function showToast(message, type = 'info') {
 }
 </script>
 
+<?php
+require_once 'includes/help_drawer.php';
+$help_config = require 'includes/help_content/alliance_tags_manager_help.php';
+render_help_drawer($help_config);
+?>
 <?php include 'includes/footer.php'; ?>

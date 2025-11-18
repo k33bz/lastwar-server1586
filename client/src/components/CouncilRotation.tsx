@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Card } from '@heroui/react';
 import { useApi } from '../hooks/useApi';
 
@@ -24,6 +25,7 @@ interface RotationSchedule {
 }
 
 export function CouncilRotation() {
+  const { t } = useTranslation('public');
   const { data: rotation, loading, error } = useApi<RotationSchedule>('rotation-schedule.json');
 
   if (loading) {
@@ -44,15 +46,15 @@ export function CouncilRotation() {
   if (error || !rotation) {
     return (
       <Card variant="quaternary" className="p-6 border-2 border-red-500/20">
-        <p className="text-red-500">Failed to load rotation schedule</p>
+        <p className="text-red-500">{t('councilRotation.error')}</p>
       </Card>
     );
   }
 
-  // Get next few weeks (current + 4 more)
+  // Get weeks to display (1 previous + current + 3 future)
   const currentWeek = rotation.currentWeekNumber;
   const upcomingWeeks = rotation.schedule
-    .filter(week => week.weekNumber >= currentWeek && week.weekNumber < currentWeek + 5)
+    .filter(week => week.weekNumber >= currentWeek - 1 && week.weekNumber <= currentWeek + 3)
     .slice(0, 5);
 
   // Get top 5 permanent members (support both old and new format)
@@ -66,9 +68,9 @@ export function CouncilRotation() {
   return (
     <Card variant="secondary" className="p-6">
       <Card.Header>
-        <Card.Title className="text-2xl">🔄 Council Rotation Schedule</Card.Title>
+        <Card.Title className="text-2xl">{t('councilRotation.title')}</Card.Title>
         <Card.Description>
-          Rotating members change weekly on Mondays at 2:00 AM UTC
+          {t('councilRotation.description')}
         </Card.Description>
       </Card.Header>
 
@@ -76,7 +78,7 @@ export function CouncilRotation() {
         {/* Permanent Members Banner */}
         <div className="mb-6 p-4 bg-accent/10 border-2 border-accent/30 rounded-lg">
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-sm font-semibold text-accent">👑 Permanent Council Members (Top 5)</span>
+            <span className="text-sm font-semibold text-accent">{t('councilRotation.permanentMembers')}</span>
           </div>
           <div className="flex flex-wrap gap-2">
             {top5Permanent.map(tag => (
@@ -89,7 +91,7 @@ export function CouncilRotation() {
 
         {/* Rotation Timeline */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-sm opacity-75">Rotating Members (Ranks 6-15)</h3>
+          <h3 className="font-semibold text-sm opacity-75">{t('councilRotation.rotatingMembers')}</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             {upcomingWeeks.map((week) => {
@@ -108,14 +110,14 @@ export function CouncilRotation() {
                   {/* Current indicator */}
                   {isCurrent && (
                     <div className="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
-                      CURRENT
+                      {t('councilRotation.current').toUpperCase()}
                     </div>
                   )}
 
                   {/* Week Number */}
                   <div className="text-center mb-3">
                     <div className={`text-2xl font-bold ${isCurrent ? 'text-accent' : ''}`}>
-                      Week {week.weekNumber}
+                      {t('councilRotation.week', { number: week.weekNumber })}
                     </div>
                     <div className="text-xs opacity-75">
                       {startDate.toLocaleDateString('en-US', {
@@ -149,9 +151,7 @@ export function CouncilRotation() {
         {/* Info Box */}
         <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
           <p className="text-sm">
-            <strong>ℹ️ How it works:</strong> The top 5 alliances are permanent council members.
-            Ranks 6-15 rotate weekly in pairs, cycling through every {cycleDuration} weeks.
-            This ensures all top alliances get council representation while maintaining stability.
+            {t('councilRotation.howItWorks', { cycleDuration })}
           </p>
         </div>
       </Card.Content>

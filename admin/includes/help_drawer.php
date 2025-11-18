@@ -24,18 +24,18 @@
  * @param array $config Configuration array with 'title' and 'sections'
  */
 function render_help_drawer($config) {
-    $title = $config['title'] ?? 'Help & Documentation';
+    $title = $config['title'] ?? __('help_drawer.default_title');
     $sections = $config['sections'] ?? [];
     ?>
 
     <!-- Help Drawer Trigger Button -->
-    <button id="help-drawer-trigger" class="help-drawer-trigger" aria-label="Open help documentation" title="Help & Documentation">
+    <button id="help-drawer-trigger" class="help-drawer-trigger" aria-label="<?php echo htmlspecialchars(__('help_drawer.aria_open')); ?>" title="<?php echo htmlspecialchars(__('help_drawer.default_title')); ?>">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
             <line x1="12" y1="17" x2="12.01" y2="17"></line>
         </svg>
-        <span>Help</span>
+        <span><?php echo __('help_drawer.button_label'); ?></span>
     </button>
 
     <!-- Help Drawer Overlay -->
@@ -45,7 +45,7 @@ function render_help_drawer($config) {
     <div id="help-drawer" class="help-drawer">
         <div class="help-drawer-header">
             <h2><?php echo htmlspecialchars($title); ?></h2>
-            <button id="help-drawer-close" class="help-drawer-close" aria-label="Close help">
+            <button id="help-drawer-close" class="help-drawer-close" aria-label="<?php echo htmlspecialchars(__('help_drawer.aria_close')); ?>">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -71,7 +71,7 @@ function render_help_drawer($config) {
                     <line x1="12" y1="9" x2="12" y2="13"></line>
                     <line x1="12" y1="17" x2="12.01" y2="17"></line>
                 </svg>
-                Report a Problem
+                <?php echo __('help_drawer.report.button'); ?>
             </button>
         </div>
     </div>
@@ -80,7 +80,7 @@ function render_help_drawer($config) {
     <div id="help-report-modal" class="help-report-modal">
         <div class="help-report-modal-content">
             <div class="help-report-modal-header">
-                <h3>Report a Problem</h3>
+                <h3><?php echo __('help_drawer.report.modal_title'); ?></h3>
                 <button id="help-report-modal-close" class="help-modal-close">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -90,20 +90,20 @@ function render_help_drawer($config) {
             </div>
 
             <div class="help-report-modal-body">
-                <p style="color: #666; margin-bottom: 1rem;">Describe the problem you're experiencing. This will notify the admin team with details about your session.</p>
+                <p style="color: #666; margin-bottom: 1rem;"><?php echo __('help_drawer.report.description'); ?></p>
 
                 <div class="help-form-group">
-                    <label for="help-problem-description">Problem Description</label>
-                    <textarea id="help-problem-description" rows="6" placeholder="Describe what you were trying to do and what went wrong..."></textarea>
+                    <label for="help-problem-description"><?php echo __('help_drawer.report.label'); ?></label>
+                    <textarea id="help-problem-description" rows="6" placeholder="<?php echo htmlspecialchars(__('help_drawer.report.placeholder')); ?>"></textarea>
                 </div>
 
                 <div class="help-report-context">
-                    <strong>The following information will be included automatically:</strong>
+                    <strong><?php echo __('help_drawer.report.context_title'); ?></strong>
                     <ul>
-                        <li>Current page: <span id="help-context-page"></span></li>
-                        <li>Your account: <span id="help-context-user"></span></li>
-                        <li>Browser: <span id="help-context-browser"></span></li>
-                        <li>Timestamp: <span id="help-context-timestamp"></span></li>
+                        <li><?php echo __('help_drawer.report.context_labels.page'); ?> <span id="help-context-page"></span></li>
+                        <li><?php echo __('help_drawer.report.context_labels.user'); ?> <span id="help-context-user"></span></li>
+                        <li><?php echo __('help_drawer.report.context_labels.browser'); ?> <span id="help-context-browser"></span></li>
+                        <li><?php echo __('help_drawer.report.context_labels.timestamp'); ?> <span id="help-context-timestamp"></span></li>
                     </ul>
                 </div>
 
@@ -112,8 +112,8 @@ function render_help_drawer($config) {
             </div>
 
             <div class="help-report-modal-footer">
-                <button id="help-report-cancel-btn" class="help-btn-secondary">Cancel</button>
-                <button id="help-report-submit-btn" class="help-btn-primary">Submit Report</button>
+                <button id="help-report-cancel-btn" class="help-btn-secondary"><?php echo __('common.buttons.cancel'); ?></button>
+                <button id="help-report-submit-btn" class="help-btn-primary"><?php echo __('common.buttons.submit'); ?> <?php echo __('help_drawer.report.button'); ?></button>
             </div>
         </div>
     </div>
@@ -804,13 +804,13 @@ function render_help_drawer($config) {
                 const description = reportDescription.value.trim();
 
                 if (!description) {
-                    reportError.textContent = 'Please describe the problem you\'re experiencing.';
+                    reportError.textContent = <?php echo json_encode(__('help_drawer.report.validation.required')); ?>;
                     reportError.style.display = 'block';
                     return;
                 }
 
                 reportSubmitBtn.disabled = true;
-                reportSubmitBtn.textContent = 'Submitting...';
+                reportSubmitBtn.textContent = <?php echo json_encode(__('help_drawer.report.submitting')); ?>;
                 reportError.style.display = 'none';
                 reportSuccess.style.display = 'none';
 
@@ -849,7 +849,7 @@ function render_help_drawer($config) {
                     const data = await response.json();
 
                     if (data.success) {
-                        reportSuccess.textContent = 'Problem report submitted successfully! An admin will be notified.';
+                        reportSuccess.textContent = <?php echo json_encode(__('help_drawer.report.success')); ?>;
                         reportSuccess.style.display = 'block';
                         reportDescription.value = '';
 
@@ -857,15 +857,15 @@ function render_help_drawer($config) {
                             closeReportModal();
                         }, 3000);
                     } else {
-                        reportError.textContent = data.error || 'Failed to submit problem report. Please try again.';
+                        reportError.textContent = data.error || <?php echo json_encode(__('help_drawer.report.error')); ?>;
                         reportError.style.display = 'block';
                     }
                 } catch (error) {
-                    reportError.textContent = 'Network error: ' + error.message;
+                    reportError.textContent = <?php echo json_encode(__('help_drawer.report.network_error')); ?> + ' ' + error.message;
                     reportError.style.display = 'block';
                 } finally {
                     reportSubmitBtn.disabled = false;
-                    reportSubmitBtn.textContent = 'Submit Report';
+                    reportSubmitBtn.textContent = <?php echo json_encode(__('common.buttons.submit') . ' ' . __('help_drawer.report.button')); ?>;
                 }
             }
 

@@ -16,9 +16,10 @@ $user_token = (object)[
     'alliances' => $user->alliances ?? []
 ];
 
-// GET: List R4s for an alliance
+// GET: List R4s for an alliance or get eligible R4 users
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $tag = $_GET['tag'] ?? '';
+    $action = $_GET['action'] ?? 'list';
 
     if (empty($tag)) {
         http_response_code(400);
@@ -33,6 +34,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         exit;
     }
 
+    // Get eligible R4 users from users.json
+    if ($action === 'eligible_users') {
+        $users_file = __DIR__ . '/../admin/users.json';
+        if (!file_exists($users_file)) {
+            echo json_encode([
+                'success' => true,
+                'eligible_users' => []
+            ]);
+            exit;
+        }
+
+        $users_data = json_decode(file_get_contents($users_file), true);
+        $eligible_users = [];
+
+        if (isset($users_data['users'])) {
+            foreach ($users_data['users'] as $user_account) {
+                // Check if user has r4 role
+                $roles = $user_account['roles'] ?? [];
+                if (!in_array('r4', $roles)) {
+                    continue;
+                }
+
+                // Check if user has access to this alliance
+                $user_alliances = $user_account['servers']['1586']['alliances'] ?? [];
+                if (!in_array($tag, $user_alliances) && !in_array('*', $user_alliances)) {
+                    continue;
+                }
+
+                $eligible_users[] = [
+                    'email' => $user_account['email'],
+                    'in_game_name' => $user_account['in_game_name'] ?? null,
+                    'discord_id' => $user_account['discord_id'] ?? null,
+                    'roles' => $roles
+                ];
+            }
+        }
+
+        echo json_encode([
+            'success' => true,
+            'alliance_tag' => $tag,
+            'eligible_users' => $eligible_users
+        ]);
+        exit;
+    }
+
+    // List current R4s
     $result = AllianceHelper::getAllianceByTag($tag);
     if (!$result) {
         http_response_code(404);
@@ -90,7 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Add R4
     if ($action === 'add') {
         $name = $input['name'] ?? '';
-        $gameId = $input['gameId'] ?? null;
+        $email = $input['email'] ?? null;
+        $user_uid = $input['user_uid'] ?? null;
         $discordId = $input['discordId'] ?? null;
         $canVote = $input['canVote'] ?? false;
         $role = $input['role'] ?? null;
@@ -103,7 +151,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $new_r4 = [
             'name' => $name,
-            'gameId' => $gameId,
+            'email' => $email,
+            'user_uid' => $user_uid,
             'discordId' => $discordId,
             'canVote' => (bool)$canVote,
             'role' => $role,
@@ -137,8 +186,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($input['name'])) {
             $alliance['r4s'][$r4_index]['name'] = $input['name'];
         }
-        if (isset($input['gameId'])) {
-            $alliance['r4s'][$r4_index]['gameId'] = $input['gameId'];
+        if (isset($input['email'])) {
+            $alliance['r4s'][$r4_index]['email'] = $input['email'];
+        }
+        if (isset($input['user_uid'])) {
+            $alliance['r4s'][$r4_index]['user_uid'] = $input['user_uid'];
         }
         if (isset($input['discordId'])) {
             $alliance['r4s'][$r4_index]['discordId'] = $input['discordId'];

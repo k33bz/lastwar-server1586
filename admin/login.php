@@ -11,9 +11,18 @@
  */
 
 define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/jwt.php';
 require_once __DIR__ . '/includes/rate_limiter.php';
+require_once __DIR__ . '/includes/i18n.php';
+
+// Start session for i18n language preference
+session_start();
+
+// Initialize i18n
+i18n_handle_language_change();
+i18n_init();
 
 // Handle magic link authentication
 if (isset($_GET['magic'])) {
@@ -92,18 +101,19 @@ if (isset($_COOKIE['jwt'])) {
 $error = $_GET['error'] ?? null;
 $success = $_GET['success'] ?? null;
 
+// Error and success messages are now handled via i18n
 $error_messages = [
-    'no_session' => 'Please log in to access this page.',
-    'expired' => 'Your session has expired. Please log in again.',
-    'revoked' => 'Your session has been revoked. Please log in again.',
-    'invalid' => 'Invalid session. Please log in again.',
-    'key_rotated' => 'Security keys have been rotated. Please log in again for your security.',
-    'unknown_email' => 'Email address not recognized or not authorized.',
-    'send_failed' => 'Failed to send magic link. Please try again.',
+    'no_session' => __('login.errors.no_session'),
+    'expired' => __('login.errors.expired'),
+    'revoked' => __('login.errors.revoked'),
+    'invalid' => __('login.errors.invalid'),
+    'key_rotated' => __('login.errors.key_rotated'),
+    'unknown_email' => __('login.errors.unknown_email'),
+    'send_failed' => __('login.errors.send_failed'),
 ];
 
 $success_messages = [
-    'sent' => 'Magic link sent! Check your email and click the link to log in.',
+    'sent' => __('login.success.sent'),
 ];
 ?>
 <!DOCTYPE html>
@@ -111,7 +121,7 @@ $success_messages = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - <?php echo $_ENV['APP_NAME'] ?? 'Last War 1586'; ?></title>
+    <title><?php echo __('login.page_title'); ?> - <?php echo $_ENV['APP_NAME'] ?? 'Last War 1586'; ?></title>
     <style>
         * {
             margin: 0;
@@ -247,7 +257,11 @@ $success_messages = [
 <body>
     <div class="login-container">
         <h1><?php echo $_ENV['APP_NAME'] ?? 'Last War 1586'; ?></h1>
-        <p class="subtitle">Alliance Admin Portal</p>
+        <p class="subtitle"><?php echo __('login.subtitle'); ?></p>
+
+        <div style="text-align: right; margin-bottom: 10px;">
+            <?php echo i18n_render_language_switcher(); ?>
+        </div>
 
         <?php if ($error && isset($error_messages[$error])): ?>
             <div class="alert alert-error">
@@ -263,28 +277,30 @@ $success_messages = [
 
         <form method="POST" action="send_magic_link.php">
             <div class="form-group">
-                <label for="email">Alliance Email Address</label>
+                <label for="email"><?php echo __('login.form.email_label'); ?></label>
                 <input
                     type="email"
                     id="email"
                     name="email"
                     required
                     autocomplete="email"
-                    placeholder="your.email@example.com"
+                    placeholder="<?php echo __('login.form.email_placeholder'); ?>"
                     autofocus
                 >
             </div>
 
-            <button type="submit">Send Magic Link</button>
+            <!-- Pass current language selection to magic link processor -->
+            <input type="hidden" name="language" value="<?php echo htmlspecialchars(i18n_get_current_language()); ?>">
+
+            <button type="submit"><?php echo __('login.form.submit_button'); ?></button>
         </form>
 
         <div class="info-box">
-            <strong>How it works:</strong>
+            <strong><?php echo __('login.info.title'); ?></strong>
             <ul>
-                <li>Enter your alliance email address</li>
-                <li>Receive a secure login link via email</li>
-                <li>Click the link to access your dashboard</li>
-                <li>Links expire after 10 minutes</li>
+                <?php foreach (__('login.info.steps') as $step): ?>
+                    <li><?php echo $step; ?></li>
+                <?php endforeach; ?>
             </ul>
         </div>
     </div>

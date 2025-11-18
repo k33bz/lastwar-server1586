@@ -15,6 +15,7 @@
 
 if (!defined('ADMIN_INIT')) {
     define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
 }
 
 // Ensure autoloader is loaded first

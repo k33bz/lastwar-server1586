@@ -50,7 +50,10 @@ header('Content-Type: application/json');
 
 // Wrap require statements in try-catch
 try {
-    require_once 'jwt.php';
+    define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
+
+require_once 'jwt.php';
     require_once 'audit_logger.php';
     require_once 'json_helpers.php';
     require_once 'includes/csrf.php';

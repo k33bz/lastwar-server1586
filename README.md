@@ -42,11 +42,14 @@ Official website for Server 1586 alliance management, council voting, and server
 - **Dynamic Data**: JSON-based data fetching with TypeScript interfaces
 
 ### Admin Panel (PHP - Separate)
-- JWT Authentication
-- Role-Based Access Control
-- Discord Integration
-- Alliance Management
-- Security Monitoring
+- **JWT Authentication**: Passwordless magic link login system
+- **Role-Based Access Control**: Admin, President, Council Member roles
+- **Multi-Language Support**: Full i18n with 5 languages (EN, ES, PT, DE, KO)
+- **Discord Integration**: Vote management, announcements, channel configuration
+- **Alliance Management**: Power updates, officer management, tags, rotation schedule
+- **Council Voting**: Discord-integrated voting system with web management
+- **Security Monitoring**: Audit logging, rate limiting, session management
+- **User Management**: Profile editing, language preferences, role assignment
 
 ---
 
@@ -125,10 +128,24 @@ Server1586-clean/
 ├── temp/                      # Temporary files (not in git)
 │
 ├── admin/                     # PHP Admin Panel (separate system)
+│   ├── i18n/                  # Admin panel translations
+│   │   ├── en/                # English (source)
+│   │   ├── es/                # Spanish
+│   │   ├── pt/                # Portuguese
+│   │   ├── de/                # German
+│   │   └── ko/                # Korean
+│   ├── includes/              # Shared PHP modules
+│   │   ├── i18n.php           # Translation functions
+│   │   └── help_content/      # Help drawer content
+│   └── [50+ admin pages]      # Various admin functionality
 │
 ├── assets/                    # Built static assets
 ├── images/                    # Static images and logos
 ├── index.html                 # Production entry point
+├── dev_server.py              # Development server GUI tool
+├── translate_admin_smart.py   # Admin panel translation script
+├── translate_rules.py         # Client rules translation script
+├── translate_locale.py        # Client locale translation script
 ├── .gitignore                 # Git exclusions
 ├── CLAUDE.md                  # Development workflow guide
 ├── DEPLOYMENT.md              # Deployment instructions
@@ -186,6 +203,40 @@ npm run type-check
 # Linting
 npm run lint
 ```
+
+### Development GUI Tool
+
+For easier local testing, use the development server GUI:
+
+```bash
+python dev_server.py
+```
+
+**Features:**
+- Start/stop PHP admin server (port 8000)
+- Start/stop React dev server (port 5173)
+- Build production bundles
+- Preview production builds (port 4173)
+- Live log monitoring for all servers
+- One-click browser launch
+- Clean dist directory
+
+### Translation Scripts
+
+The project includes automated translation tools for maintaining multi-language support:
+
+```bash
+# Translate admin panel UI (EN → ES, PT, DE, KO)
+python translate_admin_smart.py
+
+# Translate client rules (EN → ES, PT, DE, KO)
+python translate_rules.py
+
+# Translate client locales (EN → ES, PT, DE, KO)
+python translate_locale.py
+```
+
+**Note:** Requires LM Studio running on `localhost:1234` with Hunyuan-MT-7B model.
 
 ---
 

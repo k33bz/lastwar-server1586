@@ -14,7 +14,7 @@ require_once 'jwt.php';
 $user = require_jwt_session();
 
 // Set page title for header
-$page_title = "Edit Alliance";
+$page_title = __('pages.alliance_edit.title');
 
 // Create proper user token for role checking
 $user_token = (object)[
@@ -167,7 +167,7 @@ if ($show_all) {
                         </div>
                     </div>
                     <div class="alliance-info">
-                        <p><strong>R5:</strong> <?= htmlspecialchars($alliance_item['r5']['name'] ?? $alliance_item['r5'] ?? 'Unknown') ?></p>
+                        <p><strong>R5:</strong> <?= htmlspecialchars(is_array($alliance_item['r5'] ?? null) ? ($alliance_item['r5']['name'] ?? 'Unknown') : ($alliance_item['r5'] ?? 'Unknown')) ?></p>
                         <?php if (!empty($alliance_item['info']['description'])): ?>
                             <p class="description"><?= htmlspecialchars(substr($alliance_item['info']['description'], 0, 100)) ?><?= strlen($alliance_item['info']['description']) > 100 ? '...' : '' ?></p>
                         <?php endif; ?>
@@ -661,50 +661,6 @@ if ($show_all) {
             <?php endif; ?>
         </div>
 
-        <!-- Add/Edit R4 Modal -->
-        <div id="r4Modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-            <div style="background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
-                <h3 id="r4ModalTitle">Add R4 Officer</h3>
-                <form id="r4Form" onsubmit="saveR4(event)">
-                    <input type="hidden" id="r4Index" value="">
-
-                    <div class="form-group">
-                        <label>R4 Name <span style="color: red;">*</span></label>
-                        <input type="text" id="r4Name" required placeholder="In-game name">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Game ID <small>(optional)</small></label>
-                        <input type="text" id="r4GameId" placeholder="Player UID">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Discord ID <small>(optional)</small></label>
-                        <input type="text" id="r4DiscordId" placeholder="18-digit Discord user ID">
-                        <small style="color: #666;">Right-click user in Discord → Copy User ID</small>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Role <small>(optional)</small></label>
-                        <input type="text" id="r4Role" placeholder="e.g., Recruiter, Deputy, Diplomat">
-                    </div>
-
-                    <div class="form-group">
-                        <label style="display: flex; align-items: center; cursor: pointer;">
-                            <input type="checkbox" id="r4CanVote" style="margin-right: 8px;">
-                            <span>Can vote on council matters (delegation)</span>
-                        </label>
-                        <small style="color: #666; margin-left: 28px;">When enabled, this R4 can vote when R5 is absent</small>
-                    </div>
-
-                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                        <button type="submit" class="btn-primary" style="flex: 1;">Save</button>
-                        <button type="button" class="btn-secondary" onclick="closeR4Modal()" style="flex: 1;">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
         <h2>Discord Server</h2>
 
         <div class="form-group">
@@ -976,6 +932,7 @@ function updateSignatureStatus() {
 
 // R4 Management Functions
 let r4Data = [];
+let eligibleR4Users = [];
 const isR4Only = <?= $is_r4_only ? 'true' : 'false' ?>;
 
 async function loadR4s() {
@@ -994,6 +951,94 @@ async function loadR4s() {
     } catch (error) {
         console.error('Failed to load R4s:', error);
     }
+}
+
+async function loadEligibleR4Users() {
+    const tag = '<?= htmlspecialchars($tag) ?>';
+
+    try {
+        const response = await fetch(`r4_users_api.php?tag=${encodeURIComponent(tag)}`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        console.log('Eligible users API response status:', response.status);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('API error:', response.status, errorText);
+            alert('Failed to load eligible R4 users. Please refresh the page and try again.');
+            return;
+        }
+
+        const result = await response.json();
+        console.log('API result:', result);
+
+        if (result.success) {
+            eligibleR4Users = result.eligible_users || [];
+            populateR4UserDropdown();
+        } else {
+            console.error('API returned error:', result.error);
+            alert('Failed to load eligible R4 users: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Failed to load eligible R4 users:', error);
+        alert('Network error loading R4 users. Please check your connection.');
+    }
+}
+
+function populateR4UserDropdown() {
+    const select = document.getElementById('r4UserSelect');
+    if (!select) {
+        console.error('r4UserSelect element not found');
+        return;
+    }
+
+    console.log('Populating dropdown with', eligibleR4Users.length, 'users');
+
+    // Clear existing options except the first one
+    select.innerHTML = '<option value="">-- Select an R4 user --</option>';
+
+    eligibleR4Users.forEach((user, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = user.in_game_name ?
+            `${user.in_game_name} (${user.email})` :
+            user.email;
+        option.dataset.uid = user.uid || '';
+        option.dataset.email = user.email;
+        option.dataset.name = user.in_game_name || user.email;
+        option.dataset.discordId = user.discord_id || '';
+        select.appendChild(option);
+    });
+
+    console.log('Dropdown populated with', select.options.length - 1, 'options');
+}
+
+function onR4UserSelected() {
+    const select = document.getElementById('r4UserSelect');
+    const selectedOption = select.options[select.selectedIndex];
+
+    if (selectedOption.value === '') {
+        document.getElementById('r4Name').value = '';
+        document.getElementById('r4Email').value = '';
+        document.getElementById('r4UserUid').value = '';
+        document.getElementById('r4DiscordId').value = '';
+        return;
+    }
+
+    const uid = selectedOption.dataset.uid;
+    const email = selectedOption.dataset.email;
+    const name = selectedOption.dataset.name;
+    const discordId = selectedOption.dataset.discordId;
+
+    document.getElementById('r4Name').value = name;
+    document.getElementById('r4Email').value = email;
+    document.getElementById('r4UserUid').value = uid || '';
+    document.getElementById('r4DiscordId').value = discordId || '';
 }
 
 function renderR4List() {
@@ -1032,18 +1077,26 @@ function renderR4List() {
     `).join('');
 }
 
-function showAddR4Form() {
+async function showAddR4Form() {
     if (isR4Only) {
         alert('Only the R5 can add R4 officers.');
         return;
     }
+    const modal = document.getElementById('r4Modal');
     const form = document.getElementById('r4Form');
-    if (!form) return;
+    if (!modal || !form) {
+        console.error('Modal or form not found');
+        return;
+    }
 
     document.getElementById('r4ModalTitle').textContent = 'Add R4 Officer';
     document.getElementById('r4Index').value = '';
     form.reset();
-    document.getElementById('r4Modal').style.display = 'flex';
+
+    // Load eligible R4 users
+    await loadEligibleR4Users();
+
+    modal.style.display = 'block';
 }
 
 function editR4(index) {
@@ -1055,13 +1108,23 @@ function editR4(index) {
 
     document.getElementById('r4ModalTitle').textContent = 'Edit R4 Officer';
     document.getElementById('r4Index').value = index;
-    document.getElementById('r4Name').value = r4.name || '';
-    document.getElementById('r4GameId').value = r4.gameId || '';
+
+    // Hide user select for editing (can't change the user)
+    const userSelectGroup = document.getElementById('r4UserSelect').closest('.form-group');
+    if (userSelectGroup) userSelectGroup.style.display = 'none';
+
+    // Make name field editable for editing existing entries
+    const nameInput = document.getElementById('r4Name');
+    nameInput.readOnly = false;
+    nameInput.style.background = 'white';
+    nameInput.value = r4.name || '';
+
+    document.getElementById('r4Email').value = r4.email || '';
     document.getElementById('r4DiscordId').value = r4.discordId || '';
     document.getElementById('r4Role').value = r4.role || '';
     document.getElementById('r4CanVote').checked = r4.canVote || false;
 
-    document.getElementById('r4Modal').style.display = 'flex';
+    document.getElementById('r4Modal').style.display = 'block';
 }
 
 function closeR4Modal() {
@@ -1069,6 +1132,16 @@ function closeR4Modal() {
     const form = document.getElementById('r4Form');
     if (modal) modal.style.display = 'none';
     if (form) form.reset();
+
+    // Reset user select visibility and name field readonly state
+    const userSelectGroup = document.getElementById('r4UserSelect')?.closest('.form-group');
+    if (userSelectGroup) userSelectGroup.style.display = '';
+
+    const nameInput = document.getElementById('r4Name');
+    if (nameInput) {
+        nameInput.readOnly = true;
+        nameInput.style.background = '#f0f0f0';
+    }
 }
 
 async function saveR4(event) {
@@ -1080,7 +1153,8 @@ async function saveR4(event) {
 
     const r4 = {
         name: document.getElementById('r4Name').value,
-        gameId: document.getElementById('r4GameId').value || null,
+        email: document.getElementById('r4Email').value || null,
+        user_uid: document.getElementById('r4UserUid').value || null,
         discordId: document.getElementById('r4DiscordId').value || null,
         role: document.getElementById('r4Role').value || null,
         canVote: document.getElementById('r4CanVote').checked
@@ -1251,5 +1325,55 @@ $token = $user; // Use the JWT token for role-aware content
 $help_config = require 'includes/help_content/alliance_edit_help.php';
 render_help_drawer($help_config);
 ?>
+
+<!-- R4 Modal (outside form for proper DOM structure) -->
+<div id="r4Modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+        <h3 id="r4ModalTitle">Add R4 Officer</h3>
+        <form id="r4Form" onsubmit="saveR4(event)">
+            <input type="hidden" id="r4Index" value="">
+            <input type="hidden" id="r4Email" value="">
+            <input type="hidden" id="r4UserUid" value="">
+
+            <div class="form-group">
+                <label>Select R4 User <span style="color: red;">*</span></label>
+                <select id="r4UserSelect" required onchange="onR4UserSelected()">
+                    <option value="">-- Select an R4 user --</option>
+                </select>
+                <small style="color: #666;">Only users with R4 role assigned to this alliance are shown</small>
+            </div>
+
+            <div class="form-group">
+                <label>In-Game Name <span style="color: red;">*</span></label>
+                <input type="text" id="r4Name" required placeholder="In-game name" readonly style="background: #f0f0f0;">
+                <small style="color: #666;">From user profile</small>
+            </div>
+
+            <div class="form-group">
+                <label>Discord ID</label>
+                <input type="text" id="r4DiscordId" placeholder="Not set in profile" readonly style="background: #f0f0f0;">
+                <small style="color: #666;">From user profile</small>
+            </div>
+
+            <div class="form-group">
+                <label>Role <small>(optional)</small></label>
+                <input type="text" id="r4Role" placeholder="e.g., Recruiter, Deputy, Diplomat">
+            </div>
+
+            <div class="form-group">
+                <label style="display: flex; align-items: center; cursor: pointer;">
+                    <input type="checkbox" id="r4CanVote" style="margin-right: 8px;">
+                    <span>Can vote on council matters (delegation)</span>
+                </label>
+                <small style="color: #666; margin-left: 28px;">When enabled, this R4 can vote when R5 is absent</small>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn-primary" style="flex: 1;">Save</button>
+                <button type="button" class="btn-secondary" onclick="closeR4Modal()" style="flex: 1;">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <?php include 'includes/footer.php'; ?>

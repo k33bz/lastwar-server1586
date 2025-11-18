@@ -23,7 +23,7 @@ log_audit_event('votes_management_page_accessed', $user->sub, [
     'user_role' => $user->aud
 ]);
 
-$page_title = "Votes Management";
+$page_title = __('pages.votes_management.title');
 include 'includes/header.php';
 ?>
 
@@ -605,4 +605,9 @@ include 'includes/header.php';
     });
 </script>
 
+<?php
+require_once 'includes/help_drawer.php';
+$help_config = require 'includes/help_content/votes_management_help.php';
+render_help_drawer($help_config);
+?>
 <?php include 'includes/footer.php'; ?>

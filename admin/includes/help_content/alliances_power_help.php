@@ -4,9 +4,9 @@
  * For APE, R5, and R4 roles
  */
 
-$is_ape = has_role($token, 'ape');
-$is_r5 = has_role($token, 'r5');
-$is_r4 = has_role($token, 'r4');
+$is_ape = has_role($user, 'ape');
+$is_r5 = has_role($user, 'r5');
+$is_r4 = has_role($user, 'r4');
 
 return [
     'title' => 'Power Management Help',

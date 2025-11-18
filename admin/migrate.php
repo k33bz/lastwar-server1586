@@ -39,6 +39,7 @@ if (php_sapi_name() !== 'cli') {
 }
 
 define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
 
 try {
     require_once __DIR__ . '/config.php';

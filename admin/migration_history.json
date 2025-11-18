@@ -8,6 +8,15 @@
             ],
             "timestamp": "2025-11-12T21:15:04-05:00",
             "admin_email": "matthewkastro@gmail.com"
+        },
+        {
+            "from_version": "3.7.0",
+            "to_version": "3.8.0",
+            "migrations_run": [
+                "3.8.0"
+            ],
+            "timestamp": "2025-11-14T16:36:56-05:00",
+            "admin_email": "matthewkastro@gmail.com"
         }
     ]
 }

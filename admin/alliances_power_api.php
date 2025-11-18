@@ -45,7 +45,10 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 try {
-    require_once 'config.php';
+    define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
+
+require_once 'config.php';
     require_once 'jwt.php';
     require_once 'json_helpers.php';
     require_once 'audit_logger.php';

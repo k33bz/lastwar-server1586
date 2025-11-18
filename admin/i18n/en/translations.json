@@ -1,0 +1,537 @@
+{
+  "help": {
+    "president_approvals": {
+      "title": "President Vote Approval Help",
+      "sections": {
+        "overview": {
+          "title": "Overview",
+          "intro": "As the server <strong>President</strong>, you are responsible for reviewing and approving vote proposals submitted by council members. This is a crucial role in the server's governance system.",
+          "responsibilities": {
+            "title": "Your Responsibilities:",
+            "items": [
+              "Review all incoming vote proposals",
+              "Approve well-formed, legitimate proposals",
+              "Reject proposals that are unclear, inappropriate, or don't require a vote",
+              "Provide clear feedback when rejecting proposals",
+              "Act in a timely manner (within 12 hours when possible)"
+            ]
+          },
+          "auto_approval_note": "Auto-Approval Safety Net: If you don't review a proposal within 12 hours, it will automatically be approved and a vote will be created. This prevents bottlenecks but means you should check this page regularly."
+        },
+        "proposal_table": {
+          "title": "Understanding the Proposal Table",
+          "intro": "The table displays all pending vote proposals that require your review:",
+          "columns": {
+            "submitted_by": "<strong>Submitted By:</strong> The council member who created the proposal (shown as email address)",
+            "title": "<strong>Title:</strong> The vote title - should be clear and concise",
+            "description": "<strong>Description:</strong> Detailed explanation of what is being voted on - click to expand if truncated",
+            "category": "<strong>Category:</strong> The type of vote (Rule Change, Alliance Dispute, Territory Decision, Event Planning, Other)",
+            "submitted_at": "<strong>Submitted At:</strong> When the proposal was created",
+            "time_remaining": "<strong>Time Remaining:</strong> Countdown until auto-approval (12 hours from submission)",
+            "actions": "<strong>Actions:</strong> Approve or Reject buttons"
+          },
+          "priority_warning": "Priority Review: Proposals with less time remaining should be reviewed first. Look for red \"URGENT\" indicators showing less than 2 hours remain."
+        },
+        "how_to_approve": {
+          "title": "How to Approve a Proposal",
+          "steps_title": "Step-by-step approval process:",
+          "steps": [
+            "<strong>Read carefully:</strong> Review the title, description, and category",
+            "<strong>Assess legitimacy:</strong> Is this a council-level decision? Is it clear what is being voted on?",
+            "<strong>Consider timing:</strong> Is now a good time for this vote? (e.g., not during major events)",
+            "<strong>Click \"Approve\":</strong> If the proposal meets standards",
+            "<strong>Confirmation:</strong> You'll see a success message",
+            "<strong>Automatic actions:</strong> Vote is created immediately and DMs are sent to all council members"
+          ],
+          "after_approval": {
+            "title": "What happens after approval:",
+            "items": [
+              "Vote is created in Discord bot system",
+              "All 7 council members receive Discord DM with vote details",
+              "24-hour voting period begins",
+              "Proposal is removed from your pending list",
+              "Submitter is notified of approval"
+            ]
+          },
+          "criteria_title": "Approval Criteria:",
+          "criteria": [
+            "✅ Clear, specific title and description",
+            "✅ Legitimate council-level decision",
+            "✅ Not already covered by existing rules/votes",
+            "✅ Appropriate category selected",
+            "✅ Reasonable timing (not during major events/conflicts)"
+          ]
+        }
+      }
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Alliance Admin Portal",
+      "sections": {
+        "quick_actions": "Quick Actions",
+        "alliance_management": "Alliance Management",
+        "governance": "Governance",
+        "discord_integration": "Discord Integration",
+        "system_admin": "System Administration"
+      }
+    },
+    "alliance_edit": {
+      "title": "Edit Alliance",
+      "nav_title": "Editor",
+      "description": "Manage alliance information and officers"
+    },
+    "alliances_power": {
+      "title": "Power Updates",
+      "nav_title": "Power Editor",
+      "description": "Update alliance power values"
+    },
+    "alliance_tags_manager": {
+      "title": "Alliance Tags Manager",
+      "nav_title": "Tag Manager",
+      "description": "Manage alliance visibility and display order"
+    },
+    "user_management": {
+      "title": "User Management",
+      "nav_title": "Manage Users",
+      "description": "Manage admin users and permissions"
+    },
+    "user_profile": {
+      "title": "My Profile",
+      "description": "Manage your account settings and in-game information"
+    },
+    "council_rotation": {
+      "title": "Council Rotation",
+      "nav_title": "Council Rotation",
+      "description": "Manage weekly council rotation schedule"
+    },
+    "discord_announcements": {
+      "title": "Discord Announcements",
+      "nav_title": "Announcements",
+      "description": "Send announcements to Discord channels"
+    },
+    "discord_channels": {
+      "title": "Discord Channels",
+      "nav_title": "Channels",
+      "description": "Configure Discord channel mappings"
+    },
+    "discord_templates": {
+      "title": "Discord Templates",
+      "nav_title": "Message Templates",
+      "description": "Manage message templates"
+    },
+    "discord_scheduled": {
+      "title": "Scheduled Messages",
+      "nav_title": "Scheduled Messages",
+      "description": "Manage scheduled Discord posts"
+    },
+    "discord_recurring": {
+      "title": "Recurring Messages",
+      "nav_title": "Recurring Messages",
+      "description": "Manage recurring Discord posts"
+    },
+    "discord_vote_proposals": {
+      "title": "Council Proposals",
+      "nav_title": "Council Proposals",
+      "description": "Submit and manage council vote proposals"
+    },
+    "president_vote_approvals": {
+      "title": "Approve Votes",
+      "nav_title": "Vote Approvals",
+      "description": "Review and approve vote proposals"
+    },
+    "votes_management": {
+      "title": "Votes Management",
+      "nav_title": "Votes History",
+      "description": "View and manage all council votes"
+    },
+    "season2_manager": {
+      "title": "Season 2 Event Calendar",
+      "nav_title": "Event Calendar",
+      "description": "Manage Season 2 events and schedule"
+    },
+    "security_audit": {
+      "title": "Security Audit Log",
+      "nav_title": "Audit Logs",
+      "description": "Review system security events"
+    },
+    "security_backups": {
+      "title": "System Backups",
+      "nav_title": "Backups",
+      "description": "Manage system backups and restores"
+    }
+  },
+  "common": {
+    "buttons": {
+      "approve": "Approve",
+      "reject": "Reject",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "save": "Save",
+      "delete": "Delete",
+      "close": "Close",
+      "edit": "Edit",
+      "view": "View",
+      "back": "Back",
+      "add": "Add",
+      "remove": "Remove",
+      "update": "Update",
+      "create": "Create",
+      "send": "Send",
+      "export": "Export",
+      "import": "Import",
+      "refresh": "Refresh",
+      "search": "Search",
+      "filter": "Filter",
+      "reset": "Reset"
+    },
+    "labels": {
+      "title": "Title",
+      "description": "Description",
+      "category": "Category",
+      "status": "Status",
+      "actions": "Actions",
+      "date": "Date",
+      "time": "Time",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "roles": "Roles",
+      "alliance": "Alliance",
+      "alliances": "Alliances",
+      "power": "Power",
+      "rank": "Rank",
+      "tag": "Tag",
+      "created": "Created",
+      "updated": "Updated",
+      "created_by": "Created By",
+      "updated_by": "Updated By",
+      "discord_id": "Discord ID",
+      "in_game_name": "In-Game Name",
+      "yes": "Yes",
+      "no": "No",
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "visible": "Visible",
+      "hidden": "Hidden"
+    },
+    "alliance": {
+      "r5": "R5 (Leader)",
+      "r4": "R4 (Officer)",
+      "ape": "APE (Power Editor)",
+      "member_count": "Member Count",
+      "power_value": "Power Value",
+      "alliance_name": "Alliance Name",
+      "alliance_tag": "Alliance Tag",
+      "r5_name": "R5 Name",
+      "r5_discord_id": "R5 Discord ID",
+      "add_r4": "Add R4",
+      "remove_r4": "Remove R4",
+      "rules_signed": "Rules Signed",
+      "can_vote": "Can Vote",
+      "role_title": "Role/Title"
+    },
+    "discord": {
+      "channel": "Channel",
+      "channels": "Channels",
+      "template": "Template",
+      "templates": "Templates",
+      "message": "Message",
+      "announcement": "Announcement",
+      "scheduled": "Scheduled",
+      "channel_id": "Channel ID",
+      "channel_name": "Channel Name",
+      "channel_type": "Channel Type",
+      "message_content": "Message Content",
+      "send_time": "Send Time",
+      "recurring": "Recurring",
+      "one_time": "One-Time"
+    },
+    "votes": {
+      "vote": "Vote",
+      "votes": "Votes",
+      "proposal": "Proposal",
+      "proposals": "Proposals",
+      "vote_title": "Vote Title",
+      "vote_description": "Vote Description",
+      "submitted_by": "Submitted By",
+      "submitted_at": "Submitted At",
+      "deadline": "Deadline",
+      "time_remaining": "Time Remaining",
+      "vote_yes": "Yes",
+      "vote_no": "No",
+      "vote_abstain": "Abstain",
+      "results": "Results",
+      "passed": "Passed",
+      "failed": "Failed",
+      "in_progress": "In Progress"
+    },
+    "messages": {
+      "success": "Success!",
+      "error": "An error occurred",
+      "loading": "Loading...",
+      "no_data": "No data available",
+      "confirm_action": "Are you sure?",
+      "saved": "Changes saved successfully"
+    },
+    "navigation": {
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "alliances": "Alliances",
+      "votes": "Votes",
+      "governance": "Governance",
+      "settings": "Settings",
+      "logout": "Logout",
+      "server_management": "Server Management",
+      "discord": "Discord",
+      "seasons": "Seasons",
+      "users": "Users",
+      "security": "Security",
+      "system": "System"
+    },
+    "welcome_back": "Welcome back, {{name}}"
+  },
+  "seasons": {
+    "coming_soon": "Coming Soon",
+    "season1": {
+      "title": "Season 1",
+      "nav_title": "Season 1",
+      "description": "Winter Season - Completed",
+      "status": "Completed",
+      "date_label": "Season Dates",
+      "dates": "December 2024 - January 2025"
+    },
+    "season2": {
+      "title": "Season 2 Event Calendar",
+      "nav_title": "Season 2",
+      "description": "Spring Season Event Management"
+    },
+    "season3": {
+      "title": "Season 3",
+      "nav_title": "Season 3",
+      "description": "Summer Season - Coming Soon",
+      "placeholder_message": "Season 3 event management will be available soon."
+    },
+    "season4": {
+      "title": "Season 4",
+      "nav_title": "Season 4",
+      "description": "Fall Season - Coming Soon",
+      "placeholder_message": "Season 4 event management will be available soon."
+    },
+    "season5": {
+      "title": "Season 5",
+      "nav_title": "Season 5",
+      "description": "Winter Season - Coming Soon",
+      "placeholder_message": "Season 5 event management will be available soon."
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "aria_label": "Notifications",
+    "mark_all_read": "Mark all read",
+    "loading": "Loading notifications...",
+    "view_all": "View All Notifications"
+  },
+  "roles": {
+    "admin": "Admin",
+    "president": "PRESIDENT",
+    "r5": "R5",
+    "r4": "R4",
+    "ape": "APE"
+  },
+  "users": {
+    "magic_links": {
+      "nav_title": "Magic Links"
+    },
+    "send_login_link": {
+      "nav_title": "Send Login Link"
+    }
+  },
+  "discord": {
+    "rate_limits": {
+      "nav_title": "Rate Limits"
+    },
+    "config": {
+      "nav_title": "Configuration"
+    }
+  },
+  "security": {
+    "monitor": {
+      "nav_title": "Security Monitor"
+    },
+    "keys": {
+      "nav_title": "JWT Key Rotation"
+    },
+    "mfa": {
+      "nav_title": "MFA Management"
+    },
+    "test_token": {
+      "nav_title": "Generate Test Token"
+    }
+  },
+  "system": {
+    "migration": {
+      "nav_title": "Migration"
+    },
+    "metrics": {
+      "nav_title": "Metrics"
+    },
+    "notifications": {
+      "nav_title": "Notifications"
+    },
+    "changelog": {
+      "nav_title": "Changelog"
+    }
+  },
+  "forms": {
+    "validation": {
+      "required": "This field is required",
+      "email": "Please enter a valid email address",
+      "min_length": "Must be at least {{length}} characters",
+      "max_length": "Must be no more than {{length}} characters",
+      "numeric": "Must be a number",
+      "url": "Please enter a valid URL"
+    }
+  },
+  "login": {
+    "page_title": "Admin Login",
+    "subtitle": "Alliance Admin Portal",
+    "form": {
+      "email_label": "Alliance Email Address",
+      "email_placeholder": "your.email@example.com",
+      "submit_button": "Send Magic Link"
+    },
+    "errors": {
+      "no_session": "Please log in to access this page.",
+      "expired": "Your session has expired. Please log in again.",
+      "revoked": "Your session has been revoked. Please log in again.",
+      "invalid": "Invalid session. Please log in again.",
+      "key_rotated": "Security keys have been rotated. Please log in again for your security.",
+      "unknown_email": "Email address not recognized or not authorized.",
+      "send_failed": "Failed to send magic link. Please try again."
+    },
+    "success": {
+      "sent": "Magic link sent! Check your email and click the link to log in."
+    },
+    "info": {
+      "title": "How it works:",
+      "steps": [
+        "Enter your alliance email address",
+        "Receive a secure login link via email",
+        "Click the link to access your dashboard",
+        "Links expire after 10 minutes"
+      ]
+    }
+  },
+  "help_drawer": {
+    "default_title": "Help & Documentation",
+    "button_label": "Help",
+    "aria_open": "Open help documentation",
+    "aria_close": "Close help",
+    "report": {
+      "button": "Report a Problem",
+      "modal_title": "Report a Problem",
+      "description": "Describe the problem you're experiencing. This will notify the admin team with details about your session.",
+      "label": "Problem Description",
+      "placeholder": "Describe what you were trying to do and what went wrong...",
+      "context_title": "The following information will be included automatically:",
+      "context_labels": {
+        "page": "Current page:",
+        "user": "Your account:",
+        "browser": "Browser:",
+        "timestamp": "Timestamp:"
+      },
+      "validation": {
+        "required": "Please describe the problem you're experiencing."
+      },
+      "submitting": "Submitting...",
+      "success": "Problem report submitted successfully! An admin will be notified.",
+      "error": "Failed to submit problem report. Please try again.",
+      "network_error": "Network error:"
+    }
+  },
+  "emails": {
+    "magic_link": {
+      "subject": "Your Login Link for {{app_name}}",
+      "badge": "ADMIN LOGIN REQUEST",
+      "greeting": "Hello {{username}},",
+      "intro": "You requested access to the {{app_name}} Dashboard. Click the button below to securely log in:",
+      "button": "🚀 Access Admin Dashboard",
+      "alternative_label": "Alternative:",
+      "alternative_text": "Copy and paste this link into your browser:",
+      "security_title": "🛡️ Security Information",
+      "security_items": {
+        "single_use": "This link is <strong>single-use only</strong> and will become invalid after your first successful login",
+        "expiry": "Link expires in <span class=\"expiry-badge\">⏱️ 10 MINUTES</span>",
+        "no_share": "<strong>Never share this link</strong> with anyone - it grants full access to your admin account",
+        "ignore": "If you didn't request this login, you can safely ignore this email",
+        "no_reuse": "For security, the link cannot be reused once clicked"
+      },
+      "no_reply_title": "⚠️ Note:",
+      "no_reply_text": "This is an automated message from a no-reply email address. Please do not reply to this email as this mailbox is not monitored. For support, contact your server administrator.",
+      "footer_regards": "Best regards,",
+      "footer_team": "The {{app_name}} Team",
+      "footer_sent_to": "This email was sent to {{email}}"
+    },
+    "role_change": {
+      "subject": "{{app_name}} - Your Access Has Been Updated",
+      "badge": "ACCESS UPDATE",
+      "greeting": "Hello {{username}},",
+      "intro": "An administrator has updated your access permissions for the {{app_name}} admin panel.",
+      "changes_title": "What Changed:",
+      "changed_by_label": "Changed by:",
+      "date_label": "Date:",
+      "questions_text": "These changes are effective immediately. If you have any questions or believe this change was made in error, please contact an administrator.",
+      "access_text": "To access the admin panel, request a magic link at the login page or contact an admin to send you a login link.",
+      "footer_notification": "This is an automated notification from {{app_name}}",
+      "footer_unexpected": "If you did not expect this change, please contact your alliance administrator immediately",
+      "role_label": "Role:",
+      "powereditor_label": "Power Editor:",
+      "alliances_label": "Alliance Access:",
+      "yes": "Yes",
+      "no": "No",
+      "none": "(none)"
+    },
+    "test": {
+      "subject": "{{app_name}} - SMTP Test Email",
+      "title": "✅ SMTP Test Successful",
+      "badge": "Configuration Working",
+      "congratulations": "<strong>Congratulations!</strong> If you received this email, your SMTP configuration is working correctly.",
+      "config_title": "📧 Configuration Tested",
+      "config_smtp_server": "<strong>SMTP Server:</strong> <code>example.com</code>",
+      "config_port": "<strong>Port:</strong> <code>465</code> (SSL)",
+      "config_auth": "<strong>Authentication:</strong> ✅ Successful",
+      "config_from": "<strong>From Address:</strong> <code>noreply@example.com</code>",
+      "next_steps_title": "Next Steps:",
+      "next_steps_text": "You can now proceed with deploying the JWT admin system. The magic link authentication will work correctly.",
+      "no_reply_title": "Note:",
+      "no_reply_text": "This is an automated message. Please do not reply to this email as this mailbox is not monitored.",
+      "footer_regards": "Best regards,",
+      "footer_team": "The {{app_name}} Team",
+      "footer_sent_to": "Test email sent to {{email}}"
+    },
+    "council_rotation": {
+      "subject": "{{app_name}} - Council Rotation Schedule Updated",
+      "title": "🗳️ Council Rotation Updated",
+      "badge": "Schedule Regenerated",
+      "greeting": "Hello,",
+      "intro": "The <strong>council rotation schedule</strong> has been regenerated for the next {{weeks}} weeks. All future rotating council seats (ranks 6-15) have been recalculated to ensure fair distribution.",
+      "next_rotation_title": "📅 Next Rotation",
+      "week_label": "Week Number:",
+      "date_label": "Rotation Date:",
+      "regenerated_by_label": "Regenerated By:",
+      "distribution_title": "📊 Future Rotation Distribution",
+      "table_alliance": "Alliance",
+      "table_rotations": "Rotations (Next {{weeks}} Weeks)",
+      "notice_title": "ℹ️ Important:",
+      "notice_text": "The regeneration only affects future weeks. All past and current week rotations remain unchanged.",
+      "button_text": "View Full Schedule",
+      "footer_notification": "This is an automated notification from {{app_name}}.",
+      "footer_no_reply": "Please do not reply to this email."
+    }
+  }
+}

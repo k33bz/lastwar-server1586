@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@heroui/react';
 import { useApi } from '../hooks/useApi';
 import { useFullscreen } from '../hooks/useFullscreen';
@@ -6,6 +7,7 @@ import { FullscreenButton } from './FullscreenButton';
 import type { Alliance } from '../types';
 
 export function PowerDistributionEnhanced() {
+  const { t } = useTranslation('public');
   const { data: alliances, loading, error } = useApi<Alliance[]>('alliances.json');
   const [maxPower, setMaxPower] = useState(0);
 
@@ -37,7 +39,7 @@ export function PowerDistributionEnhanced() {
   if (error || !alliances) {
     return (
       <Card variant="quaternary" className="p-6 border-2 border-red-500/20">
-        <p className="text-red-500">Failed to load power distribution data</p>
+        <p className="text-red-500">{t('powerTrends.error')}</p>
       </Card>
     );
   }
@@ -57,9 +59,9 @@ export function PowerDistributionEnhanced() {
       <Card.Header>
         <div className="flex items-start justify-between w-full">
           <div>
-            <Card.Title className="text-2xl">⚡ Power Distribution</Card.Title>
+            <Card.Title className="text-2xl">{t('powerTrends.distributionTitle')}</Card.Title>
             <Card.Description>
-              Top 15 Alliances by Total Power
+              {t('powerTrends.distributionDescription')}
             </Card.Description>
           </div>
           <FullscreenButton
@@ -142,13 +144,13 @@ export function PowerDistributionEnhanced() {
             <div className="text-2xl font-bold text-accent">
               {top15.reduce((sum, a) => sum + a.power, 0).toLocaleString()}M
             </div>
-            <div className="text-xs opacity-75 mt-1">Total Combined Power</div>
+            <div className="text-xs opacity-75 mt-1">{t('powerTrends.totalCombinedPower')}</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-accent">
               {(top15.reduce((sum, a) => sum + a.power, 0) / top15.length).toFixed(0)}M
             </div>
-            <div className="text-xs opacity-75 mt-1">Average Power</div>
+            <div className="text-xs opacity-75 mt-1">{t('powerTrends.averagePower')}</div>
           </div>
         </div>
       </Card.Footer>

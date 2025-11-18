@@ -24,11 +24,20 @@
  * v1.0.0 - Initial version
  */
 
+define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
+
+// Turn off all output buffering and error display to ensure clean JSON
+ini_set('display_errors', '0');
+error_reporting(0);
+ob_start();
+
 require_once 'jwt.php';
 require_once 'json_helpers.php';
 require_once 'audit_logger.php';
 require_once 'includes/csrf.php';
 
+ob_end_clean();
 header('Content-Type: application/json');
 
 $user = require_jwt_session_api();
@@ -116,11 +125,14 @@ function load_schedule($file) {
             'generatedAt' => null,
             'epoch' => WEEK_1_EPOCH,
             'currentWeekNumber' => 0,
-            'schedule' => []
+            'schedule' => [],
+            'metadata' => []
         ];
     }
 
-    return json_read($file);
+    $data = json_read($file);
+    // Return the nested 'data' key if it exists, otherwise return as-is
+    return isset($data['data']) ? $data['data'] : $data;
 }
 
 /**

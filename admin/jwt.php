@@ -39,8 +39,12 @@
 if (!defined('ADMIN_INIT')) {
     define('ADMIN_INIT', true);
 }
+if (!defined('ADMIN_BASE_PATH')) {
+    define('ADMIN_BASE_PATH', __DIR__);
+}
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/json_helpers.php';
+require_once __DIR__ . '/includes/i18n.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -127,6 +131,23 @@ function require_jwt_session() {
             throw new Exception('Magic link tokens cannot be used as session tokens');
         }
 
+        // Auto-load user's preferred language from session token
+        if (isset($token->lang)) {
+            // Use language from JWT token
+            i18n_load_translations($token->lang);
+        } else {
+            // Fallback for old sessions without lang: check user's stored preference
+            // v4.0.0+: Use email from token, or fall back to sub for legacy tokens
+            $user_identifier = $token->email ?? $token->sub;
+            $user_lang = get_user_language($user_identifier);
+            if ($user_lang !== null) {
+                i18n_load_translations($user_lang);
+            } else {
+                // Final fallback: browser detection or default to English
+                i18n_init();
+            }
+        }
+
         return $token;
     } catch (Exception $e) {
         // Clear invalid cookie
@@ -168,6 +189,23 @@ function require_jwt_session_api() {
         // Additional validation: check token is not a magic link token
         if (isset($token->magic) && $token->magic === true) {
             throw new Exception('Magic link tokens cannot be used as session tokens');
+        }
+
+        // Auto-load user's preferred language from session token
+        if (isset($token->lang)) {
+            // Use language from JWT token
+            i18n_load_translations($token->lang);
+        } else {
+            // Fallback for old sessions without lang: check user's stored preference
+            // v4.0.0+: Use email from token, or fall back to sub for legacy tokens
+            $user_identifier = $token->email ?? $token->sub;
+            $user_lang = get_user_language($user_identifier);
+            if ($user_lang !== null) {
+                i18n_load_translations($user_lang);
+            } else {
+                // Final fallback: browser detection or default to English
+                i18n_init();
+            }
         }
 
         return $token;
@@ -387,23 +425,34 @@ function get_primary_role($roles) {
  * @return string Magic link JWT token
  */
 function create_magic_link_token($email, $user) {
+    // Extract alliances from servers structure if needed
+    $alliances = $user['alliances'] ?? null;
+    if (!$alliances && isset($user['servers']['1586']['alliances'])) {
+        $alliances = $user['servers']['1586']['alliances'];
+    }
+
+    // Get UID (v4.0.0+) or fall back to email for old tokens
+    $uid = $user['uid'] ?? $email;
+
     // Support both old format (role + powereditor) and new format (roles array)
     if (isset($user['roles']) && is_array($user['roles'])) {
-        // New multi-role format
+        // New multi-role format with UID (v4.0.0+)
         $payload = [
-            'sub' => $email,
+            'sub' => $uid,  // UID as primary identifier
+            'email' => $email,  // Email for convenience/display
             'aud' => get_primary_role($user['roles']), // Backward compatibility
-            'roles' => $user['roles'],
-            'alliances' => $user['alliances'],
+            'roles' => $user['roles'],  // All roles: admin, r5, r4, ape, president, etc.
+            'alliances' => $alliances,
             'jti' => bin2hex(random_bytes(16)),
             'magic' => true
         ];
     } else {
         // Old format (backward compatibility)
         $payload = [
-            'sub' => $email,
+            'sub' => $uid,
+            'email' => $email,
             'aud' => $user['role'],
-            'alliances' => $user['alliances'],
+            'alliances' => $alliances,
             'powereditor' => $user['powereditor'] ?? false,
             'jti' => bin2hex(random_bytes(16)),
             'magic' => true
@@ -419,21 +468,36 @@ function create_magic_link_token($email, $user) {
  * @param object $magic_token Decoded magic link token
  * @return string Session JWT token
  */
-function create_session_token($magic_token) {
+function create_session_token($magic_token, $preferred_language = null) {
     $jti = bin2hex(random_bytes(16));
     $exp = time() + SESSION_TOKEN_EXPIRY;
 
     $payload = [
-        'sub' => $magic_token->sub,
+        'sub' => $magic_token->sub,  // UID (v4.0.0+) or email (legacy)
         'aud' => $magic_token->aud,
         'alliances' => $magic_token->alliances,
         'powereditor' => $magic_token->powereditor ?? false,
         'jti' => $jti
     ];
 
+    // Add email if present (v4.0.0+)
+    if (isset($magic_token->email)) {
+        $payload['email'] = $magic_token->email;
+    }
+
+    // Add roles if present (multi-role system)
+    if (isset($magic_token->roles)) {
+        $payload['roles'] = $magic_token->roles;  // All roles: admin, r5, r4, ape, president, etc.
+    }
+
+    // Add preferred language to session if available
+    if ($preferred_language !== null) {
+        $payload['lang'] = $preferred_language;
+    }
+
     $token = encode_jwt($payload, SESSION_TOKEN_EXPIRY);
 
-    // Track active session in users.json
+    // Track active session in users.json (by UID or email)
     track_active_session($magic_token->sub, $jti, $exp);
 
     return $token;
@@ -500,18 +564,26 @@ function revoke_current_session() {
 /**
  * Track active session in users.json
  *
- * @param string $email User email
+ * @param string $identifier User UID (v4.0.0+) or email (legacy)
  * @param string $jti JWT ID
  * @param int $exp Token expiry timestamp
  * @return bool Success status
  */
-function track_active_session($email, $jti, $exp) {
+function track_active_session($identifier, $jti, $exp) {
     try {
-        return update_json_file(USERS_FILE, function(&$data) use ($email, $jti, $exp) {
-            $email = strtolower(trim($email));
+        return update_json_file(USERS_FILE, function(&$data) use ($identifier, $jti, $exp) {
+            $identifier = trim($identifier);
 
             foreach ($data['users'] as &$user) {
-                if (strtolower($user['email']) === $email) {
+                // Check by UID (v4.0.0+) or email (legacy)
+                $is_match = false;
+                if (isset($user['uid']) && $user['uid'] === $identifier) {
+                    $is_match = true;
+                } elseif (strtolower($user['email']) === strtolower($identifier)) {
+                    $is_match = true;
+                }
+
+                if ($is_match) {
                     // Initialize active_sessions if not exists
                     if (!isset($user['active_sessions'])) {
                         $user['active_sessions'] = [];
@@ -549,17 +621,25 @@ function track_active_session($email, $jti, $exp) {
 /**
  * Remove active session from users.json
  *
- * @param string $email User email
+ * @param string $identifier User UID (v4.0.0+) or email (legacy)
  * @param string $jti JWT ID
  * @return bool Success status
  */
-function remove_active_session($email, $jti) {
+function remove_active_session($identifier, $jti) {
     try {
-        return update_json_file(USERS_FILE, function(&$data) use ($email, $jti) {
-            $email = strtolower(trim($email));
+        return update_json_file(USERS_FILE, function(&$data) use ($identifier, $jti) {
+            $identifier = trim($identifier);
 
             foreach ($data['users'] as &$user) {
-                if (strtolower($user['email']) === $email) {
+                // Check by UID (v4.0.0+) or email (legacy)
+                $is_match = false;
+                if (isset($user['uid']) && $user['uid'] === $identifier) {
+                    $is_match = true;
+                } elseif (strtolower($user['email']) === strtolower($identifier)) {
+                    $is_match = true;
+                }
+
+                if ($is_match) {
                     if (isset($user['active_sessions'])) {
                         $user['active_sessions'] = array_values(array_filter(
                             $user['active_sessions'],
@@ -583,16 +663,24 @@ function remove_active_session($email, $jti) {
 /**
  * Get active sessions for a user
  *
- * @param string $email User email
+ * @param string $identifier User UID (v4.0.0+) or email (legacy)
  * @return array Array of active sessions
  */
-function get_active_sessions($email) {
+function get_active_sessions($identifier) {
     try {
         $users_data = read_json_file(USERS_FILE);
-        $email = strtolower(trim($email));
+        $identifier = trim($identifier);
 
         foreach ($users_data['users'] as $user) {
-            if (strtolower($user['email']) === $email) {
+            // Check by UID (v4.0.0+) or email (legacy)
+            $is_match = false;
+            if (isset($user['uid']) && $user['uid'] === $identifier) {
+                $is_match = true;
+            } elseif (strtolower($user['email']) === strtolower($identifier)) {
+                $is_match = true;
+            }
+
+            if ($is_match) {
                 $sessions = $user['active_sessions'] ?? [];
 
                 // Filter out expired sessions
@@ -636,7 +724,9 @@ function get_user_display_name($email) {
  * @return string Display name
  */
 function get_user_display_name_from_token($token) {
-    return get_user_display_name($token->sub);
+    // v4.0.0+: Use email from token, or fall back to sub for legacy tokens
+    $email = $token->email ?? $token->sub;
+    return get_user_display_name($email);
 }
 
 /**

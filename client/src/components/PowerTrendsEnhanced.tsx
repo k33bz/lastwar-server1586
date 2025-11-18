@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, Tabs } from '@heroui/react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
@@ -39,6 +40,7 @@ interface PowerHistoryData {
 }
 
 export function PowerTrendsEnhanced() {
+  const { t } = useTranslation('public');
   const [powerData, setPowerData] = useState<PowerHistoryData[]>([]);
   const [rangeValue, setRangeValue] = useState<number[]>([1, 5]); // Default to alliances 1-5
   const [season, setSeason] = useState<'all' | 'current'>('current');
@@ -281,7 +283,7 @@ export function PowerTrendsEnhanced() {
           },
           label: (context) => {
             const value = context.parsed.y ?? 0;
-            if (value === 0) return `${context.dataset.label}: No data`;
+            if (value === 0) return `${context.dataset.label}: ${t('powerTrends.noData')}`;
             return `${context.dataset.label}: ${value.toLocaleString()}`;
           },
         },
@@ -335,7 +337,7 @@ export function PowerTrendsEnhanced() {
       id="power-trends"
     >
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-4xl font-bold">Alliance Power Trends</h2>
+        <h2 className="text-4xl font-bold">{t('powerTrends.title')}</h2>
         <FullscreenButton
           isFullscreen={isFullscreen}
           onToggle={toggleFullscreen}
@@ -349,9 +351,9 @@ export function PowerTrendsEnhanced() {
             {/* Alliance Rank Range Selector */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-semibold">Alliance Rank Range</label>
+                <label className="text-sm font-semibold">{t('powerTrends.allianceRankRange')}</label>
                 <span className="text-accent font-bold text-base">
-                  Ranks {rangeValue[0]} - {rangeValue[1]}
+                  {t('powerTrends.ranks', { start: rangeValue[0], end: rangeValue[1] })}
                 </span>
               </div>
 
@@ -388,15 +390,15 @@ export function PowerTrendsEnhanced() {
               </div>
 
               <div className="flex justify-between text-xs opacity-60 px-1">
-                <span>Rank 1</span>
-                <span>Rank {sortedAlliances.length}</span>
+                <span>{t('powerTrends.rank')} 1</span>
+                <span>{t('powerTrends.rank')} {sortedAlliances.length}</span>
               </div>
             </div>
 
             {/* Season Filter */}
             <div>
               <label className="text-sm font-semibold mb-3 block">
-                Time Period
+                {t('powerTrends.timePeriod')}
               </label>
               <Tabs
                 selectedKey={season}
@@ -405,11 +407,11 @@ export function PowerTrendsEnhanced() {
                 <Tabs.ListContainer>
                   <Tabs.List aria-label="Season filter">
                     <Tabs.Tab id="current">
-                      Season 1 (Sep 29 - Nov 23)
+                      {t('powerTrends.season1')}
                       <Tabs.Indicator />
                     </Tabs.Tab>
                     <Tabs.Tab id="all">
-                      All-Time
+                      {t('powerTrends.allTime')}
                       <Tabs.Indicator />
                     </Tabs.Tab>
                   </Tabs.List>
@@ -419,7 +421,7 @@ export function PowerTrendsEnhanced() {
           </div>
 
           <p className="text-xs opacity-60 mt-4 text-center">
-            Rankings based on latest data point: {lastUpdate}
+            {t('powerTrends.rankingsBasedOn')}: {lastUpdate}
           </p>
         </div>
 
@@ -431,13 +433,13 @@ export function PowerTrendsEnhanced() {
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm opacity-75">
           <div>
-            <strong>Last Updated:</strong> {lastUpdate}
+            <strong>{t('powerTrends.lastUpdated')}:</strong> {lastUpdate}
           </div>
           <div>
-            <strong>Data Points:</strong> {filteredData.length}
+            <strong>{t('powerTrends.dataPoints')}:</strong> {filteredData.length}
           </div>
           <div>
-            <strong>Alliances Tracked:</strong> {topAlliances.length}
+            <strong>{t('powerTrends.alliancesTracked')}:</strong> {topAlliances.length}
           </div>
         </div>
       </Card>

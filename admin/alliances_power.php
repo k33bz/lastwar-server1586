@@ -30,6 +30,9 @@ require_once 'includes/email_utils.php';
 
 $user = require_jwt_session();
 
+// v4.0.0+: Get email from email claim, or sub for legacy tokens
+$user_email = $user->email ?? $user->sub;
+
 // Check if user has power editor access (admin or powereditor flag)
 if (!is_power_editor($user)) {
     header('Location: dashboard.php?error=access_denied');
@@ -37,7 +40,7 @@ if (!is_power_editor($user)) {
 }
 
 // Set page title for header
-$page_title = "Alliance Power Editor";
+$page_title = __('pages.alliances_power.title');
 
 // Check if user can delete alliances (admin only)
 $can_delete = can_delete_alliances($user);
@@ -427,16 +430,6 @@ include 'includes/header.php';
             <div>
                 <h1>Alliance Power Editor</h1>
                 <p style="color: #666; margin-top: 5px;">Manage alliance tags, names, and power values</p>
-            </div>
-            <div class="user-info">
-                Logged in as: <?php echo emailDisplay($user->sub, true); ?>
-                (<?php
-                    $role_display = ucfirst($user->aud);
-                    if ($user->aud !== 'admin' && isset($user->powereditor) && $user->powereditor) {
-                        $role_display .= '/Power Editor';
-                    }
-                    echo htmlspecialchars($role_display);
-                ?>)
             </div>
         </div>
 

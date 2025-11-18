@@ -12,6 +12,9 @@
  *   1.0.0 (2025-11-04) - Initial implementation
  */
 
+define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
+
 require_once 'jwt.php';
 require_once 'audit_logger.php';
 require_once 'json_helpers.php';

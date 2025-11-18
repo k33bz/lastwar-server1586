@@ -1,12 +1,20 @@
 <?php
 /**
  * User Profile API
- * Version: 1.0.1
+ * Version: 1.1.0
  * Handles user profile updates
  *
  * Changelog:
+ * - 1.1.0 (2025-01-18): Added UID-based identity support (v4.0.0+)
+ *                      - User lookup by UID or email
+ *                      - Email history tracking when email changes
+ *                      - Fixed JWT token update to preserve UID in sub claim
+ *                      - Maintains backward compatibility with legacy email-based tokens
  * - 1.0.1: Fixed authentication to use require_jwt_session_api() for proper JSON error responses
  */
+
+define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
 
 require_once 'jwt.php';
 require_once 'json_helpers.php';
@@ -30,7 +38,11 @@ try {
     $in_game_name = $_POST['in_game_name'] ?? '';
     $discord_id = $_POST['discord_id'] ?? '';
     $new_email = $_POST['email'] ?? '';
-    $current_email = $user->sub;
+    $preferred_language = $_POST['preferred_language'] ?? 'en';
+
+    // v4.0.0+: Get current email from email claim, or sub for legacy tokens
+    $current_email = $user->email ?? $user->sub;
+    $user_uid = $user->sub; // UID (v4.0.0+) or email (legacy)
 
     // Validate in-game name
     if (empty($in_game_name)) {
@@ -49,6 +61,12 @@ try {
         if (!preg_match('/^[0-9]{17,19}$/', $discord_id)) {
             throw new Exception('Invalid Discord ID format. Must be 17-19 digits.');
         }
+    }
+
+    // Validate preferred language
+    $supported_languages = ['en', 'es', 'pt', 'de', 'ko'];
+    if (!in_array($preferred_language, $supported_languages)) {
+        throw new Exception('Invalid language code');
     }
 
     // Validate email
@@ -80,10 +98,18 @@ try {
         throw new Exception('Invalid users data structure');
     }
 
-    // Find and update user
+    // Find and update user (by UID for v4.0.0+ or email for legacy)
     $user_found = false;
     foreach ($users_data['users'] as &$user_entry) {
-        if ($user_entry['email'] === $current_email) {
+        // Check by UID (v4.0.0+) or email (legacy)
+        $is_match = false;
+        if (isset($user_entry['uid']) && $user_entry['uid'] === $user_uid) {
+            $is_match = true;
+        } elseif ($user_entry['email'] === $current_email) {
+            $is_match = true;
+        }
+
+        if ($is_match) {
             $user_found = true;
 
             // Update in-game name
@@ -97,8 +123,23 @@ try {
                 unset($user_entry['discord_id']);
             }
 
-            // Update email if changed
+            // Update preferred language
+            $user_entry['preferred_language'] = $preferred_language;
+
+            // Update email if changed (with history tracking)
             if ($email_changed) {
+                // Initialize email_history if not exists
+                if (!isset($user_entry['email_history'])) {
+                    $user_entry['email_history'] = [];
+                }
+
+                // Add old email to history
+                $user_entry['email_history'][] = [
+                    'email' => $current_email,
+                    'changed_at' => gmdate('Y-m-d\TH:i:s\Z')
+                ];
+
+                // Update to new email
                 $user_entry['email'] = $new_email;
             }
 
@@ -120,14 +161,42 @@ try {
     log_audit_event('user_profile_updated', $current_email, [
         'in_game_name' => $in_game_name,
         'discord_id' => !empty($discord_id) ? 'Updated' : 'Cleared',
+        'preferred_language' => $preferred_language,
         'email_changed' => $email_changed,
         'new_email' => $email_changed ? $new_email : null
+    ]);
+
+    // Regenerate JWT token with new language and email
+    // v4.0.0+: Update email claim (not sub, which is the UID)
+    if ($email_changed) {
+        // For v4.0.0+ tokens, update the email claim
+        // For legacy tokens, sub is the email identifier (will be updated)
+        if (isset($user->email)) {
+            $user->email = $new_email;
+        } else {
+            // Legacy token: sub is email
+            $user->sub = $new_email;
+        }
+    }
+
+    // Create new session token with updated language
+    $new_token = create_session_token($user, $preferred_language);
+
+    // Set new session cookie
+    setcookie('session', $new_token, [
+        'expires' => time() + (30 * 24 * 60 * 60),
+        'path' => '/admin',
+        'httponly' => true,
+        'secure' => false,
+        'samesite' => 'Lax'
     ]);
 
     $response = [
         'success' => true,
         'message' => 'Profile updated successfully',
-        'email_changed' => $email_changed
+        'email_changed' => $email_changed,
+        'language_updated' => true,
+        'reload_required' => true
     ];
 
     echo json_encode($response);

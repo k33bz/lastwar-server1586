@@ -179,6 +179,29 @@ function get_user_by_email($email) {
 }
 
 /**
+ * Get user by UID
+ *
+ * @param string $uid User UID
+ * @return array|null User data or null if not found
+ */
+function get_user_by_uid($uid) {
+    try {
+        $users_data = read_json_file(USERS_FILE);
+        $uid = trim($uid);
+
+        foreach ($users_data['users'] as $user) {
+            if (isset($user['uid']) && $user['uid'] === $uid) {
+                return $user;
+            }
+        }
+        return null;
+    } catch (Exception $e) {
+        error_log("Error reading users: " . $e->getMessage());
+        return null;
+    }
+}
+
+/**
  * Add user to users.json
  *
  * @param string $email User email
@@ -480,6 +503,50 @@ function cleanup_blacklist() {
         error_log("Error cleaning blacklist: " . $e->getMessage());
         return 0;
     }
+}
+
+/**
+ * Update user's preferred language
+ *
+ * @param string $email User email
+ * @param string $language Language code (en, es, pt, de, ko)
+ * @return bool Success status
+ */
+function update_user_language($email, $language) {
+    try {
+        return update_json_file(USERS_FILE, function(&$data) use ($email, $language) {
+            $email = strtolower(trim($email));
+            $found = false;
+
+            foreach ($data['users'] as &$user) {
+                if (strtolower($user['email']) === $email) {
+                    $user['preferred_language'] = $language;
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                throw new Exception("User not found: $email");
+            }
+
+            return true;
+        });
+    } catch (Exception $e) {
+        error_log("Error updating user language: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Get user's preferred language
+ *
+ * @param string $email User email
+ * @return string|null Language code or null if not set
+ */
+function get_user_language($email) {
+    $user = get_user_by_email($email);
+    return $user['preferred_language'] ?? null;
 }
 
 /**

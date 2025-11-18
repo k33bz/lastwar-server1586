@@ -30,7 +30,7 @@ require_once 'jwt.php';
 $user = require_jwt_session();
 
 // Set page title for header
-$page_title = "Dashboard";
+$page_title = __('pages.dashboard.title');
 
 // Include shared header
 include 'includes/header.php';
@@ -201,9 +201,9 @@ try {
         <?php endif; ?>
 
         <?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
-        <button class="tab-button" data-tab="season2">
+        <button class="tab-button" data-tab="seasons">
             <span class="tab-icon">❄️</span>
-            <span class="tab-label">Season 2</span>
+            <span class="tab-label">Seasons</span>
             <span class="tab-badge" id="season2Badge">0</span>
         </button>
         <?php endif; ?>
@@ -216,18 +216,10 @@ try {
         <?php endif; ?>
 
         <?php if ($user->aud === 'admin'): ?>
-        <button class="tab-button" data-tab="admin">
-            <span class="tab-icon">🔐</span>
-            <span class="tab-label">Admin & Security</span>
-            <?php if ($stats['security_status'] === 'critical' || $stats['security_status'] === 'warning'): ?>
-            <span class="tab-badge warning">!</span>
-            <?php endif; ?>
-        </button>
-
         <button class="tab-button" data-tab="system">
             <span class="tab-icon">⚙️</span>
-            <span class="tab-label">System & Tools</span>
-            <?php if ($stats['backup_status'] === 'old' || $stats['backup_status'] === 'none'): ?>
+            <span class="tab-label">System</span>
+            <?php if ($stats['security_status'] === 'critical' || $stats['security_status'] === 'warning' || $stats['backup_status'] === 'old' || $stats['backup_status'] === 'none'): ?>
             <span class="tab-badge warning">!</span>
             <?php endif; ?>
         </button>
@@ -432,34 +424,92 @@ try {
 <?php endif; ?>
 <!-- End Discord Tab -->
 
-<!-- Season 2 Tab -->
+<!-- Seasons Tab -->
 <?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
-<div class="tab-content" id="season2-tab">
+<div class="tab-content" id="seasons-tab">
     <div class="main-sections">
         <div class="section-group">
             <h2 class="section-title">
                 <span class="section-icon">❄️</span>
-                Season 2 Events
+                Seasonal Events
             </h2>
 
-            <div class="section-card season">
-                <div class="card-header">
-                    <h3>📆 Event Calendar</h3>
-                    <span class="card-badge season">Season 2</span>
+            <div class="section-cards-grid">
+                <div class="section-card season">
+                    <div class="card-header">
+                        <h3>✅ Season 1</h3>
+                        <span class="card-badge season">Completed</span>
+                    </div>
+                    <p>Winter Season - Completed (December 2024 - January 2025)</p>
+                    <div class="action-buttons">
+                        <a href="season1.php" class="btn btn-secondary">
+                            <span class="btn-icon">📊</span>
+                            View Details
+                        </a>
+                    </div>
                 </div>
-                <p>View and manage Season 2 event calendar and schedules</p>
-                <div class="action-buttons">
-                    <a href="season2_manager.php" class="btn btn-primary">
-                        <span class="btn-icon">📆</span>
-                        Event Calendar
-                    </a>
+
+                <div class="section-card season">
+                    <div class="card-header">
+                        <h3>📆 Season 2</h3>
+                        <span class="card-badge season">Active</span>
+                    </div>
+                    <p>Spring Season - View and manage event calendar and schedules</p>
+                    <div class="action-buttons">
+                        <a href="season2_manager.php" class="btn btn-primary">
+                            <span class="btn-icon">📆</span>
+                            Event Calendar
+                        </a>
+                    </div>
+                </div>
+
+                <div class="section-card season">
+                    <div class="card-header">
+                        <h3>🔜 Season 3</h3>
+                        <span class="card-badge">Coming Soon</span>
+                    </div>
+                    <p>Summer Season - Event management coming soon</p>
+                    <div class="action-buttons">
+                        <a href="season3.php" class="btn btn-secondary">
+                            <span class="btn-icon">ℹ️</span>
+                            View Details
+                        </a>
+                    </div>
+                </div>
+
+                <div class="section-card season">
+                    <div class="card-header">
+                        <h3>🔜 Season 4</h3>
+                        <span class="card-badge">Coming Soon</span>
+                    </div>
+                    <p>Fall Season - Event management coming soon</p>
+                    <div class="action-buttons">
+                        <a href="season4.php" class="btn btn-secondary">
+                            <span class="btn-icon">ℹ️</span>
+                            View Details
+                        </a>
+                    </div>
+                </div>
+
+                <div class="section-card season">
+                    <div class="card-header">
+                        <h3>🔜 Season 5</h3>
+                        <span class="card-badge">Coming Soon</span>
+                    </div>
+                    <p>Winter Season - Event management coming soon</p>
+                    <div class="action-buttons">
+                        <a href="season5.php" class="btn btn-secondary">
+                            <span class="btn-icon">ℹ️</span>
+                            View Details
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <?php endif; ?>
-<!-- End Season 2 Tab -->
+<!-- End Seasons Tab -->
 
 <!-- Governance Tab -->
 <?php if (has_role($user, ['admin', 'president'])): ?>
@@ -528,9 +578,9 @@ try {
 <?php endif; ?>
 <!-- End Governance Tab -->
 
-<!-- Admin & Security Tab (Admin Only) -->
+<!-- System Tab (Admin Only) -->
 <?php if ($user->aud === 'admin'): ?>
-<div class="tab-content" id="admin-tab">
+<div class="tab-content" id="system-tab">
     <div class="main-sections">
         <!-- Administration Section -->
         <div class="section-group">
@@ -641,13 +691,7 @@ try {
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<!-- End Admin & Security Tab -->
 
-<!-- System & Tools Tab (Admin Only) -->
-<div class="tab-content" id="system-tab">
-    <div class="main-sections">
         <div class="section-group">
             <h2 class="section-title">
                 <span class="section-icon">📊</span>
@@ -756,7 +800,7 @@ try {
     </div>
 </div>
 <?php endif; ?>
-<!-- End System & Tools Tab -->
+<!-- End System Tab -->
 
 <!-- R5 & R4 users see the same tab structure as admins (just with limited tabs) -->
 
@@ -1569,4 +1613,9 @@ body.dark-theme .section-card::before {
 }
 </style>
 
+<?php
+require_once 'includes/help_drawer.php';
+$help_config = require 'includes/help_content/dashboard_help.php';
+render_help_drawer($help_config);
+?>
 <?php include 'includes/footer.php'; ?>

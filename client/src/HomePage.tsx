@@ -11,6 +11,7 @@ import { CouncilRotation } from './components/CouncilRotation';
 import { SignatureStatus } from './components/SignatureStatus';
 import { BackToTop } from './components/BackToTop';
 import { FloatingThemeToggle } from './components/FloatingThemeToggle';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { useApi } from './hooks/useApi';
 import type { Alliance, ServerInfo } from './types';
 import { Spinner, Card, Separator, Tabs, Link } from '@heroui/react';
@@ -148,9 +149,9 @@ export function HomePage() {
         <footer className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
           <Card variant="secondary" className="p-6">
             <Card.Header className="items-center text-center">
-              <Card.Title className="text-2xl">Server 1586</Card.Title>
+              <Card.Title className="text-2xl">{t('public:footer.title')}</Card.Title>
               <Card.Description>
-                Last War Alliance Rankings & NAP15
+                {t('public:footer.subtitle')}
               </Card.Description>
             </Card.Header>
             <Card.Content className="mt-4">
@@ -162,7 +163,7 @@ export function HomePage() {
                   rel="noopener noreferrer"
                   className="text-sm hover:underline"
                 >
-                  📚 GitHub Repository
+                  📚 {t('public:footer.github')}
                 </Link>
                 <Link
                   href="https://github.com/k33bz/Server1586-clean/issues"
@@ -170,7 +171,7 @@ export function HomePage() {
                   rel="noopener noreferrer"
                   className="text-sm hover:underline"
                 >
-                  🐛 Report Issues
+                  🐛 {t('public:footer.issues')}
                 </Link>
                 <Link
                   href="https://github.com/k33bz/Server1586-clean/blob/main/README.md"
@@ -178,23 +179,23 @@ export function HomePage() {
                   rel="noopener noreferrer"
                   className="text-sm hover:underline"
                 >
-                  📖 Documentation
+                  📖 {t('public:footer.documentation')}
                 </Link>
                 <Link
                   href="/admin/dashboard.php"
                   className="text-sm hover:underline"
                 >
-                  🔐 Admin Dashboard
+                  🔐 {t('public:footer.adminDashboard')}
                 </Link>
               </div>
 
               {/* Build Info */}
               <div className="text-center">
                 <p className="text-xs opacity-60">
-                  Built with HeroUI v3 &middot; Powered by React & Vite
+                  {t('public:footer.builtWith')} &middot; {t('public:footer.poweredBy')}
                 </p>
                 <p className="text-xs opacity-60 mt-1">
-                  🤖 Generated with <Link href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer" className="text-xs hover:underline">Claude Code</Link> &middot; Enhanced by <Link href="https://kiro.dev/" target="_blank" rel="noopener noreferrer" className="text-xs hover:underline">Kiro</Link>
+                  🤖 {t('public:footer.generatedWith')} <Link href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer" className="text-xs hover:underline">Claude Code</Link> &middot; {t('public:footer.enhancedBy')} <Link href="https://kiro.dev/" target="_blank" rel="noopener noreferrer" className="text-xs hover:underline">Kiro</Link>
                 </p>
                 <p className="text-xs opacity-40 mt-1">
                   v{versionInfo?.version || '3.7.0'} &middot; {new Date().getFullYear()}
@@ -210,6 +211,11 @@ export function HomePage() {
 
       {/* Floating Theme Toggle */}
       <FloatingThemeToggle />
+
+      {/* Floating Language Switcher */}
+      <div className="fixed top-24 right-8 z-50">
+        <LanguageSwitcher />
+      </div>
     </div>
   );
 }

@@ -15,6 +15,7 @@
  */
 
 define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/jwt.php';
 require_once __DIR__ . '/mailer.php';
@@ -38,6 +39,9 @@ if (!isset($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAI
 
 $email = strtolower(trim($_POST['email']));
 
+// Get selected language from login form (default to 'en' if not provided)
+$selected_language = $_POST['language'] ?? 'en';
+
 // Find user in users.json
 $user = get_user_by_email($email);
 
@@ -49,21 +53,35 @@ if (!$user) {
 }
 
 try {
+    // Save user's language preference if user exists
+    update_user_language($email, $selected_language);
+
     // Generate magic link token
     $magic_token = create_magic_link_token($email, $user);
 
     // Build magic link URL
     $magic_link_url = APP_URL . '/admin/callback.php?token=' . $magic_token;
 
-    // Send magic link email
-    $email_result = send_magic_link_email($email, $magic_link_url);
+    // In development mode, log the magic link URL for easy access
+    if (APP_ENV === 'development') {
+        error_log("==========================================");
+        error_log("DEVELOPMENT MODE: Magic Link Generated");
+        error_log("Email: $email");
+        error_log("Language: $selected_language");
+        error_log("Magic Link URL: $magic_link_url");
+        error_log("Copy this URL to your browser to log in");
+        error_log("==========================================");
+    }
+
+    // Send magic link email in selected language
+    $email_result = send_magic_link_email($email, $magic_link_url, null, $selected_language);
 
     if (!$email_result) {
         throw new Exception("Email sending returned false");
     }
 
     // Log successful send
-    error_log("Magic link sent successfully to: $email");
+    error_log("Magic link sent successfully to: $email (language: $selected_language)");
 
     // Redirect with success message
     header('Location: login.php?success=sent');

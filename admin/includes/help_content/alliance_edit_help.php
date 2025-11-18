@@ -13,7 +13,7 @@ return [
                 <p>This page allows you to manage your alliance information that appears on the public website. All changes are saved automatically and will be visible to everyone viewing the server rankings.</p>
 
                 <div class="help-note">
-                    <strong>Note:</strong> As an ' . (has_role($token, 'r5') ? 'R5' : 'R4') . ', you can only edit alliances you are assigned to. Contact an admin if you need access to a different alliance.
+                    <strong>Note:</strong> As an ' . (has_role($user, 'r5') ? 'R5' : 'R4') . ', you can only edit alliances you are assigned to. Contact an admin if you need access to a different alliance.
                 </div>
             '
         ],
@@ -77,9 +77,9 @@ return [
             '
         ],
         [
-            'title' => 'Rule Signing' . (has_role($token, 'r5') ? '' : ' (R5 Only)'),
+            'title' => 'Rule Signing' . (has_role($user, 'r5') ? '' : ' (R5 Only)'),
             'content' => '
-                ' . (has_role($token, 'r5') ? '
+                ' . (has_role($user, 'r5') ? '
                 <p>As an R5, you can sign the server rules on behalf of your alliance. This indicates your alliance agrees to follow the established server guidelines.</p>
 
                 <p><strong>Signature Status:</strong> Check the "Rules Signed" box to indicate your alliance has reviewed and agreed to the server rules.</p>

@@ -31,10 +31,64 @@
 if (!defined('ADMIN_INIT')) {
     define('ADMIN_INIT', true);
 }
+if (!defined('ADMIN_BASE_PATH')) {
+    define('ADMIN_BASE_PATH', __DIR__);
+}
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/includes/i18n.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
+/**
+ * Initialize i18n for email sending
+ * Detects language from browser header or uses default
+ *
+ * @param string|null $language Language code to use (null = auto-detect from browser)
+ * @return string The language code that was loaded
+ */
+function email_load_i18n($language = null, $user_email = null) {
+    global $i18n_supported_languages;
+
+    // Priority 1: If explicit language specified, use it
+    if ($language !== null) {
+        i18n_load_translations($language);
+        return $language;
+    }
+
+    // Priority 2: Check user's stored language preference
+    if ($user_email !== null) {
+        $user_lang = get_user_language($user_email);
+        if ($user_lang !== null && isset($i18n_supported_languages[$user_lang])) {
+            i18n_load_translations($user_lang);
+            return $user_lang;
+        }
+    }
+
+    // Priority 3: Try to detect from HTTP_ACCEPT_LANGUAGE header
+    if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+        $accept_language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+        $langs = explode(',', $accept_language);
+
+        foreach ($langs as $lang) {
+            $lang_code = strtolower(substr(trim($lang), 0, 2));
+            if (isset($i18n_supported_languages[$lang_code])) {
+                $language = $lang_code;
+                break;
+            }
+        }
+    }
+
+    // Priority 4: Default to English
+    if ($language === null) {
+        $language = 'en';
+    }
+
+    // Load translations for the specified language
+    i18n_load_translations($language);
+
+    return $language;
+}
 
 /**
  * Send email using PHPMailer with SMTP
@@ -88,14 +142,38 @@ function send_email($to, $subject, $body, $is_html = false) {
  * @param string $username Username for personalized greeting (optional, defaults to email prefix)
  * @return bool Success status
  */
-function send_magic_link_email($to, $magic_link_url, $username = null) {
+function send_magic_link_email($to, $magic_link_url, $username = null, $language = null) {
+    // Load i18n translations (with user email for preference lookup)
+    email_load_i18n($language, $to);
+
     // If no username provided, extract from email
     if ($username === null) {
         $username = explode('@', $to)[0];
     }
     $app_name = $_ENV['APP_NAME'] ?? 'Last War 1586 Admin';
     $app_name_short = $_ENV['APP_NAME'] ?? 'Last War 1586';
-    $subject = 'Your Login Link for ' . $app_name;
+
+    // Get translated subject
+    $subject = __('emails.magic_link.subject', ['app_name' => $app_name]);
+
+    // Get all translated strings
+    $t_badge = __('emails.magic_link.badge');
+    $t_greeting = __('emails.magic_link.greeting', ['username' => $username]);
+    $t_intro = __('emails.magic_link.intro', ['app_name' => $app_name]);
+    $t_button = __('emails.magic_link.button');
+    $t_alt_label = __('emails.magic_link.alternative_label');
+    $t_alt_text = __('emails.magic_link.alternative_text');
+    $t_security_title = __('emails.magic_link.security_title');
+    $t_security_single_use = __('emails.magic_link.security_items.single_use');
+    $t_security_expiry = __('emails.magic_link.security_items.expiry');
+    $t_security_no_share = __('emails.magic_link.security_items.no_share');
+    $t_security_ignore = __('emails.magic_link.security_items.ignore');
+    $t_security_no_reuse = __('emails.magic_link.security_items.no_reuse');
+    $t_no_reply_title = __('emails.magic_link.no_reply_title');
+    $t_no_reply_text = __('emails.magic_link.no_reply_text');
+    $t_footer_regards = __('emails.magic_link.footer_regards');
+    $t_footer_team = __('emails.magic_link.footer_team', ['app_name' => $app_name]);
+    $t_footer_sent_to = __('emails.magic_link.footer_sent_to', ['email' => $to]);
 
     $html_body = <<<EOT
 <!DOCTYPE html>
@@ -256,42 +334,42 @@ function send_magic_link_email($to, $magic_link_url, $username = null) {
     <div class="container">
         <div class="header">
             <h1>🔐 $app_name_short</h1>
-            <div class="header-badge">ADMIN LOGIN REQUEST</div>
+            <div class="header-badge">{$t_badge}</div>
         </div>
 
         <div class="content">
-            <p><strong>Hello $username,</strong></p>
-            <p>You requested access to the $app_name Dashboard. Click the button below to securely log in:</p>
+            <p>{$t_greeting}</p>
+            <p>{$t_intro}</p>
         </div>
 
         <div class="button-container">
-            <a href="$magic_link_url" class="button">🚀 Access Admin Dashboard</a>
+            <a href="$magic_link_url" class="button">{$t_button}</a>
         </div>
 
         <div class="link-box">
-            <p><strong>Alternative:</strong> Copy and paste this link into your browser:</p>
+            <p><strong>{$t_alt_label}</strong> {$t_alt_text}</p>
             <a href="$magic_link_url">$magic_link_url</a>
         </div>
 
         <div class="security-notice">
-            <h3>🛡️ Security Information</h3>
+            <h3>{$t_security_title}</h3>
             <ul>
-                <li>This link is <strong>single-use only</strong> and will become invalid after your first successful login</li>
-                <li>Link expires in <span class="expiry-badge">⏱️ 10 MINUTES</span></li>
-                <li><strong>Never share this link</strong> with anyone - it grants full access to your admin account</li>
-                <li>If you didn't request this login, you can safely ignore this email</li>
-                <li>For security, the link cannot be reused once clicked</li>
+                <li>{$t_security_single_use}</li>
+                <li>{$t_security_expiry}</li>
+                <li>{$t_security_no_share}</li>
+                <li>{$t_security_ignore}</li>
+                <li>{$t_security_no_reuse}</li>
             </ul>
         </div>
 
         <div class="no-reply-notice">
-            <strong>⚠️ Note:</strong> This is an automated message from a no-reply email address. Please do not reply to this email as this mailbox is not monitored. For support, contact your server administrator.
+            <strong>{$t_no_reply_title}</strong> {$t_no_reply_text}
         </div>
 
         <div class="footer">
-            <p>Best regards,</p>
-            <p><strong>The $app_name Team</strong></p>
-            <p style="font-size: 12px; color: #999; margin-top: 15px;">This email was sent to $to</p>
+            <p>{$t_footer_regards}</p>
+            <p><strong>{$t_footer_team}</strong></p>
+            <p style="font-size: 12px; color: #999; margin-top: 15px;">{$t_footer_sent_to}</p>
         </div>
     </div>
 </body>
@@ -309,10 +387,13 @@ EOT;
  * @param string $changed_by Admin who made the change
  * @return bool Success status
  */
-function send_role_change_email($to, $changes, $changed_by) {
+function send_role_change_email($to, $changes, $changed_by, $language = null) {
+    // Load i18n translations (with user email for preference lookup)
+    email_load_i18n($language, $to);
+
     $username = explode('@', $to)[0];
     $app_name = $_ENV['APP_NAME'] ?? 'Last War 1586 Admin';
-    $subject = $app_name . ' - Your Access Has Been Updated';
+    $subject = __('emails.role_change.subject', ['app_name' => $app_name]);
 
     // Build change summary
     $change_items = [];
@@ -320,24 +401,39 @@ function send_role_change_email($to, $changes, $changed_by) {
     if (isset($changes['role'])) {
         $old_role = strtoupper($changes['role']['old']);
         $new_role = strtoupper($changes['role']['new']);
-        $change_items[] = "<strong>Role:</strong> {$old_role} → {$new_role}";
+        $role_label = __('emails.role_change.role_label');
+        $change_items[] = "<strong>{$role_label}</strong> {$old_role} → {$new_role}";
     }
 
     if (isset($changes['powereditor'])) {
-        $old_pe = $changes['powereditor']['old'] ? 'Yes' : 'No';
-        $new_pe = $changes['powereditor']['new'] ? 'Yes' : 'No';
-        $change_items[] = "<strong>Power Editor:</strong> {$old_pe} → {$new_pe}";
+        $old_pe = $changes['powereditor']['old'] ? __('emails.role_change.yes') : __('emails.role_change.no');
+        $new_pe = $changes['powereditor']['new'] ? __('emails.role_change.yes') : __('emails.role_change.no');
+        $pe_label = __('emails.role_change.powereditor_label');
+        $change_items[] = "<strong>{$pe_label}</strong> {$old_pe} → {$new_pe}";
     }
 
     if (isset($changes['alliances'])) {
         $old_alliances = implode(', ', $changes['alliances']['old']);
         $new_alliances = implode(', ', $changes['alliances']['new']);
-        if (empty($old_alliances)) $old_alliances = '(none)';
-        if (empty($new_alliances)) $new_alliances = '(none)';
-        $change_items[] = "<strong>Alliance Access:</strong> {$old_alliances} → {$new_alliances}";
+        if (empty($old_alliances)) $old_alliances = __('emails.role_change.none');
+        if (empty($new_alliances)) $new_alliances = __('emails.role_change.none');
+        $alliances_label = __('emails.role_change.alliances_label');
+        $change_items[] = "<strong>{$alliances_label}</strong> {$old_alliances} → {$new_alliances}";
     }
 
     $changes_html = implode('<br>', $change_items);
+
+    // Get all translated strings
+    $t_badge = __('emails.role_change.badge');
+    $t_greeting = __('emails.role_change.greeting', ['username' => $username]);
+    $t_intro = __('emails.role_change.intro', ['app_name' => $app_name]);
+    $t_changes_title = __('emails.role_change.changes_title');
+    $t_changed_by = __('emails.role_change.changed_by_label');
+    $t_date = __('emails.role_change.date_label');
+    $t_questions = __('emails.role_change.questions_text');
+    $t_access = __('emails.role_change.access_text');
+    $t_footer_notification = __('emails.role_change.footer_notification', ['app_name' => $app_name]);
+    $t_footer_unexpected = __('emails.role_change.footer_unexpected');
 
     $html_body = <<<EOT
 <!DOCTYPE html>
@@ -437,32 +533,32 @@ function send_role_change_email($to, $changes, $changed_by) {
     <div class="container">
         <div class="header">
             <h1>{$app_name}</h1>
-            <span class="header-badge">ACCESS UPDATE</span>
+            <span class="header-badge">{$t_badge}</span>
         </div>
 
         <div class="content">
-            <p>Hello <strong>{$username}</strong>,</p>
+            <p>{$t_greeting}</p>
 
-            <p>An administrator has updated your access permissions for the {$app_name} admin panel.</p>
+            <p>{$t_intro}</p>
 
             <div class="changes-box">
-                <h3>What Changed:</h3>
+                <h3>{$t_changes_title}</h3>
                 <p>{$changes_html}</p>
             </div>
 
             <div class="info-box">
-                <p><strong>Changed by:</strong> {$changed_by}</p>
-                <p><strong>Date:</strong> {date('F j, Y \a\t g:i A T')}</p>
+                <p><strong>{$t_changed_by}</strong> {$changed_by}</p>
+                <p><strong>{$t_date}</strong> {date('F j, Y \a\t g:i A T')}</p>
             </div>
 
-            <p>These changes are effective immediately. If you have any questions or believe this change was made in error, please contact an administrator.</p>
+            <p>{$t_questions}</p>
 
-            <p>To access the admin panel, request a magic link at the login page or contact an admin to send you a login link.</p>
+            <p>{$t_access}</p>
         </div>
 
         <div class="footer">
-            <p>This is an automated notification from {$app_name}</p>
-            <p>If you did not expect this change, please contact your alliance administrator immediately</p>
+            <p>{$t_footer_notification}</p>
+            <p>{$t_footer_unexpected}</p>
         </div>
     </div>
 </body>
@@ -478,9 +574,29 @@ EOT;
  * @param string $to Recipient email address
  * @return bool Success status
  */
-function send_test_email($to) {
+function send_test_email($to, $language = null) {
+    // Load i18n translations (with user email for preference lookup)
+    email_load_i18n($language, $to);
+
     $app_name = $_ENV['APP_NAME'] ?? 'Last War 1586 Admin';
-    $subject = $app_name . ' - SMTP Test Email';
+    $subject = __('emails.test.subject', ['app_name' => $app_name]);
+
+    // Get all translated strings
+    $t_title = __('emails.test.title');
+    $t_badge = __('emails.test.badge');
+    $t_congratulations = __('emails.test.congratulations');
+    $t_config_title = __('emails.test.config_title');
+    $t_config_smtp = __('emails.test.config_smtp_server');
+    $t_config_port = __('emails.test.config_port');
+    $t_config_auth = __('emails.test.config_auth');
+    $t_config_from = __('emails.test.config_from');
+    $t_next_steps_title = __('emails.test.next_steps_title');
+    $t_next_steps_text = __('emails.test.next_steps_text');
+    $t_no_reply_title = __('emails.test.no_reply_title');
+    $t_no_reply_text = __('emails.test.no_reply_text');
+    $t_footer_regards = __('emails.test.footer_regards');
+    $t_footer_team = __('emails.test.footer_team', ['app_name' => $app_name]);
+    $t_footer_sent_to = __('emails.test.footer_sent_to', ['email' => $to]);
 
     $html_body = <<<EOT
 <!DOCTYPE html>
@@ -577,36 +693,36 @@ function send_test_email($to) {
 <body>
     <div class="container">
         <div class="header">
-            <h1>✅ SMTP Test Successful</h1>
-            <div class="success-badge">Configuration Working</div>
+            <h1>{$t_title}</h1>
+            <div class="success-badge">{$t_badge}</div>
         </div>
 
         <div class="content">
-            <p><strong>Congratulations!</strong> If you received this email, your SMTP configuration is working correctly.</p>
+            <p>{$t_congratulations}</p>
         </div>
 
         <div class="config-box">
-            <h3>📧 Configuration Tested</h3>
+            <h3>{$t_config_title}</h3>
             <ul>
-                <li><strong>SMTP Server:</strong> <code>example.com</code></li>
-                <li><strong>Port:</strong> <code>465</code> (SSL)</li>
-                <li><strong>Authentication:</strong> ✅ Successful</li>
-                <li><strong>From Address:</strong> <code>noreply@example.com</code></li>
+                <li>{$t_config_smtp}</li>
+                <li>{$t_config_port}</li>
+                <li>{$t_config_auth}</li>
+                <li>{$t_config_from}</li>
             </ul>
         </div>
 
         <div class="content">
-            <h3>Next Steps:</h3>
-            <p>You can now proceed with deploying the JWT admin system. The magic link authentication will work correctly.</p>
+            <h3>{$t_next_steps_title}</h3>
+            <p>{$t_next_steps_text}</p>
         </div>
 
         <div class="no-reply-notice">
-            <strong>Note:</strong> This is an automated message. Please do not reply to this email as this mailbox is not monitored.
+            <strong>{$t_no_reply_title}</strong> {$t_no_reply_text}
         </div>
 
         <div class="footer">
-            <p>Best regards,<br><strong>The $app_name Team</strong></p>
-            <p style="font-size: 12px; color: #999;">Test email sent to $to</p>
+            <p>{$t_footer_regards}<br><strong>{$t_footer_team}</strong></p>
+            <p style="font-size: 12px; color: #999;">{$t_footer_sent_to}</p>
         </div>
     </div>
 </body>
@@ -624,9 +740,12 @@ EOT;
  * @param string $regenerated_by Email of admin/president who regenerated
  * @return bool Success status
  */
-function send_council_rotation_notification($to, $stats, $regenerated_by) {
+function send_council_rotation_notification($to, $stats, $regenerated_by, $language = null) {
+    // Load i18n translations (with user email for preference lookup)
+    email_load_i18n($language, $to);
+
     $app_name = $_ENV['APP_NAME'] ?? 'Last War 1586 Admin';
-    $subject = $app_name . ' - Council Rotation Schedule Updated';
+    $subject = __('emails.council_rotation.subject', ['app_name' => $app_name]);
 
     $next_rotation_date = $stats['next_rotation_date'] ?? 'Unknown';
     $next_rotation_week = $stats['next_rotation_week'] ?? 'Unknown';
@@ -638,6 +757,24 @@ function send_council_rotation_notification($to, $stats, $regenerated_by) {
     foreach ($rotation_counts as $alliance_tag => $count) {
         $distribution_rows .= "<tr><td style='padding:8px;border-bottom:1px solid #e0e0e0;'>{$alliance_tag}</td><td style='padding:8px;border-bottom:1px solid #e0e0e0;text-align:center;'>{$count}</td></tr>";
     }
+
+    // Get all translated strings
+    $t_title = __('emails.council_rotation.title');
+    $t_badge = __('emails.council_rotation.badge');
+    $t_greeting = __('emails.council_rotation.greeting');
+    $t_intro = __('emails.council_rotation.intro', ['weeks' => $weeks_generated]);
+    $t_next_rotation_title = __('emails.council_rotation.next_rotation_title');
+    $t_week_label = __('emails.council_rotation.week_label');
+    $t_date_label = __('emails.council_rotation.date_label');
+    $t_regenerated_by = __('emails.council_rotation.regenerated_by_label');
+    $t_distribution_title = __('emails.council_rotation.distribution_title');
+    $t_table_alliance = __('emails.council_rotation.table_alliance');
+    $t_table_rotations = __('emails.council_rotation.table_rotations', ['weeks' => $weeks_generated]);
+    $t_notice_title = __('emails.council_rotation.notice_title');
+    $t_notice_text = __('emails.council_rotation.notice_text');
+    $t_button_text = __('emails.council_rotation.button_text');
+    $t_footer_notification = __('emails.council_rotation.footer_notification', ['app_name' => $app_name]);
+    $t_footer_no_reply = __('emails.council_rotation.footer_no_reply');
 
     $html_body = <<<EOT
 <!DOCTYPE html>
@@ -759,39 +896,39 @@ function send_council_rotation_notification($to, $stats, $regenerated_by) {
 <body>
     <div class="container">
         <div class="header">
-            <h1>🗳️ Council Rotation Updated</h1>
-            <div class="badge">Schedule Regenerated</div>
+            <h1>{$t_title}</h1>
+            <div class="badge">{$t_badge}</div>
         </div>
 
         <div class="content">
-            <p>Hello,</p>
+            <p>{$t_greeting}</p>
 
-            <p>The <strong>council rotation schedule</strong> has been regenerated for the next {$weeks_generated} weeks. All future rotating council seats (ranks 6-15) have been recalculated to ensure fair distribution.</p>
+            <p>{$t_intro}</p>
 
             <div class="info-box">
-                <h3>📅 Next Rotation</h3>
+                <h3>{$t_next_rotation_title}</h3>
                 <div class="stats">
                     <div class="stat-item">
-                        <span class="stat-label">Week Number:</span>
+                        <span class="stat-label">{$t_week_label}</span>
                         <span class="stat-value">#{$next_rotation_week}</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">Rotation Date:</span>
+                        <span class="stat-label">{$t_date_label}</span>
                         <span class="stat-value">{$next_rotation_date}</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">Regenerated By:</span>
+                        <span class="stat-label">{$t_regenerated_by}</span>
                         <span class="stat-value">{$regenerated_by}</span>
                     </div>
                 </div>
             </div>
 
-            <h3>📊 Future Rotation Distribution</h3>
+            <h3>{$t_distribution_title}</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>Alliance</th>
-                        <th style="text-align:center;">Rotations (Next {$weeks_generated} Weeks)</th>
+                        <th>{$t_table_alliance}</th>
+                        <th style="text-align:center;">{$t_table_rotations}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -800,17 +937,17 @@ function send_council_rotation_notification($to, $stats, $regenerated_by) {
             </table>
 
             <div class="notice">
-                <strong>ℹ️ Important:</strong> The regeneration only affects future weeks. All past and current week rotations remain unchanged.
+                <strong>{$t_notice_title}</strong> {$t_notice_text}
             </div>
 
             <div style="text-align: center;">
-                <a href="https://www.lastwar1586.online/admin/council_rotation.php" class="button">View Full Schedule</a>
+                <a href="https://www.lastwar1586.online/admin/council_rotation.php" class="button">{$t_button_text}</a>
             </div>
         </div>
 
         <div class="footer">
-            <p>This is an automated notification from {$app_name}.</p>
-            <p style="color: #999; font-size: 12px;">Please do not reply to this email.</p>
+            <p>{$t_footer_notification}</p>
+            <p style="color: #999; font-size: 12px;">{$t_footer_no_reply}</p>
         </div>
     </div>
 </body>

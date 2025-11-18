@@ -1,22 +1,23 @@
 {
-  "requests": [
-    {
-      "request_id": "votereq_20251110_l9ylg9",
-      "status": "pending",
-      "created_at": "2025-11-10T03:57:35.973Z",
-      "requested_by": {
-        "discord_id": "199257650154831872",
-        "username": "k33bz",
-        "tag": "k33bz"
-      },
-      "vote_details": {
-        "title": "test vote",
-        "description": "test vote description",
-        "category": "alliance_action"
-      },
-      "president_response": null,
-      "responded_at": null,
-      "created_vote_id": null
-    }
-  ]
+    "requests": [
+        {
+            "request_id": "votereq_20251110_l9ylg9",
+            "status": "pending",
+            "created_at": "2025-11-10T03:57:35.973Z",
+            "requested_by": {
+                "discord_id": "199257650154831872",
+                "username": "k33bz",
+                "tag": "k33bz"
+            },
+            "vote_details": {
+                "title": "test vote",
+                "description": "test vote description",
+                "category": "alliance_action"
+            },
+            "president_response": null,
+            "responded_at": null,
+            "created_vote_id": null,
+            "server": "1586"
+        }
+    ]
 }

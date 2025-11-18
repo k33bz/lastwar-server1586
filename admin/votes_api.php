@@ -20,7 +20,10 @@ ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 
 try {
-    require_once 'jwt.php';
+    define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
+
+require_once 'jwt.php';
     require_once 'audit_logger.php';
     require_once 'json_helpers.php';
     require_once 'includes/csrf.php';

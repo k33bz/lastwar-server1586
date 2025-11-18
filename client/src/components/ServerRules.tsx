@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Accordion, Switch, Chip } from '@heroui/react';
 import { useApi } from '../hooks/useApi';
 import DOMPurify from 'dompurify';
@@ -20,8 +21,17 @@ interface RuleSection {
 }
 
 export function ServerRules() {
+  const { t, i18n } = useTranslation('public');
   const [showDiff, setShowDiff] = useState(false);
-  const { data: rules } = useApi<RuleSection[]>('rules.json');
+
+  // Load language-specific rules file, fallback to en-US if not found
+  const rulesFile = `rules-${i18n.language}.json`;
+  const { data: rules, error, loading: rulesLoading } = useApi<RuleSection[]>(rulesFile);
+  const { data: fallbackRules } = useApi<RuleSection[]>('rules-en-US.json');
+
+  // Use translated rules if available, otherwise fall back to English
+  const displayRules = (error && fallbackRules) ? fallbackRules : rules;
+  const loading = rulesLoading;
 
   // Sanitize HTML to prevent XSS attacks
   const sanitizeHtml = (html: string): string => {
@@ -31,7 +41,8 @@ export function ServerRules() {
     });
   };
 
-  if (!rules || rules.length === 0) return null;
+  if (loading) return null;
+  if (!displayRules || displayRules.length === 0) return null;
 
   const getChangeBackground = (type: 'add' | 'remove' | 'modify') => {
     switch (type) {
@@ -61,14 +72,14 @@ export function ServerRules() {
         {/* Header with Toggle */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold mb-2">SERVER 1586 RULES & NAP15</h2>
-            <span className="text-sm opacity-60">Last War Server 1586</span>
+            <h2 className="text-3xl font-bold mb-2">{t('rules.title')}</h2>
+            <span className="text-sm opacity-60">{t('rules.subtitle')}</span>
           </div>
           <Switch isSelected={showDiff} onChange={setShowDiff}>
             <Switch.Control>
               <Switch.Thumb />
             </Switch.Control>
-            <span className="text-sm font-medium ml-2">Show Changes</span>
+            <span className="text-sm font-medium ml-2">{t('rules.showChanges')}</span>
           </Switch>
         </div>
 
@@ -77,7 +88,7 @@ export function ServerRules() {
           allowsMultipleExpanded
           className="space-y-4"
         >
-          {rules.map((section, sectionIdx) => {
+          {displayRules.map((section, sectionIdx) => {
             const hasChanges = (section.amendments?.length || 0) > 0;
 
             return (
@@ -89,10 +100,10 @@ export function ServerRules() {
                 <Accordion.Heading>
                   <Accordion.Trigger className="w-full px-4 py-3 text-left hover:bg-accent/5 transition-colors flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <span className="font-semibold text-lg">{section.title}</span>
+                      <span className="font-semibold text-lg" dangerouslySetInnerHTML={{ __html: sanitizeHtml(section.title) }} />
                       {hasChanges && showDiff && (
                         <Chip color="accent" size="sm">
-                          {section.amendments!.length} version{section.amendments!.length !== 1 ? 's' : ''}
+                          {t('rules.versions', { count: section.amendments!.length })}
                         </Chip>
                       )}
                     </div>
@@ -136,7 +147,7 @@ export function ServerRules() {
                       <div className="space-y-4">
                         {/* Show current content first */}
                         <div className="space-y-2">
-                          <div className="text-xs font-semibold opacity-60 uppercase mb-2">Current Version</div>
+                          <div className="text-xs font-semibold opacity-60 uppercase mb-2">{t('rules.currentVersion')}</div>
                           {section.content && section.content.map((para, idx) => (
                             <p key={idx} className="text-sm leading-relaxed px-3 py-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(para) }} />
                           ))}
@@ -192,7 +203,7 @@ export function ServerRules() {
 
                         {(!section.amendments || section.amendments.length === 0) && (
                           <div className="text-sm opacity-60 italic px-3 py-2">
-                            No changes recorded for this section
+                            {t('rules.noChanges')}
                           </div>
                         )}
                       </div>

@@ -15,6 +15,9 @@
  * - initiate_migration: Start a new migration (with required backup)
  */
 
+define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
+
 require_once 'jwt.php';
 require_once 'json_helpers.php';
 require_once 'audit_logger.php';

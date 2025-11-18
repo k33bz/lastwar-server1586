@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Card, Avatar, Chip, Disclosure, Button } from '@heroui/react';
 import { useApi } from '../hooks/useApi';
 import type { CouncilMember } from '../types';
@@ -12,6 +13,7 @@ interface RotationSchedule {
 }
 
 export function CouncilMembers() {
+  const { t } = useTranslation('public');
   const { data: council } = useApi<{ members: CouncilMember[] }>('council.json');
   const { data: rotation } = useApi<RotationSchedule>('rotation-schedule.json');
 
@@ -22,26 +24,26 @@ export function CouncilMembers() {
 
   return (
     <section className="mb-16" id="council">
-      <h2 className="text-4xl font-bold text-center mb-8">Council Voting Members</h2>
+      <h2 className="text-4xl font-bold text-center mb-8">{t('council.title')}</h2>
 
       {/* Council Info Card */}
       <Card variant="secondary" className="mb-8 p-6">
         <div className="flex flex-col md:flex-row justify-around items-center gap-6 text-center">
           <div>
             <div className="text-3xl font-bold text-accent">7</div>
-            <div className="text-sm opacity-75">Total Members</div>
+            <div className="text-sm opacity-75">{t('council.totalMembers')}</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-green-500">5</div>
-            <div className="text-sm opacity-75">Permanent Seats</div>
+            <div className="text-sm opacity-75">{t('council.permanentSeats')}</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-blue-500">2</div>
-            <div className="text-sm opacity-75">Rotating Seats</div>
+            <div className="text-sm opacity-75">{t('council.rotatingSeats')}</div>
           </div>
           <div>
-            <div className="text-3xl font-bold">Weekly</div>
-            <div className="text-sm opacity-75">Rotation</div>
+            <div className="text-3xl font-bold">{t('council.weekly')}</div>
+            <div className="text-sm opacity-75">{t('council.rotation')}</div>
           </div>
         </div>
       </Card>
@@ -49,8 +51,8 @@ export function CouncilMembers() {
       {/* Permanent Members */}
       <div className="mb-8">
         <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-          <Chip color="success" variant="primary">Permanent</Chip>
-          <span>Top 5 Alliances</span>
+          <Chip color="success" variant="primary">{t('council.permanent')}</Chip>
+          <span>{t('council.top5Alliances')}</span>
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {permanentMembers.map((member, idx) => (
@@ -75,8 +77,8 @@ export function CouncilMembers() {
       {/* Rotating Members */}
       <div>
         <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-          <Chip color="accent" variant="primary">Rotating</Chip>
-          <span>Current Week</span>
+          <Chip color="accent" variant="primary">{t('council.rotating')}</Chip>
+          <span>{t('council.currentWeek')}</span>
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {rotatingMembers.map((member) => (
@@ -89,9 +91,9 @@ export function CouncilMembers() {
                 </Avatar>
                 <div className="flex-1">
                   <div className="font-bold text-lg">[{member.tag}] {member.name}</div>
-                  <div className="text-sm opacity-75">Rotating Member</div>
+                  <div className="text-sm opacity-75">{t('council.rotatingMember')}</div>
                   {member.startDate && (
-                    <div className="text-xs opacity-60 mt-1">Since: {member.startDate}</div>
+                    <div className="text-xs opacity-60 mt-1">{t('council.since')}: {member.startDate}</div>
                   )}
                 </div>
               </div>
@@ -104,8 +106,8 @@ export function CouncilMembers() {
       {rotation && rotation.schedule && (
         <div className="mt-12">
           <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-            <Chip color="warning" variant="primary">Schedule</Chip>
-            <span>Rotation Calendar</span>
+            <Chip color="warning" variant="primary">{t('councilRotation.schedule')}</Chip>
+            <span>{t('councilRotation.rotationCalendar')}</span>
           </h3>
           <Card variant="tertiary" className="p-6">
             <div className="space-y-4">
@@ -117,8 +119,8 @@ export function CouncilMembers() {
                   <Card variant="secondary" className="p-4 opacity-60">
                     <Card.Header className="pb-2">
                       <div className="flex items-center justify-between w-full">
-                        <Card.Title className="text-base">Week {prevWeek.weekNumber}</Card.Title>
-                        <Chip color="default" size="sm" variant="secondary">Previous</Chip>
+                        <Card.Title className="text-base">{t('councilRotation.week')} {prevWeek.weekNumber}</Card.Title>
+                        <Chip color="default" size="sm" variant="secondary">{t('councilRotation.previous')}</Chip>
                       </div>
                       <Card.Description className="text-xs">
                         {weekDate.toLocaleDateString()}
@@ -144,8 +146,8 @@ export function CouncilMembers() {
                   <Card variant="secondary" className="p-4 ring-2 ring-accent">
                     <Card.Header className="pb-2">
                       <div className="flex items-center justify-between w-full">
-                        <Card.Title className="text-base">Week {currentWeek.weekNumber}</Card.Title>
-                        <Chip color="accent" size="sm">Current</Chip>
+                        <Card.Title className="text-base">{t('councilRotation.week')} {currentWeek.weekNumber}</Card.Title>
+                        <Chip color="accent" size="sm">{t('councilRotation.current')}</Chip>
                       </div>
                       <Card.Description className="text-xs">
                         {weekDate.toLocaleDateString()}
@@ -168,8 +170,8 @@ export function CouncilMembers() {
                 <Disclosure.Heading>
                   <Button slot="trigger" variant="secondary" className="w-full p-4 justify-between">
                     <div className="flex items-center gap-2">
-                      <Chip color="default" size="sm" variant="secondary">Upcoming</Chip>
-                      <span className="font-semibold">Next 4 Weeks</span>
+                      <Chip color="default" size="sm" variant="secondary">{t('councilRotation.upcoming')}</Chip>
+                      <span className="font-semibold">{t('councilRotation.next4Weeks')}</span>
                     </div>
                     <Disclosure.Indicator />
                   </Button>
@@ -182,7 +184,7 @@ export function CouncilMembers() {
                         <Card key={week.weekNumber} variant="secondary" className="p-4">
                           <Card.Header className="pb-2">
                             <div className="flex items-center justify-between w-full">
-                              <Card.Title className="text-base">Week {week.weekNumber}</Card.Title>
+                              <Card.Title className="text-base">{t('councilRotation.week')} {week.weekNumber}</Card.Title>
                             </div>
                             <Card.Description className="text-xs">
                               {weekDate.toLocaleDateString()}
@@ -204,7 +206,10 @@ export function CouncilMembers() {
               </Disclosure>
             </div>
             <div className="mt-6 text-center text-sm opacity-60">
-              Currently Week {rotation.currentWeekNumber} of {rotation.schedule.length} • 5-week rotation cycle
+              {t('councilRotation.currentlyWeek', {
+                current: rotation.currentWeekNumber,
+                total: rotation.schedule.length
+              })}
             </div>
           </Card>
         </div>

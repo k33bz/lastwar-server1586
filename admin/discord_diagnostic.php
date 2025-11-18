@@ -5,6 +5,7 @@
  */
 
 define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
 require_once 'config.php';
 require_once 'jwt.php';
 

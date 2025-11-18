@@ -55,9 +55,16 @@ require_once __DIR__ . '/csrf.php';
 // Include email utilities
 require_once __DIR__ . '/email_utils.php';
 
-// Include and initialize CSP (Content Security Policy)
-require_once __DIR__ . '/csp.php';
-$csp_nonce = init_csp(true); // Initialize CSP in report-only mode (monitors but doesn't block)
+// CSP disabled for development - re-enable for production
+// require_once __DIR__ . '/csp.php';
+// $csp_nonce = init_csp(true);
+
+// Include i18n
+require_once __DIR__ . '/i18n.php';
+if (!isset($_SESSION)) {
+    session_start();
+}
+i18n_init();
 
 // Get current page for navigation highlighting
 $current_page = basename($_SERVER['PHP_SELF']);
@@ -82,7 +89,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <link rel="stylesheet" href="includes/styles.css">
 
     <!-- Page-specific Styles -->
-    <style <?php echo csp_nonce(); ?>>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -1049,7 +1056,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         }
     </style>
 
-    <script <?php echo csp_nonce(); ?>>
+    <script>
         // Token expiration countdown
         const tokenExp = <?php echo isset($user->exp) ? $user->exp : 'null'; ?>;
         
@@ -1388,22 +1395,22 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
             
             <nav class="admin-nav">
-                <a href="dashboard.php" class="nav-link <?php echo $current_page === 'dashboard.php' ? 'active' : ''; ?>">Dashboard</a>
-                <a href="user_profile.php" class="nav-link <?php echo $current_page === 'user_profile.php' ? 'active' : ''; ?>">👤 My Profile</a>
+                <a href="dashboard.php" class="nav-link <?php echo $current_page === 'dashboard.php' ? 'active' : ''; ?>"><?php echo __('common.navigation.dashboard'); ?></a>
+                <a href="user_profile.php" class="nav-link <?php echo $current_page === 'user_profile.php' ? 'active' : ''; ?>">👤 <?php echo __('pages.user_profile.title'); ?></a>
 
                 <!-- Alliances Dropdown -->
                 <?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
                 <div class="nav-dropdown">
                     <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['alliance_edit.php', 'alliances_power.php', 'alliance_tags_manager.php']) ? 'active' : ''; ?>">
-                        Alliances
+                        <?php echo __('common.navigation.alliances'); ?>
                     </div>
                     <div class="nav-dropdown-menu">
-                        <a href="alliance_edit.php" class="nav-link <?php echo $current_page === 'alliance_edit.php' ? 'active' : ''; ?>">Editor</a>
+                        <a href="alliance_edit.php" class="nav-link <?php echo $current_page === 'alliance_edit.php' ? 'active' : ''; ?>"><?php echo __('pages.alliance_edit.nav_title'); ?></a>
                         <?php if ($user->aud === 'admin' || (function_exists('is_power_editor') && is_power_editor($user))): ?>
-                        <a href="alliances_power.php" class="nav-link <?php echo $current_page === 'alliances_power.php' ? 'active' : ''; ?>">Power Editor</a>
+                        <a href="alliances_power.php" class="nav-link <?php echo $current_page === 'alliances_power.php' ? 'active' : ''; ?>"><?php echo __('pages.alliances_power.nav_title'); ?></a>
                         <?php endif; ?>
                         <?php if ($user->aud === 'admin'): ?>
-                        <a href="alliance_tags_manager.php" class="nav-link <?php echo $current_page === 'alliance_tags_manager.php' ? 'active' : ''; ?>">Tag Manager</a>
+                        <a href="alliance_tags_manager.php" class="nav-link <?php echo $current_page === 'alliance_tags_manager.php' ? 'active' : ''; ?>"><?php echo __('pages.alliance_tags_manager.nav_title'); ?></a>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -1413,16 +1420,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php if (has_role($user, ['admin', 'r5', 'r4', 'president', 'ape'])): ?>
                 <div class="nav-dropdown">
                     <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['council_rotation.php', 'discord_vote_proposals.php', 'president_vote_approvals.php', 'votes_management.php']) ? 'active' : ''; ?>">
-                        🏛️ Server Management
+                        🏛️ <?php echo __('common.navigation.server_management'); ?>
                     </div>
                     <div class="nav-dropdown-menu">
                         <?php if (has_role($user, ['admin', 'president'])): ?>
-                        <a href="council_rotation.php" class="nav-link <?php echo $current_page === 'council_rotation.php' ? 'active' : ''; ?>">Council Rotation</a>
+                        <a href="council_rotation.php" class="nav-link <?php echo $current_page === 'council_rotation.php' ? 'active' : ''; ?>"><?php echo __('pages.council_rotation.nav_title'); ?></a>
                         <?php endif; ?>
-                        <a href="discord_vote_proposals.php" class="nav-link <?php echo $current_page === 'discord_vote_proposals.php' ? 'active' : ''; ?>">Council Proposals</a>
+                        <a href="discord_vote_proposals.php" class="nav-link <?php echo $current_page === 'discord_vote_proposals.php' ? 'active' : ''; ?>"><?php echo __('pages.discord_vote_proposals.nav_title'); ?></a>
                         <?php if (has_role($user, ['admin', 'president'])): ?>
-                        <a href="president_vote_approvals.php" class="nav-link <?php echo $current_page === 'president_vote_approvals.php' ? 'active' : ''; ?>">Vote Approvals</a>
-                        <a href="votes_management.php" class="nav-link <?php echo $current_page === 'votes_management.php' ? 'active' : ''; ?>">Votes History</a>
+                        <a href="president_vote_approvals.php" class="nav-link <?php echo $current_page === 'president_vote_approvals.php' ? 'active' : ''; ?>"><?php echo __('pages.president_vote_approvals.nav_title'); ?></a>
+                        <a href="votes_management.php" class="nav-link <?php echo $current_page === 'votes_management.php' ? 'active' : ''; ?>"><?php echo __('pages.votes_management.nav_title'); ?></a>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -1432,30 +1439,34 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php if (defined('DISCORD_ENABLED') && DISCORD_ENABLED && has_role($user, ['admin', 'r5', 'r4', 'president', 'ape'])): ?>
                 <div class="nav-dropdown">
                     <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['discord_announcements.php', 'discord_scheduled.php', 'discord_recurring.php', 'discord_templates.php', 'discord_channels.php', 'discord_rate_limits.php', 'discord_config.php']) ? 'active' : ''; ?>">
-                        Discord
+                        <?php echo __('common.navigation.discord'); ?>
                     </div>
                     <div class="nav-dropdown-menu">
-                        <a href="discord_announcements.php" class="nav-link <?php echo $current_page === 'discord_announcements.php' ? 'active' : ''; ?>">Announcements</a>
-                        <a href="discord_scheduled.php" class="nav-link <?php echo $current_page === 'discord_scheduled.php' ? 'active' : ''; ?>">Scheduled Messages</a>
-                        <a href="discord_recurring.php" class="nav-link <?php echo $current_page === 'discord_recurring.php' ? 'active' : ''; ?>">Recurring Messages</a>
-                        <a href="discord_templates.php" class="nav-link <?php echo $current_page === 'discord_templates.php' ? 'active' : ''; ?>">Message Templates</a>
+                        <a href="discord_announcements.php" class="nav-link <?php echo $current_page === 'discord_announcements.php' ? 'active' : ''; ?>"><?php echo __('pages.discord_announcements.nav_title'); ?></a>
+                        <a href="discord_scheduled.php" class="nav-link <?php echo $current_page === 'discord_scheduled.php' ? 'active' : ''; ?>"><?php echo __('pages.discord_scheduled.nav_title'); ?></a>
+                        <a href="discord_recurring.php" class="nav-link <?php echo $current_page === 'discord_recurring.php' ? 'active' : ''; ?>"><?php echo __('pages.discord_recurring.nav_title'); ?></a>
+                        <a href="discord_templates.php" class="nav-link <?php echo $current_page === 'discord_templates.php' ? 'active' : ''; ?>"><?php echo __('pages.discord_templates.nav_title'); ?></a>
                         <?php if ($user->aud === 'admin'): ?>
-                        <a href="discord_channels.php" class="nav-link <?php echo $current_page === 'discord_channels.php' ? 'active' : ''; ?>">Channels</a>
-                        <a href="discord_rate_limits.php" class="nav-link <?php echo $current_page === 'discord_rate_limits.php' ? 'active' : ''; ?>">Rate Limits</a>
-                        <a href="discord_config.php" class="nav-link <?php echo $current_page === 'discord_config.php' ? 'active' : ''; ?>">Configuration</a>
+                        <a href="discord_channels.php" class="nav-link <?php echo $current_page === 'discord_channels.php' ? 'active' : ''; ?>"><?php echo __('pages.discord_channels.nav_title'); ?></a>
+                        <a href="discord_rate_limits.php" class="nav-link <?php echo $current_page === 'discord_rate_limits.php' ? 'active' : ''; ?>"><?php echo __('discord.rate_limits.nav_title'); ?></a>
+                        <a href="discord_config.php" class="nav-link <?php echo $current_page === 'discord_config.php' ? 'active' : ''; ?>"><?php echo __('discord.config.nav_title'); ?></a>
                         <?php endif; ?>
                     </div>
                 </div>
                 <?php endif; ?>
 
-                <!-- Season 2 Dropdown -->
+                <!-- Seasons Dropdown -->
                 <?php if (has_role($user, ['admin', 'r5', 'r4', 'president'])): ?>
                 <div class="nav-dropdown">
-                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['season2_manager.php']) ? 'active' : ''; ?>">
-                        ❄️ Season 2
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['season1.php', 'season2_manager.php', 'season3.php', 'season4.php', 'season5.php']) ? 'active' : ''; ?>">
+                        ❄️ <?php echo __('common.navigation.seasons'); ?>
                     </div>
                     <div class="nav-dropdown-menu">
-                        <a href="season2_manager.php" class="nav-link <?php echo $current_page === 'season2_manager.php' ? 'active' : ''; ?>">Event Calendar</a>
+                        <a href="season1.php" class="nav-link <?php echo $current_page === 'season1.php' ? 'active' : ''; ?>"><?php echo __('seasons.season1.nav_title'); ?></a>
+                        <a href="season2_manager.php" class="nav-link <?php echo $current_page === 'season2_manager.php' ? 'active' : ''; ?>"><?php echo __('seasons.season2.nav_title'); ?></a>
+                        <a href="season3.php" class="nav-link <?php echo $current_page === 'season3.php' ? 'active' : ''; ?>"><?php echo __('seasons.season3.nav_title'); ?></a>
+                        <a href="season4.php" class="nav-link <?php echo $current_page === 'season4.php' ? 'active' : ''; ?>"><?php echo __('seasons.season4.nav_title'); ?></a>
+                        <a href="season5.php" class="nav-link <?php echo $current_page === 'season5.php' ? 'active' : ''; ?>"><?php echo __('seasons.season5.nav_title'); ?></a>
                     </div>
                 </div>
                 <?php endif; ?>
@@ -1464,42 +1475,33 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <!-- Users Dropdown -->
                 <div class="nav-dropdown">
                     <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['user_management.php', 'generate_magic_link.php', 'send_magic_link.php']) ? 'active' : ''; ?>">
-                        Users
+                        <?php echo __('common.navigation.users'); ?>
                     </div>
                     <div class="nav-dropdown-menu">
-                        <a href="user_management.php" class="nav-link <?php echo $current_page === 'user_management.php' ? 'active' : ''; ?>">Manage Users</a>
-                        <a href="generate_magic_link.php" class="nav-link <?php echo $current_page === 'generate_magic_link.php' ? 'active' : ''; ?>">Magic Links</a>
-                        <a href="send_magic_link.php" class="nav-link <?php echo $current_page === 'send_magic_link.php' ? 'active' : ''; ?>">Send Login Link</a>
+                        <a href="user_management.php" class="nav-link <?php echo $current_page === 'user_management.php' ? 'active' : ''; ?>"><?php echo __('pages.user_management.nav_title'); ?></a>
+                        <a href="generate_magic_link.php" class="nav-link <?php echo $current_page === 'generate_magic_link.php' ? 'active' : ''; ?>"><?php echo __('users.magic_links.nav_title'); ?></a>
+                        <a href="send_magic_link.php" class="nav-link <?php echo $current_page === 'send_magic_link.php' ? 'active' : ''; ?>"><?php echo __('users.send_login_link.nav_title'); ?></a>
                     </div>
                 </div>
 
-                <!-- Security Dropdown (Admin Only) -->
-                <?php if ($user->aud === 'admin'): ?>
+                <!-- System Dropdown (includes Security for admin) -->
                 <div class="nav-dropdown">
-                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['security_monitor.php', 'security_keys.php', 'security_mfa_manage.php', 'security_audit.php', 'security_backups.php', 'generate_test_token.php']) ? 'active' : ''; ?>">
-                        🔐 Security
+                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['migrate.php', 'metrics_dashboard.php', 'changelog.php', 'notifications.php', 'security_monitor.php', 'security_keys.php', 'security_mfa_manage.php', 'security_audit.php', 'security_backups.php', 'generate_test_token.php']) ? 'active' : ''; ?>">
+                        ⚙️ <?php echo __('common.navigation.system'); ?>
                     </div>
                     <div class="nav-dropdown-menu">
-                        <a href="security_monitor.php" class="nav-link <?php echo $current_page === 'security_monitor.php' ? 'active' : ''; ?>">Security Monitor</a>
-                        <a href="security_keys.php" class="nav-link <?php echo $current_page === 'security_keys.php' ? 'active' : ''; ?>">JWT Key Rotation</a>
-                        <a href="security_mfa_manage.php" class="nav-link <?php echo $current_page === 'security_mfa_manage.php' ? 'active' : ''; ?>">MFA Management</a>
-                        <a href="security_audit.php" class="nav-link <?php echo $current_page === 'security_audit.php' ? 'active' : ''; ?>">Audit Logs</a>
-                        <a href="security_backups.php" class="nav-link <?php echo $current_page === 'security_backups.php' ? 'active' : ''; ?>">Backups</a>
-                        <a href="generate_test_token.php" class="nav-link <?php echo $current_page === 'generate_test_token.php' ? 'active' : ''; ?>">Generate Test Token</a>
-                    </div>
-                </div>
-                <?php endif; ?>
-
-                <!-- System Dropdown -->
-                <div class="nav-dropdown">
-                    <div class="nav-link nav-dropdown-trigger <?php echo in_array($current_page, ['migrate.php', 'metrics_dashboard.php', 'changelog.php', 'notifications.php']) ? 'active' : ''; ?>">
-                        ⚙️ System
-                    </div>
-                    <div class="nav-dropdown-menu">
-                        <a href="migrate.php" class="nav-link <?php echo $current_page === 'migrate.php' ? 'active' : ''; ?>">Migration</a>
-                        <a href="metrics_dashboard.php" class="nav-link <?php echo $current_page === 'metrics_dashboard.php' ? 'active' : ''; ?>">Metrics</a>
-                        <a href="notifications.php" class="nav-link <?php echo $current_page === 'notifications.php' ? 'active' : ''; ?>">Notifications</a>
-                        <a href="changelog.php" class="nav-link <?php echo $current_page === 'changelog.php' ? 'active' : ''; ?>">Changelog</a>
+                        <a href="migrate.php" class="nav-link <?php echo $current_page === 'migrate.php' ? 'active' : ''; ?>"><?php echo __('system.migration.nav_title'); ?></a>
+                        <a href="metrics_dashboard.php" class="nav-link <?php echo $current_page === 'metrics_dashboard.php' ? 'active' : ''; ?>"><?php echo __('system.metrics.nav_title'); ?></a>
+                        <a href="notifications.php" class="nav-link <?php echo $current_page === 'notifications.php' ? 'active' : ''; ?>"><?php echo __('system.notifications.nav_title'); ?></a>
+                        <a href="changelog.php" class="nav-link <?php echo $current_page === 'changelog.php' ? 'active' : ''; ?>"><?php echo __('system.changelog.nav_title'); ?></a>
+                        <?php if ($user->aud === 'admin'): ?>
+                        <a href="security_monitor.php" class="nav-link <?php echo $current_page === 'security_monitor.php' ? 'active' : ''; ?>"><?php echo __('security.monitor.nav_title'); ?></a>
+                        <a href="security_keys.php" class="nav-link <?php echo $current_page === 'security_keys.php' ? 'active' : ''; ?>"><?php echo __('security.keys.nav_title'); ?></a>
+                        <a href="security_mfa_manage.php" class="nav-link <?php echo $current_page === 'security_mfa_manage.php' ? 'active' : ''; ?>"><?php echo __('security.mfa.nav_title'); ?></a>
+                        <a href="security_audit.php" class="nav-link <?php echo $current_page === 'security_audit.php' ? 'active' : ''; ?>"><?php echo __('pages.security_audit.nav_title'); ?></a>
+                        <a href="security_backups.php" class="nav-link <?php echo $current_page === 'security_backups.php' ? 'active' : ''; ?>"><?php echo __('pages.security_backups.nav_title'); ?></a>
+                        <a href="generate_test_token.php" class="nav-link <?php echo $current_page === 'generate_test_token.php' ? 'active' : ''; ?>"><?php echo __('security.test_token.nav_title'); ?></a>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <?php endif; ?>
@@ -1507,7 +1509,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
             <!-- Notification Bell -->
             <div class="notification-container">
-                <button class="notification-bell" id="notification-bell" aria-label="Notifications">
+                <button class="notification-bell" id="notification-bell" aria-label="<?php echo __('notifications.aria_label'); ?>">
                     🔔
                     <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
                 </button>
@@ -1515,14 +1517,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <!-- Notification Dropdown -->
                 <div class="notification-dropdown" id="notification-dropdown">
                     <div class="notification-dropdown-header">
-                        <h3>Notifications</h3>
-                        <button class="mark-all-read-btn" id="mark-all-read-btn" style="display: none;">Mark all read</button>
+                        <h3><?php echo __('notifications.title'); ?></h3>
+                        <button class="mark-all-read-btn" id="mark-all-read-btn" style="display: none;"><?php echo __('notifications.mark_all_read'); ?></button>
                     </div>
                     <div class="notification-list" id="notification-list">
-                        <div class="notification-loading">Loading notifications...</div>
+                        <div class="notification-loading"><?php echo __('notifications.loading'); ?></div>
                     </div>
                     <div class="notification-dropdown-footer">
-                        <a href="notifications.php" class="view-all-link">View All Notifications</a>
+                        <a href="notifications.php" class="view-all-link"><?php echo __('notifications.view_all'); ?></a>
                     </div>
                 </div>
             </div>
@@ -1538,7 +1540,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
 
             <div class="user-info">
-                <span class="user-welcome">Welcome back, <?php echo htmlspecialchars(get_user_display_name_from_token($user)); ?></span>
+                <span class="user-welcome"><?php echo __('common.welcome_back', ['name' => htmlspecialchars(get_user_display_name_from_token($user))]); ?></span>
                 <span class="user-role">
                     <?php
                     $user_roles = get_user_roles($user);
@@ -1550,13 +1552,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         if ($role === 'ape'): ?>
                             <span style="background: #ffc107; color: #212529; padding: 0.1rem 0.3rem; border-radius: 4px; font-size: 0.6rem; margin-left: 0.25rem;">APE</span>
                         <?php elseif ($role === 'president'): ?>
-                            <span style="background: #16a085; color: white; padding: 0.1rem 0.3rem; border-radius: 4px; font-size: 0.6rem; margin-left: 0.25rem;">PRESIDENT</span>
+                            <span style="background: #16a085; color: white; padding: 0.1rem 0.3rem; border-radius: 4px; font-size: 0.6rem; margin-left: 0.25rem;"><?php echo __('roles.president'); ?></span>
                         <?php endif;
                     endforeach;
                     ?>
                 </span>
                 <a href="logout.php" class="logout-btn">
-                    Logout <span class="token-countdown" id="token-countdown"></span>
+                    <?php echo __('common.navigation.logout'); ?> <span class="token-countdown" id="token-countdown"></span>
                 </a>
             </div>
         </div>

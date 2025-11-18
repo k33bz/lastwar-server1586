@@ -25,10 +25,14 @@
  * - President/Admin: Can create votes, approve/reject requests, view all
  */
 
+define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
+
 require_once 'jwt.php';
 require_once 'audit_logger.php';
 require_once 'json_helpers.php';
 require_once 'admin_api_helpers.php';
+require_once 'includes/csrf.php';
 
 // Require authentication
 $user = require_jwt_session_api();

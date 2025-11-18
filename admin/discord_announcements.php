@@ -29,7 +29,7 @@ log_audit_event('discord_announcements_accessed', $user->sub, [
 ]);
 
 // Set page title for header
-$page_title = "Discord Announcements";
+$page_title = __('pages.discord_announcements.title');
 
 // Include shared header
 include 'includes/header.php';
@@ -1230,4 +1230,9 @@ loadChannels();
 loadTemplates();
 </script>
 
+<?php
+require_once 'includes/help_drawer.php';
+$help_config = require 'includes/help_content/discord_announcements_help.php';
+render_help_drawer($help_config);
+?>
 <?php include 'includes/footer.php'; ?>

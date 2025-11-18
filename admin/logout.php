@@ -10,6 +10,7 @@
  */
 
 define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/jwt.php';
 require_once __DIR__ . '/audit_logger.php';

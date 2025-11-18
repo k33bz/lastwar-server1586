@@ -17,6 +17,9 @@
  * - Data modifications
  */
 
+define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
+
 require_once 'jwt.php';
 require_once 'audit_logger.php';
 require_once 'includes/csrf.php';
@@ -57,10 +60,67 @@ function get_time_range($range) {
 }
 
 /**
+ * Load users data for role lookups
+ */
+function load_users() {
+    static $users_cache = null;
+
+    if ($users_cache !== null) {
+        return $users_cache;
+    }
+
+    $users_file = __DIR__ . '/users.json';
+    if (!file_exists($users_file)) {
+        return [];
+    }
+
+    $users_data = json_decode(file_get_contents($users_file), true);
+    if (!$users_data || !isset($users_data['users'])) {
+        return [];
+    }
+
+    // Create email => user map for quick lookups
+    $users_map = [];
+    foreach ($users_data['users'] as $user) {
+        if (isset($user['email'])) {
+            $users_map[$user['email']] = $user;
+        }
+    }
+
+    $users_cache = $users_map;
+    return $users_map;
+}
+
+/**
+ * Check if user has a specific role
+ */
+function user_has_role($email, $role) {
+    $users = load_users();
+
+    if (!isset($users[$email])) {
+        return false;
+    }
+
+    $user = $users[$email];
+
+    // Check new multi-role format
+    if (isset($user['roles']) && is_array($user['roles'])) {
+        return in_array($role, $user['roles']);
+    }
+
+    // Check legacy single role format
+    if (isset($user['role']) && $user['role'] === $role) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * Load audit logs and filter by time range
  */
 function load_audit_logs($start_time, $end_time) {
-    $log_file = __DIR__ . '/audit_logs.json';
+    $log_file = __DIR__ . '/audit_log.json';
 
     if (!file_exists($log_file)) {
         return [];
@@ -83,7 +143,9 @@ function load_audit_logs($start_time, $end_time) {
  */
 function generate_time_buckets($start_time, $end_time, $interval) {
     $buckets = [];
-    $current = $start_time;
+
+    // Align start time to interval boundary
+    $current = floor($start_time / $interval) * $interval;
 
     while ($current <= $end_time) {
         $buckets[$current] = 0;
@@ -162,7 +224,7 @@ try {
         case 'login_attempts':
             // Login attempts (successful vs failed)
             $successful = aggregate_by_time($logs, $start_time, $end_time, $interval, function($log) {
-                return $log['action'] === 'login_success';
+                return $log['action'] === 'login';
             });
 
             $failed = aggregate_by_time($logs, $start_time, $end_time, $interval, function($log) {
@@ -231,15 +293,15 @@ try {
         case 'user_activity':
             // Activity by user role
             $admins = aggregate_by_time($logs, $start_time, $end_time, $interval, function($log) {
-                return isset($log['metadata']['role']) && $log['metadata']['role'] === 'admin';
+                return isset($log['user']) && user_has_role($log['user'], 'admin');
             });
 
             $r5 = aggregate_by_time($logs, $start_time, $end_time, $interval, function($log) {
-                return isset($log['metadata']['role']) && $log['metadata']['role'] === 'r5';
+                return isset($log['user']) && user_has_role($log['user'], 'r5');
             });
 
             $r4 = aggregate_by_time($logs, $start_time, $end_time, $interval, function($log) {
-                return isset($log['metadata']['role']) && $log['metadata']['role'] === 'r4';
+                return isset($log['user']) && user_has_role($log['user'], 'r4');
             });
 
             echo json_encode([

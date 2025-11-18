@@ -17,7 +17,7 @@ if ($user->aud !== 'admin') {
 }
 
 // Set page title for header
-$page_title = "User Management";
+$page_title = __('pages.user_management.title');
 
 // Include shared header
 include 'includes/header.php';
@@ -594,23 +594,23 @@ function sortRolesByHierarchy($roles) {
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($users as $user): ?>
+                <?php foreach ($users as $user_item): ?>
                     <tr>
                         <td>
-                            <?php echo emailDisplay($user['email'], true); ?>
+                            <?php echo emailDisplay($user_item['email'], true); ?>
                         </td>
                         <td>
                             <?php
-                            $displayName = get_user_display_name($user['email']);
+                            $displayName = get_user_display_name($user_item['email']);
                             echo htmlspecialchars($displayName);
                             ?>
                         </td>
                         <td>
                             <?php
                             // Support both old format (role + powereditor) and new format (roles array)
-                            if (isset($user['roles']) && is_array($user['roles'])) {
+                            if (isset($user_item['roles']) && is_array($user_item['roles'])) {
                                 // New multi-role format - sort by hierarchy before displaying
-                                $sortedRoles = sortRolesByHierarchy($user['roles']);
+                                $sortedRoles = sortRolesByHierarchy($user_item['roles']);
                                 foreach ($sortedRoles as $role) {
                                     echo '<span class="role-badge role-' . htmlspecialchars($role) . '">';
                                     echo htmlspecialchars(strtoupper($role));
@@ -618,9 +618,9 @@ function sortRolesByHierarchy($roles) {
                                 }
                             } else {
                                 // Old format (backward compatibility)
-                                echo '<span class="role-badge role-' . htmlspecialchars($user['role']) . '">';
-                                echo htmlspecialchars(strtoupper($user['role']));
-                                if (($user['role'] === 'r4' || $user['role'] === 'r5') && isset($user['powereditor']) && $user['powereditor']) {
+                                echo '<span class="role-badge role-' . htmlspecialchars($user_item['role']) . '">';
+                                echo htmlspecialchars(strtoupper($user_item['role']));
+                                if (($user_item['role'] === 'r4' || $user_item['role'] === 'r5') && isset($user_item['powereditor']) && $user_item['powereditor']) {
                                     echo '<span class="ape-badge">+APE</span>';
                                 }
                                 echo '</span>';
@@ -630,7 +630,7 @@ function sortRolesByHierarchy($roles) {
                         <td>
                             <div class="alliance-tags">
                                 <?php
-                                $user_alliances = get_user_alliances($user);
+                                $user_alliances = get_user_alliances($user_item);
                                 if (in_array('*', $user_alliances)): ?>
                                     <span class="alliance-tag alliance-all">ALL</span>
                                 <?php else: ?>
@@ -641,7 +641,7 @@ function sortRolesByHierarchy($roles) {
                             </div>
                         </td>
                         <td>
-                            <?php $isActive = isUserTokenActive($user['email']); ?>
+                            <?php $isActive = isUserTokenActive($user_item['email']); ?>
                             <div class="status-indicator">
                                 <span class="status-dot <?php echo $isActive ? 'active' : 'inactive'; ?>"></span>
                                 <span class="status-text"><?php echo $isActive ? 'Active' : 'Inactive'; ?></span>
@@ -649,9 +649,9 @@ function sortRolesByHierarchy($roles) {
                         </td>
                         <td>
                             <div class="action-buttons">
-                                <button class="btn btn-secondary" onclick="openEditModal('<?php echo htmlspecialchars($user['email']); ?>')">Edit</button>
-                                <button class="btn btn-primary" onclick="generateMagicLink('<?php echo htmlspecialchars($user['email']); ?>')" title="Generate magic link">🔗 Magic Link</button>
-                                <button class="btn btn-danger" onclick="deleteUser('<?php echo htmlspecialchars($user['email']); ?>')" title="Delete user">🗑️ Delete</button>
+                                <button class="btn btn-secondary" onclick="openEditModal('<?php echo htmlspecialchars($user_item['email']); ?>')">Edit</button>
+                                <button class="btn btn-primary" onclick="generateMagicLink('<?php echo htmlspecialchars($user_item['email']); ?>')" title="Generate magic link">🔗 Magic Link</button>
+                                <button class="btn btn-danger" onclick="deleteUser('<?php echo htmlspecialchars($user_item['email']); ?>')" title="Delete user">🗑️ Delete</button>
                             </div>
                         </td>
                     </tr>
@@ -1700,4 +1700,9 @@ window.onclick = function(event) {
 }
 </script>
 
+<?php
+require_once 'includes/help_drawer.php';
+$help_config = require 'includes/help_content/user_management_help.php';
+render_help_drawer($help_config);
+?>
 <?php include 'includes/footer.php'; ?>

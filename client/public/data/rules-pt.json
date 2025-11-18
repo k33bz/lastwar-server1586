@@ -1,0 +1,92 @@
+[
+    {
+        "title": "<strong>NAP15</strong> Visão Geral",
+        "content": [
+            "Todas as Alianças do Top 15 são parte do Pacto de Não Agressão (PAN15). Os membros da PAN15 estão protegidos em qualquer lugar do mapa.",
+            "Verifique a lista de NAP15 mais atualizada no Check Alliance > Configurações > Lista de Aliança > Classificações de Aliança."
+        ]
+    },
+    {
+        "title": "Territórios Protegidos",
+        "items": [
+            "Asas que pertençam a membros ou não-membros do NAP15 em um território tocante à Capital não podem ser atingidas ou apagadas.",
+            "Membros do NAP15 estão protegidos em qualquer lugar do mapa",
+            "Bases não-NAP15 fora de territórios protegidos podem ser atacadas"
+        ]
+    },
+    {
+        "title": "Proteção de Recursos",
+        "items": [
+            "Comboios, caminhões, tarefas e tijolos de recursos não podem ser atacados exceto:",
+            "Tijolos durante a Guerra do Capitólio (ou sextas-feiras das 10:00 AM às 6:00 PM ET se não houver Guerra do Capitólio)<strong> </strong>",
+            "Quando ambos os lados concordarem mutuamente (<span style=\"text-decoration: underline;\">deve ser postado na caixa de bate-papo da aliança</span>)."
+        ]
+    },
+    {
+        "title": "Segurança da Informação",
+        "items": [
+            "Coordenadas das bases NAP15 de tremes, trens, caminhões ou tijolos NÃO DEVEM SER PARTILHADAS com servidores externos.",
+            "Nenhum acordo com outros servidores para atacar recursos da NAP15",
+            "Acordos de concordata entre servidores que concedem recursos/território a estranhos requer aprovação do Conselho."
+        ]
+    },
+    {
+        "title": "Sistema de Disciplina",
+        "items": [
+            "<strong>Olho-pela-olho:</strong> Corridos e pilhagem são matchados equivalentemente",
+            "<strong>Compartilhamento de coordenadas:</strong> 1 dia de prisão (sem perda) ou 3 dias (com perda)",
+            "<strong>Múltiplas violações:</strong> 1 semana em prisão",
+            "<strong>Acordos de servidores externos:</strong> Aliança perde buffs por 3 dias",
+            "<strong>Punir-se recusando:</strong> Três disciplinas triplo em R5/R4"
+        ]
+    },
+    {
+        "title": "Vitupérios e Linguagem Málica",
+        "items": [
+            "Nenhum insulto pessoal, palavrões, chamadas de nomes ou ameaças em World Chat ou DMs",
+            "<strong>Primeira infração:</strong> 3 dias a 2 semanas na Prisão Aliança",
+            "<strong>Segunda infração:</strong> Proibição das proteções do NAP15",
+            "<strong>Língua ameaçadora:</strong> Banimento imediato da NAP15"
+        ]
+    },
+    {
+        "title": "Votação do Conselho",
+        "items": [
+            "R5s (ou designados) das alianças do Top 5 + 2 rotativos dos Top 6-15 <strong>",
+            "Votação majoritária determina resultados <strong>",
+            "Partidos ofendidos e acusados não votam em matérias disciplinares.",
+            "Top 3 alianças quebram laços",
+            "janela de resposta de 24 horas ou votar é desistido"
+        ]
+    },
+    {
+        "title": "<strong>Presidência</strong>&amp; <strong>Estabilidade</strong>",
+        "items": [
+            "A presidência rota semanalmente entre os Top 3 aliados.",
+            "Novas alianças no Top 3 devem manter a posição por 7 dias consecutivos.",
+            "Novas alianças no Top 15 devem manter sua posição por 7 dias consecutivos para ser elegíveis para o NAP15.",
+            "Novos R5s devem ratificar regras dentro de 7 dias ou perderam proteções contra NAP15"
+        ]
+    },
+    {
+        "title": "Aliança de Presídio",
+        "items": [
+            "Sistema de punição para infrações graves.",
+            "Membros de prisão estão protegidos sob a NAP15, mas não rodam no Conselho.",
+            "Violações continuadas enquanto em prisão resultam em banimento permanente da NAP15.",
+            "<Punho segue para novas alianças os membros se eles saírem></strong>"
+        ]
+    },
+    {
+        "title": "Processo de Resolução de Conflitos",
+        "items": [
+            "Partido Ofendido notifica Partido Acusado diretamente",
+            "Se não for resolvido, escalonar para R5/R4 com prova.",
+            "Líderes da Aliança tentam concordar sobre disciplina.",
+            "Se recusado, escalar para o Conselho com documentação.",
+            "O Conselho vota e o Presidente do Servidor aplica a consequência.",
+            "Ações concordantes devem ser comunicadas nas conversas das alianças."
+        ],
+        "type": "ordered"
+    }
+]

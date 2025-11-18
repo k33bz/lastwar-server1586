@@ -1,0 +1,92 @@
+[
+    {
+        "title": "<strong>NAP15</strong> Vista General",
+        "content": [
+            "Todas las alianzas del Top 15 forman parte del Pacto de No Agresión (PAN15). Los miembros del PAN15 están protegidos en cualquier lugar del mapa.",
+            "Verifique la lista de Alianza > Configuración > Lista de Alianzas > Clasificaciones de Alianza para obtener la lista de NAP15 más actualizada."
+        ]
+    },
+    {
+        "title": "Territorios Protegidos",
+        "items": [
+            "Las bases que pertenecen a miembros o no miembros de NAP15 en un territorio que toca la Ciudadela no pueden ser golpeadas ni asentadas.",
+            "Miembros de NAP15 están protegidos en cualquier lugar del mapa.",
+            "Las bases no-NAP15 fuera de territorios protegidos pueden ser atacadas."
+        ]
+    },
+    {
+        "title": "Protección de Recursos",
+        "items": [
+            "Trenes, camiones, tareas y tejas de recursos no pueden ser atacados excepto:",
+            "<strong>Tiles</strong> en el barro durante la Guerra del Capitolio (o viernes de 10:00 a.m. a 6:00 p.m. ET si no hay Guerra del Capitolio).",
+            "Cuando ambos lados estén de acuerdo mutuo (debe ser publicado en la conversación de alianza)\n\n<strong>"
+        ]
+    },
+    {
+        "title": "Seguridad de la Información",
+        "items": [
+            "Las coordenadas de las bases NAP15, trenes, camiones o tejas NO deben compartirse con servidores externos.",
+            "No hay acuerdos con otros servidores para atacar recursos de NAP15.",
+            "Acuerdos inter-servidor que otorguen recursos/tierras a extranjeros requieren aprobación del Consejo."
+        ]
+    },
+    {
+        "title": "Sistema de Disciplina",
+        "items": [
+            "<strong>Ojo por ojo:</strong> Los hits por base y el despojo se igualan equivalentemente",
+            "<strong>Compartir coordenadas:</strong> 1 día en prisión (sin pérdida) o 3 días (con pérdida)",
+            "<strong>Múltiples violaciones:</strong> 1 semana en prisión",
+            "<strong>Acuerdos de servidores fuera:</strong> Alianza pierde beneficios por 3 días",
+            "<strong>Rehusar el castigo:</strong> Triple disciplina en R5/R4"
+        ]
+    },
+    {
+        "title": "Injurias y Lenguaje Malévolo",
+        "items": [
+            "No personal insults, profanidad, nombre-calleo, o amenazas en World Chat o correos electrónicos.",
+            "<strong>Primera ofensa:</strong> 3 días a 2 semanas en la cárcel Alianza",
+            "<strong>Segunda ofensa:</strong> Prohibición de protecciones NAP15",
+            "<strong>Lenguaje amenazador:</strong> Prohibición inmediata del NAP15"
+        ]
+    },
+    {
+        "title": "Votación del Concejo",
+        "items": [
+            "R5s (o designados) desde las alianzas del Top 5 + 2 rotativos desde el Top 6-15",
+            "La votación mayoritaria determina los resultados <strong>",
+            "Partidos ofendidos y acusados no votan en asuntos disciplinarios.",
+            "**Tres alianzas en la cima rompen empates**",
+            "ventana de respuesta de 24 horas o la votación se ve anulada"
+        ]
+    },
+    {
+        "title": "<strong>Presidencia</strong>&amp; <strong>Estabilidad</strong>",
+        "items": [
+            "La presidencia rota semanalmente entre las tres principales alianzas.",
+            "Nuevas alianzas en el Top 3 deben mantener su rango durante 7 días consecutivos.",
+            "Nuevas alianzas en el Top 15 deben mantener su rango durante 7 días consecutivos para ser elegibles para la condición NAP15.",
+            "Nuevos R5 deben ratificar las reglas dentro de 7 días o perder protecciones NAP15"
+        ]
+    },
+    {
+        "title": "Alianza de Carcel",
+        "items": [
+            "Sistema de castigo para infracciones graves.",
+            "Miembros de la cárcel protegidos bajo NAP15 pero no rotan en el Consejo.",
+            "Las continuas violaciones mientras se está en prisión dan como resultado el bando permanente de NAP15.",
+            "La condena sigue a los miembros hasta nuevas alianzas si se van."
+        ]
+    },
+    {
+        "title": "Proceso de Resolución de Conflictos",
+        "items": [
+            "Partido Ofendido notifica al Partido Acusado directamente.",
+            "Si no se resuelve, escalar a R5/R4 con prueba.",
+            "Lideres de la Alianza intentan acordar sobre disciplina.",
+            "Si se niega, escalar a Consejo con documentación.",
+            "El Consejo vota y el presidente del Servidor aplica el resultado.",
+            "Las acciones acordadas deben ser comunicadas en chats de alianza."
+        ],
+        "type": "ordered"
+    }
+]

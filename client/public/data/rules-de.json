@@ -1,0 +1,92 @@
+[
+    {
+        "title": "<strong>NAP15 Übersicht</strong>",
+        "content": [
+            "Alle Top-15-Allianzen sind Teil des Nicht-Angriffspaktes (NAP15). Als Mitglieder von NAP15 sind alleine auf dem Karte geschützt, wo immer sie auch sind.",
+            "Überprüfen Sie Allianz > Einstellungen > Allianzliste > Allianz-Ranglisten für die aktualisierte NAP15-Liste."
+        ]
+    },
+    {
+        "title": "Schutzgebiete",
+        "items": [
+            "Basen, die den Mitgliedern oder Nichtmitgliedern von NAP15 in einem Gebiet zustehen, das an das Kapitol grenzt, können nicht getroffen oder ausgedöscht werden.",
+            "Mitglieder von NAP15 sind überall auf der Karte geschützt.",
+            "Nicht-NAP15-Basis außerhalb geschützter Territorien kann angegriffen werden."
+        ]
+    },
+    {
+        "title": "Ressourcenschutz",
+        "items": [
+            "Züge, Lastwagen, Aufgaben und Ressourcetiles können nicht angegriffen werden, außer:",
+            "Fliesen im Schlamm während des Kapitol-Krieges (oder Freitags von 10:00 Uhr - 18:00 Uhr ET, wenn kein Kapitol-Krieg)<strong> </strong>",
+            "Wenn beide Seiten sich einig sind (muss in Allianz-Chat veröffentlicht werden)"
+        ]
+    },
+    {
+        "title": "Sicherheitsinformation",
+        "items": [
+            "Koordinaten von NAP15-Basen, Zügen, Lastwagen oder Fliesen dürfen NICHT mit Außenservern geteilt werden.",
+            "Keine Vereinbarungen mit anderen Servern, um NAP15-Ressourcen anzugreifen.",
+            "Serverübereinkommen, die Ressourcen/Territorien an Außenstehende übergeben, benötigen den Rat der Ratsmitglieder für ihre Genehmigung."
+        ]
+    },
+    {
+        "title": "System der Disziplin",
+        "items": [
+            "<strong>Auge-um-Auge:</strong> Vorderwärts- und Plünder-Schläge werden gleichwertig aufgestellt",
+            "<strong>Bereitstellung von Koordinaten:</strong> 1 Tag Haft (kein Verlust) oder 3 Tage (mit Verlust)",
+            "<strong>Mehrfache Verstöße:</strong> 1 Woche Haft",
+            "<strong>Außerhalb-Server-Vereinbarungen:</strong> Allianz verliert Buffs für 3 Tage",
+            "<strong>Bestrafung verwehren:</strong> Dreifache Disziplin auf R5/R4"
+        ]
+    },
+    {
+        "title": "Beleidigungen & übler Launen",
+        "items": [
+            "Keine persönlichen Beleidigungen, Schimpfwörter, Namensnennung oder Drohungen in World Chat oder Direct Messages.",
+            "<strong>Erste Vergehen:</strong> 3 Tage bis 2 Wochen Haft im Gefängnis Alliance",
+            "<strong>Zweite Strafe:</strong> Ausschluss von Schutzmaßnahmen NAP15",
+            "<strong>Großes drohendes Verhalten:</strong> sofortige Aussetzung von NAP15"
+        ]
+    },
+    {
+        "title": "Rat-Abstimmung",
+        "items": [
+            "R5s (oder designierte) aus den Top 5 Allianzen + 2 rotierende von Top 6-15",
+            "Mehrheitsentscheid bestimmt die Ausgänge",
+            "Betroffene und Angeklagte stimmen in Disziplinarangelegenheiten nicht ab.",
+            "Top 3 Allianzen brechen Tiefs",
+            "24-Stunden-Antwort-Fenster oder Stimmrecht wird erlischt"
+        ]
+    },
+    {
+        "title": "Präsidentschaft & Stabilität",
+        "items": [
+            "Präsidentschaft rotiert wöchentlich unter den Top-3-Allianzen.",
+            "Neue Top-3-Bündnisse müssen für 7 aufeinanderfolgende Tage Rang halten.",
+            "Neue Top-15-Allianzen müssen für 7 aufeinander folgende Tage Rang halten, um die NAP15-Eligibilität zu erfüllen.",
+            "Neue R5s müssen Regeln innerhalb von 7 Tagen ratifizieren oder NAP15-Schutz verlieren."
+        ]
+    },
+    {
+        "title": "Gefängnis-Allianz",
+        "items": [
+            "Strafensystem für schwere Vergehen",
+            "Mitglieder, die unter NAP15 geschützt sind, schützen sich nicht im Rat ab.",
+            "Weitere Verstöße während des Gefängnisaufenthalts führen zu dauerhafter Sperre von NAP15.",
+            "Strafe folgt den Mitgliedern in neue Bündnisse, wenn sie gehen."
+        ]
+    },
+    {
+        "title": "Konfliktbeilegungsprozess",
+        "items": [
+            "Partei, die angegriffen wurde, benachrichtigt Partei, gegen die ergerungen wurden direkt.",
+            "Wenn unbeantwortet, an R5/R4 mit Beweis weitergeben.",
+            "Führer der Allianz versuchen, sich auf Disziplin zu einigen.",
+            "Wenn abgelehnt wird, eskalieren Sie an das Rat mit Dokumentation.",
+            "Rat gibt ab und Server-Präsident setzt Ausgang durch.",
+            "Geschlossene Aktionen müssen in Allianz-Chats kommuniziert werden."
+        ],
+        "type": "ordered"
+    }
+]

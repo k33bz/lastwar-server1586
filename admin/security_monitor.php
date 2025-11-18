@@ -17,6 +17,7 @@
 
 if (!defined('ADMIN_INIT')) {
     define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
 }
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/json_helpers.php';

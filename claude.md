@@ -16,6 +16,23 @@
 - Navigation links with role-based access control
 - Critical bug fix: `top5Permanent` field reference (commit 0be1633)
 
+**Admin Panel i18n: ✅ COMPLETE**
+- Multi-language support for 5 languages (EN, ES, PT, DE, KO)
+- Translation system using `__('key')` pattern
+- User language preferences stored in JWT and user profile
+- Automated translation via LM Studio (Hunyuan-MT-7B)
+- Translation files: `admin/i18n/{lang}/translations.json`
+- Magic link emails sent in user's preferred language
+- Language selector on login page and user profile
+- 9 admin pages translated (dashboard, user management, etc.)
+
+**Development Tools: ✅ COMPLETE**
+- GUI development server tool (`dev_server.py`)
+- Controls PHP admin server, React dev server, Vite preview
+- Live log monitoring for all servers
+- One-click browser launch and build management
+- Translation scripts for admin UI, client rules, and locales
+
 ---
 
 ## Bug Tracking & Documentation

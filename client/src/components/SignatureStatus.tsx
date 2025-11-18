@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Card } from '@heroui/react';
 import { useApi } from '../hooks/useApi';
 
@@ -22,6 +23,7 @@ interface SignatureHistoryData {
 }
 
 export function SignatureStatus() {
+  const { t } = useTranslation('public');
   const { data: signatureData, loading, error } = useApi<SignatureHistoryData>('signature-history.json');
 
   if (loading) {
@@ -42,7 +44,7 @@ export function SignatureStatus() {
   if (error || !signatureData) {
     return (
       <Card variant="quaternary" className="p-6 border-2 border-red-500/20">
-        <p className="text-red-500">Failed to load signature data</p>
+        <p className="text-red-500">{t('votes.error')}</p>
       </Card>
     );
   }
@@ -68,7 +70,7 @@ export function SignatureStatus() {
         bg: 'bg-red-50 dark:bg-red-900/10',
         border: 'border-red-500/30',
         text: 'text-red-600 dark:text-red-400',
-        status: 'Not Signed'
+        status: t('votes.notSigned')
       };
     }
 
@@ -80,7 +82,7 @@ export function SignatureStatus() {
         bg: 'bg-green-50 dark:bg-green-900/10',
         border: 'border-green-500/30',
         text: 'text-green-600 dark:text-green-400',
-        status: 'Current'
+        status: t('votes.current')
       };
     } else if (distance === 0.1) {
       // 0.1 versions behind - yellow-green
@@ -88,7 +90,7 @@ export function SignatureStatus() {
         bg: 'bg-lime-50 dark:bg-lime-900/10',
         border: 'border-lime-500/30',
         text: 'text-lime-600 dark:text-lime-400',
-        status: 'Slightly Outdated'
+        status: t('votes.slightlyOutdated')
       };
     } else if (distance === 0.2) {
       // 0.2 versions behind - yellow
@@ -96,7 +98,7 @@ export function SignatureStatus() {
         bg: 'bg-yellow-50 dark:bg-yellow-900/10',
         border: 'border-yellow-500/30',
         text: 'text-yellow-600 dark:text-yellow-400',
-        status: 'Outdated'
+        status: t('votes.outdated')
       };
     } else {
       // 0.3+ versions behind - orange/red
@@ -104,7 +106,7 @@ export function SignatureStatus() {
         bg: 'bg-orange-50 dark:bg-orange-900/10',
         border: 'border-orange-500/30',
         text: 'text-orange-600 dark:text-orange-400',
-        status: 'Very Outdated'
+        status: t('votes.veryOutdated')
       };
     }
   };
@@ -136,9 +138,9 @@ export function SignatureStatus() {
   return (
     <Card variant="secondary" className="p-6">
       <Card.Header>
-        <Card.Title className="text-2xl">📝 NAP15 Signature Status</Card.Title>
+        <Card.Title className="text-2xl">{t('votes.signatureStatus')}</Card.Title>
         <Card.Description>
-          Top 15 Alliance Adoption of Rules v{signatureData.currentRulesVersion}
+          {t('votes.adoptionDescription', { version: signatureData.currentRulesVersion })}
         </Card.Description>
       </Card.Header>
 
@@ -148,31 +150,31 @@ export function SignatureStatus() {
           {/* Adoption Rate */}
           <div className="p-4 bg-accent/10 border-2 border-accent/30 rounded-lg text-center">
             <div className="text-3xl font-bold text-accent">{adoptionRate}%</div>
-            <div className="text-sm opacity-75 mt-1">Current Version</div>
+            <div className="text-sm opacity-75 mt-1">{t('votes.currentVersion')}</div>
           </div>
 
           {/* Current Version Signed */}
           <div className="p-4 bg-green-50 dark:bg-green-900/20 border-2 border-green-500/30 rounded-lg text-center">
             <div className="text-3xl font-bold text-green-600 dark:text-green-400">{signedCount}</div>
-            <div className="text-sm opacity-75 mt-1">Up to Date</div>
+            <div className="text-sm opacity-75 mt-1">{t('votes.upToDate')}</div>
           </div>
 
           {/* Outdated */}
           <div className="p-4 bg-orange-50 dark:bg-orange-900/20 border-2 border-orange-500/30 rounded-lg text-center">
             <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">{outdatedCount}</div>
-            <div className="text-sm opacity-75 mt-1">Outdated</div>
+            <div className="text-sm opacity-75 mt-1">{t('votes.outdated')}</div>
           </div>
 
           {/* Unsigned */}
           <div className="p-4 bg-red-50 dark:bg-red-900/20 border-2 border-red-500/30 rounded-lg text-center">
             <div className="text-3xl font-bold text-red-600 dark:text-red-400">{unsignedCount}</div>
-            <div className="text-sm opacity-75 mt-1">Not Signed</div>
+            <div className="text-sm opacity-75 mt-1">{t('votes.notSigned')}</div>
           </div>
         </div>
 
         {/* Alliance Grid */}
         <div className="space-y-2">
-          <h3 className="font-semibold text-sm opacity-75 mb-3">Top 15 Alliances</h3>
+          <h3 className="font-semibold text-sm opacity-75 mb-3">{t('votes.top15Alliances')}</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {signatureData.alliances.map((alliance) => {
@@ -215,20 +217,20 @@ export function SignatureStatus() {
                   {latestSignature ? (
                     <div className="text-xs space-y-1">
                       <div className="flex justify-between items-center">
-                        <span className="opacity-75">Version:</span>
+                        <span className="opacity-75">{t('votes.version')}:</span>
                         <span className={`font-semibold ${colorScheme.text}`}>
                           v{latestSignature.version}
-                          {isOutdated && ' (old)'}
+                          {isOutdated && ` (${t('votes.old')})`}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="opacity-75">Status:</span>
+                        <span className="opacity-75">{t('votes.status')}:</span>
                         <span className={`font-semibold ${colorScheme.text}`}>
                           {colorScheme.status}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="opacity-75">Signed:</span>
+                        <span className="opacity-75">{t('votes.signed')}:</span>
                         <span className="font-semibold opacity-75">
                           {new Date(latestSignature.signedAt).toLocaleDateString()}
                         </span>
@@ -251,9 +253,9 @@ export function SignatureStatus() {
             <div className="flex items-start gap-3">
               <span className="text-2xl">⚠️</span>
               <div>
-                <p className="font-semibold text-sm">Outdated Signatures</p>
+                <p className="font-semibold text-sm">{t('votes.outdatedSignatures')}</p>
                 <p className="text-sm opacity-75 mt-1">
-                  The following alliances need to update their signatures to v{currentVersion}:{' '}
+                  {t('votes.outdatedMessage', { version: currentVersion })}{' '}
                   <span className="font-semibold">
                     {outdatedAlliances.map(a => a.tag).join(', ')}
                   </span>
@@ -269,9 +271,9 @@ export function SignatureStatus() {
             <div className="flex items-start gap-3">
               <span className="text-2xl">❌</span>
               <div>
-                <p className="font-semibold text-sm">Not Signed</p>
+                <p className="font-semibold text-sm">{t('votes.notSigned')}</p>
                 <p className="text-sm opacity-75 mt-1">
-                  The following alliances have not yet signed the NAP15 rules:{' '}
+                  {t('votes.unsignedMessage')}{' '}
                   <span className="font-semibold">
                     {unsignedAlliances.map(a => a.tag).join(', ')}
                   </span>

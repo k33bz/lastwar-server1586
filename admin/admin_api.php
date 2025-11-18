@@ -38,6 +38,12 @@
  */
 
 // Require JWT authentication
+define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
+
+define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
+
 require_once 'jwt.php';
 
 $user = require_jwt_session();

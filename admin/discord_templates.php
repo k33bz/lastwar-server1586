@@ -636,4 +636,9 @@ Use variables like {r5_name}, {event_time}, etc. Click variables below to insert
     loadVariables();
 </script>
 
+<?php
+require_once 'includes/help_drawer.php';
+$help_config = require 'includes/help_content/discord_templates_help.php';
+render_help_drawer($help_config);
+?>
 <?php include 'includes/footer.php'; ?>

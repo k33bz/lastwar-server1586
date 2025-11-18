@@ -17,6 +17,9 @@ error_reporting(E_ALL);
 ini_set('display_errors', '0'); // Don't display errors to user
 ini_set('log_errors', '1');
 
+define('ADMIN_INIT', true);
+define('ADMIN_BASE_PATH', __DIR__);
+
 header('Content-Type: application/json');
 
 require_once __DIR__ . '/jwt.php';

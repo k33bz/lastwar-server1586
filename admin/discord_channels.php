@@ -881,4 +881,9 @@ function escapeHtml(text) {
 }
 </script>
 
+<?php
+require_once 'includes/help_drawer.php';
+$help_config = require 'includes/help_content/discord_channels_help.php';
+render_help_drawer($help_config);
+?>
 <?php include 'includes/footer.php'; ?>

@@ -9,15 +9,25 @@ require_once 'audit_logger.php';
 
 $user = require_jwt_session();
 
-// Get current user data
-$user_data = get_user_by_email($user->sub);
+// v4.0.0+: Get email from email claim, or sub for legacy tokens
+$user_email = $user->email ?? $user->sub;
+$user_uid = $user->sub; // UID (v4.0.0+) or email (legacy)
+
+// Get current user data (by UID if available, else by email)
+if (isset($user->email)) {
+    // v4.0.0+: Look up by UID
+    $user_data = get_user_by_uid($user_uid);
+} else {
+    // Legacy: Look up by email
+    $user_data = get_user_by_email($user_email);
+}
 
 // Log page access
-log_audit_event('user_profile_accessed', $user->sub, [
+log_audit_event('user_profile_accessed', $user_email, [
     'user_roles' => get_user_roles($user)
 ]);
 
-$page_title = "My Profile";
+$page_title = __('pages.user_profile.title');
 include 'includes/header.php';
 ?>
 
@@ -238,7 +248,7 @@ include 'includes/header.php';
             <div>
                 <strong style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">You appear as:</strong>
                 <div id="displayNamePreview" style="font-size: 1.5rem; font-weight: 700; margin-top: 0.25rem;">
-                    <?php echo htmlspecialchars(get_user_display_name($user->sub)); ?>
+                    <?php echo htmlspecialchars(get_user_display_name($user_email)); ?>
                 </div>
             </div>
             <div style="font-size: 3rem; opacity: 0.3;">👤</div>
@@ -316,11 +326,39 @@ include 'includes/header.php';
                     type="email"
                     id="email"
                     name="email"
-                    value="<?php echo htmlspecialchars($user->sub); ?>"
+                    value="<?php echo htmlspecialchars($user_email); ?>"
                     required
                 >
                 <div class="help-text">
                     Changing your email will require you to log in again with your new email address.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="language">Preferred Language</label>
+                <select
+                    id="language"
+                    name="preferred_language"
+                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95rem;"
+                >
+                    <?php
+                    $current_language = $user_data['preferred_language'] ?? 'en';
+                    $languages = [
+                        'en' => '🇺🇸 English',
+                        'es' => '🇪🇸 Español (Spanish)',
+                        'pt' => '🇧🇷 Português (Portuguese)',
+                        'de' => '🇩🇪 Deutsch (German)',
+                        'ko' => '🇰🇷 한국어 (Korean)'
+                    ];
+                    foreach ($languages as $code => $label):
+                    ?>
+                        <option value="<?php echo $code; ?>" <?php echo $current_language === $code ? 'selected' : ''; ?>>
+                            <?php echo $label; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <div class="help-text">
+                    This language will be used for the admin panel interface and email notifications.
                 </div>
             </div>
 
@@ -436,7 +474,7 @@ include 'includes/header.php';
 // Real-time display name preview
 document.getElementById('inGameName').addEventListener('input', function(e) {
     const preview = document.getElementById('displayNamePreview');
-    const currentEmail = '<?php echo addslashes($user->sub); ?>';
+    const currentEmail = '<?php echo addslashes($user_email); ?>';
     const inGameName = e.target.value.trim();
 
     if (inGameName) {
@@ -461,6 +499,7 @@ document.getElementById('profileForm').addEventListener('submit', async function
         formData.append('in_game_name', document.getElementById('inGameName').value.trim());
         formData.append('discord_id', document.getElementById('discordId').value.trim());
         formData.append('email', document.getElementById('email').value.trim());
+        formData.append('preferred_language', document.getElementById('language').value);
 
         const response = await fetch('profile_api.php', {
             method: 'POST',
@@ -486,6 +525,17 @@ document.getElementById('profileForm').addEventListener('submit', async function
                 setTimeout(() => {
                     window.location.href = 'logout.php';
                 }, 3000);
+            }
+            // If language updated, reload page to apply new language
+            else if (data.language_updated || data.reload_required) {
+                setTimeout(() => {
+                    showAlert('Language updated. Reloading page...', 'info');
+                }, 500);
+
+                // Reload after 1.5 seconds
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
             }
         } else {
             showAlert('Failed to update profile: ' + data.error, 'error');
@@ -661,4 +711,9 @@ if (document.getElementById('rateLimitInfo')) {
 }
 </script>
 
+<?php
+require_once 'includes/help_drawer.php';
+$help_config = require 'includes/help_content/user_profile_help.php';
+render_help_drawer($help_config);
+?>
 <?php include 'includes/footer.php'; ?>
