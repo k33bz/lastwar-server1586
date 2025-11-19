@@ -26,6 +26,16 @@
 - Language selector on login page and user profile
 - 9 admin pages translated (dashboard, user management, etc.)
 
+**UID-Based Identity System (v4.0.0): ✅ COMPLETE**
+- Migrated from email-based to UID-based user identity
+- All 9 users migrated with UID format: `usr_XXXXXXXXXXXXXXXX`
+- JWT tokens updated: `sub` claim = UID, `email` as separate claim
+- Email change history tracking with timestamps
+- R4 management linked to user UIDs (not emails)
+- Backward compatible with legacy email-based tokens
+- Migration script: `admin/migrate_to_uid.php`
+- Key files: `jwt.php`, `json_helpers.php`, `profile_api.php`, `callback.php`
+
 **Development Tools: ✅ COMPLETE**
 - GUI development server tool (`dev_server.py`)
 - Controls PHP admin server, React dev server, Vite preview
@@ -73,19 +83,54 @@ gh issue view 123
 
 ## Git Commit Guidelines
 
-### ✅ DO: Use LM Studio Integration
+### ✅ DO: Use LM Studio Integration with Retry Loop
 - **NEVER use `SKIP_LMSTUDIO=1`** - Always let LM Studio review commits
+- **IMPLEMENT RETRY LOOP** - If LM Studio rejects, revise and retry until approved
 - Let the commit-msg hook run fully for quality checks
 - LM Studio provides valuable commit message improvements
 
+### Commit Workflow with Retry Loop
+When committing changes, follow this pattern:
+
+1. **Attempt initial commit** with your best message
+2. **Check if commit succeeded**:
+   - If LM Studio approves (✅) → Commit succeeds, continue
+   - If LM Studio rejects (❌) → Commit fails, go to step 3
+3. **Read LM Studio feedback** from the error output
+4. **Revise commit message** based on suggestions
+5. **Retry with `git commit --amend`** or new commit
+6. **Repeat steps 2-5** until LM Studio approves
+
 ### Commit Commands
 ```bash
-# Standard commit (with LM Studio review)
+# Standard commit (with LM Studio review and retry)
 git add .
 git commit -m "fix(admin): Description of fix"
 
+# If rejected, read feedback and retry with revised message:
+git commit --amend -m "fix(admin): Improved description based on feedback"
+
+# Repeat until LM Studio approves (✅ Good commit message)
+
 # DON'T use:
 # SKIP_LMSTUDIO=1 git commit  ❌
+```
+
+### Example Retry Flow
+```bash
+# Attempt 1
+$ git commit -m "fix stuff"
+❌ LM Studio: Message too vague, describe what was fixed
+
+# Attempt 2
+$ git commit --amend -m "fix(admin): Fix user profile bug"
+❌ LM Studio: Describe what the bug was and how it was fixed
+
+# Attempt 3
+$ git commit --amend -m "fix(admin): Fix user profile email update not saving to database"
+✅ LM Studio: Good commit message
+
+# Success! Commit created
 ```
 
 ## Discord Vote Management System
