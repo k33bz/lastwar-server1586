@@ -340,14 +340,15 @@ class DevServerGUI:
             # Check if in client directory or need to cd
             client_dir = "client" if os.path.exists("client") else "."
 
-            # Start npm dev server
+            # Start npm dev server (shell=True needed on Windows for npm.cmd)
             self.client_process = subprocess.Popen(
                 ["npm", "run", "dev"],
                 cwd=client_dir,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 universal_newlines=True,
-                bufsize=1
+                bufsize=1,
+                shell=True
             )
 
             # Monitor output
@@ -407,14 +408,15 @@ class DevServerGUI:
 
             client_dir = "client" if os.path.exists("client") else "."
 
-            # Run npm build
+            # Run npm build (shell=True needed on Windows for npm.cmd)
             process = subprocess.Popen(
                 ["npm", "run", "build"],
                 cwd=client_dir,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 universal_newlines=True,
-                bufsize=1
+                bufsize=1,
+                shell=True
             )
 
             # Monitor build output
@@ -445,14 +447,15 @@ class DevServerGUI:
 
             client_dir = "client" if os.path.exists("client") else "."
 
-            # Start preview server
+            # Start preview server (shell=True needed on Windows for npm.cmd)
             self.preview_process = subprocess.Popen(
                 ["npm", "run", "preview"],
                 cwd=client_dir,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 universal_newlines=True,
-                bufsize=1
+                bufsize=1,
+                shell=True
             )
 
             # Monitor output

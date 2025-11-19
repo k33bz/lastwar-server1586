@@ -8,8 +8,8 @@ Official website for Server 1586 alliance management, council voting, and server
 **Live Website**: [https://www.lastwar1586.online](https://www.lastwar1586.online)
 **GitHub Repository**: [https://github.com/k33bz/Server1586-clean](https://github.com/k33bz/Server1586-clean)
 
-**Version**: 3.7.0
-**Last Updated**: November 11, 2025
+**Version**: 4.0.0
+**Last Updated**: November 18, 2025
 
 ---
 
@@ -43,13 +43,14 @@ Official website for Server 1586 alliance management, council voting, and server
 
 ### Admin Panel (PHP - Separate)
 - **JWT Authentication**: Passwordless magic link login system
+- **UID-Based Identity System (v4.0.0)**: Stable user IDs with email change history
 - **Role-Based Access Control**: Admin, President, Council Member roles
 - **Multi-Language Support**: Full i18n with 5 languages (EN, ES, PT, DE, KO)
 - **Discord Integration**: Vote management, announcements, channel configuration
-- **Alliance Management**: Power updates, officer management, tags, rotation schedule
+- **Alliance Management**: Power updates, officer management (UID-linked), tags, rotation schedule
 - **Council Voting**: Discord-integrated voting system with web management
 - **Security Monitoring**: Audit logging, rate limiting, session management
-- **User Management**: Profile editing, language preferences, role assignment
+- **User Management**: Profile editing, email changes with history, language preferences, role assignment
 
 ---
 
@@ -464,6 +465,18 @@ Generates `data/rotation-schedule.json` with:
 - 100-week schedule
 - Fair 5-week rotation cycle for ranks 6-15
 
+### UID Migration (v4.0.0)
+
+```bash
+php admin/migrate_to_uid.php
+```
+
+Migrates user identity system from email-based to UID-based:
+- Generates unique UIDs for all users (`usr_XXXXXXXXXXXXXXXX`)
+- Updates R4 references in alliances to use UIDs
+- Preserves backward compatibility
+- **Note**: This is a one-time migration script (already completed)
+
 ### Update Alliance Data
 
 ```bash
@@ -576,6 +589,6 @@ This project is private and intended for Server 1586 alliance management only.
 
 ---
 
-**Version**: 3.7.0 | **Last Updated**: November 11, 2025 | **Maintained by**: Server 1586 Council
+**Version**: 4.0.0 | **Last Updated**: November 18, 2025 | **Maintained by**: Server 1586 Council
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code) · Enhanced by [Kiro](https://kiro.dev/)
