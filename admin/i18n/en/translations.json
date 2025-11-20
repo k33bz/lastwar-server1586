@@ -532,6 +532,40 @@
       "button_text": "View Full Schedule",
       "footer_notification": "This is an automated notification from {{app_name}}.",
       "footer_no_reply": "Please do not reply to this email."
-    }
+    },
+    "vote_notification": {
+      "subject": "New Council Vote",
+      "title": "New Council Vote",
+      "subtitle": "Your vote is required",
+      "greeting": "Hello {{name}},",
+      "voting_as": "Voting as",
+      "deadline": "Voting Deadline",
+      "vote_button": "Cast Your Vote",
+      "alternative_method": "Or copy this link",
+      "voting_options": "Voting Options",
+      "option_yes": "Yes",
+      "option_no": "No",
+      "option_abstain": "Abstain",
+      "discord_alternative": "You can also vote via Discord by replying to the bot's DM with: vote: yes, vote: no, or vote: abstain",
+      "security_title": "Security Notice",
+      "security_notice": "This is a one-time voting link valid for 48 hours. Do not share this link with anyone. If you didn't expect this vote, please contact an administrator.",
+      "vote_id": "Vote ID"
+    },
+    "vote_result": {
+      "subject": "Vote Results",
+      "title": "Vote Results",
+      "greeting": "Hello {{name}},",
+      "you_voted": "You voted: {{choice}}",
+      "did_not_vote": "⚠️ You did not vote",
+      "results_breakdown": "Results Breakdown",
+      "yes": "Yes",
+      "no": "No",
+      "abstain": "Abstain",
+      "absent": "Absent",
+      "total": "Total Eligible Voters",
+      "vote_id": "Vote ID"
+    },
+    "no_reply_notice": "This is an automated message from a no-reply email address. Please do not reply to this email.",
+    "footer_copyright": "Server 1586 Council - All Rights Reserved"
   }
 }

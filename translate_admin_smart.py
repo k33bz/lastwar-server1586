@@ -7,6 +7,7 @@ Translates entire JSON sections at once with glossary preservation
 import json
 import requests
 import time
+import subprocess
 from pathlib import Path
 
 # Terms that should NOT be translated
@@ -40,7 +41,7 @@ def translate_text(text, target_language, preserve_terms):
 Keep unchanged: {glossary}"""
 
     payload = {
-        "model": "tencent/hunyuan-mt-7b",
+        "model": "tencent.hunyuan-mt-7b:5",
         "messages": [
             {"role": "system", "content": "You are a professional translator. Return ONLY the translated text with no explanations, no rules, no formatting - just the pure translation."},
             {"role": "user", "content": prompt}
@@ -49,21 +50,35 @@ Keep unchanged: {glossary}"""
         "max_tokens": 2048
     }
 
+    # Show what we're translating
+    print(f"    [TRANSLATING] {text[:80]}..." if len(text) > 80 else f"    [TRANSLATING] {text}")
+
     try:
         response = requests.post(LM_STUDIO_URL, json=payload, timeout=120)
         response.raise_for_status()
         result = response.json()
         translation = result['choices'][0]['message']['content'].strip()
 
+        # Show the translation result
+        print(f"    [RESULT] {translation[:80]}..." if len(translation) > 80 else f"    [RESULT] {translation}")
+
         # Clean up: Remove glossary instructions that were appended
         # Pattern: "Text\n\nMantén sin cambios: R5, R4..." or similar variations
         import re
 
-        # Comprehensive pattern to match any glossary instruction
-        # Matches: \n\n followed by any text mentioning "sin cambios", "unchanged", etc. until end of string
-        glossary_pattern = r'\n\n.*?(?:sin cambios?|unchanged|que se mantienen|términos|elementos)[^.]*[:.][^\n]*(?:R5|Discord|SMTP|API).*$'
+        # Comprehensive pattern to match any glossary instruction in any language
+        # Matches: \n\n followed by preservation instructions
+        glossary_patterns = [
+            r'\n\n.*?(?:sin cambios?|unchanged|que se mantienen|términos|elementos)[^.]*[:.][^\n]*(?:R5|Discord|SMTP|API).*$',  # Spanish/English
+            r'\n\n.*?(?:Mantenha|Mant[ée]m-se)[^.]*inalterado[^\n]*(?:R5|Discord|SMTP|API).*$',  # Portuguese
+            r'\n\n.*?(?:Unver[aä]ndert|bleiben)[^.]*[:.][^\n]*(?:R5|Discord|SMTP|API).*$',  # German
+            r'\n\n.*?(?:변경|않|없음|마세요)[^.]*[:.][^\n]*(?:R5|Discord|SMTP|API).*$',  # Korean
+            r'\n\nKeep unchanged:.*$',  # Direct English match
+            r'\n\n.*?항목.*?(?:R5|Discord|SMTP|API).*$',  # Korean "items" pattern
+        ]
 
-        translation = re.sub(glossary_pattern, '', translation, flags=re.IGNORECASE | re.DOTALL)
+        for pattern in glossary_patterns:
+            translation = re.sub(pattern, '', translation, flags=re.IGNORECASE | re.DOTALL)
 
         # Remove instruction text markers
         cleanup_markers = [
@@ -135,15 +150,19 @@ def translate_section(section_name, section_data, target_language, preserve_term
 def main():
     """Main translation process"""
 
+    print("=" * 60)
+    print("Smart Translation Script")
+    print("=" * 60)
+
+    # Skip model loading - assume model is already loaded
+    print("\n[SETUP] Using pre-loaded Hunyuan-MT-7B model...")
+
     # Load English translations
     en_file = Path("admin/i18n/en/translations.json")
     with open(en_file, 'r', encoding='utf-8') as f:
         en_data = json.load(f)
 
-    print("=" * 60)
-    print("Smart Translation Script")
-    print("=" * 60)
-    print(f"Loaded: {en_file}")
+    print(f"\nLoaded: {en_file}")
     print(f"Terms to preserve: {', '.join(PRESERVE_TERMS[:10])}...")
     print(f"Target languages: {', '.join(LANGUAGES.keys())}")
     print("=" * 60)
@@ -181,6 +200,9 @@ def main():
     print("\n" + "=" * 60)
     print("[COMPLETE] All translations finished!")
     print("=" * 60)
+
+    # Skip unloading - leave model loaded for future use
+    print("\n[INFO] Model left loaded for future use")
 
 if __name__ == '__main__':
     main()
