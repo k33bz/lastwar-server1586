@@ -134,12 +134,20 @@
     "discord_vote_proposals": {
       "title": "Council Proposals",
       "nav_title": "Council Proposals",
-      "description": "Submit and manage council vote proposals"
+      "description": "Submit and manage council vote proposals",
+      "description_admin": "Submit vote requests or create votes directly as president/admin",
+      "description_member": "Submit vote proposals to the president for approval"
     },
     "president_vote_approvals": {
       "title": "Approve Votes",
       "nav_title": "Vote Approvals",
-      "description": "Review and approve vote proposals"
+      "description": "Review and approve vote proposals",
+      "description_full": "Review and approve vote proposals submitted by council members"
+    },
+    "discord_votes_history": {
+      "title": "Vote History",
+      "nav_title": "Vote History",
+      "description": "View all council vote history and results"
     },
     "votes_management": {
       "title": "Votes Management",

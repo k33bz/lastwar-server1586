@@ -1,21 +1,26 @@
 <?php
 /**
  * Council Proposals
- * Version: 1.0.0
+ * Version: 1.0.1
  *
- * Allows R5s and designated R4s to propose votes to the council
+ * Allows R5s and designated R4s (with canVote permission) to propose votes to the council
  * Requests are sent to the president for approval
  *
- * Access: R5, R4, APE roles only (must be current council members)
+ * Access: R5, R4 (with canVote), President, Admin
  */
 
 require_once 'jwt.php';
 require_once 'audit_logger.php';
+require_once 'includes/csrf.php';
+require_once 'includes/i18n.php';
+
+// Initialize i18n
+i18n_init();
 
 $user = require_jwt_session();
 
-// Check if user has R5, R4, or APE role
-if (!has_role($user, ['r5', 'r4', 'ape', 'admin', 'president'])) {
+// Check if user has R5, R4, admin, or president role (APE not allowed)
+if (!has_role($user, ['r5', 'r4', 'admin', 'president'])) {
     header('Location: dashboard.php?error=access_denied');
     exit();
 }
@@ -24,17 +29,17 @@ log_audit_event('council_proposals_page_accessed', $user->sub, [
     'user_role' => $user->aud
 ]);
 
-$page_title = "Council Proposals";
+$page_title = __('pages.discord_vote_proposals.title');
 include 'includes/header.php';
 ?>
 
 <div class="page-header">
-    <h1 class="page-title">🗳️ Council Proposals</h1>
+    <h1 class="page-title">🗳️ <?php echo __('pages.discord_vote_proposals.title'); ?></h1>
     <p class="page-description">
         <?php if (has_role($user, ['admin', 'president'])): ?>
-            Submit vote requests or create votes directly as president/admin
+            <?php echo __('pages.discord_vote_proposals.description_admin'); ?>
         <?php else: ?>
-            Submit vote proposals to the president for approval
+            <?php echo __('pages.discord_vote_proposals.description_member'); ?>
         <?php endif; ?>
     </p>
 </div>
@@ -99,8 +104,8 @@ include 'includes/header.php';
 
     <!-- Tabs -->
     <div class="tabs">
-        <button class="tab active" onclick="switchTab('submit')">Submit Proposal</button>
-        <button class="tab" onclick="switchTab('my-requests')">My Requests</button>
+        <button class="tab active" onclick="switchTab('submit', this)">Submit Proposal</button>
+        <button class="tab" onclick="switchTab('my-requests', this)">My Requests</button>
     </div>
 
     <!-- Submit Proposal Tab -->
@@ -121,7 +126,7 @@ include 'includes/header.php';
             </div>
 
             <form id="proposalForm">
-                <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
+                <input type="hidden" name="csrf_token" value="<?= getCsrfToken() ?>">
 
                 <div class="form-group">
                     <label for="title">Vote Title *</label>
@@ -169,10 +174,10 @@ include 'includes/header.php';
 
 <script>
 // Tab switching
-function switchTab(tab) {
+function switchTab(tab, element) {
     // Update tab buttons
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
+    element.classList.add('active');
 
     // Show/hide content
     document.getElementById('submitTab').style.display = tab === 'submit' ? 'block' : 'none';
@@ -280,7 +285,8 @@ async function apiRequest(method, url, data = null) {
         method,
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        credentials: 'include' // Send cookies (JWT token) with request
     };
 
     if (method === 'POST' && data) {

@@ -11,6 +11,10 @@
 
 require_once 'jwt.php';
 require_once 'audit_logger.php';
+require_once 'includes/i18n.php';
+
+// Initialize i18n
+i18n_init();
 
 $user = require_jwt_session();
 
@@ -24,13 +28,13 @@ log_audit_event('president_vote_approvals_page_accessed', $user->sub, [
     'user_role' => $user->aud
 ]);
 
-$page_title = "Vote Approvals";
+$page_title = __('pages.president_vote_approvals.title');
 include 'includes/header.php';
 ?>
 
 <div class="page-header">
-    <h1 class="page-title">🗳️ Vote Request Approvals</h1>
-    <p class="page-description">Review and approve/reject vote requests from council members</p>
+    <h1 class="page-title">🗳️ <?php echo __('pages.president_vote_approvals.title'); ?></h1>
+    <p class="page-description"><?php echo __('pages.president_vote_approvals.description_full'); ?></p>
 </div>
 
 <div class="container">
@@ -349,7 +353,8 @@ async function apiRequest(method, url, data = null) {
         method,
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        credentials: 'include' // Send cookies (JWT token) with request
     };
 
     if (method === 'POST' && data) {
