@@ -194,6 +194,14 @@
     "unsignedMessage": "Las siguientes alianzas no han firmado el acuerdo NAP15:",
     "error": "Error al cargar los datos de la firma."
   },
+  "clock": {
+    "serverTime": "Hora del Servidor",
+    "localTime": "Hora Local",
+    "seasonEnds": "Termina Temporada 1",
+    "seasonEnded": "Temporada Terminada",
+    "seasonComplete": "Temporada Completa",
+    "season1": "Temporada 1"
+  },
   "footer": {
     "title": "Servidor 1586",
     "subtitle": "Rankings de Alianzas de Last War y NAP15",

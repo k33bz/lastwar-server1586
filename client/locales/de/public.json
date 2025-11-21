@@ -194,6 +194,14 @@
     "unsignedMessage": "Die folgenden Allianzen haben das NAP15-Abkommen nicht unterzeichnet:",
     "error": "Fehler beim Laden der Signaturdaten."
   },
+  "clock": {
+    "serverTime": "Serverzeit",
+    "localTime": "Ortszeit",
+    "seasonEnds": "Saison 1 Endet",
+    "seasonEnded": "Saison Beendet",
+    "seasonComplete": "Saison Abgeschlossen",
+    "season1": "Saison 1"
+  },
   "footer": {
     "title": "Server 1586",
     "subtitle": "Last War Allianz-Ranglisten und NAP15",

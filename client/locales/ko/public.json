@@ -194,6 +194,14 @@
     "unsignedMessage": "다음 동맹들은 NAP15 협정에 서명하지 않았습니다:",
     "error": "서명 데이터를 로드하는 데 오류가 발생했습니다."
   },
+  "clock": {
+    "serverTime": "서버 시간",
+    "localTime": "현지 시간",
+    "seasonEnds": "시즌 1 종료",
+    "seasonEnded": "시즌 종료됨",
+    "seasonComplete": "시즌 완료",
+    "season1": "시즌 1"
+  },
   "footer": {
     "title": "서버 1586",
     "subtitle": "Last War 동맹 순위 및 NAP15",

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { DiscordBanner } from './components/DiscordBanner';
+import { ServerClock } from './components/ServerClock';
 import { AlliancePodium } from './components/AlliancePodium';
 import { AllianceGrid } from './components/AllianceGrid';
 import { CouncilMembers } from './components/CouncilMembers';
@@ -69,6 +70,9 @@ export function HomePage() {
     <div className="min-h-screen bg-gradient-to-br from-background via-surface to-surface-secondary">
       {/* Main Container with max width */}
       <div className="container mx-auto px-4 pt-8 pb-8 max-w-7xl">
+        {/* Server Clock */}
+        <ServerClock />
+
         {/* Discord Banner */}
         {serverInfo && (
           <div className="mb-16">

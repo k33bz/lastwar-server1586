@@ -54,7 +54,71 @@ export function AlliancePodium({ alliances }: AlliancePodiumProps) {
       <section className="mb-12">
         <h2 className="text-3xl font-bold text-center mb-12">{t('podium.title')}</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        {/* Mobile Layout - Proper Ranking Order */}
+        <div className="grid grid-cols-1 gap-6 max-w-md mx-auto md:hidden">
+          {topThree.map((alliance, index) => {
+            const actualRank = index + 1;
+            const isFirst = actualRank === 1;
+
+            return (
+              <Card
+                key={alliance.tag}
+                className={`p-6 text-center transition-all cursor-pointer hover:shadow-xl ${
+                  isFirst ? 'scale-105 shadow-lg' : 'shadow-md'
+                }`}
+                onClick={() => setSelectedAlliance({ alliance, rank: actualRank })}
+              >
+              <Card.Header className="flex-col items-center">
+                <div className={`text-6xl mb-2 ${getMedalColor(actualRank)}`}>
+                  {getMedalEmoji(actualRank)}
+                </div>
+                <Avatar size="lg" className="mb-3">
+                  {alliance.discord?.logoUrl && (
+                    <Avatar.Image
+                      src={alliance.discord.logoUrl}
+                      alt={alliance.name}
+                    />
+                  )}
+                  <Avatar.Fallback>
+                    {alliance.tag}
+                  </Avatar.Fallback>
+                </Avatar>
+                <Card.Title className="text-xl">{alliance.name}</Card.Title>
+                <Card.Description className="text-sm">
+                  [{alliance.tag}]
+                </Card.Description>
+              </Card.Header>
+
+              <Card.Content className="space-y-3">
+                <div>
+                  <div className="text-sm opacity-60 mb-1">{t('alliances.power')}</div>
+                  <div className="text-2xl font-bold">{formatPower(alliance.power)}</div>
+                </div>
+
+                <div>
+                  <div className="text-sm opacity-60 mb-1">{t('alliances.r5')}</div>
+                  <div className="font-semibold">{alliance.r5.name}</div>
+                </div>
+
+                {alliance.signed && (
+                  <Chip color="success" size="sm">
+                    {t('podium.signed')}
+                  </Chip>
+                )}
+
+                {alliance.crossServer?.hasPartner && (
+                  <Chip color="accent" size="sm">
+                    Cross-Server Alliance
+                  </Chip>
+                )}
+              </Card.Content>
+            </Card>
+            );
+          })}
+        </div>
+
+        {/* Desktop Layout - Podium Visual Effect */}
+        <div className="hidden md:grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {podiumOrder.map((alliance) => {
             // Get actual rank (1st, 2nd, or 3rd)
             const actualRank = topThree.indexOf(alliance) + 1;

@@ -194,6 +194,14 @@
     "unsignedMessage": "The following alliances have not signed the NAP15 agreement:",
     "error": "Error loading signature data"
   },
+  "clock": {
+    "serverTime": "Server Time",
+    "localTime": "Local Time",
+    "seasonEnds": "Season 1 Ends",
+    "seasonEnded": "Season Ended",
+    "seasonComplete": "Season Complete",
+    "season1": "Season 1"
+  },
   "footer": {
     "title": "Server 1586",
     "subtitle": "Last War Alliance Rankings & NAP15",
