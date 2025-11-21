@@ -168,6 +168,7 @@ function get_recent_audit_logs($limit = 10) {
  * @param int $offset Offset for pagination
  * @return array Array of filtered log entries
  */
+if (!function_exists('get_audit_logs')) {
 function get_audit_logs($filters = [], $limit = 100, $offset = 0) {
     $audit_file = AUDIT_LOG_FILE;
     $logs = [];
@@ -214,6 +215,7 @@ function get_audit_logs($filters = [], $limit = 100, $offset = 0) {
 
     return $logs;
 }
+} // end if (!function_exists('get_audit_logs'))
 
 /**
  * Get alliance backups with metadata

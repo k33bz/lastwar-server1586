@@ -178,7 +178,47 @@
       "title": "„Stimmen genehmigen“",
       "nav_title": "„Stimmenabstimmungen zur Genehmigung“",
       "description": "Überprüfen und genehmigen Abstimmungsvorschläge.",
-      "description_full": "Überprüfen und genehmigen die von den Ratmitgliedern eingereichten Abstimmungsvorschläge."
+      "description_full": "Überprüfen und genehmigen die von den Ratmitgliedern eingereichten Abstimmungsvorschläge.",
+      "stats": {
+        "pending_requests": "„Wartende Anfragen“",
+        "active_votes": "„Aktive Abstimmungen“",
+        "total_requests": "„Gesamtanzahl der Anfragen“"
+      },
+      "section_title": "„Anfragen nach Abstimmungen“",
+      "filters": {
+        "all": "All",
+        "pending": "„In Bearbeitung“",
+        "approved": "„Genehmigt“",
+        "rejected": "„Abgelehnt“"
+      },
+      "request_card": {
+        "submitted": "„Abgegeben“",
+        "ago": "ago",
+        "hour": "„Stunde“",
+        "hours": "„Stunden“",
+        "auto_approve_warning": "„Automatische Genehmigung in {Stunden} {Einheit}, sofern der Inhalt nicht überprüft wird.“",
+        "approved_by": "„Von … genehmigt“",
+        "rejected_by": "Von … abgelehnt.",
+        "vote_id": "„Vote-ID“"
+      },
+      "buttons": {
+        "approve_create": "„Genehmigen und Abstimmung erstellen“"
+      },
+      "modal": {
+        "reject_title": "„Ablehnen des Stimmungsanfrags“",
+        "reason_label": "Begründung für die Ablehnung (optional)",
+        "reason_placeholder": "Erklären Sie, warum dieser Antrag abgelehnt wird…"
+      },
+      "messages": {
+        "confirm_approve": "Sind Sie sicher, dass Sie diesen Antrag genehmigen und die Abstimmung durchführen möchten?",
+        "approve_success": "Anfrage genehmigt! Die Abstimmung wurde erstellt: {vote_id}",
+        "reject_success": "Anfrage wurde erfolgreich abgelehnt.",
+        "approve_error": "„Es gelang nicht, den Antrag zu genehmigen.“",
+        "reject_error": "„Es gelang nicht, die Anfrage abzulehnen.“",
+        "load_error": "Fehler: {error}",
+        "no_requests": "„Keine Anfragen gefunden.“",
+        "load_stats_error": "„Fehler beim Laden der Statistiken.“"
+      }
     },
     "discord_votes_history": {
       "title": "„Wahlergebnisverlauf“",

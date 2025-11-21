@@ -1,0 +1,47 @@
+{
+  "i18n": {
+    "source_locale": "en",
+    "default_namespace": "admin",
+    "key_separator": ".",
+    "fallback_locale": "en",
+    "validate_placeholders": true,
+    "validate_html_tags": true,
+    "validate_preserve_terms": true,
+    "locale_conventions": {
+      "quote_marks": true,
+      "number_format": true,
+      "date_format": true
+    }
+  },
+  "model": "tencent.hunyuan-mt-7b",
+  "temperature": 0.1,
+  "max_tokens": 512,
+  "max_retries": 3,
+  "timeout": 30,
+  "log_level": "INFO",
+  "lm_studio_url": "http://localhost:1234",
+  "preserve_terms": [
+    "R5", "R4", "APE", "NAP15",
+    "Discord", "SMTP", "JWT", "API",
+    "UvvU", "ORCE", "MTOP", "FNXS", "MZKU",
+    "admin",
+    "🚀", "📋", "🛡️", "⚠️", "✅", "🗳️", "📅", "📊", "ℹ️"
+  ],
+  "locales": {
+    "es": "Spanish",
+    "pt": "Portuguese",
+    "de": "German",
+    "ko": "Korean",
+    "fr": "French",
+    "it": "Italian",
+    "ja": "Japanese",
+    "zh": "Chinese (Simplified)",
+    "ru": "Russian",
+    "ar": "Arabic",
+    "nl": "Dutch",
+    "pl": "Polish",
+    "tr": "Turkish",
+    "sv": "Swedish",
+    "da": "Danish"
+  }
+}

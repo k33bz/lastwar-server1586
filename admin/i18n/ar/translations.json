@@ -178,7 +178,47 @@
       "title": "الموافقة على الأصوات",
       "nav_title": "موافقات التصويت",
       "description": "مراجعة والموافقة على مقترحات التصويت.",
-      "description_full": "مراجعة والموافقة على مقترحات التصويت المقدمة من أعضاء المجلس."
+      "description_full": "مراجعة والموافقة على مقترحات التصويت المقدمة من أعضاء المجلس.",
+      "stats": {
+        "pending_requests": "الطلبات قيد الانتظار",
+        "active_votes": "الأصوات الفعالة",
+        "total_requests": "الطلبات الإجمالية"
+      },
+      "section_title": "طلبات التصويت",
+      "filters": {
+        "all": "All",
+        "pending": "قيد الانتظار.",
+        "approved": "تم الموافقة عليه.",
+        "rejected": "تم رفض الطلب."
+      },
+      "request_card": {
+        "submitted": "تم تقديمه ( Submitted ).",
+        "ago": "ago",
+        "hour": "ساعة",
+        "hours": "ساعات",
+        "auto_approve_warning": "الموافقة التلقائية خلال {ساعات} إذا لم يتم مراجعته.",
+        "approved_by": "تم الموافقة عليه بواسطة…",
+        "rejected_by": "تم رفضه من قبل…",
+        "vote_id": "رقم هوية التصويت (Vote ID)"
+      },
+      "buttons": {
+        "approve_create": "الموافقة على الطلب وإنشاء عملية التصويت"
+      },
+      "modal": {
+        "reject_title": "رفض طلب التصويت.",
+        "reason_label": "سبب الرفض (اختياري)",
+        "reason_placeholder": "اشرح لماذا يتم رفض هذا الطلب…"
+      },
+      "messages": {
+        "confirm_approve": "هل أنت متأكد من رغبتك في الموافقة على هذا الطلب وإجراء عملية التصويت؟",
+        "approve_success": "تمت الموافقة على الطلب! تم إنشاء صوت انتخابي: {vote_id}",
+        "reject_success": "تم رفض الطلب بنجاح.",
+        "approve_error": "لم يتم الموافقة على الطلب.",
+        "reject_error": "لم يتم رفض الطلب.",
+        "load_error": "خطأ: {الخطأ}",
+        "no_requests": "لم يتم العثور على أي طلبات.",
+        "load_stats_error": "لم يتم تحميل البيانات/الإحصائيات."
+      }
     },
     "discord_votes_history": {
       "title": "سجل التصويتات",

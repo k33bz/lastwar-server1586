@@ -178,7 +178,47 @@
       "title": "Aprovar os Votos",
       "nav_title": "“Votos de Aprovação”",
       "description": "Revisar e aprovar as propostas de votação.",
-      "description_full": "Rever e aprovar as propostas de votação apresentadas pelos membros do conselho."
+      "description_full": "Rever e aprovar as propostas de votação apresentadas pelos membros do conselho.",
+      "stats": {
+        "pending_requests": "“Pedidos em Espera”",
+        "active_votes": "“Votos Ativos”",
+        "total_requests": "“Total de Pedidos”"
+      },
+      "section_title": "“Pedidos de Voto”",
+      "filters": {
+        "all": "All",
+        "pending": "“Em espera”",
+        "approved": "“Aprovado.”",
+        "rejected": "Rejeitado"
+      },
+      "request_card": {
+        "submitted": "“Submetido.”",
+        "ago": "ago",
+        "hour": "“hora”",
+        "hours": "“horas”",
+        "auto_approve_warning": "“Aprovação automática em {horas} {unidade} caso não seja revisada.”",
+        "approved_by": "“Aprovado por”",
+        "rejected_by": "Rejeitado por…",
+        "vote_id": "“ID do Voto”"
+      },
+      "buttons": {
+        "approve_create": "“Aprovar e Criar Voto”"
+      },
+      "modal": {
+        "reject_title": "“Rejeitar Solicitação de Voto”",
+        "reason_label": "Motivo da rejeição (opcional)",
+        "reason_placeholder": "Explique por que este pedido está sendo rejeitado…"
+      },
+      "messages": {
+        "confirm_approve": "Você tem certeza de que deseja aprovar este pedido e criar a votação?",
+        "approve_success": "Pedido aprovado! Voto criado: {vote_id}",
+        "reject_success": "“Solicitação rejeitada com sucesso.”",
+        "approve_error": "“Falhou-se na aprovação do pedido.”",
+        "reject_error": "“Falhou em rejeitar o pedido.”",
+        "load_error": "Erro: {erro}",
+        "no_requests": "“Nenhuma solicitação foi encontrada.”",
+        "load_stats_error": "“Falhou na carga das estatísticas.”"
+      }
     },
     "discord_votes_history": {
       "title": "“Histórico de Votações”",

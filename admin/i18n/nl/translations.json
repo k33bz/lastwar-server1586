@@ -178,7 +178,47 @@
       "title": "Bevestigen stemmen",
       "nav_title": "Vote Approvals",
       "description": "Beoordel en stemmen de voorstellen af.",
-      "description_full": "Beoordelen en goedkeuren de voorstellen voor stemmingen die zijn ingediend door de leden van het bestuur."
+      "description_full": "Beoordelen en goedkeuren de voorstellen voor stemmingen die zijn ingediend door de leden van het bestuur.",
+      "stats": {
+        "pending_requests": "Aanvraag in behandeling",
+        "active_votes": "Actieve stemmen",
+        "total_requests": "Algemene verzoeken (Total Requests)"
+      },
+      "section_title": "Vraag om stemmen (‘Vote Requests’)",
+      "filters": {
+        "all": "All",
+        "pending": "In afwachting van...",
+        "approved": "Goedkeurd.",
+        "rejected": "Afgekeurd"
+      },
+      "request_card": {
+        "submitted": "Ingeleverd.",
+        "ago": "ago",
+        "hour": "Uur",
+        "hours": "Uren",
+        "auto_approve_warning": "Automatische goedkeuring in {uren} {eenheid}, indien de inhoud niet wordt bekeken.",
+        "approved_by": "Goedkeurd door",
+        "rejected_by": "Afgekeurd door...",
+        "vote_id": "Vote ID"
+      },
+      "buttons": {
+        "approve_create": "Goedkeuren en een stemming instellen."
+      },
+      "modal": {
+        "reject_title": "Weigeren om de verzoek om stemming te behandelen.",
+        "reason_label": "Reden voor afwijzing (optioneel)",
+        "reason_placeholder": "Uitleggen waarom deze vraag wordt afgewezen..."
+      },
+      "messages": {
+        "confirm_approve": "Weet u zeker dat u deze vraag wilt goedgekeuren en de stemming wilt starten?",
+        "approve_success": "Verzoek is goedgekeurd! Een stemming is gecreëerd: {vote_id}",
+        "reject_success": "Verzoek is met succes afgewezen.",
+        "approve_error": "Het was niet mogelijk om de vraag te goedenkeuren.",
+        "reject_error": "Fout: Het was niet mogelijk om de vraag te weigeren.",
+        "load_error": "Fout: {error}",
+        "no_requests": "Er werden geen verzoeken gevonden.",
+        "load_stats_error": "Fout bij het laden van de statistieken."
+      }
     },
     "discord_votes_history": {
       "title": "Historie van stemmen",
@@ -389,7 +429,7 @@
   },
   "users": {
     "magic_links": {
-      "nav_title": "Magic Links"
+      "nav_title": "‘Magic Links’"
     },
     "send_login_link": {
       "nav_title": "Stuur de inloglink."
@@ -397,7 +437,7 @@
   },
   "discord": {
     "rate_limits": {
-      "nav_title": "Rate Limits"
+      "nav_title": "Reate Limits"
     },
     "config": {
       "nav_title": "Vertaling naar Nederlands: 'Configuratie"
@@ -443,7 +483,7 @@
   },
   "login": {
     "page_title": "Inloggen als admin",
-    "subtitle": "Alliance Admin Portal",
+    "subtitle": "alliance admin portal",
     "form": {
       "email_label": "E-mailadres van de alliantie",
       "email_placeholder": "Je.e-mail@voorbeeld.com",

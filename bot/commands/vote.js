@@ -7,7 +7,7 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { getActiveVotes, getVote, getAdminUsers } = require('../utils/dataAccess');
 const { createVote, publishVote } = require('../utils/voteManager');
 const { verifyVoteIntegrity, generateVerificationReceipt } = require('../utils/voteIntegrity');
-const { getPresidentDiscordId } = require('../utils/councilUtils');
+const { getPresidentDiscordId, canProposeVote } = require('../utils/councilUtils');
 const { createVoteRequest, getPendingRequests } = require('../utils/voteRequestManager');
 
 module.exports = {
@@ -410,6 +410,16 @@ async function initiateVoteCreation(user, dm, client) {
  * Handle /vote request
  */
 async function handleRequest(interaction) {
+  // Check if user has permission to propose votes
+  const permission = await canProposeVote(interaction.user.id);
+
+  if (!permission.canPropose) {
+    return await interaction.reply({
+      content: `❌ ${permission.reason}`,
+      ephemeral: true
+    });
+  }
+
   await interaction.reply({
     content: '✅ Check your DMs to submit your vote request!',
     ephemeral: true

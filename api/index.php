@@ -4,8 +4,12 @@
  *
  * Interactive API documentation and testing interface
  *
- * @version 1.0.0
- * @date 2025-10-29
+ * @version 1.1.0
+ * @date 2025-11-20
+ *
+ * Changelog:
+ *   1.1.0 - Added missing public endpoints, documentation links
+ *   1.0.0 - Initial version
  */
 ?>
 <!DOCTYPE html>
@@ -206,6 +210,63 @@
             <div class="cache-info">⏱️ Cache: 3600 seconds (1 hour)</div>
             <button class="test-button" onclick="testEndpoint('server-info.php', this)">Test Endpoint</button>
             <div class="response"></div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method">GET</span>
+                <span class="path">/api/power-history.php</span>
+            </div>
+            <div class="description">Returns historical power data in CSV format for alliance trend analysis.</div>
+            <div class="cache-info">⏱️ Cache: 300 seconds (5 minutes) | Format: CSV</div>
+            <button class="test-button" onclick="testEndpoint('power-history.php', this)">Test Endpoint</button>
+            <div class="response"></div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method">GET</span>
+                <span class="path">/api/signature-history.php</span>
+            </div>
+            <div class="description">Returns R5 signature change history for server rules tracking.</div>
+            <div class="cache-info">⏱️ Cache: 60 seconds</div>
+            <button class="test-button" onclick="testEndpoint('signature-history.php', this)">Test Endpoint</button>
+            <div class="response"></div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method">GET</span>
+                <span class="path">/api/profile_api.php?action=search&alliance=UvvU&name=PlayerName</span>
+            </div>
+            <div class="description">Search for user profile by alliance tag and in-game name (public self-service).</div>
+            <div class="cache-info">⚡ No caching (real-time lookup)</div>
+            <button class="test-button" onclick="testEndpoint('profile_api.php?action=search&alliance=UvvU&name=TestPlayer', this)">Test Endpoint</button>
+            <div class="response"></div>
+        </div>
+
+        <h2>Additional Public Endpoints</h2>
+        <p style="margin: 20px 0; color: #555;">
+            The API also includes endpoints for self-service profile management:
+        </p>
+        <ul style="margin-left: 40px; color: #555;">
+            <li><code>POST /api/profile_api.php</code> - Create or update user profiles</li>
+            <li><code>POST /api/alliance_r5_profile_api.php</code> - R5 Discord ID updates</li>
+            <li><code>POST /api/alliance_r4_profile_api.php</code> - R4 Discord ID updates</li>
+        </ul>
+
+        <h2>Complete Documentation</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-title">📖 Public API Documentation</div>
+                <p>Complete REST API reference for all public endpoints</p>
+                <a href="../docs/PUBLIC_API.md" style="color: #3498db; text-decoration: none; font-weight: bold;">View PUBLIC_API.md →</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">🔐 Admin API Documentation</div>
+                <p>Authenticated endpoints with JWT & CSRF protection</p>
+                <a href="../docs/ADMIN_API.md" style="color: #3498db; text-decoration: none; font-weight: bold;">View ADMIN_API.md →</a>
+            </div>
         </div>
 
         <h2>Response Format</h2>

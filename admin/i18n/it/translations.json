@@ -178,7 +178,47 @@
       "title": "“Approvare i voti”",
       "nav_title": "“Voti di Approvazione”",
       "description": "“Esaminare e approvare le proposte di voto.”",
-      "description_full": "Esaminare e approvare le proposte di voto presentate dai membri del consiglio."
+      "description_full": "Esaminare e approvare le proposte di voto presentate dai membri del consiglio.",
+      "stats": {
+        "pending_requests": "“Richieste in attesa di elaborazione”",
+        "active_votes": "“Voti attivi”",
+        "total_requests": "“Totale richieste”"
+      },
+      "section_title": "“Richieste di voto”",
+      "filters": {
+        "all": "All",
+        "pending": "“In attesa di…”",
+        "approved": "Approvato.",
+        "rejected": "Rifiutato."
+      },
+      "request_card": {
+        "submitted": "“Inviato.”",
+        "ago": "ago",
+        "hour": "“Ore”",
+        "hours": "ore",
+        "auto_approve_warning": "Autoreapprovazione in {ore} {unità di tempo} se non viene revisionato.",
+        "approved_by": "Approvato da…",
+        "rejected_by": "Rifiutato da…",
+        "vote_id": "“ID del voto”"
+      },
+      "buttons": {
+        "approve_create": "“Approva e crea il sondaggio.”"
+      },
+      "modal": {
+        "reject_title": "Rifiuta la richiesta di voto.",
+        "reason_label": "Motivo del rifiuto (opzionale)",
+        "reason_placeholder": "Spiegate perché questa richiesta viene rifiutata…"
+      },
+      "messages": {
+        "confirm_approve": "Sei sicuro di voler approvare questa richiesta e avviare il processo di votazione?",
+        "approve_success": "Richiesta approvata! Il voto relativo a questa richiesta è stato creato: {vote_id}",
+        "reject_success": "La richiesta è stata rifiutata con successo.",
+        "approve_error": "“Non è stato possibile approvare la richiesta.”",
+        "reject_error": "“Non è stato possibile rifiutare la richiesta.”",
+        "load_error": "Errore: {error}",
+        "no_requests": "Non sono stati trovati alcun richiesto (nessuna richiesta è stata ricevuta).",
+        "load_stats_error": "“Non è stato possibile caricare i dati statistici.”"
+      }
     },
     "discord_votes_history": {
       "title": "**Storia dei voti**",

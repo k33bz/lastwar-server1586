@@ -178,7 +178,47 @@
       "title": "“Aprobar los votos”.",
       "nav_title": "“Votos de Aprobación”",
       "description": "Revisar y aprobar las propuestas de votación.",
-      "description_full": "Revisar y aprobar las propuestas de votación presentadas por los miembros del consejo."
+      "description_full": "Revisar y aprobar las propuestas de votación presentadas por los miembros del consejo.",
+      "stats": {
+        "pending_requests": "Solicitudes en espera de procesamiento",
+        "active_votes": "Votos Activos",
+        "total_requests": "Solicitudes totales"
+      },
+      "section_title": "Solicitudes de Voto",
+      "filters": {
+        "all": "All",
+        "pending": "“Pendiente”.",
+        "approved": "Aprobado.",
+        "rejected": "Rechazado."
+      },
+      "request_card": {
+        "submitted": "“Submitted”.",
+        "ago": "ago",
+        "hour": "hora",
+        "hours": "“hours”",
+        "auto_approve_warning": "“Aprobación automática en {horas} {unidad} si no se revisa”.",
+        "approved_by": "“Aprobado por…”",
+        "rejected_by": "Rechazado por…",
+        "vote_id": "“ID de Voto”"
+      },
+      "buttons": {
+        "approve_create": "“Aprobar y crear el voto”."
+      },
+      "modal": {
+        "reject_title": "Rechazar la solicitud de voto.",
+        "reason_label": "Razón de rechazo (opcional)",
+        "reason_placeholder": "Explique por qué se está rechazando esta solicitud…"
+      },
+      "messages": {
+        "confirm_approve": "¿Estás seguro de que quieres aprobar esta solicitud y crear el proceso de votación?",
+        "approve_success": "Solicitud aprobada. Voto creado: {vote_id}",
+        "reject_success": "Solicitud rechazada con éxito.",
+        "approve_error": "“No se pudo aprobar la solicitud”.",
+        "reject_error": "“No se pudo rechazar la solicitud”.",
+        "load_error": "Error: {error}",
+        "no_requests": "No se encontraron solicitudes.",
+        "load_stats_error": "“No se pudieron cargar los datos estadísticos”."
+      }
     },
     "discord_votes_history": {
       "title": "**Historial de Votos**",

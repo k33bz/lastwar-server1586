@@ -3,9 +3,13 @@
  *
  * Common JavaScript functions used across admin pages
  *
- * @version 1.4.0
- * @date 2025-11-06
+ * @version 1.5.0
+ * @date 2025-11-19
  * @changelog
+ *   1.5.0 (2025-11-19) - Added automatic session expiration monitoring
+ *                       - Decodes JWT cookie to check expiration timestamp
+ *                       - Auto-redirects to login when session expires
+ *                       - Checks every 30 seconds for expired sessions
  *   1.4.0 (2025-11-06) - Added comprehensive form validation library (Issue #20)
  *                       - Client-side validators matching PHP backend
  *                       - Real-time field validation with visual feedback
@@ -20,6 +24,189 @@
  *   1.1.0 (2025-10-16) - Added closeModalOnBackdrop() for help modal support
  *   1.0.0 (2025-10-16) - Initial consolidated utilities
  */
+
+// ============================================================================
+// Session Expiration Monitoring
+// ============================================================================
+
+// Global variable to store token expiration (set by PHP in header)
+window.SESSION_EXPIRY = window.SESSION_EXPIRY || null;
+
+// Track if we've already shown a redirect to prevent loops
+let sessionCheckRedirecting = false;
+
+/**
+ * Check if session has expired and redirect if needed
+ * Shows warning modal before expiration
+ */
+function checkSessionExpiration() {
+    // Don't check if we're already in the process of redirecting
+    if (sessionCheckRedirecting) {
+        return;
+    }
+
+    // If no expiry time provided by server, skip check
+    if (!window.SESSION_EXPIRY) {
+        return;
+    }
+
+    const now = Math.floor(Date.now() / 1000); // Current time in seconds
+    const expiresAt = window.SESSION_EXPIRY;
+    const timeUntilExpiry = expiresAt - now;
+
+    if (timeUntilExpiry <= 0) {
+        // Token has expired - redirect to login (only if not already redirecting)
+        if (!sessionCheckRedirecting) {
+            console.warn('[SESSION] Token expired, redirecting to login');
+            sessionCheckRedirecting = true;
+            window.location.href = 'login.php?error=expired';
+        }
+    } else if (timeUntilExpiry <= 300 && timeUntilExpiry > 0) {
+        // Less than 5 minutes remaining - show warning modal
+        showSessionExpirationWarning(timeUntilExpiry);
+    }
+}
+
+/**
+ * Show session expiration warning modal
+ * @param {number} secondsRemaining - Seconds until expiration
+ */
+function showSessionExpirationWarning(secondsRemaining) {
+    // Check if modal already exists
+    let modal = document.getElementById('session-expiration-modal');
+
+    if (!modal) {
+        // Create modal
+        modal = document.createElement('div');
+        modal.id = 'session-expiration-modal';
+        modal.innerHTML = `
+            <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                <div style="background: white; padding: 2rem; border-radius: 8px; max-width: 500px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+                    <h3 style="margin: 0 0 1rem 0; color: #ff6b6b;">⚠️ Session Expiring Soon</h3>
+                    <p style="margin: 0 0 1.5rem 0; color: #333;">Your session will expire in <strong id="expiry-countdown">--</strong>.</p>
+                    <p style="margin: 0 0 1.5rem 0; color: #666; font-size: 0.9rem;">Click "Extend Session" to continue working, or you'll be logged out automatically.</p>
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button id="logout-now-btn" style="padding: 0.75rem 1.5rem; border: 1px solid #ccc; background: white; border-radius: 6px; cursor: pointer;">
+                            Logout Now
+                        </button>
+                        <button id="extend-session-btn" style="padding: 0.75rem 1.5rem; border: none; background: #667eea; color: white; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                            Extend Session
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        // Add event listeners
+        document.getElementById('logout-now-btn').addEventListener('click', function() {
+            window.location.href = 'logout.php';
+        });
+
+        document.getElementById('extend-session-btn').addEventListener('click', refreshSessionToken);
+    }
+
+    // Update countdown
+    const minutes = Math.floor(secondsRemaining / 60);
+    const seconds = secondsRemaining % 60;
+    const countdownEl = document.getElementById('expiry-countdown');
+    if (countdownEl) {
+        countdownEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+}
+
+/**
+ * Refresh the JWT token
+ */
+async function refreshSessionToken() {
+    const extendBtn = document.getElementById('extend-session-btn');
+    const originalText = extendBtn.textContent;
+
+    try {
+        extendBtn.textContent = 'Refreshing...';
+        extendBtn.disabled = true;
+
+        const response = await fetch('refresh_token_api.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Update global SESSION_EXPIRY with new expiration time
+            window.SESSION_EXPIRY = data.expires_at;
+
+            // Success - close modal and reset monitoring
+            const modal = document.getElementById('session-expiration-modal');
+            if (modal) {
+                modal.remove();
+            }
+
+            console.log('[SESSION] Token refreshed successfully - new expiry:', new Date(data.expires_at * 1000).toLocaleString());
+
+            // Show success message
+            showToast('Session extended successfully!', 'success');
+        } else {
+            throw new Error(data.error || 'Failed to refresh session');
+        }
+    } catch (error) {
+        console.error('[SESSION] Failed to refresh token:', error);
+        extendBtn.textContent = originalText;
+        extendBtn.disabled = false;
+        showToast('Failed to extend session. Please login again.', 'error');
+    }
+}
+
+/**
+ * Show a toast notification
+ * @param {string} message - Message to display
+ * @param {string} type - Type of toast (success, error, info)
+ */
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#667eea'};
+        color: white;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 10001;
+        animation: slideIn 0.3s ease-out;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+/**
+ * Initialize session expiration monitoring
+ * Checks every 30 seconds for expired sessions
+ */
+function initSessionMonitoring() {
+    // Check immediately on page load
+    checkSessionExpiration();
+
+    // Check every 30 seconds
+    setInterval(checkSessionExpiration, 30000);
+}
+
+// Start monitoring when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSessionMonitoring);
+} else {
+    initSessionMonitoring();
+}
 
 // ============================================================================
 // Email Masking & Display
@@ -798,11 +985,25 @@ async function apiRequest(url, options = {}) {
             headers
         });
 
+        // Check for 401 Unauthorized - session expired
+        if (response.status === 401) {
+            console.warn('[SESSION] API returned 401 Unauthorized, redirecting to login');
+            window.location.href = 'login.php?error=expired';
+            throw new Error('Session expired');
+        }
+
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
         const data = await response.json();
+
+        // Check for session-related error codes
+        if (data.code === 'expired' || data.code === 'no_session') {
+            console.warn('[SESSION] API returned session error, redirecting to login');
+            window.location.href = `login.php?error=${data.code}`;
+            throw new Error(data.error || 'Session expired');
+        }
 
         if (data.error) {
             throw new Error(data.error);

@@ -178,7 +178,47 @@
       "title": "„Zatwierdzić głosowania”",
       "nav_title": "„Vote Approvals”",
       "description": "Przeglądaj i przyjmaj propozycje dotyczące głosowania.",
-      "description_full": "Przeglądanie i przyjęcie propozycji głosowań złożonych przez członków rady."
+      "description_full": "Przeglądanie i przyjęcie propozycji głosowań złożonych przez członków rady.",
+      "stats": {
+        "pending_requests": "„Zaproszenia w oczekiwaniu”",
+        "active_votes": "„Aktywne głosy”",
+        "total_requests": "„Total Requests”"
+      },
+      "section_title": "„Prośby o głosowanie”",
+      "filters": {
+        "all": "All",
+        "pending": "W trakcie realizacji.",
+        "approved": "„Zatwierdzone”.",
+        "rejected": "Odrzucono."
+      },
+      "request_card": {
+        "submitted": "„Złożony” (ang. „Submitted”)",
+        "ago": "ago",
+        "hour": "„Godzina”",
+        "hours": "„Godziny”",
+        "auto_approve_warning": "Autoweryfikacja zostanie dokonana po upływie {godzin} {jednostka czasu}, jeśli nie dojdzie do żadnej interwencji ze strony użytkownika.",
+        "approved_by": "„Zatwierdzone przez…”",
+        "rejected_by": "Odrzucony przez…",
+        "vote_id": "„Vote ID”"
+      },
+      "buttons": {
+        "approve_create": "„Zatwierdź i utwórz procedurę głosowania”"
+      },
+      "modal": {
+        "reject_title": "Odrzuć prośbę o głosowanie.",
+        "reason_label": "Powód odrzucenia (opcjonalny)",
+        "reason_placeholder": "Wyjaśnij, dlaczego ta prośba jest odrzucona…"
+      },
+      "messages": {
+        "confirm_approve": "Czy jesteś pewny, że chcesz zatwierdzić ten wniosek i uruchomić procedurę głosowania?",
+        "approve_success": "Prośba zatwierdzona! Utworzono głosowanie: {vote_id}",
+        "reject_success": "Prośba została odrzucona z powodzeniem.",
+        "approve_error": "Prośba nie została zatwierdzona.",
+        "reject_error": "Nie udało się odrzucić żądania.",
+        "load_error": "Błąd: {error}",
+        "no_requests": "Nie znaleziono żadnych żądań.",
+        "load_stats_error": "Nie udało się załadować statystyk."
+      }
     },
     "discord_votes_history": {
       "title": "„Historia głosowań”",

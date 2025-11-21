@@ -178,7 +178,47 @@
       "title": "“Oyları Onayla”",
       "nav_title": "“Oylama Onayları”",
       "description": "Oylama tekliflerini inceleyin ve onaylayın.",
-      "description_full": "Konsey üyeleri tarafından sunulan oylama tekliflerini inceleyin ve onaylayın."
+      "description_full": "Konsey üyeleri tarafından sunulan oylama tekliflerini inceleyin ve onaylayın.",
+      "stats": {
+        "pending_requests": "“Bekleyen İstekler”",
+        "active_votes": "“Etkin Oylar”",
+        "total_requests": "Toplam Talepler (Total Requests)"
+      },
+      "section_title": "“Oy Talepleri”",
+      "filters": {
+        "all": "All",
+        "pending": "“Beklemede”",
+        "approved": "Onaylandı.",
+        "rejected": "Reddedildi."
+      },
+      "request_card": {
+        "submitted": "Gönderildi (Submitted)",
+        "ago": "ago",
+        "hour": "“saat”",
+        "hours": "“saatler”",
+        "auto_approve_warning": "İnceleme yapılmazsa, {saatler} sonra {birim} üzerinden otomatik onay gerçekleşecek.",
+        "approved_by": "“Onaylanmıştır”",
+        "rejected_by": "“Reddedildi.”",
+        "vote_id": "“Oylama Kimliği”"
+      },
+      "buttons": {
+        "approve_create": "Onaylayın ve Oylama İşlemini Başlatın."
+      },
+      "modal": {
+        "reject_title": "“Oylama Talebini Reddet”",
+        "reason_label": "Reddedilme nedeni (isteğe bağlı)",
+        "reason_placeholder": "“Bu isteğin neden reddedildiğini açıklayın…”"
+      },
+      "messages": {
+        "confirm_approve": "Bu isteği onaylamak ve oylama sürecini başlatmak istediğinizden emin misiniz?",
+        "approve_success": "İstek onaylandı! Oylama oluşturuldu: {vote_id}",
+        "reject_success": "İstek başarıyla reddedildi.",
+        "approve_error": "“İstek onaylanamadı.”",
+        "reject_error": "“İstek reddedilemedi.”",
+        "load_error": "Hata: {error}",
+        "no_requests": "“Hiçbir istek bulunamadı.”",
+        "load_stats_error": "İstatistikleri yüklemekte başarısız oldu."
+      }
     },
     "discord_votes_history": {
       "title": "“Oylama Geçmişi”",

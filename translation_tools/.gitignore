@@ -1,0 +1,28 @@
+# Translation tool generated files
+translate_config.json
+logs/
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Temporary files
+*.tmp
+*.temp
+*_verify.txt
+common_verify.txt
+verify_categories.txt
+test_en.json
+
+# Checkpoints (stored in parent directory)
+../.checkpoints/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

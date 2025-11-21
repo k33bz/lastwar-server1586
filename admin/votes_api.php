@@ -62,9 +62,6 @@ $action = $_GET['action'] ?? $_POST['action'] ?? '';
 $votes_file = __DIR__ . '/../data/votes.json';
 $screenshots_dir = __DIR__ . '/../images/votes/';
 
-// Wrap all operations in try-catch for better error reporting
-try {
-
 // Helper: Load votes
 function load_votes($file) {
     if (!file_exists($file)) {
@@ -104,34 +101,7 @@ function generate_vote_id() {
     return 'vote_' . date('Ymd_His') . '_' . bin2hex(random_bytes(4));
 }
 
-switch ($action) {
-    case 'list':
-        handle_list();
-        break;
-    case 'get':
-        handle_get();
-        break;
-    case 'create':
-        handle_create();
-        break;
-    case 'update':
-        handle_update();
-        break;
-    case 'delete':
-        handle_delete();
-        break;
-    case 'upload_screenshot':
-        handle_screenshot_upload();
-        break;
-    case 'delete_screenshot':
-        handle_screenshot_delete();
-        break;
-    default:
-        http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'Invalid action']);
-        break;
-}
-
+// Handler functions - defined before use
 function handle_list() {
     global $user, $votes_file;
 
@@ -616,6 +586,35 @@ function handle_screenshot_delete() {
     ]);
 }
 
+// Action handling with try-catch
+try {
+    switch ($action) {
+        case 'list':
+            handle_list();
+            break;
+        case 'get':
+            handle_get();
+            break;
+        case 'create':
+            handle_create();
+            break;
+        case 'update':
+            handle_update();
+            break;
+        case 'delete':
+            handle_delete();
+            break;
+        case 'upload_screenshot':
+            handle_screenshot_upload();
+            break;
+        case 'delete_screenshot':
+            handle_screenshot_delete();
+            break;
+        default:
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Invalid action']);
+            break;
+    }
 } catch (Throwable $e) {
     error_log("Votes API Error: " . $e->getMessage());
     http_response_code(500);

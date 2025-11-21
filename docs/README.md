@@ -23,6 +23,8 @@ Welcome to the Server 1586 documentation hub. This directory contains all projec
 |----------|-------------|
 | **[README.md](../README.md)** | Project overview, features, quick start |
 | **[DEPLOYMENT.md](DEPLOYMENT.md)** | Complete deployment guide (CI/CD, FTP, incremental) |
+| **[MULTI_SERVER_DEPLOYMENT.md](MULTI_SERVER_DEPLOYMENT.md)** | Multi-server deployment architecture and procedures |
+| **[MULTI_SERVER_MIGRATION.md](MULTI_SERVER_MIGRATION.md)** | Multi-server migration plan and implementation steps |
 | **[PRODUCTION-ENV-SETUP.md](PRODUCTION-ENV-SETUP.md)** | Production environment configuration |
 | **[CLAUDE.md](CLAUDE.md)** | Claude Code AI assistant instructions |
 

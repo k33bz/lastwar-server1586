@@ -33,6 +33,8 @@ require_once 'audit_logger.php';
 require_once 'json_helpers.php';
 require_once 'admin_api_helpers.php';
 require_once 'includes/csrf.php';
+require_once 'vote_email_helper.php';
+require_once 'discord_vote_submit_api.php';
 
 // Require authentication
 $user = require_jwt_session_api();
@@ -99,12 +101,35 @@ try {
 
 /**
  * Handle vote request creation
- * Accessible by R5, R4, APE, President, Admin
+ * Accessible by R5, R4 (with canVote permission), President, Admin
  */
 function handleCreateRequest($user) {
-    // Check permissions - R5, R4, APE, President, or Admin
-    if (!has_role($user, ['admin', 'president', 'r5', 'r4', 'ape'])) {
-        throw new Exception('Access denied. Only alliance members can submit vote requests.');
+    // Check permissions - R5, R4 (with canVote), President, or Admin (APE not allowed)
+    if (!has_role($user, ['admin', 'president', 'r5', 'r4'])) {
+        throw new Exception('Access denied. Only R5s, R4s with voting rights, and admins can submit vote requests.');
+    }
+
+    // For R4 users, verify they have canVote permission
+    if (has_role($user, ['r4']) && !has_role($user, ['admin', 'president', 'r5'])) {
+        $userEmail = $user->sub;
+        $alliancesFile = __DIR__ . '/../data/alliances.json';
+        $alliances = json_read($alliancesFile);
+
+        $hasVotingRights = false;
+        foreach ($alliances as $alliance) {
+            if (isset($alliance['r4s']) && is_array($alliance['r4s'])) {
+                foreach ($alliance['r4s'] as $r4) {
+                    if (isset($r4['email']) && $r4['email'] === $userEmail && isset($r4['canVote']) && $r4['canVote'] === true) {
+                        $hasVotingRights = true;
+                        break 2;
+                    }
+                }
+            }
+        }
+
+        if (!$hasVotingRights) {
+            throw new Exception('Access denied. R4 users must have voting rights to submit vote requests.');
+        }
     }
 
     // Get request data
@@ -294,10 +319,14 @@ function handleCreateVote($user) {
         'source' => 'web'
     ]);
 
+    // Send email notifications to all eligible voters
+    $emailResults = sendVoteEmailNotifications($vote, $user);
+
     echo json_encode([
         'success' => true,
         'vote' => $vote,
-        'message' => 'Vote created successfully. Discord bot will process and publish it.'
+        'email_notifications' => $emailResults,
+        'message' => 'Vote created successfully. Discord bot will process and publish it. Email notifications sent to eligible voters.'
     ]);
 }
 
@@ -767,5 +796,146 @@ function createVoteFromRequest($request, $user) {
         'title' => $vote['vote_details']['title']
     ]);
 
+    // Send email notifications to all eligible voters
+    sendVoteEmailNotifications($vote, $user);
+
     return $voteId;
+}
+
+/**
+ * Helper: Send email notifications to all eligible voters
+ */
+function sendVoteEmailNotifications($vote, $user) {
+    $alliancesFile = __DIR__ . '/../data/alliances.json';
+    $alliances = json_read($alliancesFile);
+
+    $emailsSent = 0;
+    $emailsFailed = 0;
+
+    // Loop through each voter
+    foreach ($vote['council_snapshot']['voter_details'] as $voter) {
+        $allianceTag = $voter['alliance_tag'];
+
+        // Find alliance data
+        $alliance = null;
+        foreach ($alliances as $a) {
+            if ($a['tag'] === $allianceTag) {
+                $alliance = $a;
+                break;
+            }
+        }
+
+        if (!$alliance) {
+            error_log("Alliance not found for tag: {$allianceTag}");
+            continue;
+        }
+
+        // Get R5 info
+        $r5Email = $alliance['r5']['email'] ?? null;
+        $r5Name = $alliance['r5']['name'] ?? $allianceTag;
+
+        if (!$r5Email) {
+            error_log("No email for R5 of alliance: {$allianceTag}");
+            continue;
+        }
+
+        // Get user info for language preference
+        $userInfo = get_user_by_email($r5Email);
+        $language = $userInfo['preferred_language'] ?? 'en';
+
+        // Generate magic link token
+        try {
+            $token = generateVoteToken($vote['vote_id'], $allianceTag, $userInfo);
+            $baseUrl = rtrim($_ENV['SITE_URL'] ?? 'https://www.lastwar1586.online', '/');
+            $magicLink = $baseUrl . '/admin/vote_submit.php?token=' . $token;
+
+            // Send email
+            $emailSent = send_vote_notification_email(
+                $r5Email,
+                $vote['vote_id'],
+                $vote['vote_details']['title'],
+                $vote['vote_details']['description'],
+                $allianceTag,
+                $r5Name,
+                $magicLink,
+                $vote['voting_period']['end_time'],
+                $language
+            );
+
+            if ($emailSent) {
+                $emailsSent++;
+                error_log("Vote notification email sent to {$r5Email} ({$allianceTag})");
+            } else {
+                $emailsFailed++;
+                error_log("Failed to send vote notification to {$r5Email} ({$allianceTag})");
+            }
+
+        } catch (Exception $e) {
+            $emailsFailed++;
+            error_log("Error sending vote notification to {$r5Email}: " . $e->getMessage());
+        }
+
+        // Also check for R4s with voting rights
+        if (isset($alliance['r4s']) && is_array($alliance['r4s'])) {
+            foreach ($alliance['r4s'] as $r4) {
+                if (!isset($r4['canVote']) || !$r4['canVote']) {
+                    continue;
+                }
+
+                $r4Email = $r4['email'] ?? null;
+                $r4Name = $r4['name'] ?? 'R4 Officer';
+
+                if (!$r4Email) {
+                    continue;
+                }
+
+                // Get user info for language preference
+                $r4UserInfo = get_user_by_email($r4Email);
+                $r4Language = $r4UserInfo['preferred_language'] ?? 'en';
+
+                // Generate magic link token for R4
+                try {
+                    $r4Token = generateVoteToken($vote['vote_id'], $allianceTag, $r4UserInfo);
+                    $r4MagicLink = $baseUrl . '/admin/vote_submit.php?token=' . $r4Token;
+
+                    // Send email
+                    $r4EmailSent = send_vote_notification_email(
+                        $r4Email,
+                        $vote['vote_id'],
+                        $vote['vote_details']['title'],
+                        $vote['vote_details']['description'],
+                        $allianceTag,
+                        $r4Name,
+                        $r4MagicLink,
+                        $vote['voting_period']['end_time'],
+                        $r4Language
+                    );
+
+                    if ($r4EmailSent) {
+                        $emailsSent++;
+                        error_log("Vote notification email sent to R4 {$r4Email} ({$allianceTag})");
+                    } else {
+                        $emailsFailed++;
+                        error_log("Failed to send vote notification to R4 {$r4Email} ({$allianceTag})");
+                    }
+
+                } catch (Exception $e) {
+                    $emailsFailed++;
+                    error_log("Error sending vote notification to R4 {$r4Email}: " . $e->getMessage());
+                }
+            }
+        }
+    }
+
+    // Log summary
+    log_audit_event('vote_emails_sent', $user->sub, [
+        'vote_id' => $vote['vote_id'],
+        'emails_sent' => $emailsSent,
+        'emails_failed' => $emailsFailed
+    ]);
+
+    return [
+        'sent' => $emailsSent,
+        'failed' => $emailsFailed
+    ];
 }

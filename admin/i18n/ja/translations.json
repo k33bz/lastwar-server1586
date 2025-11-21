@@ -178,7 +178,47 @@
       "title": "「投票の承認」",
       "nav_title": "「投票による承認」",
       "description": "「投票提案をレビューし、承認する」",
-      "description_full": "「評議会メンバーから提出された投票提案を審査し、承認する」"
+      "description_full": "「評議会メンバーから提出された投票提案を審査し、承認する」",
+      "stats": {
+        "pending_requests": "「待機中のリクエスト（Pending Requests）」",
+        "active_votes": "「アクティブな投票数（Active Votes）」",
+        "total_requests": "「総リクエスト数（Total Requests）」"
+      },
+      "section_title": "「投票依頼」",
+      "filters": {
+        "all": "All",
+        "pending": "「Pending（保留中）」",
+        "approved": "「承認されました」",
+        "rejected": "「拒否された」"
+      },
+      "request_card": {
+        "submitted": "「送信済み（Submitted）」",
+        "ago": "ago",
+        "hour": "「hour」",
+        "hours": "「hours」",
+        "auto_approve_warning": "「{時間}後にレビューが行われなかった場合、自動的に承認されます。」",
+        "approved_by": "「承認された」",
+        "rejected_by": "「『Rejected by』」",
+        "vote_id": "「投票ID」"
+      },
+      "buttons": {
+        "approve_create": "「承認し、投票を作成する」"
+      },
+      "modal": {
+        "reject_title": "「投票リクエストを拒否する」",
+        "reason_label": "「拒否の理由（任意）」",
+        "reason_placeholder": "「なぜこのリクエストが却下されているのかを説明してください…」"
+      },
+      "messages": {
+        "confirm_approve": "このリクエストを承認して投票を行うことに本当に確信ですか？",
+        "approve_success": "リクエストが承認されました！投票用のIDは「{vote_id}」です。",
+        "reject_success": "「リクエストが正常に拒否されました。」",
+        "approve_error": "「リクエストの承認に失敗しました。」",
+        "reject_error": "「リクエストを拒否するに失敗しました。」",
+        "load_error": "エラー：{error}",
+        "no_requests": "「リクエストは見つかりませんでした。」",
+        "load_stats_error": "「統計データの読み込みに失敗しました。」"
+      }
     },
     "discord_votes_history": {
       "title": "「投票履歴」",

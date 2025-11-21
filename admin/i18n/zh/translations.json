@@ -178,7 +178,47 @@
       "title": "“批准投票结果”",
       "nav_title": "“投票批准”",
       "description": "“审查并批准投票提案”",
-      "description_full": "“审查并批准由理事会成员提交的投票提案。”"
+      "description_full": "“审查并批准由理事会成员提交的投票提案。”",
+      "stats": {
+        "pending_requests": "“待处理请求”",
+        "active_votes": "“活跃投票数”",
+        "total_requests": "“总请求量”"
+      },
+      "section_title": "“投票请求”",
+      "filters": {
+        "all": "All",
+        "pending": "“Pending”（待处理中）。",
+        "approved": "“已批准”。",
+        "rejected": "“被拒绝了。”"
+      },
+      "request_card": {
+        "submitted": "“已提交”",
+        "ago": "ago",
+        "hour": "“小时”",
+        "hours": "“hours”",
+        "auto_approve_warning": "“如果未在 {小时} 内被审核，系统将自动批准（该请求）。”",
+        "approved_by": "“经……批准”",
+        "rejected_by": "被……拒绝。",
+        "vote_id": "“投票ID”"
+      },
+      "buttons": {
+        "approve_create": "“批准并创建投票”"
+      },
+      "modal": {
+        "reject_title": "“拒绝投票请求”",
+        "reason_label": "“拒绝原因（可选）”",
+        "reason_placeholder": "“请解释为什么这个请求会被拒绝……”"
+      },
+      "messages": {
+        "confirm_approve": "“你确定要批准这个请求并启动投票吗？”",
+        "approve_success": "请求已批准！生成的投票链接为：{vote_id}",
+        "reject_success": "“请求已成功拒绝。”",
+        "approve_error": "“请求未获批准。”",
+        "reject_error": "“无法拒绝该请求。”",
+        "load_error": "错误：{error}",
+        "no_requests": "“未找到任何请求。”",
+        "load_stats_error": "“无法加载统计数据。”"
+      }
     },
     "discord_votes_history": {
       "title": "“投票记录”",

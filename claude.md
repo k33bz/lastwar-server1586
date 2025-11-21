@@ -17,14 +17,15 @@
 - Critical bug fix: `top5Permanent` field reference (commit 0be1633)
 
 **Admin Panel i18n: ✅ COMPLETE**
-- Multi-language support for 5 languages (EN, ES, PT, DE, KO)
+- Multi-language support for 15 languages (EN, ES, PT, DE, KO, FR, IT, JA, ZH, RU, AR, NL, PL, TR, SV, DA)
 - Translation system using `__('key')` pattern
 - User language preferences stored in JWT and user profile
 - Automated translation via LM Studio (Hunyuan-MT-7B)
 - Translation files: `admin/i18n/{lang}/translations.json`
 - Magic link emails sent in user's preferred language
 - Language selector on login page and user profile
-- 9 admin pages translated (dashboard, user management, etc.)
+- Consolidation pattern: Common translations in `common.*` namespace
+- 9+ admin pages translated (dashboard, user management, Discord votes, etc.)
 
 **UID-Based Identity System (v4.0.0): ✅ COMPLETE**
 - Migrated from email-based to UID-based user identity
@@ -41,7 +42,166 @@
 - Controls PHP admin server, React dev server, Vite preview
 - Live log monitoring for all servers
 - One-click browser launch and build management
-- Translation scripts for admin UI, client rules, and locales
+- Translation automation tool (`translation_tools/translate_admin_reliable.py`)
+
+---
+
+## Translation Tool System
+
+### Overview
+Automated translation system using LM Studio with Hunyuan-MT-7B model for admin panel internationalization.
+
+### Key Files
+- `translation_tools/translate_admin_reliable.py` - Main translation script
+- `translation_tools/translate_config.json` - Configuration file
+- `admin/i18n/en/translations.json` - Source English translations
+- `admin/i18n/{lang}/translations.json` - Target language files (15 languages)
+
+### Configuration (`translate_config.json`)
+```json
+{
+  "i18n": {
+    "source_locale": "en",
+    "default_namespace": "admin",
+    "key_separator": ".",
+    "fallback_locale": "en",
+    "validate_placeholders": true,
+    "validate_html_tags": true,
+    "validate_preserve_terms": true
+  },
+  "model": "tencent.hunyuan-mt-7b",
+  "temperature": 0.1,
+  "max_tokens": 512,
+  "max_retries": 3,
+  "timeout": 30,
+  "lm_studio_url": "http://localhost:1234",
+  "preserve_terms": [
+    "R5", "R4", "APE", "NAP15", "Discord", "SMTP", "JWT", "API",
+    "UvvU", "ORCE", "MTOP", "FNXS", "MZKU", "admin",
+    "🚀", "📋", "🛡️", "⚠️", "✅", "🗳️", "📅", "📊", "ℹ️"
+  ],
+  "languages": {
+    "es": "Spanish", "pt": "Portuguese", "de": "German", "ko": "Korean",
+    "fr": "French", "it": "Italian", "ja": "Japanese", "zh": "Chinese (Simplified)",
+    "ru": "Russian", "ar": "Arabic", "nl": "Dutch", "pl": "Polish",
+    "tr": "Turkish", "sv": "Swedish", "da": "Danish"
+  }
+}
+```
+
+### Running Translations
+
+**Incremental Translation** (recommended):
+```bash
+cd translation_tools
+python translate_admin_reliable.py --incremental 2>&1 | tee ../translation_output.log
+```
+
+**Full Translation** (all strings):
+```bash
+cd translation_tools
+python translate_admin_reliable.py 2>&1 | tee ../translation_output.log
+```
+
+**Single Language**:
+```bash
+cd translation_tools
+python translate_admin_reliable.py --language ko 2>&1 | tee ../translation_ko.log
+```
+
+### Features
+
+**Quality Validation**:
+- ✅ Placeholder preservation (e.g., `{user}`, `{count}`)
+- ✅ HTML tag validation
+- ✅ Preserve terms enforcement (technical terms, emojis)
+- ✅ Contamination detection (Korean in non-Korean languages)
+- ✅ Auto-retry on validation failures (max 3 attempts)
+
+**Translation Consolidation Pattern**:
+- Reusable translations under `common.*` namespace
+- `common.buttons.*` - Standard buttons (cancel, save, delete, etc.)
+- `common.labels.*` - Standard labels (email, username, status, etc.)
+- `common.messages.*` - Standard messages (loading, error_occurred, success, etc.)
+- Page-specific translations under `pages.{page_name}.*`
+
+**Performance**:
+- Incremental mode: Only translates new/missing keys
+- Parallel processing: Translates multiple strings concurrently
+- Progress tracking: Real-time completion percentage
+- Error logging: Detailed logs for debugging
+
+### Translation Workflow
+
+1. **Update English source** (`admin/i18n/en/translations.json`):
+   - Add new translation keys with English text
+   - Use placeholder syntax: `{variable_name}`
+   - Group by namespace: `pages.page_name.section.key`
+
+2. **Run incremental translation**:
+   ```bash
+   cd translation_tools
+   python translate_admin_reliable.py --incremental
+   ```
+
+3. **Monitor progress**:
+   - Watch console output for completion percentage
+   - Check for validation warnings/errors
+   - Review quality issues flagged by validator
+
+4. **Verify translations**:
+   ```bash
+   # Check all languages have the new keys
+   for lang in es pt de ko fr it ja zh ru ar nl pl tr sv da; do
+     echo "$lang: $(jq '.pages.page_name.new_key' admin/i18n/$lang/translations.json)"
+   done
+   ```
+
+5. **Commit changes**:
+   ```bash
+   git add admin/i18n/
+   git commit -m "feat(i18n): Add translations for new_feature"
+   ```
+
+### PHP Integration
+
+**Using translations in PHP**:
+```php
+<?php echo __('common.buttons.save'); ?>
+<?php echo __('pages.dashboard.welcome_message'); ?>
+<?php echo __('common.messages.error_occurred'); ?>
+```
+
+**JavaScript integration**:
+```javascript
+const i18n = {
+    save: <?php echo json_encode(__('common.buttons.save')); ?>,
+    cancel: <?php echo json_encode(__('common.buttons.cancel')); ?>,
+    loading: <?php echo json_encode(__('common.messages.loading')); ?>
+};
+
+// Use in JavaScript
+alert(i18n.save);
+document.getElementById('msg').textContent = i18n.loading;
+```
+
+### Troubleshooting
+
+**KeyError: 'languages'**:
+- Fix: Ensure `translate_config.json` has `languages` key (not `locales`)
+
+**Placeholder not preserved**:
+- Symptom: `{user}` becomes `{usuario}` in Spanish
+- Fix: Model limitation - manually correct in target language file
+
+**LM Studio connection error**:
+- Check: LM Studio is running on `http://localhost:1234`
+- Check: Hunyuan-MT-7B model is loaded
+- Test: `curl http://localhost:1234/v1/models`
+
+**Contamination warnings**:
+- Review: Check flagged translations for incorrect language mixing
+- Fix: Manually correct contaminated strings
 
 ---
 

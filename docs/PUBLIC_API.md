@@ -267,6 +267,194 @@ Returns server metadata, Discord info, and NAP15 details.
 
 ---
 
+### 8. GET /api/power-history.php
+
+Returns historical power data for alliances in CSV format.
+
+**Response:**
+```csv
+Date,UvvU,ORCE,MTOP,FNXS,MZKU,STR8,...
+2025-10-01,7804360932,6543210987,...
+2025-10-08,7920451023,6598432109,...
+```
+
+**Format:** CSV (not JSON)
+**Cache:** 300 seconds (5 minutes)
+**ETag:** Supported
+
+**Note:** Contains only public data (alliance tags and power numbers). No PII.
+
+---
+
+### 9. GET /api/signature-history.php
+
+Returns R5 signature change history for server rules.
+
+**Response:**
+```json
+{
+  "success": true,
+  "timestamp": "2025-11-12T12:00:00Z",
+  "data": {
+    "currentRulesVersion": "1.3",
+    "lastUpdated": "2025-11-01T10:00:00Z",
+    "alliances": [
+      {
+        "tag": "UvvU",
+        "currentR5": "Leader Name",
+        "signed": true,
+        "signatureHistory": [
+          {
+            "date": "2025-10-01",
+            "r5Name": "Previous Leader",
+            "action": "signed",
+            "rulesVersion": "1.2"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Cache:** 60 seconds
+**ETag:** Supported
+
+---
+
+### 10. GET /api/profile_api.php?action=search
+
+Search for user profile by alliance and game name.
+
+**Query Parameters:**
+- `action=search` (required)
+- `alliance` - Alliance tag (required)
+- `name` - In-game name (required)
+
+**Example:** `/api/profile_api.php?action=search&alliance=UvvU&name=PlayerName`
+
+**Response:**
+```json
+{
+  "found": true,
+  "profile": {
+    "profile_id": "prof_20251110_a1b2c3d4",
+    "alliance_tag": "UvvU",
+    "game_name": "PlayerName",
+    "discord_id": "123456789012345678",
+    "discord_tag": "username#1234",
+    "role": "member",
+    "verified": false,
+    "created_at": "2025-11-10T12:00:00Z",
+    "updated_at": "2025-11-10T12:00:00Z"
+  }
+}
+```
+
+**Cache:** No caching (real-time lookups)
+**Authentication:** Not required (public self-service)
+
+---
+
+### 11. POST /api/profile_api.php
+
+Create or update user profile.
+
+**Request Body (Create):**
+```json
+{
+  "action": "create",
+  "alliance_tag": "UvvU",
+  "game_name": "PlayerName"
+}
+```
+
+**Request Body (Update):**
+```json
+{
+  "action": "update",
+  "profile_id": "prof_20251110_a1b2c3d4",
+  "discord_id": "123456789012345678",
+  "discord_tag": "username#1234"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "profile": { ... }
+}
+```
+
+**Authentication:** Not required (public self-service)
+
+---
+
+### 12. POST /api/alliance_r5_profile_api.php
+
+Update R5 Discord ID in alliance data (self-service for R5s).
+
+**Request Body:**
+```json
+{
+  "alliance_tag": "UvvU",
+  "discord_id": "123456789012345678"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "R5 Discord ID updated successfully",
+  "alliance": {
+    "tag": "UvvU",
+    "r5": {
+      "name": "R5 Name",
+      "discordId": "123456789012345678"
+    }
+  }
+}
+```
+
+**Authentication:** Not required (public self-service)
+**Note:** Validates Discord ID format (17-19 digits)
+
+---
+
+### 13. POST /api/alliance_r4_profile_api.php
+
+Update R4 Discord ID in alliance data (self-service for R4s).
+
+**Request Body:**
+```json
+{
+  "alliance_tag": "UvvU",
+  "r4_name": "Officer Name",
+  "discord_id": "123456789012345678"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "R4 Discord ID updated successfully",
+  "r4": {
+    "name": "Officer Name",
+    "discordId": "123456789012345678",
+    "canVote": false,
+    "role": "Deputy"
+  }
+}
+```
+
+**Authentication:** Not required (public self-service)
+**Note:** Validates Discord ID format (17-19 digits)
+
+---
+
 ## Response Format
 
 ### Success Response
@@ -427,11 +615,16 @@ ETag: "abc123def456"
 |----------|----------------|-----------|
 | /api/alliances.php | 60s | Power updates frequently |
 | /api/council.php | 60s | Changes weekly, but check often |
+| /api/signature-history.php | 60s | R5 changes tracked in real-time |
 | /api/rules.php | 300s | Rules rarely change |
 | /api/amendments.php | 300s | Amendments are historical |
 | /api/council/schedule.php | 300s | Schedule pre-generated |
+| /api/power-history.php | 300s | Historical data, updated weekly |
 | /api/version.php | 300s | Versions change on deployment |
 | /api/server-info.php | 3600s | Static server information |
+| /api/profile_api.php | No cache | Real-time profile lookups |
+| /api/alliance_r5_profile_api.php | No cache | Immediate updates |
+| /api/alliance_r4_profile_api.php | No cache | Immediate updates |
 
 ### Client-Side Caching Recommendations
 
@@ -611,6 +804,10 @@ For API issues or questions:
 
 ---
 
-**Last Updated:** 2025-10-29
-**API Version:** 1.0.0
+**Last Updated:** 2025-11-20
+**API Version:** 1.1.0
 **Maintained By:** Server 1586 Development Team
+
+**Changelog:**
+- v1.1.0 (2025-11-20): Added 6 public endpoints (power-history, signature-history, profile APIs)
+- v1.0.0 (2025-10-29): Initial public API documentation

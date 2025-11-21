@@ -24,17 +24,35 @@ require_once __DIR__ . '/json_helpers.php';
 require_once __DIR__ . '/audit_logger.php';
 
 // Security monitoring configuration
-define('SECURITY_LOG_FILE', __DIR__ . '/security_events.json');
-define('IP_BLACKLIST_FILE', __DIR__ . '/ip_blacklist.json');
-define('RATE_LIMIT_FILE', __DIR__ . '/rate_limits.json');
+if (!defined('SECURITY_LOG_FILE')) {
+    define('SECURITY_LOG_FILE', __DIR__ . '/security_events.json');
+}
+if (!defined('IP_BLACKLIST_FILE')) {
+    define('IP_BLACKLIST_FILE', __DIR__ . '/ip_blacklist.json');
+}
+if (!defined('RATE_LIMIT_FILE')) {
+    define('RATE_LIMIT_FILE', __DIR__ . '/rate_limits.json');
+}
 
 // Rate limiting thresholds
-define('MAGIC_LINK_RATE_LIMIT', 3);     // 3 requests per 15 minutes
-define('MAGIC_LINK_RATE_WINDOW', 900);  // 15 minutes
-define('LOGIN_ATTEMPT_LIMIT', 5);       // 5 failed attempts per hour
-define('LOGIN_ATTEMPT_WINDOW', 3600);   // 1 hour
-define('API_RATE_LIMIT', 60);           // 60 requests per minute
-define('API_RATE_WINDOW', 60);          // 1 minute
+if (!defined('MAGIC_LINK_RATE_LIMIT')) {
+    define('MAGIC_LINK_RATE_LIMIT', 3);     // 3 requests per 15 minutes
+}
+if (!defined('MAGIC_LINK_RATE_WINDOW')) {
+    define('MAGIC_LINK_RATE_WINDOW', 900);  // 15 minutes
+}
+if (!defined('LOGIN_ATTEMPT_LIMIT')) {
+    define('LOGIN_ATTEMPT_LIMIT', 5);       // 5 failed attempts per hour
+}
+if (!defined('LOGIN_ATTEMPT_WINDOW')) {
+    define('LOGIN_ATTEMPT_WINDOW', 3600);   // 1 hour
+}
+if (!defined('API_RATE_LIMIT')) {
+    define('API_RATE_LIMIT', 60);           // 60 requests per minute
+}
+if (!defined('API_RATE_WINDOW')) {
+    define('API_RATE_WINDOW', 60);          // 1 minute
+}
 
 /**
  * Initialize security files

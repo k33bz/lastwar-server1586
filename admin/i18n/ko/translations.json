@@ -178,7 +178,47 @@
       "title": "“투표 승인”",
       "nav_title": "“투표 승인(Vote Approvals)”",
       "description": "투표 제안을 검토하고 승인하세요.",
-      "description_full": "의회 의원들이 제출한 투표 제안을 검토하고 승인합니다."
+      "description_full": "의회 의원들이 제출한 투표 제안을 검토하고 승인합니다.",
+      "stats": {
+        "pending_requests": "“대기 중인 요청(Pending Requests)”",
+        "active_votes": "“활성 투표(Active Votes)”",
+        "total_requests": "총 요청 건수(Total Requests)"
+      },
+      "section_title": "“투표 요청(Vote Requests)”",
+      "filters": {
+        "all": "All",
+        "pending": "“진행 중(Pending)”.",
+        "approved": "승인되었습니다.",
+        "rejected": "거절됨."
+      },
+      "request_card": {
+        "submitted": "제출됨(Submitted)",
+        "ago": "ago",
+        "hour": "“hour”",
+        "hours": "“hours”",
+        "auto_approve_warning": "검토되지 않을 경우 {시간} 후에 자동으로 승인됩니다.",
+        "approved_by": "“승인됨(Approved by)”",
+        "rejected_by": "“‘Rejected by’는 ‘다음과 같은 사람/단체에 의해 거절당했다’라는 의미입니다.”",
+        "vote_id": "“투표 식별 번호(Vote ID)”"
+      },
+      "buttons": {
+        "approve_create": "“승인하고 투표를 생성하세요.”"
+      },
+      "modal": {
+        "reject_title": "“투표 요청 거부”",
+        "reason_label": "거절 사유 (선택 사항)",
+        "reason_placeholder": "“이 요청이 거부되는 이유를 설명해 주세요…”"
+      },
+      "messages": {
+        "confirm_approve": "이 요청을 승인하고 투표를 진행하시겠습니까?",
+        "approve_success": "요청이 승인되었습니다! 생성된 투표 정보: {vote_id}",
+        "reject_success": "요청이 성공적으로 거부되었습니다.",
+        "approve_error": "“요청 승인에 실패했습니다.”",
+        "reject_error": "“요청을 거부하는 데 실패했습니다.”",
+        "load_error": "오류: {error}",
+        "no_requests": "요청 사항을 찾을 수 없습니다.",
+        "load_stats_error": "“통계 데이터를 로드하는 데 실패했습니다.”"
+      }
     },
     "discord_votes_history": {
       "title": "“투표 기록(Vote History)”",

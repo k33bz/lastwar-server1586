@@ -178,7 +178,47 @@
       "title": "Godkänna röster",
       "nav_title": "“Vote Approvals”",
       "description": "Gå igenom och godkänn förslag på rösträffningar.",
-      "description_full": "Gå igenom och godkänn de rösträckande förslag som har lämnats in av rådets medlemmar."
+      "description_full": "Gå igenom och godkänn de rösträckande förslag som har lämnats in av rådets medlemmar.",
+      "stats": {
+        "pending_requests": "“In åndringar”",
+        "active_votes": "Aktiva röster",
+        "total_requests": "Totala förfrågningar"
+      },
+      "section_title": "“Omfrågningar om rösträtt”",
+      "filters": {
+        "all": "All",
+        "pending": "“Pending”",
+        "approved": "Godkänt",
+        "rejected": "Avvisat"
+      },
+      "request_card": {
+        "submitted": "“Inlämnat”",
+        "ago": "ago",
+        "hour": "“Hour”",
+        "hours": "“hours”",
+        "auto_approve_warning": "Automatisk godkännande om inte granskats innan {timmar} {enhet}.",
+        "approved_by": "Godkänt av",
+        "rejected_by": "Avvisad av…",
+        "vote_id": "“Röstrings-ID”"
+      },
+      "buttons": {
+        "approve_create": "Godkänn och skapa en omröstning."
+      },
+      "modal": {
+        "reject_title": "Avvisa omröstningsförfrågan",
+        "reason_label": "Anledning till avslag (valfritt)",
+        "reason_placeholder": "Förklara varför denna begäran avvisas…"
+      },
+      "messages": {
+        "confirm_approve": "Är du säker på att du vill godkänna denna begäran och skapa en omröstning?",
+        "approve_success": "Ansökan har godkänts! Röstning har skapats: {vote_id}",
+        "reject_success": "Begäran har avvisats med framgång.",
+        "approve_error": "Försöket att godkänna begäran misslyckades.",
+        "reject_error": "Försöket att avvisa begäran misslyckades.",
+        "load_error": "Fel: {error}",
+        "no_requests": "“Ingen förfrågningar hittades.”",
+        "load_stats_error": "Försöket att ladda in statistikken misslyckades."
+      }
     },
     "discord_votes_history": {
       "title": "“Röstringshistorik”",

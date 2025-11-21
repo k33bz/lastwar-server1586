@@ -1059,6 +1059,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <script>
         // Token expiration countdown
         const tokenExp = <?php echo isset($user->exp) ? $user->exp : 'null'; ?>;
+
+        // Set global SESSION_EXPIRY for session monitoring (in scripts.js)
+        window.SESSION_EXPIRY = tokenExp;
         
         function updateTokenCountdown() {
             const countdownEl = document.getElementById('token-countdown');

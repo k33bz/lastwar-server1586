@@ -104,22 +104,23 @@ switch ($action) {
         exit;
 
     case 'get_user_info':
-        // Get user info for tooltip display
-        $email = $_GET['email'] ?? '';
+        // Get user info for tooltip display (accepts UID or email)
+        $identifier = $_GET['email'] ?? ''; // Can be UID or email
 
-        if (empty($email)) {
-            echo json_encode(['success' => false, 'error' => 'Email required']);
+        if (empty($identifier)) {
+            echo json_encode(['success' => false, 'error' => 'User identifier required']);
             break;
         }
 
         require_once __DIR__ . '/json_helpers.php';
-        $user_data = get_user_by_email($email);
+        $user_data = get_user_by_email($identifier); // Function supports both UID and email
 
         if ($user_data) {
             echo json_encode([
                 'success' => true,
                 'user_info' => [
-                    'email' => $email,
+                    'email' => $user_data['email'] ?? $identifier,
+                    'uid' => $user_data['uid'] ?? null,
                     'roles' => $user_data['roles'] ?? [],
                     'alliances' => $user_data['alliances'] ?? [],
                     'in_game_name' => $user_data['in_game_name'] ?? null

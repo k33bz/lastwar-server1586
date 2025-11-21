@@ -178,7 +178,47 @@
       "title": "« Approver les votes »",
       "nav_title": "« Votes d’approbation »",
       "description": "Examiner et approuver les propositions de votes.",
-      "description_full": "Examiner et approuver les propositions de vote soumises par les membres du conseil."
+      "description_full": "Examiner et approuver les propositions de vote soumises par les membres du conseil.",
+      "stats": {
+        "pending_requests": "Demandes en attente",
+        "active_votes": "« Votes Actifs »",
+        "total_requests": "Demandes totales"
+      },
+      "section_title": "Demandes de vote",
+      "filters": {
+        "all": "All",
+        "pending": "En attente.",
+        "approved": "Approuvé.",
+        "rejected": "Rejeté."
+      },
+      "request_card": {
+        "submitted": "Soumis.",
+        "ago": "ago",
+        "hour": "heure",
+        "hours": "heures",
+        "auto_approve_warning": "Approbation automatique dans {heures} {unité} si le contenu n’est pas revu.",
+        "approved_by": "Approuvé par…",
+        "rejected_by": "Rejeté par…",
+        "vote_id": "« Identifiant du vote »"
+      },
+      "buttons": {
+        "approve_create": "« Approuver et créer le vote »"
+      },
+      "modal": {
+        "reject_title": "« Rejeter la demande de vote »",
+        "reason_label": "Motif du rejet (optionnel)",
+        "reason_placeholder": "Expliquez pourquoi cette demande est rejetée…"
+      },
+      "messages": {
+        "confirm_approve": "Êtes-vous sûr de vouloir approuver cette demande et lancer le processus de vote ?",
+        "approve_success": "La demande a été approuvée ! Le vote correspondant a été créé : {vote_id}",
+        "reject_success": "La demande a été rejetée avec succès.",
+        "approve_error": "« Échec à l’approbation de la demande. »",
+        "reject_error": "« Échec à la réjection de la demande. »",
+        "load_error": "Erreur : {error}",
+        "no_requests": "Aucune demande n’a été trouvée.",
+        "load_stats_error": "Échec à la chargement des statistiques."
+      }
     },
     "discord_votes_history": {
       "title": "Historique des votes",

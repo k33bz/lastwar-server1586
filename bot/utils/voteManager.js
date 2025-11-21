@@ -3,9 +3,9 @@
  * Handles vote creation, publishing, and finalization
  */
 
-const { saveVote, updateVote } = require('./dataAccess');
+const { saveVote, updateVote, getVote } = require('./dataAccess');
 const { getCurrentCouncilMembers, countVotes, determineOutcome, allVotesSubmitted } = require('./councilUtils');
-const { createVoteHash, addHashChainEvent } = require('./voteIntegrity');
+const { createVoteHash, addHashChainEvent, createWebhookSignature } = require('./voteIntegrity');
 const { sendToWebsite } = require('./webhookClient');
 
 /**
@@ -221,47 +221,74 @@ async function notifyVoters(vote, client) {
 }
 
 /**
- * Record a vote submission
+ * Record a vote submission via unified API
  */
 async function recordVoteSubmission(vote, voterInfo, discordUser, choice) {
   const now = new Date().toISOString();
 
-  // Create submission record
-  const submission = {
-    alliance_tag: voterInfo.alliance_tag,
-    voter_discord_id: discordUser.id,
-    voter_username: discordUser.username,
+  // Prepare API payload
+  const payload = {
+    vote_id: vote.vote_id,
     vote_choice: choice,
-    submitted_at: now,
-    vote_sequence: vote.submissions.length + 1
+    submission_method: 'discord',
+    discord_id: discordUser.id,
+    username: discordUser.username,
+    alliance_tag: voterInfo.alliance_tag,
+    user_uid: null, // Bot doesn't have UID, API can look it up if needed
+    user_email: null // Bot doesn't have email, API can look it up if needed
   };
 
-  // Add to submissions
-  vote.submissions.push(submission);
+  const payloadString = JSON.stringify(payload);
+  const signature = createWebhookSignature(payloadString);
 
-  // Update voter status
-  const voterIndex = vote.council_snapshot.voter_details.findIndex(
-    v => v.alliance_tag === voterInfo.alliance_tag
-  );
+  // Call unified submission API
+  const apiUrl = `${process.env.WEBSITE_URL}/admin/discord_vote_submit_api.php?action=submit_vote`;
 
-  if (voterIndex >= 0) {
-    vote.council_snapshot.voter_details[voterIndex].vote_submitted = true;
-    vote.council_snapshot.voter_details[voterIndex].submission_time = now;
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Bot-Signature': signature
+      },
+      body: payloadString
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: response.statusText }));
+      throw new Error(`API Error: ${errorData.error || response.statusText}`);
+    }
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.error || 'Unknown API error');
+    }
+
+    console.log(`[VOTE] Recorded ${choice} vote from ${voterInfo.alliance_tag} (${discordUser.username}) on vote ${vote.vote_id} via API`);
+
+    // Reload vote from file to get updated data
+    const updatedVote = await getVote(vote.vote_id);
+
+    // Update local vote object reference
+    Object.assign(vote, updatedVote);
+
+    // Add to hash chain (integrity tracking)
+    addHashChainEvent(vote, `vote_submitted_${voterInfo.alliance_tag}`, {
+      alliance: voterInfo.alliance_tag,
+      choice: choice,
+      timestamp: now
+    });
+
+    // Save vote with hash chain update
+    await updateVote(vote.vote_id, vote);
+
+    return result.submission;
+
+  } catch (error) {
+    console.error(`[ERROR] Failed to record vote via API:`, error.message);
+    throw error;
   }
-
-  // Add to hash chain
-  addHashChainEvent(vote, `vote_submitted_${voterInfo.alliance_tag}`, {
-    alliance: voterInfo.alliance_tag,
-    choice: choice,
-    timestamp: now
-  });
-
-  // Save updated vote
-  await updateVote(vote.vote_id, vote);
-
-  console.log(`[VOTE] Recorded ${choice} vote from ${voterInfo.alliance_tag} (${discordUser.username}) on vote ${vote.vote_id}`);
-
-  return submission;
 }
 
 /**

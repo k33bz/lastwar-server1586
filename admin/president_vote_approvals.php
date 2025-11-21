@@ -1,12 +1,14 @@
 <?php
 /**
  * President Vote Approvals
- * Version: 1.0.0
+ * Version: 1.1.0
  *
  * Allows president and admins to review and approve/reject vote requests
  * submitted by council members
  *
  * Access: President and Admin roles only
+ * Changelog:
+ *   1.1.0 - Added i18n support with translation consolidation pattern
  */
 
 require_once 'jwt.php';
@@ -111,32 +113,32 @@ include 'includes/header.php';
     <div class="stats-row">
         <div class="stat-card">
             <div class="stat-number" id="pendingCount">-</div>
-            <div class="stat-label">Pending Requests</div>
+            <div class="stat-label"><?php echo __('pages.president_vote_approvals.stats.pending_requests'); ?></div>
         </div>
         <div class="stat-card">
             <div class="stat-number" id="activeVotesCount">-</div>
-            <div class="stat-label">Active Votes</div>
+            <div class="stat-label"><?php echo __('pages.president_vote_approvals.stats.active_votes'); ?></div>
         </div>
         <div class="stat-card">
             <div class="stat-number" id="totalRequestsCount">-</div>
-            <div class="stat-label">Total Requests</div>
+            <div class="stat-label"><?php echo __('pages.president_vote_approvals.stats.total_requests'); ?></div>
         </div>
     </div>
 
     <!-- Requests Section -->
     <div class="requests-section">
         <div class="section-header">
-            <h2>Vote Requests</h2>
+            <h2><?php echo __('pages.president_vote_approvals.section_title'); ?></h2>
             <div class="filter-buttons">
-                <button class="filter-btn active" onclick="filterRequests('all')">All</button>
-                <button class="filter-btn" onclick="filterRequests('pending')">Pending</button>
-                <button class="filter-btn" onclick="filterRequests('approved')">Approved</button>
-                <button class="filter-btn" onclick="filterRequests('rejected')">Rejected</button>
+                <button class="filter-btn active" onclick="filterRequests('all')"><?php echo __('pages.president_vote_approvals.filters.all'); ?></button>
+                <button class="filter-btn" onclick="filterRequests('pending')"><?php echo __('pages.president_vote_approvals.filters.pending'); ?></button>
+                <button class="filter-btn" onclick="filterRequests('approved')"><?php echo __('pages.president_vote_approvals.filters.approved'); ?></button>
+                <button class="filter-btn" onclick="filterRequests('rejected')"><?php echo __('pages.president_vote_approvals.filters.rejected'); ?></button>
             </div>
         </div>
 
         <div id="requestsGrid" class="requests-grid">
-            <div class="loading">Loading requests...</div>
+            <div class="loading"><?php echo __('common.messages.loading'); ?></div>
         </div>
     </div>
 </div>
@@ -145,25 +147,60 @@ include 'includes/header.php';
 <div id="rejectionModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Reject Vote Request</h3>
+            <h3><?php echo __('pages.president_vote_approvals.modal.reject_title'); ?></h3>
             <button class="modal-close" onclick="closeRejectionModal()">&times;</button>
         </div>
 
         <form id="rejectionForm">
             <div class="form-group">
-                <label for="rejectionReason">Reason for rejection (optional)</label>
-                <textarea id="rejectionReason" name="reason" placeholder="Explain why this request is being rejected..."></textarea>
+                <label for="rejectionReason"><?php echo __('pages.president_vote_approvals.modal.reason_label'); ?></label>
+                <textarea id="rejectionReason" name="reason" placeholder="<?php echo __('pages.president_vote_approvals.modal.reason_placeholder'); ?>"></textarea>
             </div>
 
             <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeRejectionModal()">Cancel</button>
-                <button type="submit" class="btn btn-danger">Reject Request</button>
+                <button type="button" class="btn btn-secondary" onclick="closeRejectionModal()"><?php echo __('common.buttons.cancel'); ?></button>
+                <button type="submit" class="btn btn-danger"><?php echo __('common.buttons.reject'); ?></button>
             </div>
         </form>
     </div>
 </div>
 
 <script>
+// i18n translations for JavaScript
+const i18n = {
+    loading: <?php echo json_encode(__('common.messages.loading')); ?>,
+    noRequests: <?php echo json_encode(__('pages.president_vote_approvals.messages.no_requests')); ?>,
+    loadError: <?php echo json_encode(__('pages.president_vote_approvals.messages.load_error')); ?>,
+    submitted: <?php echo json_encode(__('pages.president_vote_approvals.request_card.submitted')); ?>,
+    ago: <?php echo json_encode(__('pages.president_vote_approvals.request_card.ago')); ?>,
+    hour: <?php echo json_encode(__('pages.president_vote_approvals.request_card.hour')); ?>,
+    hours: <?php echo json_encode(__('pages.president_vote_approvals.request_card.hours')); ?>,
+    autoApproveWarning: <?php echo json_encode(__('pages.president_vote_approvals.request_card.auto_approve_warning')); ?>,
+    approvedBy: <?php echo json_encode(__('pages.president_vote_approvals.request_card.approved_by')); ?>,
+    rejectedBy: <?php echo json_encode(__('pages.president_vote_approvals.request_card.rejected_by')); ?>,
+    voteId: <?php echo json_encode(__('pages.president_vote_approvals.request_card.vote_id')); ?>,
+    requestId: <?php echo json_encode(__('common.labels.request_id')); ?>,
+    category: <?php echo json_encode(__('common.labels.category')); ?>,
+    approveCreate: <?php echo json_encode(__('pages.president_vote_approvals.buttons.approve_create')); ?>,
+    reject: <?php echo json_encode(__('common.buttons.reject')); ?>,
+    confirmApprove: <?php echo json_encode(__('pages.president_vote_approvals.messages.confirm_approve')); ?>,
+    approveSuccess: <?php echo json_encode(__('pages.president_vote_approvals.messages.approve_success')); ?>,
+    approveError: <?php echo json_encode(__('pages.president_vote_approvals.messages.approve_error')); ?>,
+    rejectSuccess: <?php echo json_encode(__('pages.president_vote_approvals.messages.reject_success')); ?>,
+    rejectError: <?php echo json_encode(__('pages.president_vote_approvals.messages.reject_error')); ?>,
+    errorOccurred: <?php echo json_encode(__('common.messages.error_occurred')); ?>,
+    noReason: <?php echo json_encode(__('common.messages.no_reason')); ?>,
+    pending: <?php echo json_encode(__('pages.president_vote_approvals.filters.pending')); ?>,
+    approved: <?php echo json_encode(__('pages.president_vote_approvals.filters.approved')); ?>,
+    rejected: <?php echo json_encode(__('pages.president_vote_approvals.filters.rejected')); ?>,
+    categories: {
+        rule_change: <?php echo json_encode(__('pages.discord_vote_proposals.categories.rule_change')); ?>,
+        alliance_action: <?php echo json_encode(__('pages.discord_vote_proposals.categories.alliance_action')); ?>,
+        server_event: <?php echo json_encode(__('pages.discord_vote_proposals.categories.server_event')); ?>,
+        other: <?php echo json_encode(__('pages.discord_vote_proposals.categories.other')); ?>
+    }
+};
+
 let currentFilter = 'all';
 let allRequests = [];
 let currentRejectRequestId = null;
@@ -192,7 +229,7 @@ async function loadStats() {
 
 async function loadRequests() {
     const container = document.getElementById('requestsGrid');
-    container.innerHTML = '<div class="loading">Loading requests...</div>';
+    container.innerHTML = `<div class="loading">${i18n.loading}</div>`;
 
     try {
         const response = await apiRequest('GET', 'discord_votes_api.php?action=get_requests');
@@ -204,7 +241,7 @@ async function loadRequests() {
         allRequests = response.requests || [];
         renderRequests();
     } catch (error) {
-        container.innerHTML = `<div class="empty-state" style="color: #dc3545;">Error: ${error.message}</div>`;
+        container.innerHTML = `<div class="empty-state" style="color: #dc3545;">${i18n.loadError.replace('{error}', error.message)}</div>`;
     }
 }
 
@@ -217,13 +254,15 @@ function renderRequests() {
     }
 
     if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty-state">No requests found</div>';
+        container.innerHTML = `<div class="empty-state">${i18n.noRequests}</div>`;
         return;
     }
 
     container.innerHTML = filtered.map(req => {
         const age = Math.floor((Date.now() - new Date(req.created_at).getTime()) / (1000 * 60 * 60));
         const autoApproveIn = Math.max(0, 12 - age);
+        const hourUnit = autoApproveIn === 1 ? i18n.hour : i18n.hours;
+        const statusLabel = i18n[req.status] || req.status.toUpperCase();
 
         return `
             <div class="request-card ${req.status}">
@@ -231,7 +270,7 @@ function renderRequests() {
                     <div style="flex: 1;">
                         <h3 class="request-title">${escapeHtml(req.vote_details.title)}</h3>
                         <div class="request-meta">
-                            Submitted: ${formatDate(req.created_at)} (${age}h ago)
+                            ${i18n.submitted}: ${formatDate(req.created_at)} (${age}h ${i18n.ago})
                             <span class="category-badge">${formatCategory(req.vote_details.category)}</span>
                         </div>
                         <div class="request-submitter">
@@ -239,41 +278,41 @@ function renderRequests() {
                             ${req.requested_by.alliance ? ` - ${req.requested_by.alliance}` : ''}
                         </div>
                     </div>
-                    <span class="status-badge ${req.status}">${req.status.toUpperCase()}</span>
+                    <span class="status-badge ${req.status}">${statusLabel}</span>
                 </div>
 
                 <div class="request-description">${escapeHtml(req.vote_details.description)}</div>
 
                 ${req.status === 'pending' ? `
                     <div class="auto-approve-warning">
-                        ⏰ Auto-approval in ${autoApproveIn} hour(s) if not reviewed
+                        ⏰ ${i18n.autoApproveWarning.replace('{hours}', autoApproveIn).replace('{unit}', hourUnit)}
                     </div>
                     <div class="request-actions">
                         <button class="btn btn-success" onclick="approveRequest('${req.request_id}')">
-                            ✓ Approve & Create Vote
+                            ✓ ${i18n.approveCreate}
                         </button>
                         <button class="btn btn-danger" onclick="openRejectionModal('${req.request_id}')">
-                            ✗ Reject
+                            ✗ ${i18n.reject}
                         </button>
                     </div>
                 ` : req.status === 'approved' ? `
                     <div class="request-actions">
                         <span style="color: #28a745; font-weight: 600;">
-                            ✓ Approved by ${escapeHtml(req.president_response?.approver_name || 'Unknown')}
-                            ${req.created_vote_id ? `- Vote ID: ${req.created_vote_id}` : ''}
+                            ✓ ${i18n.approvedBy} ${escapeHtml(req.president_response?.approver_name || 'Unknown')}
+                            ${req.created_vote_id ? `- ${i18n.voteId}: ${req.created_vote_id}` : ''}
                         </span>
                     </div>
                 ` : `
                     <div class="request-actions">
                         <span style="color: #dc3545; font-weight: 600;">
-                            ✗ Rejected by ${escapeHtml(req.president_response?.rejector_name || 'Unknown')}
+                            ✗ ${i18n.rejectedBy} ${escapeHtml(req.president_response?.rejector_name || 'Unknown')}
                             ${req.president_response?.reason ? `: "${escapeHtml(req.president_response.reason)}"` : ''}
                         </span>
                     </div>
                 `}
 
                 <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e9ecef; font-size: 0.875rem; color: #6c757d;">
-                    <strong>Request ID:</strong> ${req.request_id}
+                    <strong>${i18n.requestId}:</strong> ${req.request_id}
                 </div>
             </div>
         `;
@@ -291,7 +330,7 @@ function filterRequests(status) {
 }
 
 async function approveRequest(requestId) {
-    if (!confirm('Are you sure you want to approve this request and create the vote?')) {
+    if (!confirm(i18n.confirmApprove)) {
         return;
     }
 
@@ -301,14 +340,14 @@ async function approveRequest(requestId) {
         });
 
         if (response.success) {
-            showSuccess(`Request approved! Vote created: ${response.vote_id}`);
+            showSuccess(i18n.approveSuccess.replace('{vote_id}', response.vote_id));
             loadStats();
             loadRequests();
         } else {
-            showError(response.error || 'Failed to approve request');
+            showError(response.error || i18n.approveError);
         }
     } catch (error) {
-        showError(error.message || 'An error occurred');
+        showError(error.message || i18n.errorOccurred);
     }
 }
 
@@ -331,19 +370,19 @@ document.getElementById('rejectionForm').addEventListener('submit', async (e) =>
     try {
         const response = await apiRequest('POST', 'discord_votes_api.php?action=reject_request', {
             request_id: currentRejectRequestId,
-            reason: reason || 'No reason provided'
+            reason: reason || i18n.noReason
         });
 
         if (response.success) {
-            showSuccess('Request rejected successfully');
+            showSuccess(i18n.rejectSuccess);
             closeRejectionModal();
             loadStats();
             loadRequests();
         } else {
-            showError(response.error || 'Failed to reject request');
+            showError(response.error || i18n.rejectError);
         }
     } catch (error) {
-        showError(error.message || 'An error occurred');
+        showError(error.message || i18n.errorOccurred);
     }
 });
 
@@ -392,7 +431,7 @@ function formatDate(dateString) {
 }
 
 function formatCategory(category) {
-    return category.replace('_', ' ').toUpperCase();
+    return i18n.categories[category] || category.replace('_', ' ').toUpperCase();
 }
 
 // Close modal on backdrop click

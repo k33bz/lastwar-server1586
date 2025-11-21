@@ -983,11 +983,7 @@ include 'includes/header.php';
             const savedTimezone = localStorage.getItem('audit-log-timezone') || 'local';
             const toggle = document.getElementById('timezone-toggle');
             toggle.checked = savedTimezone === 'local';
-            
-            // Update timezone label to show current timezone info
-            const localOption = toggle.querySelector('option[value="local"]');
-            localOption.textContent = `🌍 Local Time (${getTimezoneInfo()})`;
-            
+
             // Apply initial timezone setting
             toggleTimezone();
         });

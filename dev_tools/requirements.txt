@@ -1,0 +1,14 @@
+# Server 1586 Development Tools Dependencies
+# Optional dependencies for enhanced functionality
+
+# System monitoring and performance metrics
+psutil>=5.8.0
+
+# HTTP health checks and server validation
+requests>=2.25.0
+
+# Enhanced file system monitoring (future feature)
+# watchdog>=2.1.0
+
+# Git integration (future feature)
+# GitPython>=3.1.0

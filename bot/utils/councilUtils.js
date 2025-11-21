@@ -160,6 +160,82 @@ function determineOutcome(counts, totalEligible) {
 }
 
 /**
+ * Check if a Discord user can propose votes (submit vote requests)
+ * R5 and R4 (with canVote) can propose. APE cannot propose.
+ */
+async function canProposeVote(discordId) {
+  try {
+    const adminUsers = await getAdminUsers();
+    const alliances = await getAlliances();
+
+    // Find user in admin users
+    let user = null;
+    if (adminUsers && adminUsers.users) {
+      user = adminUsers.users.find(u => u.discord_id === discordId);
+    }
+
+    if (!user) {
+      // Not in admin users = cannot propose
+      return { canPropose: false, reason: 'You must be a council member to propose votes.' };
+    }
+
+    // Check roles
+    const roles = user.roles || [];
+
+    // Admin/President should create votes directly, not requests
+    if (roles.includes('admin') || roles.includes('president')) {
+      return {
+        canPropose: false,
+        reason: 'As an admin/president, you can create votes directly using `/vote create`.'
+      };
+    }
+
+    // APE cannot propose
+    if (roles.includes('ape')) {
+      return { canPropose: false, reason: 'APE role cannot propose votes.' };
+    }
+
+    // R5 can propose
+    if (roles.includes('r5')) {
+      return { canPropose: true };
+    }
+
+    // R4 needs canVote permission
+    if (roles.includes('r4')) {
+      // Find this user's alliance and check canVote
+      for (const alliance of alliances) {
+        if (alliance.r4s && Array.isArray(alliance.r4s)) {
+          const r4 = alliance.r4s.find(r => r.discordId === discordId);
+          if (r4) {
+            if (r4.canVote === true) {
+              return { canPropose: true };
+            } else {
+              return {
+                canPropose: false,
+                reason: 'R4 users must have voting rights to propose votes.'
+              };
+            }
+          }
+        }
+      }
+
+      // R4 user found but not in any alliance's R4 list
+      return {
+        canPropose: false,
+        reason: 'R4 users must have voting rights to propose votes.'
+      };
+    }
+
+    // No valid role
+    return { canPropose: false, reason: 'You must be a council member (R5 or R4 with voting rights) to propose votes.' };
+
+  } catch (error) {
+    console.error('[ERROR] Failed to check vote proposal permission:', error);
+    return { canPropose: false, reason: 'Error checking permissions.' };
+  }
+}
+
+/**
  * Get the current president's Discord ID
  * First checks admin users with "president" role, then falls back to council.json + alliances
  */
@@ -219,5 +295,6 @@ module.exports = {
   allVotesSubmitted,
   countVotes,
   determineOutcome,
-  getPresidentDiscordId
+  getPresidentDiscordId,
+  canProposeVote
 };

@@ -45,9 +45,17 @@ Official website for Server 1586 alliance management, council voting, and server
 - **JWT Authentication**: Passwordless magic link login system
 - **UID-Based Identity System (v4.0.0)**: Stable user IDs with email change history
 - **Role-Based Access Control**: Admin, President, Council Member roles
-- **Multi-Language Support**: Full i18n with 5 languages (EN, ES, PT, DE, KO)
+- **Multi-Language Support**: Full i18n with 15 languages (EN, ES, PT, DE, KO, FR, IT, JA, ZH, RU, AR, NL, PL, TR, SV, DA)
 - **Discord Integration**: Vote management, announcements, channel configuration
 - **Alliance Management**: Power updates, officer management (UID-linked), tags, rotation schedule
+
+### Translation Tools (Enterprise i18n System)
+- **AI-Powered Translation**: LM Studio integration with quality validation
+- **Namespace Filtering**: Translate specific sections for faster development
+- **Resume Capability**: Checkpoint system for interrupted translations
+- **Quality Assurance**: Automatic retry logic with comprehensive validation
+- **15 Locale Support**: Professional internationalization workflow
+- **Configuration Management**: Environment-specific settings (dev/prod)
 - **Council Voting**: Discord-integrated voting system with web management
 - **Security Monitoring**: Audit logging, rate limiting, session management
 - **User Management**: Profile editing, email changes with history, language preferences, role assignment
@@ -83,30 +91,31 @@ Official website for Server 1586 alliance management, council voting, and server
 ```
 Server1586-clean/
 ├── client/                    # React frontend application
-│   ├── src/
+│   ├── src/                   # Source code
 │   │   ├── components/        # React components
-│   │   │   ├── AllianceGrid.tsx
-│   │   │   ├── AlliancePodium.tsx
-│   │   │   ├── BackToTop.tsx
-│   │   │   ├── CouncilMembers.tsx
-│   │   │   ├── DiscordBanner.tsx
-│   │   │   ├── FloatingThemeToggle.tsx
-│   │   │   ├── Header.tsx
-│   │   │   ├── PowerTrends.tsx
-│   │   │   ├── ServerRules.tsx
-│   │   │   └── Signatories.tsx
 │   │   ├── hooks/             # Custom React hooks
-│   │   │   └── useApi.ts      # Data fetching hook
-│   │   ├── styles/            # Styling
-│   │   │   └── custom-theme.css
-│   │   ├── HomePage.tsx       # Main page component
-│   │   ├── main.tsx           # React entry point
-│   │   └── types.ts           # TypeScript type definitions
+│   │   └── styles/            # Styling
 │   ├── dist/                  # Build output
 │   ├── public/                # Static assets
 │   ├── package.json           # npm dependencies
-│   ├── tsconfig.json          # TypeScript configuration
-│   └── vite.config.ts         # Vite configuration
+│   └── README.md              # → Client development guide
+│
+├── admin/                     # PHP Admin Panel (separate system)
+│   ├── i18n/                  # Admin panel translations (15 languages)
+│   ├── includes/              # Shared PHP modules
+│   ├── vendor/                # Composer dependencies
+│   ├── [50+ admin pages]      # Various admin functionality
+│   └── README.md              # → Admin panel overview
+│
+├── api/                       # Public REST API endpoints
+│   ├── council/               # Council-specific endpoints
+│   └── [API endpoints]        # Alliance, rules, power data APIs
+│
+├── bot/                       # Discord bot integration
+│   ├── commands/              # Discord slash commands
+│   ├── events/                # Discord event handlers
+│   ├── utils/                 # Bot utilities
+│   └── README.md              # → Discord bot setup guide
 │
 ├── data/                      # JSON/CSV data files
 │   ├── alliances.json         # Alliance data (power-based ranking)
@@ -119,39 +128,60 @@ Server1586-clean/
 │   └── version.json           # Site version info
 │
 ├── scripts/                   # Python automation scripts
+│   ├── deploy-ftp-*.py        # Deployment scripts
 │   ├── update_rotation_schedule.py
-│   └── update_niki.py
+│   └── README.md              # → Scripts documentation
 │
-├── docs/                      # Documentation
-│   ├── HEROUI_MIGRATION.md
-│   └── MIGRATION_SUMMARY.md
+├── translation_tools/         # Enterprise i18n translation system
+│   ├── translate_admin_reliable.py  # Main translation script
+│   ├── docs/                  # Translation documentation
+│   │   ├── TRANSLATION_GUIDE.md     # Comprehensive guide
+│   │   └── TRANSLATION_README.md    # Quick reference
+│   ├── configs/               # Configuration examples
+│   └── README.md              # → Translation tools overview
 │
-├── temp/                      # Temporary files (not in git)
+├── dev_tools/                 # Development utilities
+│   ├── dev_server.py          # Development server GUI
+│   ├── dev_server_config.json # GUI configuration
+│   ├── requirements.txt       # Python dependencies
+│   └── README.md              # → Development tools guide
 │
-├── admin/                     # PHP Admin Panel (separate system)
-│   ├── i18n/                  # Admin panel translations
-│   │   ├── en/                # English (source)
-│   │   ├── es/                # Spanish
-│   │   ├── pt/                # Portuguese
-│   │   ├── de/                # German
-│   │   └── ko/                # Korean
-│   ├── includes/              # Shared PHP modules
-│   │   ├── i18n.php           # Translation functions
-│   │   └── help_content/      # Help drawer content
-│   └── [50+ admin pages]      # Various admin functionality
+├── docs/                      # Comprehensive documentation
+│   ├── admin/                 # Admin panel documentation
+│   ├── schemas/               # Data structure documentation
+│   ├── scripts/               # Script documentation
+│   ├── DEPLOYMENT.md          # Deployment guide
+│   ├── MULTI_SERVER_*.md      # Multi-server documentation
+│   └── README.md              # → Documentation index
+│
+├── tests/                     # Test suites
+│   ├── admin/                 # Admin panel tests
+│   └── README.md              # → Testing documentation
+│
+├── temp/                      # Temporary files (gitignored)
+│   └── README.md              # → Temp directory info
 │
 ├── assets/                    # Built static assets
 ├── images/                    # Static images and logos
 ├── index.html                 # Production entry point
-├── dev_server.py              # Development server GUI tool
-├── translate_admin_smart.py   # Admin panel translation script
-├── translate_rules.py         # Client rules translation script
-├── translate_locale.py        # Client locale translation script
-├── .gitignore                 # Git exclusions
 ├── CLAUDE.md                  # Development workflow guide
 ├── DEPLOYMENT.md              # Deployment instructions
 └── README.md                  # This file
 ```
+
+### 📚 Key Documentation Links
+
+| Directory | README | Description |
+|-----------|--------|-------------|
+| **[client/](client/)** | **[README.md](client/README.md)** | React development guide, components, build process |
+| **[admin/](admin/)** | **[README.md](admin/README.md)** | PHP admin panel overview, features, setup |
+| **[bot/](bot/)** | **[README.md](bot/README.md)** | Discord bot setup, commands, deployment |
+| **[scripts/](scripts/)** | **[README.md](scripts/README.md)** | Automation scripts, deployment tools |
+| **[translation_tools/](translation_tools/)** | **[README.md](translation_tools/README.md)** | i18n translation system, AI-powered tools |
+| **[dev_tools/](dev_tools/)** | **[README.md](dev_tools/README.md)** | Development server GUI, local testing |
+| **[docs/](docs/)** | **[README.md](docs/README.md)** | Complete documentation index |
+| **[tests/](tests/)** | **[README.md](tests/README.md)** | Testing framework, test suites |
+| **[temp/](temp/)** | **[README.md](temp/README.md)** | Temporary files, backups, archives |
 
 ---
 
@@ -210,34 +240,37 @@ npm run lint
 For easier local testing, use the development server GUI:
 
 ```bash
+cd dev_tools
 python dev_server.py
 ```
 
 **Features:**
-- Start/stop PHP admin server (port 8000)
-- Start/stop React dev server (port 5173)
-- Build production bundles
-- Preview production builds (port 4173)
-- Live log monitoring for all servers
-- One-click browser launch
-- Clean dist directory
+- Multi-server management (Admin PHP, Client React, Preview Vite, API Node.js)
+- Real-time log monitoring with color-coded output
+- One-click browser launching and server management
+- Production build tools with dist management
+- Performance monitoring and health checks
+- Configuration management with GUI settings
 
-### Translation Scripts
+See **[dev_tools/README.md](dev_tools/README.md)** for complete setup and usage guide.
 
-The project includes automated translation tools for maintaining multi-language support:
+### Translation Tools
+
+The project includes enterprise-grade AI-powered translation tools:
 
 ```bash
-# Translate admin panel UI (EN → ES, PT, DE, KO)
-python translate_admin_smart.py
-
-# Translate client rules (EN → ES, PT, DE, KO)
-python translate_rules.py
-
-# Translate client locales (EN → ES, PT, DE, KO)
-python translate_locale.py
+cd translation_tools
+python translate_admin_reliable.py
 ```
 
-**Note:** Requires LM Studio running on `localhost:1234` with Hunyuan-MT-7B model.
+**Features:**
+- AI-powered translation with LM Studio integration
+- 15 language support (EN, ES, PT, DE, KO, FR, IT, JA, ZH, RU, AR, NL, PL, TR, SV, DA)
+- Quality validation and automatic retry logic
+- Namespace filtering for targeted translations
+- Resume capability for interrupted translations
+
+See **[translation_tools/README.md](translation_tools/README.md)** for complete setup and usage guide.
 
 ---
 
@@ -503,10 +536,20 @@ Example script for updating specific alliance information.
 ## 📚 Documentation
 
 ### Core Documentation
+- **[docs/README.md](docs/README.md)** - Complete documentation index
 - **[CLAUDE.md](CLAUDE.md)** - Development workflow guidelines
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Deployment instructions
+- **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** - Comprehensive deployment guide
+- **[docs/MULTI_SERVER_DEPLOYMENT.md](docs/MULTI_SERVER_DEPLOYMENT.md)** - Multi-server architecture
 - **[docs/HEROUI_MIGRATION.md](docs/HEROUI_MIGRATION.md)** - HeroUI v3 migration guide
-- **[docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md)** - Migration summary
+
+### Component Documentation
+- **[client/README.md](client/README.md)** - React development guide
+- **[admin/README.md](admin/README.md)** - PHP admin panel overview
+- **[bot/README.md](bot/README.md)** - Discord bot setup
+- **[scripts/README.md](scripts/README.md)** - Automation scripts
+- **[translation_tools/README.md](translation_tools/README.md)** - i18n translation system
+- **[dev_tools/README.md](dev_tools/README.md)** - Development utilities
 
 ### Version Information
 

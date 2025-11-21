@@ -178,7 +178,47 @@
       "title": "Approve Votes",
       "nav_title": "Vote Approvals",
       "description": "Review and approve vote proposals",
-      "description_full": "Review and approve vote proposals submitted by council members"
+      "description_full": "Review and approve vote proposals submitted by council members",
+      "stats": {
+        "pending_requests": "Pending Requests",
+        "active_votes": "Active Votes",
+        "total_requests": "Total Requests"
+      },
+      "section_title": "Vote Requests",
+      "filters": {
+        "all": "All",
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      },
+      "request_card": {
+        "submitted": "Submitted",
+        "ago": "ago",
+        "hour": "hour",
+        "hours": "hours",
+        "auto_approve_warning": "Auto-approval in {hours} {unit} if not reviewed",
+        "approved_by": "Approved by",
+        "rejected_by": "Rejected by",
+        "vote_id": "Vote ID"
+      },
+      "buttons": {
+        "approve_create": "Approve & Create Vote"
+      },
+      "modal": {
+        "reject_title": "Reject Vote Request",
+        "reason_label": "Reason for rejection (optional)",
+        "reason_placeholder": "Explain why this request is being rejected..."
+      },
+      "messages": {
+        "confirm_approve": "Are you sure you want to approve this request and create the vote?",
+        "approve_success": "Request approved! Vote created: {vote_id}",
+        "reject_success": "Request rejected successfully",
+        "approve_error": "Failed to approve request",
+        "reject_error": "Failed to reject request",
+        "load_error": "Error: {error}",
+        "no_requests": "No requests found",
+        "load_stats_error": "Failed to load stats"
+      }
     },
     "discord_votes_history": {
       "title": "Vote History",
