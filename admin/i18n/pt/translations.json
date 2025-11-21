@@ -1,64 +1,64 @@
 {
   "help": {
     "president_approvals": {
-      "title": "Ajuda para a Aprovação da Votação do Presidente",
+      "title": "“Ajuda para a Aprovação do Voto do Presidente”",
       "sections": {
         "overview": {
-          "title": "Visão Geral",
-          "intro": "Como <strong>Presidente</strong> do servidor, você é responsável por revisar e aprovar as propostas de votação apresentadas pelos membros do conselho. Esta é uma função crucial no sistema de governança do servidor.",
+          "title": "“Visão Geral”",
+          "intro": "Como <strong>Presidente</strong> do servidor, você é responsável por revisar e aprovar as propostas de votação apresentadas pelos membros do conselho. Este é um papel crucial no sistema de governança do servidor.",
           "responsibilities": {
-            "title": "Suas Responsabilidades:",
+            "title": "“Suas Responsabilidades:”",
             "items": [
               "Reveja todas as propostas de votação recebidas.",
-              "Aprovar propostas bem-formuladas e legítimas.\n\nManter inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+              "“Aprovar propostas bem estruturadas e legítimas.”",
               "Rejeite propostas que sejam pouco claras, inapropriadas ou que não exijam uma votação.",
               "Forneça um feedback claro ao rejeitar propostas.",
               "Aja de forma oportuna (dentro de 12 horas, quando possível)."
             ]
           },
-          "auto_approval_note": "Rede de Segurança para Aprovação Automática: Se você não revisar uma proposta dentro de 12 horas, ela será automaticamente aprovada e um voto será criado. Isso evita congestionamentos, mas significa que você deve verificar esta página regularmente."
+          "auto_approval_note": "“Rede de Segurança para Aprovação Automática”: Se você não revisar uma proposta dentro de 12 horas, ela será automaticamente aprovada e um voto será criado. Isso evita congestionamentos no processo de aprovação, mas significa que você deve verificar esta página com frequência."
         },
         "proposal_table": {
-          "title": "Compreendendo a Tabela de Propostas",
-          "intro": "A tabela exibe todas as propostas de votação pendentes que requerem a sua revisão:",
+          "title": "“Compreender a Tabela de Propostas”",
+          "intro": "A tabela exibe todas as propostas de votação em pendência que requerem a sua revisão.",
           "columns": {
-            "submitted_by": "Submetido por: O membro do conselho que criou a proposta (indicado pelo endereço de e-mail).",
-            "title": "Título: O título do voto deve ser claro e conciso.",
-            "description": "Descrição: Explicação detalhada do que está sendo votado; clique para expandir o texto se estiver truncado.",
-            "category": "Categoria: Tipo de voto (Mudança de regra, Disputa de aliança, Decisão sobre território, Planejamento de evento, Outro)",
-            "submitted_at": "Data de Envio: Quando a proposta foi criada.",
-            "time_remaining": "Tempo Restante: Contagem regressiva até à aprovação automática (12 horas a partir da submissão)",
-            "actions": "Ações: Botões “Aprovar” ou “Rejeitar”"
+            "submitted_by": "<strong>Submetido por:</strong> O membro do conselho que criou a proposta (indicado pelo endereço de e-mail).",
+            "title": "<strong>Título:</strong> O título do voto deve ser claro e conciso.",
+            "description": "<strong>Descrição:</strong> Explicação detalhada do que está sendo votado; clique para expandir o texto caso esteja truncado.",
+            "category": "<strong>Categoria:</strong> O tipo de voto (Mudança de Regra, Disputa de Aliança, Decisão sobre Território, Planejamento de Evento, Outro)",
+            "submitted_at": "<strong>Submetido em:</strong> Quando a proposta foi criada",
+            "time_remaining": "<strong>Tempo Restante:</strong> Contagem regressiva até a aprovação automática (12 horas a partir da submissão).",
+            "actions": "<strong>Ações:</strong> Botões “Aprovar” ou “Rejeitar”."
           },
-          "priority_warning": "Revisão Prioritária: As propostas com menos tempo restante devem ser revisadas primeiro. Procure indicadores vermelhos “URGENT” que mostrem que resta menos de 2 horas."
+          "priority_warning": "Revisão Prioritária: As propostas com menos tempo restante devem ser revisadas primeiro. Procure pelos indicadores vermelhos “URGENTE”, que indicam que resta menos de 2 horas para a conclusão do processo."
         },
         "how_to_approve": {
-          "title": "Como Aprovar uma Proposta",
-          "steps_title": "Processo de aprovação passo a passo:",
+          "title": "“Como Aprovar uma Proposta”",
+          "steps_title": "“Processo de aprovação passo a passo:”",
           "steps": [
-            "Leia atentamente: Revise o título, a descrição e a categoria.",
-            "Avaliar a legitimidade: Trata-se de uma decisão a nível do conselho? Está claro sobre o que está a ser votado?",
-            "Considere o momento certo: Agora é um bom momento para realizar esta votação? (Por exemplo, não durante eventos importantes.)",
-            "Clique em “Aprovar”: Se a proposta atender aos padrões estabelecidos.",
-            "Confirmação: Você verá uma mensagem de sucesso.",
-            "Ações automáticas: O voto é criado imediatamente e mensagens privadas (DMs) são enviadas a todos os membros do conselho."
+            "<strong>Leia atentamente:</strong> Revise o título, a descrição e a categoria.",
+            "<strong>Avaliar a legitimidade:</strong> Trata-se de uma decisão a nível de conselho? Está claro sobre o que está a ser votado?",
+            "<strong>Considere o momento certo para realizar a votação:</strong> Agora é um bom momento para essa votação? (por exemplo, não durante eventos importantes.)",
+            "Clique em 'Aprovar': Se a proposta atender aos padrões...",
+            "<strong>Confirmação:</strong> Você verá uma mensagem de sucesso.",
+            "<strong>Ações automáticas:</strong> O voto é criado imediatamente e as mensagens privadas (DMs) são enviadas a todos os membros do conselho."
           ],
           "after_approval": {
-            "title": "O que acontece após a aprovação:\n\nPermanece inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+            "title": "O que acontece após a aprovação?",
             "items": [
-              "O “Vote” foi criado no sistema de bots do Discord.",
-              "Todos os 7 membros do conselho recebem uma mensagem privada (DM) no Discord com detalhes sobre o voto.",
-              "Inicia-se o período de votação de 24 horas.\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+              "O “voto” é criado no sistema de bots do Discord.",
+              "Todos os 7 membros do conselho recebem uma mensagem privada (DM) no Discord com os detalhes da votação.",
+              "“Período de votação de 24 horas começa.”",
               "A proposta foi removida da sua lista de pendências.",
               "O remetente é notificado da aprovação."
             ]
           },
-          "criteria_title": "Critérios de Aprovação:",
+          "criteria_title": "“Critérios de Aprovação:”",
           "criteria": [
-            "✅ Título e descrição claros e específicos",
-            "✅ Decisão legítima a nível do conselho",
-            "✅ Não já coberto por regras/votos existentes.",
-            "✅ A categoria apropriada foi selecionada.",
+            "✅ Título e descrição claros e específicos.",
+            "✅ Decisão legítima a nível de conselho.",
+            "✅ Não já abrangido pelas regras ou votações existentes.",
+            "✅ A categoria adequada foi selecionada.",
             "✅ Horário razoável (não durante eventos ou conflitos importantes)."
           ]
         }
@@ -67,343 +67,387 @@
   },
   "pages": {
     "dashboard": {
-      "title": "Painel de Controle",
-      "description": "Portal de Administração da Aliança",
+      "title": "**Painel de Controle (Dashboard)**",
+      "description": "“Portal de Administração da Aliança”",
       "sections": {
-        "quick_actions": "Ações Rápidas",
-        "alliance_management": "Gestão de Alianças",
-        "governance": "Governança",
-        "discord_integration": "Integração com Discord",
-        "system_admin": "Administração de Sistemas"
+        "quick_actions": "“Ações Rápidas”",
+        "alliance_management": "“Gestão de Alianças”",
+        "governance": "“Governança”",
+        "discord_integration": "“Integração com o Discord”",
+        "system_admin": "**Administração de Sistemas**"
       }
     },
     "alliance_edit": {
-      "title": "Editar Aliança",
-      "nav_title": "Editor:",
-      "description": "Gerenciar informações da aliança e oficiais\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "title": "“Editar Aliança”",
+      "nav_title": "“Editor”",
+      "description": "Gerenciar informações da aliança e dos oficiais."
     },
     "alliances_power": {
-      "title": "Atualizações de Poder\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "nav_title": "Power Editor",
-      "description": "Atualizar os valores de poder da aliança.\n\nManter inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "title": "Atualizações de Poder",
+      "nav_title": "“Power Editor”",
+      "description": "Atualizar os valores de poder da aliança."
     },
     "alliance_tags_manager": {
-      "title": "Gerenciador de Tags de Alianças",
-      "nav_title": "Tag Manager",
-      "description": "Gerenciar a visibilidade da aliança e a ordem de exibição dos elementos."
+      "title": "“Gerenciador de Tags de Alianças”",
+      "nav_title": "“Tag Manager”",
+      "description": "Gerenciar a visibilidade da aliança e a ordem de exibição dos seus membros."
     },
     "user_management": {
       "title": "Gestão de Usuários",
-      "nav_title": "Gerenciar Usuários",
-      "description": "Gerenciar usuários administradores e permissões\n\nManter inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "nav_title": "“Gerenciar Usuários”",
+      "description": "Gerenciar usuários administradores e permissões."
     },
     "user_profile": {
-      "title": "Meu Perfil",
-      "description": "Gerencie as configurações da sua conta e as informações do jogo."
+      "title": "“Meu Perfil”",
+      "description": "Gerencie as configurações da sua conta e as informações dentro do jogo."
     },
     "council_rotation": {
-      "title": "Rotação do Conselho",
-      "nav_title": "Rotação do Conselho",
-      "description": "Gerenciar o cronograma de rotação semanal do conselho."
+      "title": "“Rotação do Conselho”",
+      "nav_title": "“Rotação do Conselho”",
+      "description": "Gerenciar o cronograma de rotação do conselho semanal."
     },
     "discord_announcements": {
-      "title": "Anúncios do Discord\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, administrador, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "nav_title": "Anúncios",
-      "description": "Envie anúncios para os canais do Discord."
+      "title": "“Anúncios do Discord”",
+      "nav_title": "“Anúncios”",
+      "description": "“Envie anúncios para os canais do Discord.”"
     },
     "discord_channels": {
-      "title": "Canais do Discord:\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "nav_title": "Canais\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "description": "Configure as mapeamentos dos canais do Discord."
+      "title": "“Canais do Discord”",
+      "nav_title": "“Canais”",
+      "description": "“Configure as correspondências entre os canais do Discord.”"
     },
     "discord_templates": {
-      "title": "Modelos para Discord",
-      "nav_title": "Modelos de Mensagens",
-      "description": "Gerenciar modelos de mensagens\n\nManter inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "title": "“Modelos do Discord”",
+      "nav_title": "“Modelos de Mensagens”",
+      "description": "“Gerenciar modelos de mensagens”"
     },
     "discord_scheduled": {
-      "title": "Mensagens Agendadas\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "nav_title": "Mensagens Agendadas\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "description": "Gerenciar postagens agendadas no Discord\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "title": "Mensagens Agendadas",
+      "nav_title": "Mensagens Agendadas",
+      "description": "Gerenciar postagens programadas no Discord."
     },
     "discord_recurring": {
-      "title": "Mensagens Recorrentes\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "nav_title": "Mensagens Recorrentes\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+      "title": "Mensagens Recorrentes",
+      "nav_title": "Mensagens Recorrentes",
       "description": "Gerenciar postagens recorrentes no Discord"
     },
     "discord_vote_proposals": {
-      "title": "Propostas do Conselho",
-      "nav_title": "Propostas do Conselho",
-      "description": "Submeter e gerenciar propostas de votação do conselho"
+      "title": "“Propostas do Conselho”",
+      "nav_title": "“Propostas do Conselho”",
+      "description": "Submeter e gerenciar propostas de votação do conselho.",
+      "description_admin": "Envie pedidos de votação ou crie votações diretamente como presidente/administrador.",
+      "description_member": "Submeta as propostas de votação ao presidente para aprovação.",
+      "tabs": {
+        "submit": "“Submeter Proposta”",
+        "my_requests": "“Minhas Solicitações”"
+      },
+      "form": {
+        "heading": "“Submeter Proposta de Voto”",
+        "title_hint": "Seja conciso – no máximo 100 caracteres.",
+        "description_hint": "Forneça detalhes sobre o que os membros do conselho estão a votar."
+      },
+      "help": {
+        "title": "“Como Funcionam as Propostas de Voto”",
+        "intro": "Como membro do conselho, você pode propor votações ao conselho. Sua proposta será enviada ao presidente para aprovação.",
+        "admin_note": "Aos presidentes/administradores, seus votos serão criados imediatamente, sem a necessidade de aprovação.",
+        "auto_approval": "Se o presidente não responder em 12 horas, a sua proposta será automaticamente aprovada."
+      },
+      "categories": {
+        "rule_change": "Mudança de Regra",
+        "alliance_action": "Alliance Action",
+        "server_event": "“Evento do Servidor”",
+        "other": "“Outros”"
+      },
+      "buttons": {
+        "create_vote": "Crie uma votação agora."
+      },
+      "labels": {
+        "request_id": "“ID da Solicitação”"
+      },
+      "messages": {
+        "vote_created": "Voto Criado",
+        "no_reason": "“Sem nenhuma razão fornecida.”",
+        "awaiting_approval": "“Aguardando a aprovação do presidente.”",
+        "empty_state": "Você ainda não enviou nenhuma solicitação de voto.",
+        "submit_success": "“A proposta foi submetida com sucesso!”",
+        "submit_error": "“Falhou na submissão da proposta.”",
+        "load_error": "“Falhou ao carregar os pedidos.”"
+      }
     },
     "president_vote_approvals": {
-      "title": "Aprovar Votos\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "nav_title": "Aprovações de Votação",
-      "description": "Revisar e aprovar as propostas de votação.\n\nMantê-lo inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "title": "Aprovar os Votos",
+      "nav_title": "“Votos de Aprovação”",
+      "description": "Revisar e aprovar as propostas de votação.",
+      "description_full": "Rever e aprovar as propostas de votação apresentadas pelos membros do conselho."
+    },
+    "discord_votes_history": {
+      "title": "“Histórico de Votações”",
+      "nav_title": "“Histórico de Votos”",
+      "description": "Visualizar todo o histórico e os resultados das votações do conselho."
     },
     "votes_management": {
-      "title": "Gestão de Votos",
-      "nav_title": "Histórico de Votos",
-      "description": "Ver e gerenciar todos os votos do conselho."
+      "title": "“Gestão de Votos”",
+      "nav_title": "“Histórico de Votos”",
+      "description": "Visualizar e gerenciar todos os votos do conselho."
     },
     "season2_manager": {
-      "title": "Calendário de Eventos da 2ª Temporada",
-      "nav_title": "Calendário de Eventos",
-      "description": "Gerencie os eventos e o cronograma da 2ª temporada."
+      "title": "“Calendário de Eventos da 2ª Temporada”",
+      "nav_title": "“Calendário de Eventos”",
+      "description": "Gerenciar os eventos da 2ª temporada e agendar todos eles."
     },
     "security_audit": {
-      "title": "Log de Auditoria de Segurança",
-      "nav_title": "Registros de Auditoria",
-      "description": "Revisar eventos de segurança do sistema"
+      "title": "“Log de Auditoria de Segurança”",
+      "nav_title": "“Logs de Auditoria”",
+      "description": "“Revisar os eventos de segurança do sistema”"
     },
     "security_backups": {
-      "title": "Backups do Sistema",
-      "nav_title": "Backups",
-      "description": "Gerenciar backups e restaurações do sistema\n\nManter inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "title": "“Backups do Sistema”",
+      "nav_title": "“Backups”",
+      "description": "Gerenciar cópias de segurança (backups) e restaurações do sistema."
     }
   },
   "common": {
     "buttons": {
-      "approve": "Aprovar.",
-      "reject": "Rejeitar\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "submit": "Submeter.",
-      "cancel": "Cancelar",
-      "save": "Salve. Mantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "delete": "Excluir.\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "close": "Fechar",
-      "edit": "Mantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "view": "Visualizar",
-      "back": "Mantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+      "approve": "“Aprovar”",
+      "reject": "Rejeitar",
+      "submit": "“Submeter”",
+      "cancel": "“Cancelar”",
+      "save": "“Salvar”",
+      "delete": "“Excluir”.",
+      "close": "“Fechar”",
+      "edit": "“Edit”",
+      "view": "“Ver”",
+      "back": "“Voltar”",
       "add": "Add",
-      "remove": "Remover:\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "update": "Atualização:",
-      "create": "Crie:",
-      "send": "Envie.",
-      "export": "Mantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "import": "Import:",
-      "refresh": "Atualizar",
-      "search": "Mantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "filter": "Filtrar:",
-      "reset": "Reiniciar"
+      "remove": "“Remover”",
+      "update": "Atualização",
+      "create": "“Criar”.",
+      "send": "“Send”",
+      "export": "“Exportar”",
+      "import": "“Importar”",
+      "refresh": "“Atualizar”",
+      "search": "“Pesquisar”",
+      "filter": "“Filtro”",
+      "reset": "“Reset”"
     },
     "labels": {
-      "title": "Título:  \nMantém-se inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, administrador, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "description": "Descrição:",
-      "category": "Categoria: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "status": "Status:",
-      "actions": "Ações",
-      "date": "Data",
-      "time": "Tempo",
-      "name": "Nome:  \nMantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "email": "E-mail:",
-      "role": "Papel/Funcção:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, administrador, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "roles": "Papéis/Funcções:\n\nManter inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, administrador, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "alliance": "Aliança",
-      "alliances": "Alianças\n\nPermanecem inalteradas: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "power": "Poder",
-      "rank": "Rank",
+      "title": "Título",
+      "description": "“Descrição”",
+      "category": "“Categoria”",
+      "status": "“Status”",
+      "actions": "“Ações”",
+      "date": "“Data”.",
+      "time": "“Time”",
+      "name": "“Nome”",
+      "email": "“E-mail”",
+      "role": "“Role”",
+      "roles": "“Rolos”",
+      "alliance": "“Aliança”",
+      "alliances": "“Alianças”",
+      "power": "“Poder”",
+      "rank": "“Rank”",
       "tag": "Tag",
       "created": "Criado.",
-      "updated": "Atualizado:",
-      "created_by": "Criado por:",
-      "updated_by": "Atualizado por:",
-      "discord_id": "ID do Discord:",
-      "in_game_name": "Nome no Jogo:  \nMantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+      "updated": "Atualizado",
+      "created_by": "Criado por",
+      "updated_by": "“Atualizado por”",
+      "discord_id": "“ID do Discord”",
+      "in_game_name": "“Nome no Jogo”",
       "yes": "Yes",
       "no": "No",
       "active": "Ativo",
       "inactive": "Inativo",
-      "pending": "Pendente…",
-      "approved": "Aprovado.",
-      "rejected": "Rejeitado.",
-      "visible": "Visível",
-      "hidden": "O texto “Hidden” não contém informações que possam ser traduzidas, uma vez que é um termo genérico ou uma sequência de caracteres sem significado claro em português. Se você tiver outro texto que precise ser traduzido, por favor, forneça-o!"
+      "pending": "“Em espera”",
+      "approved": "“Aprovado.”",
+      "rejected": "Rejeitado",
+      "visible": "“Visível”",
+      "hidden": "“Escondido”"
     },
     "alliance": {
-      "r5": "R5 (Líder)  \nMantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "r4": "R4 (Oficial)  \nMantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+      "r5": "R5 (Líder)",
+      "r4": "R4 (Oficial)",
       "ape": "APE (Power Editor)",
-      "member_count": "Número de Membros",
-      "power_value": "Power Value",
-      "alliance_name": "Nome da Aliança:  \nMantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "alliance_tag": "Tag da Aliança:",
-      "r5_name": "Nome R5: Mantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "r5_discord_id": "ID do Discord de R5:",
-      "add_r4": "Adicione R4.",
-      "remove_r4": "Remova R4.",
-      "rules_signed": "Regras Assinadas",
-      "can_vote": "Pode votar.",
-      "role_title": "Função/Título:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, administrador, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "member_count": "“Número de Membros”",
+      "power_value": "“Valor de Potência”",
+      "alliance_name": "“Nome da Aliança”",
+      "alliance_tag": "“Tag de Aliança”",
+      "r5_name": "“Nome do R5”",
+      "r5_discord_id": "“ID do Discord no R5”",
+      "add_r4": "Adicione o R4.",
+      "remove_r4": "“Remova o R4.”",
+      "rules_signed": "“Regras Assinadas”",
+      "can_vote": "“Pode votar.”",
+      "role_title": "“Função/Título”"
     },
     "discord": {
-      "channel": "Canal",
-      "channels": "Canais\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "template": "Template",
-      "templates": "Templates",
-      "message": "Mensagem:\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "announcement": "Anúncio",
-      "scheduled": "Agendado",
-      "channel_id": "ID do Canal",
-      "channel_name": "Nome do Canal:",
+      "channel": "“Channel”",
+      "channels": "“Canais”",
+      "template": "“Template”",
+      "templates": "“Templates”",
+      "message": "Mensagem",
+      "announcement": "“Anúncio”",
+      "scheduled": "“Agendado”",
+      "channel_id": "“ID do Canal”",
+      "channel_name": "“Nome do Canal”",
       "channel_type": "Tipo de Canal",
-      "message_content": "Mensagem Conteúdo:\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "send_time": "Horário de Envio",
-      "recurring": "Recorrente",
-      "one_time": "One-Time"
+      "message_content": "“Conteúdo da Mensagem”",
+      "send_time": "“Send Time”",
+      "recurring": "“Recurrente”",
+      "one_time": "“Único” (ou “De uma única vez”)."
     },
     "votes": {
-      "vote": "Vote",
-      "votes": "Votos",
-      "proposal": "Proposta",
-      "proposals": "Propostas",
-      "vote_title": "Título do Voto:",
-      "vote_description": "Descrição da Votação:",
-      "submitted_by": "Submetido por:",
-      "submitted_at": "Submetido em:",
-      "deadline": "Prazo Final:",
-      "time_remaining": "Tempo Restante",
+      "vote": "“Vote.”",
+      "votes": "“Votos”",
+      "proposal": "“Proposta”",
+      "proposals": "“Propostas”",
+      "vote_title": "Título da Votação",
+      "vote_description": "“Descrição da Vota”",
+      "submitted_by": "“Submetido por”",
+      "submitted_at": "“Submetido em…”",
+      "deadline": "“Prazo final”",
+      "time_remaining": "“Tempo Restante”",
       "vote_yes": "Yes",
       "vote_no": "No",
-      "vote_abstain": "Abster-se.",
-      "results": "Resultados",
-      "passed": "Aprovado.",
-      "failed": "Falhou.",
-      "in_progress": "Em andamento…"
+      "vote_abstain": "“Abster-se”.",
+      "results": "“Resultados”",
+      "passed": "“Passou.”",
+      "failed": "“Falhou.”",
+      "in_progress": "“Em andamento”"
     },
     "messages": {
-      "success": "Sucesso!",
+      "success": "“Sucesso!”",
       "error": "Ocorreu um erro.",
-      "loading": "Carregando…",
-      "no_data": "Não há dados disponíveis.",
-      "confirm_action": "Você tem certeza?",
+      "loading": "“Carregando…”",
+      "no_data": "“Não há dados disponíveis.”",
+      "confirm_action": "“Você tem certeza?”",
       "saved": "As alterações foram salvas com sucesso."
     },
     "navigation": {
-      "home": "Início",
-      "dashboard": "Painel de Controle",
-      "alliances": "Alianças\n\nPermanecem inalteradas: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "votes": "Votos",
-      "governance": "Governança",
-      "settings": "Configurações",
-      "logout": "Desconectar",
+      "home": "“Página Inicial”",
+      "dashboard": "**Painel de Controle (Dashboard)**",
+      "alliances": "“Alianças”",
+      "votes": "“Votos”",
+      "governance": "“Governança”",
+      "settings": "“Configurações”",
+      "logout": "“Logout”",
       "server_management": "Gestão de Servidores",
       "discord": "Discord",
-      "seasons": "Estações (Seasons):  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "users": "Usuários",
-      "security": "Segurança",
+      "seasons": "“Seasons”",
+      "users": "“Usuários”",
+      "security": "“Segurança”",
       "system": "Sistema"
     },
-    "welcome_back": "Bem-vindo de volta, {{name}}."
+    "welcome_back": "Bem-vindo de volta, {{nome}}!"
   },
   "seasons": {
-    "coming_soon": "Em breve…",
+    "coming_soon": "“Em breve…”",
     "season1": {
-      "title": "Temporada 1",
-      "nav_title": "Temporada 1",
+      "title": "“Temporada 1”",
+      "nav_title": "“Temporada 1”",
       "description": "Temporada de Inverno – Concluída",
       "status": "Concluído.",
-      "date_label": "Datas das Temporadas",
+      "date_label": "“Datas da Temporada”",
       "dates": "Dezembro de 2024 – Janeiro de 2025"
     },
     "season2": {
-      "title": "Calendário de Eventos da 2ª Temporada",
-      "nav_title": "Temporada 2",
-      "description": "Gestão de Eventos da Estação da Primavera"
+      "title": "“Calendário de Eventos da 2ª Temporada”",
+      "nav_title": "“Temporada 2”",
+      "description": "“Gestão de Eventos da Estação da Primavera”"
     },
     "season3": {
-      "title": "Temporada 3",
-      "nav_title": "Temporada 3",
-      "description": "Temporada de Verão – Em Breve\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "placeholder_message": "O gerenciamento de eventos da 3ª temporada estará disponível em breve.\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "title": "“Temporada 3”",
+      "nav_title": "“Temporada 3”",
+      "description": "Temporada de Verão – Em Breve",
+      "placeholder_message": "O gerenciamento de eventos da Terceira Temporada estará disponível em breve."
     },
     "season4": {
-      "title": "Temporada 4",
-      "nav_title": "Temporada 4",
-      "description": "Temporada de Outono – Em Breve\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "placeholder_message": "O gerenciamento de eventos da 4ª temporada estará disponível em breve.\n\nAs configurações permanecem inalteradas: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "title": "“Temporada 4”",
+      "nav_title": "“Temporada 4”",
+      "description": "Temporada de Outono – Em Breve",
+      "placeholder_message": "O gerenciamento de eventos da 4ª temporada estará disponível em breve."
     },
     "season5": {
-      "title": "Temporada 5",
-      "nav_title": "Temporada 5",
-      "description": "Temporada de Inverno – Em Breve\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "placeholder_message": "O gerenciamento de eventos da 5ª temporada estará disponível em breve.\n\nAs configurações permanecem inalteradas: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "title": "“Temporada 5”",
+      "nav_title": "“Temporada 5”",
+      "description": "Temporada de Inverno – Em Breve",
+      "placeholder_message": "O gerenciamento de eventos da 5ª temporada estará disponível em breve."
     }
   },
   "notifications": {
     "title": "Notificações",
     "aria_label": "Notificações",
-    "mark_all_read": "Marque tudo como “lido”.",
-    "loading": "Notificações de carregamento em andamento…",
-    "view_all": "Ver todas as notificações"
+    "mark_all_read": "“Marcar tudo como lido”",
+    "loading": "“Notificações de carregamento em andamento…”",
+    "view_all": "“Ver todas as notificações”"
   },
   "roles": {
-    "admin": "Admin",
-    "president": "Presidente",
+    "admin": "“Admin”",
+    "president": "“Presidente”",
     "r5": "R5",
     "r4": "R4",
     "ape": "APE"
   },
   "users": {
     "magic_links": {
-      "nav_title": "Magic Links"
+      "nav_title": "“Magic Links”"
     },
     "send_login_link": {
-      "nav_title": "Envie o link de login."
+      "nav_title": "“Envie o link de login.”"
     }
   },
   "discord": {
     "rate_limits": {
-      "nav_title": "Limites de Taxa (Rate Limits)\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "nav_title": "“Limites de Taxa (Rate Limits)”"
     },
     "config": {
-      "nav_title": "Configuração"
+      "nav_title": "“Configuração”"
     }
   },
   "security": {
     "monitor": {
-      "nav_title": "Monitor de Segurança"
+      "nav_title": "“Security Monitor”"
     },
     "keys": {
-      "nav_title": "Rotação de Chaves JWT"
+      "nav_title": "“Rotação de Chaves JWT”"
     },
     "mfa": {
-      "nav_title": "MFA (Management in Focus)\n\nManter inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "nav_title": "“Gestão de MFA (Multi-Factor Authentication)”."
     },
     "test_token": {
-      "nav_title": "Generate Test Token"
+      "nav_title": "“Gerar Token de Teste”"
     }
   },
   "system": {
     "migration": {
-      "nav_title": "Migração\n\nManter inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "nav_title": "Migração"
     },
     "metrics": {
-      "nav_title": "Métricas\n\nPermaneçam inalteradas: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "nav_title": "Métricas"
     },
     "notifications": {
       "nav_title": "Notificações"
     },
     "changelog": {
-      "nav_title": "Histórico de Alterações (Changelog):\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "nav_title": "“Changelog”"
     }
   },
   "forms": {
     "validation": {
       "required": "Este campo é obrigatório.",
       "email": "Por favor, insira um endereço de e-mail válido.",
-      "min_length": "Deve conter pelo menos {{length}} caracteres.",
+      "min_length": "Deve ter pelo menos {{length}} caracteres.",
       "max_length": "Deve conter no máximo {{length}} caracteres.",
       "numeric": "Deve ser um número.",
       "url": "Por favor, insira um URL válido."
     }
   },
   "login": {
-    "page_title": "Login de Administrador",
-    "subtitle": "Portal de Administração da Aliança",
+    "page_title": "“Login de Administrador”",
+    "subtitle": "“Portal de Administração da Aliança”",
     "form": {
       "email_label": "Endereço de E-mail da Aliança",
       "email_placeholder": "your.email@example.com",
-      "submit_button": "Envie o Link Mágico."
+      "submit_button": "“Envie o Link Mágico.”"
     },
     "errors": {
       "no_session": "Por favor, faça login para aceder a esta página.",
@@ -412,160 +456,160 @@
       "invalid": "Sessão inválida. Por favor, faça o login novamente.",
       "key_rotated": "As chaves de segurança foram trocadas. Por favor, faça o login novamente para garantir sua segurança.",
       "unknown_email": "Endereço de e-mail não reconhecido ou não autorizado.",
-      "send_failed": "Falhou-se ao enviar o link mágico. Por favor, tente novamente."
+      "send_failed": "“Falhou ao enviar o link mágico. Por favor, tente novamente.”"
     },
     "success": {
       "sent": "Link mágico enviado! Verifique seu e-mail e clique no link para fazer o login."
     },
     "info": {
-      "title": "Como funciona:",
+      "title": "“Como funciona:”",
       "steps": [
         "Insira o endereço de e-mail da sua aliança.",
-        "Receba um link seguro para fazer login por e-mail.",
+        "Receba um link seguro para fazer o login por e-mail.",
         "Clique no link para acessar o seu painel de controle.",
         "Os links expiram após 10 minutos."
       ]
     }
   },
   "help_drawer": {
-    "default_title": "Ajuda e Documentação",
-    "button_label": "Ajuda",
-    "aria_open": "Abrir a documentação de ajuda.",
-    "aria_close": "Fechar ajuda",
+    "default_title": "“Ajuda e Documentação”",
+    "button_label": "“Ajuda.”",
+    "aria_open": "“Abrir a documentação de ajuda.”",
+    "aria_close": "“Fechar ajuda”",
     "report": {
-      "button": "Relatar um Problema",
-      "modal_title": "Relatar um Problema",
-      "description": "Descreva o problema que você está enfrentando. Isso informará a equipe administrativa com detalhes sobre sua sessão.",
-      "label": "Descrição do Problema",
+      "button": "“Relatar um Problema”",
+      "modal_title": "“Relatar um Problema”",
+      "description": "Descreva o problema que você está enfrentando. Isso notificará a equipe de administradores com detalhes sobre sua sessão.",
+      "label": "**Descrição do Problema**",
       "placeholder": "Descreva o que você estava tentando fazer e o que deu errado…",
-      "context_title": "R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+      "context_title": "As seguintes informações serão incluídas automaticamente:",
       "context_labels": {
         "page": "Página atual:",
-        "user": "Seu conta:  \nMantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+        "user": "“Seu conta:”",
         "browser": "Navegador:",
-        "timestamp": "Carimbo de tempo:"
+        "timestamp": "“ Timestamp:”"
       },
       "validation": {
         "required": "Por favor, descreva o problema que você está enfrentando."
       },
-      "submitting": "Submetendo…",
-      "success": "Relatório de problema enviado com sucesso! Um administrador será notificado.",
-      "error": "Falhou-se a enviar o relatório de problema. Por favor, tente novamente.",
-      "network_error": "Erro de rede:"
+      "submitting": "“Submetendo…”",
+      "success": "O relatório de problema foi enviado com sucesso! Um administrador será notificado.",
+      "error": "“Falhou na submissão do relatório de problema. Por favor, tente novamente.”",
+      "network_error": "“Erro de rede:”"
     }
   },
   "emails": {
     "magic_link": {
-      "subject": "O seu link de login para {{app_name}}:",
-      "badge": "Solicitação de login administrativo.",
-      "greeting": "Olá {{username}},",
-      "intro": "Você solicitou acesso ao Painel de Controle do {{app_name}}. Clique no botão abaixo para fazer login com segurança:",
-      "button": "🚀 Acesso ao Painel de Controle Administrativo",
-      "alternative_label": "Alternativa:",
+      "subject": "“O seu link de login para o {{app_name}}”",
+      "badge": "“SOLICITAÇÃO DE CONEXÃO COM O PERFIL DE ADMINISTRADOR”",
+      "greeting": "Olá, {{username}}!",
+      "intro": "Você solicitou acesso ao Painel de Controle da {{app_name}}. Clique no botão abaixo para fazer o login com segurança:",
+      "button": "🚀 Acesso ao Painel de Controle do Administrador",
+      "alternative_label": "“Alternativa:”",
       "alternative_text": "Copie e cole este link no seu navegador:",
       "security_title": "🛡️ Informações de Segurança",
       "security_items": {
-        "single_use": "Este link é <strong>de uso único</strong> e perderá a validade após o seu primeiro login bem-sucedido.",
+        "single_use": "Este link é **de uso único** e perderá a validade após o seu primeiro login bem-sucedido.",
         "expiry": "O link expira em <span class=\"expiry-badge\">⏱️ 10 MINUTOS</span>.",
-        "no_share": "Nunca compartilhe este link com ninguém – ele concede acesso total à sua conta de administrador.",
-        "ignore": "Se você não solicitou este acesso (login), pode ignorar este e-mail com segurança.",
-        "no_reuse": "Por segurança, o link não pode ser reutilizado após ser clicado."
+        "no_share": "<strong>Nunca compartilhe este link</strong> com ninguém; ele concede acesso total à sua conta de administrador.",
+        "ignore": "Se você não solicitou esse acesso (login), pode ignorar este e-mail com segurança.",
+        "no_reuse": "Por razões de segurança, o link não pode ser reutilizado após ser clicado."
       },
       "no_reply_title": "⚠️ Nota:",
-      "no_reply_text": "Esta é uma mensagem automatizada de um endereço de e-mail que não aceita respostas. Por favor, não responda a este e-mail, pois esta caixa de correio não é monitorada. Para obter suporte, entre em contato com o administrador do seu servidor.",
-      "footer_regards": "Com os melhores cumprimentos,",
-      "footer_team": "Equipe do {{app_name}}",
+      "no_reply_text": "“Este é uma mensagem automatizada de um endereço de e-mail que não aceita respostas. Por favor, não responda a este e-mail, pois esta caixa de correio não é monitorada. Para obter suporte, entre em contato com o administrador do seu servidor.”",
+      "footer_regards": "“Com os melhores cumprimentos,”",
+      "footer_team": "“A Equipe da {{app_name}}”",
       "footer_sent_to": "Este e-mail foi enviado para {{email}}."
     },
     "role_change": {
-      "subject": "{{app_name}} – O seu acesso foi atualizado.",
-      "badge": "ATUALIZAÇÃO DE ACESSO",
-      "greeting": "Olá {{username}},",
-      "intro": "Um administrador atualizou as suas permissões de acesso para o painel de administração do {{app_name}}.\n\nPermissões que permanecem inalteradas: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "changes_title": "O que mudou:",
+      "subject": "“{{app_name}} – O seu acesso foi atualizado.”",
+      "badge": "Atualização do acesso",
+      "greeting": "Olá, {{username}}!",
+      "intro": "Um administrador atualizou as suas permissões de acesso para o painel de administração do {{app_name}}.",
+      "changes_title": "O que mudou?",
       "changed_by_label": "Alterado por:",
       "date_label": "Data:",
-      "questions_text": "Estas alterações entram em vigor imediatamente. Se você tiver alguma dúvida ou acreditar que esta mudança foi feita por engano, por favor entre em contato com um administrador.\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "access_text": "Para aceder ao painel de administrador, solicite um “link mágico” na página de login ou contacte um administrador para que lhe envie esse link.",
-      "footer_notification": "Esta é uma notificação automática da {{app_name}}.",
-      "footer_unexpected": "Se você não esperava por essa mudança, por favor entre em contato com o administrador da sua aliança imediatamente.\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "role_label": "Papel:",
-      "powereditor_label": "Power Editor:",
-      "alliances_label": "Alliance Access:",
+      "questions_text": "Estas alterações entram em vigor imediatamente. Se você tiver alguma dúvida ou acreditar que esta mudança foi feita por engano, por favor, entre em contato com um administrador.",
+      "access_text": "Para acessar o painel de administrador, solicite um “link mágico” na página de login ou entre em contato com um administrador para que ele envie um link de login para você.",
+      "footer_notification": "“Esta é uma notificação automatizada da {{app_name}}.”",
+      "footer_unexpected": "Se você não esperava por essa mudança, por favor entre em contato com o administrador da sua aliança imediatamente.",
+      "role_label": "“Role:”",
+      "powereditor_label": "“Power Editor:”",
+      "alliances_label": "“Alliance Access:”",
       "yes": "Yes",
       "no": "No",
-      "none": "Mantenha inalterado: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "none": "“(nenhum)”"
     },
     "test": {
-      "subject": "{{app_name}} – E-mail de Teste para SMTP",
+      "subject": "“{{app_name}} – E-mail de Teste para SMTP”",
       "title": "✅ Teste de SMTP bem-sucedido.",
-      "badge": "Configuração em funcionamento.",
-      "congratulations": "Parabéns! Se você recebeu este e-mail, sua configuração SMTP está funcionando corretamente.",
-      "config_title": "📧 Configuração Testada",
-      "config_smtp_server": "Servidor SMTP: <code>example.com</code>",
-      "config_port": "Porta: `465` (SSL)",
-      "config_auth": "Autenticação: ✅ Concluída com sucesso.",
+      "badge": "“A configuração está funcionando corretamente.”",
+      "congratulations": "<strong>Parabéns!</strong> Se você recebeu este e-mail, significa que a sua configuração de SMTP está funcionando corretamente.",
+      "config_title": "📧 Configuração testada.",
+      "config_smtp_server": "<strong>Servidor SMTP:</strong> <code>example.com</code>",
+      "config_port": "<strong>Porta:</strong> <code>465</code> (SSL)",
+      "config_auth": "<strong>Autenticação:</strong> ✅ Concluída com sucesso",
       "config_from": "<strong>Endereço de Origem:</strong> <code>noreply@example.com</code>",
-      "next_steps_title": "Próximos Passos:",
-      "next_steps_text": "Você pode agora prosseguir com a implantação do sistema administrativo baseado em JWT. A autenticação através de links especiais (magic links) funcionará corretamente.",
-      "no_reply_title": "Nota:",
-      "no_reply_text": "Esta é uma mensagem automatizada. Por favor, não responda a este e-mail, pois esta caixa de correio não é monitorada.",
-      "footer_regards": "Com os melhores cumprimentos,",
-      "footer_team": "Equipe do {{app_name}}",
-      "footer_sent_to": "E-mail de teste enviado para {{email}}"
+      "next_steps_title": "“Próximos Passos:”",
+      "next_steps_text": "Você pode agora prosseguir com a implementação do sistema administrativo baseado em JWT (JSON Web Tokens). A autenticação através de links especiais (“magic links”) funcionará corretamente.",
+      "no_reply_title": "“Nota:”",
+      "no_reply_text": "Este é uma mensagem automatizada. Por favor, não responda a este e-mail, pois esta caixa de correio não é monitorada.",
+      "footer_regards": "“Com os melhores cumprimentos,”",
+      "footer_team": "A Equipe da {{app_name}}",
+      "footer_sent_to": "E-mail de teste enviado para {{email}}."
     },
     "council_rotation": {
-      "subject": "{{app_name}} – Agenda de Rotação do Conselho Atualizada\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "title": "🗳️ Rotação do Conselho Atualizada\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, administrador, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "badge": "Agenda Regenerada",
-      "greeting": "Olá,",
-      "intro": "O calendário de rotação do conselho foi atualizado para as próximas {{semanas}}. Todos os futuros cargos no conselho sujeitos a rotação (níveis 6 a 15) foram recalculados para garantir uma distribuição justa.\n\nPermanecem inalterados: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, presidente, conselho, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "next_rotation_title": "📅 Próxima Rotação",
-      "week_label": "Número da Semana:",
+      "subject": "“{{app_name}} – Agenda de Rotação do Conselho Atualizada”",
+      "title": "🗳️ Rotação do Conselho Atualizada",
+      "badge": "“Agendamento Regenerado”",
+      "greeting": "“Olá.”",
+      "intro": "O **calendário de rotação dos conselhos** foi atualizado para as próximas {{semanas}}. Todos os futuros cargos no conselho que serão sujeitos a rotação (níveis 6 a 15) foram recalculados para garantir uma distribuição justa.",
+      "next_rotation_title": "📅 Próxima Rodada",
+      "week_label": "“Número da Semana:”",
       "date_label": "Data de Rotação:",
-      "regenerated_by_label": "Regenerado por:",
+      "regenerated_by_label": "“Regenerado por:”",
       "distribution_title": "📊 Distribuição da Rotação Futura",
-      "table_alliance": "Aliança",
-      "table_rotations": "Rotações (Próximas {{semanas}})",
+      "table_alliance": "“Aliança”",
+      "table_rotations": "“Rotações (nas próximas {{semanas}})”",
       "notice_title": "ℹ️ Importante:",
       "notice_text": "A regeneração afeta apenas as semanas futuras. Todas as rotações das semanas passadas e da semana atual permanecem inalteradas.",
-      "button_text": "Ver Horário Completo",
-      "footer_notification": "Esta é uma notificação automática da {{app_name}}.",
+      "button_text": "“Ver o Horário Completo”",
+      "footer_notification": "“Esta é uma notificação automatizada da {{app_name}}.”",
       "footer_no_reply": "Por favor, não responda a este e-mail."
     },
     "vote_notification": {
-      "subject": "Nova Votação do Conselho",
-      "title": "Nova Votação do Conselho",
-      "subtitle": "O seu voto é necessário.",
-      "greeting": "Olá {{name}},",
-      "voting_as": "Votação como:",
-      "deadline": "Prazo Final para Votação",
-      "vote_button": "Vote!",
-      "alternative_method": "Ou copie este link:",
-      "voting_options": "Opções de Votação\n\nMantêm-se inalteradas: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+      "subject": "“Nova Votação no Conselho”",
+      "title": "“Nova Votação no Conselho”",
+      "subtitle": "“O seu voto é necessário.”",
+      "greeting": "Olá, {{name}}.",
+      "voting_as": "“Votar como…”",
+      "deadline": "“Prazo Final para Votação”",
+      "vote_button": "“Vote!”",
+      "alternative_method": "Ou copie este link.",
+      "voting_options": "“Opções de Votação”",
       "option_yes": "Yes",
       "option_no": "No",
-      "option_abstain": "Abster-se.",
-      "discord_alternative": "Você também pode votar através do Discord respondendo ao DM do bot com: “vote: sim”, “vote: não” ou “vote: abster-se”.",
+      "option_abstain": "“Abster-se”.",
+      "discord_alternative": "Você também pode votar através do Discord respondendo ao mensagem privada (DM) do bot com: “vote: sim”, “vote: não” ou “vote: abster-se”.",
       "security_title": "Aviso de Segurança",
-      "security_notice": "Este é um link de votação único, válido por 48 horas. Não compartilhe este link com ninguém. Se você não esperava receber esse voto, por favor, entre em contato com um administrador.",
-      "vote_id": "ID de Voto"
+      "security_notice": "Este é um link de votação único, válido por 48 horas. Não compartilhe este link com ninguém. Se você não esperava por esta votação, por favor, entre em contato com um administrador.",
+      "vote_id": "“ID do Voto”"
     },
     "vote_result": {
-      "subject": "Resultados da Votação",
-      "title": "Resultados da Votação",
-      "greeting": "Olá {{name}},",
+      "subject": "“Resultados da Votação”",
+      "title": "“Resultados da Votação”",
+      "greeting": "Olá, {{name}}.",
       "you_voted": "Você votou: {{choice}}",
       "did_not_vote": "⚠️ Você não votou.",
-      "results_breakdown": "Desagregação dos resultados",
+      "results_breakdown": "“Desdobramento dos Resultados”",
       "yes": "Yes",
       "no": "No",
-      "abstain": "Abster-se.",
+      "abstain": "“Abster-se”.",
       "absent": "Ausente",
-      "total": "Total de Eleitores Elegíveis",
-      "vote_id": "ID de Voto"
+      "total": "“Total de Eleitores Elegíveis”",
+      "vote_id": "“ID do Voto”"
     },
-    "no_reply_notice": "Esta é uma mensagem automática de um endereço de e-mail que não aceita respostas. Por favor, não responda a este e-mail.",
-    "footer_copyright": "Servidor 1586 – Conselho: Todos os direitos reservados."
+    "no_reply_notice": "“Esta é uma mensagem automatizada de um endereço de e-mail que não aceita respostas. Por favor, não responda a este e-mail.”",
+    "footer_copyright": "“Servidor 1586 – Conselho; Todos os direitos reservados.”"
   }
 }

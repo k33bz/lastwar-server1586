@@ -1,0 +1,615 @@
+{
+  "help": {
+    "president_approvals": {
+      "title": "「大統領選挙の承認に関するサポート」",
+      "sections": {
+        "overview": {
+          "title": "「概要」",
+          "intro": "サーバーの<strong>プレジデント</strong>として、あなたは評議員から提出された投票提案を審査し、承認する責任があります。これはサーバーのガバナンスシステムにおいて非常に重要な役割です。",
+          "responsibilities": {
+            "title": "「あなたの責任範囲：」",
+            "items": [
+              "「すべての提出された投票提案を審査せよ。」",
+              "「正規の形式で作成された、有効な提案を承認する」",
+              "不明確で不適切な提案、または投票が不要な提案は却下してください。",
+              "提案を却下する際には、明確なフィードバックを提供してください。",
+              "「可能であれば、迅速に（できるだけ12時間以内に）対応してください。」"
+            ]
+          },
+          "auto_approval_note": "**自動承認システム：** 提案を12時間以内にレビューしない場合、その提案は自動的に承認され、投票が行われます。これにより処理のボトルネックが防げますが、そのページを定期的に確認する必要があります。"
+        },
+        "proposal_table": {
+          "title": "「提案内容の理解」",
+          "intro": "この表には、あなたのレビューが必要なすべての未処理の投票提案が表示されています。",
+          "columns": {
+            "submitted_by": "<strong>提出者：</strong> この提案を作成した評議会メンバー（メールアドレスで表示）",
+            "title": "<strong>タイトル：</strong> 投票のタイトルは、明確で簡潔でなければなりません。",
+            "description": "<strong>説明：</strong> 投票対象となっている内容についての詳細な説明です。表示が短縮されている場合は、クリックして内容を拡張できます。",
+            "category": "<strong>カテゴリ：</strong> 投票の種類（ルール変更、同盟間の争い、領土に関する決定、イベントの計画、その他）",
+            "submitted_at": "<strong>提出日時：</strong> 提案が作成された日時",
+            "time_remaining": "<strong>残り時間：</strong> 自動承認までのカウントダウン（提出から12時間）",
+            "actions": "<strong>アクション：</strong>「承認」または「拒否」のボタン"
+          },
+          "priority_warning": "**優先レビュー:** 残り時間が少ない提案は、まずレビューを行うべきです。残り時間が2時間未満であることを示す「URGENT（緊急）」の表示があるものを探してください。"
+        },
+        "how_to_approve": {
+          "title": "「提案の承認方法」",
+          "steps_title": "「ステップバイステップの承認プロセス：」",
+          "steps": [
+            "<strong>よくお読みください：</strong>タイトル、説明文、カテゴリを確認してください。",
+            "<strong>合法性の評価：</strong>これは理事会レベルでの決定なのか？何について投票が行われているのか、明確になっているか？",
+            "<strong>タイミングについて考えてください：</strong> 今がこの投票を行うのに適したタイミングでしょうか？（例えば、大きなイベントが開催されている最中ではない方が良いでしょう。）",
+            "<strong>「承認」をクリックしてください：</strong> 提案が基準を満たしている場合には…",
+            "<strong>確認：</strong>成功メッセージが表示されます。",
+            "<strong>自動実行される処理：</strong> 投票結果は即座に生成され、すべての評議員メンバーにダイレクトメッセージ（DM）が送信されます。"
+          ],
+          "after_approval": {
+            "title": "「承認された後にはどうなるのか？」",
+            "items": [
+              "「投票機能はDiscordのボットシステム内で作成されています。」",
+              "理事会の7人のメンバー全員に、投票の詳細が記載されたDiscordのダイレクトメッセージが送られます。",
+              "「24時間の投票期間が始まります。」",
+              "「提案はあなたの未処理リストから削除されました。」",
+              "提出者に承認の通知が送られます。"
+            ]
+          },
+          "criteria_title": "「承認基準：」",
+          "criteria": [
+            "✅ タイトルと説明が明確で具体的です。",
+            "✅ 正式な評議会レベルの決定",
+            "✅ 既存のルールや投票ではまだカバーされていない",
+            "✅ 適切なカテゴリが選択されました。",
+            "✅ 適切なタイミング（主要なイベントや紛争の最中ではない）"
+          ]
+        }
+      }
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "title": "「ダッシュボード」",
+      "description": "「アライアンス管理ポータル」",
+      "sections": {
+        "quick_actions": "「クイックアクション」",
+        "alliance_management": "「アライアンス管理」",
+        "governance": "「ガバナンス」",
+        "discord_integration": "「Discordとの連携機能」",
+        "system_admin": "「システム管理」"
+      }
+    },
+    "alliance_edit": {
+      "title": "「アライアンスの編集」",
+      "nav_title": "「エディター」",
+      "description": "同盟情報および幹部の管理"
+    },
+    "alliances_power": {
+      "title": "「パワーアップアップデート」",
+      "nav_title": "「パワーエディター（Power Editor）」",
+      "description": "「同盟のパワー値を更新する」"
+    },
+    "alliance_tags_manager": {
+      "title": "「アライアンスタグマネージャー」",
+      "nav_title": "「タグマネージャー（Tag Manager）」",
+      "description": "「同盟の表示状態や表示順序を管理する」"
+    },
+    "user_management": {
+      "title": "「ユーザー管理」",
+      "nav_title": "「ユーザーの管理」",
+      "description": "「管理者ユーザーおよびその権限の管理」"
+    },
+    "user_profile": {
+      "title": "「マイプロフィール」",
+      "description": "アカウント設定やゲーム内の情報を管理してください。"
+    },
+    "council_rotation": {
+      "title": "「評議会のローテーション」",
+      "nav_title": "「評議会のローテーション」",
+      "description": "「週例評議会のメンバー交代スケジュールを管理する」"
+    },
+    "discord_announcements": {
+      "title": "「Discordのお知らせ」",
+      "nav_title": "「お知らせ」",
+      "description": "「Discordチャンネルに通知を送信する」"
+    },
+    "discord_channels": {
+      "title": "「Discordチャンネル」",
+      "nav_title": "「チャンネル」",
+      "description": "「Discordチャンネルのマッピングを設定する」"
+    },
+    "discord_templates": {
+      "title": "「Discordテンプレート」",
+      "nav_title": "「メッセージテンプレート」",
+      "description": "「メッセージテンプレートの管理」"
+    },
+    "discord_scheduled": {
+      "title": "「スケジュールされたメッセージ」",
+      "nav_title": "「スケジュールされたメッセージ」",
+      "description": "「予定されているDiscord投稿の管理」"
+    },
+    "discord_recurring": {
+      "title": "「繰り返し表示されるメッセージ」",
+      "nav_title": "「繰り返し表示されるメッセージ」",
+      "description": "「繰り返し投稿されるDiscordの投稿を管理する」"
+    },
+    "discord_vote_proposals": {
+      "title": "「評議会の提案」",
+      "nav_title": "「評議会の提案」",
+      "description": "「評議会の投票提案を提出し、管理する」",
+      "description_admin": "「投票のリクエストを提出するか、またはプレジデント/管理者として直接投票を作成する。」",
+      "description_member": "投票案を社長に提出し、承認を得る。",
+      "tabs": {
+        "submit": "「提案書の提出」",
+        "my_requests": "「マイ・リクエスト」"
+      },
+      "form": {
+        "heading": "「投票提案を提出する」",
+        "title_hint": "簡潔に書いてください。最大100文字までです。",
+        "description_hint": "「評議会のメンバーが何について投票しているのか、詳細を提供してください。」"
+      },
+      "help": {
+        "title": "「投票提案の仕組み」",
+        "intro": "評議会のメンバーとして、あなたは評議会に投票案を提案することができます。その提案は大統領の承認を経て実施されます。",
+        "admin_note": "「プレジデントまたは管理者として、あなたの投票内容は承認を経ずにすぐに作成されます。」",
+        "auto_approval": "「大統領が12時間以内に返答しない場合、あなたの提案は自動的に承認されます。」"
+      },
+      "categories": {
+        "rule_change": "「ルールの変更」",
+        "alliance_action": "「アライアンス・アクション」",
+        "server_event": "「サーバーイベント」",
+        "other": "「その他」"
+      },
+      "buttons": {
+        "create_vote": "「Create Vote Now」"
+      },
+      "labels": {
+        "request_id": "「リクエストID」"
+      },
+      "messages": {
+        "vote_created": "「投票が作成されました。」",
+        "no_reason": "「理由は明かされていない」",
+        "awaiting_approval": "「大統領の承認を待っています。」",
+        "empty_state": "「まだ投票依頼を一度も提出していません。」",
+        "submit_success": "「提案が無事に提出されました！」",
+        "submit_error": "「提案の提出に失敗しました。」",
+        "load_error": "「リクエストの読み込みに失敗しました。」"
+      }
+    },
+    "president_vote_approvals": {
+      "title": "「投票の承認」",
+      "nav_title": "「投票による承認」",
+      "description": "「投票提案をレビューし、承認する」",
+      "description_full": "「評議会メンバーから提出された投票提案を審査し、承認する」"
+    },
+    "discord_votes_history": {
+      "title": "「投票履歴」",
+      "nav_title": "「投票履歴」",
+      "description": "「すべての評議会の投票履歴および結果を閲覧する」"
+    },
+    "votes_management": {
+      "title": "「投票管理」",
+      "nav_title": "「投票履歴」",
+      "description": "「すべての評議会の投票内容を閲覧および管理する」"
+    },
+    "season2_manager": {
+      "title": "「シーズン2イベントカレンダー」",
+      "nav_title": "「イベントカレンダー」",
+      "description": "「シーズン2のイベントの管理およびスケジュールの調整を行う」"
+    },
+    "security_audit": {
+      "title": "「セキュリティ監査ログ」",
+      "nav_title": "「監査ログ（Audit Logs）」",
+      "description": "「システムセキュリティイベントのレビューを行う」"
+    },
+    "security_backups": {
+      "title": "「システムバックアップ」",
+      "nav_title": "「バックアップ」",
+      "description": "「システムのバックアップおよび復元を管理する」"
+    }
+  },
+  "common": {
+    "buttons": {
+      "approve": "「承認する」",
+      "reject": "「リジェクト（Reject）」",
+      "submit": "「Submit」",
+      "cancel": "「キャンセル」",
+      "save": "「保存」",
+      "delete": "「削除」",
+      "close": "「クローズ」",
+      "edit": "「編集」",
+      "view": "「View」",
+      "back": "「バック」",
+      "add": "Add",
+      "remove": "「削除する」",
+      "update": "「アップデート」",
+      "create": "「Create」",
+      "send": "「送信する」",
+      "export": "「エクスポート」",
+      "import": "「インポート」",
+      "refresh": "「リフレッシュ」",
+      "search": "「検索」",
+      "filter": "「フィルター」",
+      "reset": "「リセット」"
+    },
+    "labels": {
+      "title": "「タイトル」",
+      "description": "「説明」",
+      "category": "「カテゴリ」",
+      "status": "「ステータス」",
+      "actions": "「アクションズ（Actions）」",
+      "date": "「Date」",
+      "time": "「タイム」",
+      "name": "「名前」",
+      "email": "「メール」",
+      "role": "「ロール（Role）」",
+      "roles": "「ロール（Roles）」",
+      "alliance": "「アライアンス」",
+      "alliances": "「アライアンス」",
+      "power": "「パワー」",
+      "rank": "「ランク」",
+      "tag": "Tag",
+      "created": "「Created」",
+      "updated": "「アップデートされました」",
+      "created_by": "「作成者：」",
+      "updated_by": "「更新者（Updated By）」",
+      "discord_id": "「Discord ID」",
+      "in_game_name": "「インゲームネーム」",
+      "yes": "Yes",
+      "no": "No",
+      "active": "「アクティブ」",
+      "inactive": "「インアクティブ（inactive）」",
+      "pending": "「Pending（保留中）」",
+      "approved": "「承認されました」",
+      "rejected": "「拒否された」",
+      "visible": "「ヴィジブル（Visible）」",
+      "hidden": "「Hidden」"
+    },
+    "alliance": {
+      "r5": "「R5（リーダー）」",
+      "r4": "R4（オフィサー）",
+      "ape": "「APE（Power Editor）」",
+      "member_count": "「メンバー数」",
+      "power_value": "「パワーバリュー（Power Value）」",
+      "alliance_name": "「アライアンス名」",
+      "alliance_tag": "「アライアンスタグ」",
+      "r5_name": "「R5の名称」",
+      "r5_discord_id": "「R5のDiscord ID」",
+      "add_r4": "「R4を追加してください。」",
+      "remove_r4": "「R4を削除してください。」",
+      "rules_signed": "「ルールに署名しました」",
+      "can_vote": "「投票が可能」",
+      "role_title": "「役割／タイトル」"
+    },
+    "discord": {
+      "channel": "「チャンネル」",
+      "channels": "「チャンネル」",
+      "template": "「テンプレート」",
+      "templates": "「テンプレート」",
+      "message": "「メッセージ」",
+      "announcement": "「お知らせ」",
+      "scheduled": "「スケジュール済み」",
+      "channel_id": "「チャンネルID」",
+      "channel_name": "「チャンネル名」",
+      "channel_type": "「チャンネルタイプ」",
+      "message_content": "「メッセージの内容」",
+      "send_time": "「送信時間」",
+      "recurring": "「Recurring（リカーリング）」",
+      "one_time": "「ワンタイム（One-Time）」"
+    },
+    "votes": {
+      "vote": "「投票してください。」",
+      "votes": "「投票」",
+      "proposal": "「提案」",
+      "proposals": "「提案」",
+      "vote_title": "「投票タイトル」",
+      "vote_description": "「投票説明」",
+      "submitted_by": "「提出者（Submitted By）」",
+      "submitted_at": "「提出日（Submitted At）」",
+      "deadline": "「締め切り」",
+      "time_remaining": "「残り時間」",
+      "vote_yes": "Yes",
+      "vote_no": "No",
+      "vote_abstain": "「棄権する」",
+      "results": "「結果」",
+      "passed": "「合格しました。」",
+      "failed": "「失敗しました。」",
+      "in_progress": "「進行中」"
+    },
+    "messages": {
+      "success": "「成功だ！」",
+      "error": "「エラーが発生しました。」",
+      "loading": "「ローディング中…」",
+      "no_data": "「データは利用できません。」",
+      "confirm_action": "「本当にそうですか？」",
+      "saved": "「変更内容が正常に保存されました。」"
+    },
+    "navigation": {
+      "home": "「ホーム」",
+      "dashboard": "「ダッシュボード」",
+      "alliances": "「アライアンス」",
+      "votes": "「投票」",
+      "governance": "「ガバナンス」",
+      "settings": "「設定（Settings）」",
+      "logout": "「ログアウト」",
+      "server_management": "「サーバー管理」",
+      "discord": "Discord",
+      "seasons": "「シーズンズ」",
+      "users": "「ユーザー」",
+      "security": "「セキュリティ」",
+      "system": "「システム」"
+    },
+    "welcome_back": "「またお帰りなさい、{{name}}」"
+  },
+  "seasons": {
+    "coming_soon": "「間もなく公開予定」",
+    "season1": {
+      "title": "「シーズン1」",
+      "nav_title": "「シーズン1」",
+      "description": "「ウィンターシーズン – 完了」",
+      "status": "「完了」",
+      "date_label": "「シーズンの日程」",
+      "dates": "「2024年12月～2025年1月」"
+    },
+    "season2": {
+      "title": "「シーズン2イベントカレンダー」",
+      "nav_title": "「シーズン2」",
+      "description": "「スプリングシーズンイベント管理」"
+    },
+    "season3": {
+      "title": "「シーズン3」",
+      "nav_title": "「シーズン3」",
+      "description": "「サマーシーズン – 開始まであと少し！」",
+      "placeholder_message": "「シーズン3のイベント管理機能は間もなく利用可能になります。」"
+    },
+    "season4": {
+      "title": "「シーズン4」",
+      "nav_title": "「シーズン4」",
+      "description": "「フォールシーズン – 開始まであと少し！」",
+      "placeholder_message": "「シーズン4のイベント管理機能は間もなく利用可能になります。」"
+    },
+    "season5": {
+      "title": "「シーズン5」",
+      "nav_title": "「シーズン5」",
+      "description": "「ウィンターシーズン – 開始まであと少し！」",
+      "placeholder_message": "「シーズン5のイベント管理機能は間もなく利用可能になります。」"
+    }
+  },
+  "notifications": {
+    "title": "「通知」",
+    "aria_label": "「通知」",
+    "mark_all_read": "「すべてのメッセージを『既読』にマークする」",
+    "loading": "「ローディング通知中…」",
+    "view_all": "「すべての通知を表示する」"
+  },
+  "roles": {
+    "admin": "「Admin」",
+    "president": "「プレジデント」",
+    "r5": "R5",
+    "r4": "R4",
+    "ape": "APE"
+  },
+  "users": {
+    "magic_links": {
+      "nav_title": "「マジックリンクス」"
+    },
+    "send_login_link": {
+      "nav_title": "「ログインリンクを送信してください」"
+    }
+  },
+  "discord": {
+    "rate_limits": {
+      "nav_title": "「レートリミット（Rate Limits）」"
+    },
+    "config": {
+      "nav_title": "「コンフィギュレーション」"
+    }
+  },
+  "security": {
+    "monitor": {
+      "nav_title": "「セキュリティモニター」"
+    },
+    "keys": {
+      "nav_title": "「JWTキーのローテーション（JWT Key Rotation）」"
+    },
+    "mfa": {
+      "nav_title": "「MFA管理（Multi-Factor Authentication Management）」"
+    },
+    "test_token": {
+      "nav_title": "「テストトークンの生成」"
+    }
+  },
+  "system": {
+    "migration": {
+      "nav_title": "「マイグレーション」"
+    },
+    "metrics": {
+      "nav_title": "「メトリクス（Metrics）」"
+    },
+    "notifications": {
+      "nav_title": "「通知」"
+    },
+    "changelog": {
+      "nav_title": "「チェンジログ（Changelog）」"
+    }
+  },
+  "forms": {
+    "validation": {
+      "required": "「この項目の入力は必須です。」",
+      "email": "「有効なメールアドレスを入力してください。」",
+      "min_length": "「少なくとも{{length}}文字でなければなりません。」",
+      "max_length": "「文字数は{{length}}文字以下でなければなりません。」",
+      "numeric": "「数字でなければなりません。」",
+      "url": "「有効なURLを入力してください。」"
+    }
+  },
+  "login": {
+    "page_title": "「管理者ログイン」",
+    "subtitle": "「アライアンス管理ポータル」",
+    "form": {
+      "email_label": "「アライアンスのメールアドレス」",
+      "email_placeholder": "「your.email@example.com」",
+      "submit_button": "「Magic Linkを送ってください。」"
+    },
+    "errors": {
+      "no_session": "このページにアクセスするには、ログインしてください。",
+      "expired": "セッションの有効期限が切れました。再度ログインしてください。",
+      "revoked": "「あなたのセッションは無効になりました。再度ログインしてください。」",
+      "invalid": "「セッションが無効です。再度ログインしてください。」",
+      "key_rotated": "セキュリティキーが更新されました。ご自身のセキュリティを確保するために、再度ログインしてください。",
+      "unknown_email": "「メールアドレスが認識されなかった、または許可されていない。」",
+      "send_failed": "「マジックリンクの送信に失敗しました。再度お試しください。」"
+    },
+    "success": {
+      "sent": "「マジックリンクを送りました！メールを確認して、リンクをクリックしてログインしてください。」"
+    },
+    "info": {
+      "title": "「仕組みについて：」",
+      "steps": [
+        "「同盟のメールアドレスを入力してください。」",
+        "「メールでセキュアなログインリンクを受け取る」",
+        "「ダッシュボードにアクセスするには、リンクをクリックしてください。」",
+        "リンクは10分後に有効期限が切れます。"
+      ]
+    }
+  },
+  "help_drawer": {
+    "default_title": "「ヘルプ＆ドキュメント」",
+    "button_label": "「助けて」",
+    "aria_open": "「ヘルプドキュメントを開く」",
+    "aria_close": "「ヘルプを閉じる」",
+    "report": {
+      "button": "「問題を報告する」",
+      "modal_title": "「問題を報告する」",
+      "description": "現在遭遇している問題を詳しく説明してください。そうすることで、アドミンチームにあなたのセッションに関する詳細情報が通知されます。",
+      "label": "「問題の説明」",
+      "placeholder": "「何をしようとしていたのか、そして何がうまくいかなかったのかを説明してください…」",
+      "context_title": "以下の情報は自動的に含まれます：",
+      "context_labels": {
+        "page": "「現在のページ：」",
+        "user": "「あなたのアカウント：」",
+        "browser": "「ブラウザ：」",
+        "timestamp": "「タイムスタンプ：」"
+      },
+      "validation": {
+        "required": "「現在遭遇している問題について詳しく説明してください。」"
+      },
+      "submitting": "「送信中…」",
+      "success": "問題報告が正常に送信されました！管理者に通知されます。",
+      "error": "問題報告の送信に失敗しました。再度お試しください。",
+      "network_error": "「ネットワークエラー：」"
+    }
+  },
+  "emails": {
+    "magic_link": {
+      "subject": "「{{app_name}}」用のログインリンクです。",
+      "badge": "「ADMINログインリクエスト」",
+      "greeting": "こんにちは、{{username}}さん。",
+      "intro": "{{app_name}}のダッシュボードへのアクセスをご希望です。以下のボタンをクリックして、安全にログインしてください：",
+      "button": "🚀 管理者ダッシュボードにアクセスします。",
+      "alternative_label": "「代替案：」",
+      "alternative_text": "このリンクをブラウザにコピーして貼り付けてください。",
+      "security_title": "🛡️ セキュリティ情報",
+      "security_items": {
+        "single_use": "このリンクは<strong>一度限りの使用</strong>しかできず、初めてログインに成功した後に無効になります。",
+        "expiry": "リンクの有効期限は<span class=\"expiry-badge\">⏱️10分後</span>に切れます。",
+        "no_share": "<strong>このリンクを絶対に誰にも共有しないでください</strong>。これを共有すると、あなたの管理者アカウントに完全なアクセス権が与えられてしまいます。",
+        "ignore": "「もしこのログインを依頼した覚えがない場合は、このメールを安全に無視して構いません。」",
+        "no_reuse": "セキュリティ上の理由から、このリンクは一度クリックすると再利用できません。"
+      },
+      "no_reply_title": "⚠️ 注意：",
+      "no_reply_text": "これは返信不要のメールアドレスから送信された自動メッセージです。このメールボックスは監視されていないため、返信しないでください。サポートが必要な場合は、サーバー管理者にご連絡ください。",
+      "footer_regards": "「よろしくお願いします。」",
+      "footer_team": "「{{app_name}}チーム」",
+      "footer_sent_to": "このメールは「{{email}}」宛てに送信されました。"
+    },
+    "role_change": {
+      "subject": "「{{app_name}} – アクセス権が更新されました」",
+      "badge": "「アクセス更新」",
+      "greeting": "こんにちは、{{username}}さん。",
+      "intro": "管理者が、{{app_name}}の管理パネルにおけるあなたのアクセス権限を更新しました。",
+      "changes_title": "「何が変わったのか：」",
+      "changed_by_label": "「変更者：」",
+      "date_label": "日付：",
+      "questions_text": "これらの変更はすぐに効力を発揮します。何か質問がある場合、またはこの変更が誤って行われたと思われる場合は、管理者までご連絡ください。",
+      "access_text": "管理パネルにアクセスするには、ログインページで「マジックリンク」を要求するか、管理者に連絡してログイン用のリンクを送ってもらってください。",
+      "footer_notification": "これは「{{app_name}}」からの自動通知です。",
+      "footer_unexpected": "この変更を予想していなかった場合は、すぐに所属するアライアンスの管理者に連絡してください。",
+      "role_label": "「ロール：」",
+      "powereditor_label": "「パワーエディター：」",
+      "alliances_label": "「アライアンス・アクセス：」",
+      "yes": "Yes",
+      "no": "No",
+      "none": "「（なし）」"
+    },
+    "test": {
+      "subject": "「{{app_name}} – SMTPテストメール」",
+      "title": "✅ SMTPテストに成功しました。",
+      "badge": "「設定が正常に機能しています。」",
+      "congratulations": "<strong>おめでとうございます！</strong> このメールを受け取ったということは、ご利用のSMTP設定が正しく機能している証拠です。",
+      "config_title": "📧 設定のテストが完了しました。",
+      "config_smtp_server": "<strong>SMTPサーバー：</strong> <code>example.com</code>",
+      "config_port": "<strong>ポート：</strong> `465` (SSL)",
+      "config_auth": "<strong>認証：</strong> ✅ 認証に成功しました。",
+      "config_from": "<strong>送信元アドレス：</strong> <code>noreply@example.com</code>",
+      "next_steps_title": "「次のステップ：」",
+      "next_steps_text": "JWT管理システムのデプロイを進めることができます。マジックリンクによる認証も正常に機能します。",
+      "no_reply_title": "「注：」",
+      "no_reply_text": "これは自動生成されたメッセージです。このメールボックスは監視されていないため、返信しないでください。",
+      "footer_regards": "「よろしくお願いします。」",
+      "footer_team": "「{{app_name}}チーム」",
+      "footer_sent_to": "テストメールが{{email}}宛てに送信されました。"
+    },
+    "council_rotation": {
+      "subject": "「{{app_name}} – 評議会メンバーのローテーションスケジュールが更新されました」",
+      "title": "🗳️ 評議会のメンバー交代が更新されました。",
+      "badge": "「スケジュールが再生成されました。」",
+      "greeting": "「こんにちは。」",
+      "intro": "<strong>評議会のローテーションスケジュール</strong>は、今後の{{週数}}週間分に更新されました。将来交代する予定のすべての評議員ポスト（ランク6～15）についても再計算が行われ、公平な配分が確保されています。",
+      "next_rotation_title": "📅 次のローテーション",
+      "week_label": "「週番号：」",
+      "date_label": "「ローテーション日：」",
+      "regenerated_by_label": "「再生元：（Regenerated By:）」",
+      "distribution_title": "📊 今後のローテーション分布について",
+      "table_alliance": "「アライアンス」",
+      "table_rotations": "「ローテーション（次の{{週数}}週間）」",
+      "notice_title": "ℹ️ 重要：",
+      "notice_text": "この「再生」処理は今後の週にのみ影響を及ぼします。過去の週や現在の週のローテーションについては変更ありません。",
+      "button_text": "「全スケジュールを表示」",
+      "footer_notification": "「これは{{app_name}}からの自動通知です。」",
+      "footer_no_reply": "このメールには返信しないでください。"
+    },
+    "vote_notification": {
+      "subject": "「新たな評議会の投票」",
+      "title": "「新たな評議会の投票」",
+      "subtitle": "「あなたの投票が必要です。」",
+      "greeting": "こんにちは、{{name}}さん。",
+      "voting_as": "「『Voting as』という形で投票する」",
+      "deadline": "「投票締切日」",
+      "vote_button": "「投票をお願いします。」",
+      "alternative_method": "「または、このリンクをコピーしてください。」",
+      "voting_options": "「投票オプション」",
+      "option_yes": "Yes",
+      "option_no": "No",
+      "option_abstain": "「棄権する」",
+      "discord_alternative": "Discordを通じても投票が可能です。ボットからのDMに「vote: yes」「vote: no」「vote: abstain」と返信するだけで投票できます。",
+      "security_title": "「セキュリティ通知」",
+      "security_notice": "これは1回限りの投票用リンクで、有効期限は48時間です。このリンクを他人と共有しないでください。もし予期していなかった投票であれば、管理者に連絡してください。",
+      "vote_id": "「投票ID」"
+    },
+    "vote_result": {
+      "subject": "「投票結果」",
+      "title": "「投票結果」",
+      "greeting": "こんにちは、{{name}}さん。",
+      "you_voted": "あなたの投票結果は：{{choice}}です。",
+      "did_not_vote": "⚠️ あなたは投票していません。",
+      "results_breakdown": "「結果の詳細分析」",
+      "yes": "Yes",
+      "no": "No",
+      "abstain": "「棄権する」",
+      "absent": "「欠席」",
+      "total": "「有資格な投票者の総数」",
+      "vote_id": "「投票ID」"
+    },
+    "no_reply_notice": "「これは返信不可のメールアドレスから送信された自動化されたメッセージです。このメールには返信しないでください。」",
+    "footer_copyright": "「サーバー1586評議会 – 無断転載を禁じます」"
+  }
+}

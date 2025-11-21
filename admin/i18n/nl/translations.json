@@ -1,0 +1,615 @@
+{
+  "help": {
+    "president_approvals": {
+      "title": "Hulp bij de bevestiging van de presidentiele verkiezingen",
+      "sections": {
+        "overview": {
+          "title": "Overzicht",
+          "intro": "Als <strong>president</strong> van de server bent u verantwoordelijk voor het beoordelen en goedkeuren van stemmingvoorstellen die worden ingediend door de leden van de raad. Dit is een cruciale rol in het bestuurssysteem van de server.",
+          "responsibilities": {
+            "title": "Uw verantwoordelijkheden:",
+            "items": [
+              "Beoordeel alle inkomende voorstellen voor stemmingen.",
+              "Goede voorstellen die voldoen aan de vereisten, moeten worden goedgekeurd.",
+              "Wees afkeerlijk van voorstellen die onduidelijk zijn, ongepast zijn of waarvoor geen stemming nodig is.",
+              "Geef duidelijke feedback wanneer je voorstellen afweert.",
+              "Handel op tijd (mogelijk binnen 12 uur)."
+            ]
+          },
+          "auto_approval_note": "**Automaatkeuringsbeveiligingssysteem:** Als je een voorstel niet binnen 12 uur beoordeelt, wordt het automatisch goedgekeurd en wordt er een stemming georganiseerd. Dit voorkomt dat er problemen (zoals ‘bottlenecks’) ontstaan, maar betekent wel dat je deze pagina regelmatig moet controleren."
+        },
+        "proposal_table": {
+          "title": "Het begrijpen van de voorstel tabel",
+          "intro": "De tabel toont alle nog lopende stemvoorstellingen die uw beoordeling vereisen.",
+          "columns": {
+            "submitted_by": "<strong>Ingediend door:</strong> De raadslid die het voorstel heeft opgesteld (afgebeeld als e-mailadres)",
+            "title": "<strong>Titel:</strong> De titel van de stemming moet duidelijk en kort zijn.",
+            "description": "<strong>Omschrijving:</strong> Een uitgebreide uitlegging van wat er wordt gestemd op; klik om de inhoud te vergroten als deze is ingekort.",
+            "category": "<strong> categorie: </strong> De soort stemming (Regelwijziging, Duitzaamheid binnen een alliantie, Beslissing over territorium, Organisatie van evenementen, Overig)",
+            "submitted_at": "<strong>Ingestuurd op:</strong> Op het moment dat het voorstel werd gemaakt.",
+            "time_remaining": "<strong>Tijd over: </strong> Telronde tot de automatische bevestiging (12 uur na het indienen)",
+            "actions": "<strong>Acties:</strong> Knoppen om te stemmen met 'Goedkeuren' of 'Weigeren"
+          },
+          "priority_warning": "**Prioriteitsbeoordeling:** Voorstellen waar nog weinig tijd over is, moeten eerst worden beoordeeld. Let op de rode ‘URGENT’-indicatoren; deze geven aan dat er minder dan 2 uur tijd over is."
+        },
+        "how_to_approve": {
+          "title": "Hoe je een voorstel goedgekeurt",
+          "steps_title": "Stap voor stap: de goedkeuringsprocedure",
+          "steps": [
+            "<strong-Lees goed door:</strong> Bekijk de titel, beschrijving en categorie.",
+            "<strong>Beoordelen van de legitiemheid:</strong> Is dit een besluit op niveau van de raad? Is duidelijk wat er wordt bepaald?",
+            "<strong>Denk na over de juiste tijd: </strong> Is nu een goede tijd om deze stemming te houden? (Niet bijvoorbeeld tijdens grote evenementen.)",
+            "<Klik op 'Goedkeuren': als het voorstel voldoet aan de vereisten/>",
+            "<strong(Bevestiging):</strong> Je ziet een bericht met de mededeling dat het is gelukt.",
+            "<strong>Automatische acties:</strong> De stemming wordt onmiddellijk gecreëerd en er worden privéberichtjes (DM’s) gestuurd naar alle leden van de raad."
+          ],
+          "after_approval": {
+            "title": "Wat gebeurt er na de goedkeuring?",
+            "items": [
+              "De stem wordt gecreëerd in het systeem van de Discord-bot.",
+              "Alle 7 leden van de raad ontvangen een privébericht (DM) via Discord met daarin de details van hun stem.",
+              "Het 24-uurs lange stemmingsperiod begint.",
+              "Het voorstel is van uw wachtlijst verwijderd.",
+              "De indieder wordt geïnformeerd over de goedkeuring."
+            ]
+          },
+          "criteria_title": "Goedkeuringscriteriumen:",
+          "criteria": [
+            "✅ Duidelijke, specifieke titel en beschrijving",
+            "✅ Een legitieme beslissing op niveau van de raad",
+            "✅ Dit valt niet onder de bestaande regels of stemmingresultaten.",
+            "✅ De juiste categorie is geselecteerd.",
+            "✅ Redelijk tijdsplan (niet tijdens grote evenementen of conflicten)"
+          ]
+        }
+      }
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "alliance admin portal",
+      "sections": {
+        "quick_actions": "Snel acties",
+        "alliance_management": "alliance management",
+        "governance": "Bestuur",
+        "discord_integration": "Discord-integratie",
+        "system_admin": "Systeembeheer"
+      }
+    },
+    "alliance_edit": {
+      "title": "Edit Alliance",
+      "nav_title": "Vertaling naar Nederlands: 'Editor",
+      "description": "Beheer informatie over allianties en de ambtenaren die erbij betrokken zijn."
+    },
+    "alliances_power": {
+      "title": "Power Updates",
+      "nav_title": "Power Editor",
+      "description": "‘De waarden voor de machtsverhoudingen binnen de alliantie worden bijgewerkt.’"
+    },
+    "alliance_tags_manager": {
+      "title": "Alliance Tags Manager",
+      "nav_title": "Tag Manager",
+      "description": "Beheer de zichtbaarheid van allianties en de weergavevolgorde."
+    },
+    "user_management": {
+      "title": "Gebruikersbeheer",
+      "nav_title": "Mensen beheren",
+      "description": "Beheer administratieve gebruikers en hun rechten (toegangsen)."
+    },
+    "user_profile": {
+      "title": "Mijn Profiel",
+      "description": "Beheer de instellingen van je account en de informatie die in het spel wordt weergegeven."
+    },
+    "council_rotation": {
+      "title": "Rondomwenteling van het bestuur",
+      "nav_title": "Rondomwenteling van het bestuur",
+      "description": "Beheer het wekelijkse roteringschema van de raadleden."
+    },
+    "discord_announcements": {
+      "title": "Discord-announcements",
+      "nav_title": "Announcements",
+      "description": "Stuur berichtjes naar de Discord-channels."
+    },
+    "discord_channels": {
+      "title": "Discord-channels",
+      "nav_title": "Channels",
+      "description": "Instellen van de mappingen voor Discord-channels."
+    },
+    "discord_templates": {
+      "title": "Discord Templates",
+      "nav_title": "`Berichttemplates`",
+      "description": "Beheer berichttemplates."
+    },
+    "discord_scheduled": {
+      "title": "Geschikte berichten (Scheduled Messages)",
+      "nav_title": "Geplande berichten",
+      "description": "Beheer geplande berichten op Discord."
+    },
+    "discord_recurring": {
+      "title": "Herhaalde berichten",
+      "nav_title": "Herhaalde berichten",
+      "description": "Beheer herhaalde berichten op Discord."
+    },
+    "discord_vote_proposals": {
+      "title": "Raadvoorstellen",
+      "nav_title": "Raadvoorstellen",
+      "description": "Inleveren en beheren van voorstellen voor stemmingen in de raad",
+      "description_admin": "Stuur verzoeken om te stemmen in of creeer zelf stemmingen als president/administrateur.",
+      "description_member": "Stuur voorstellen voor stemmingen naar de president ter goedkeuring.",
+      "tabs": {
+        "submit": "Stuur je voorstel in.",
+        "my_requests": "Mijn verzoeken"
+      },
+      "form": {
+        "heading": "Stuur je voorstel voor het stemmen in.",
+        "title_hint": "Houd het kort en krachtig: maximaal 100 karakters.",
+        "description_hint": "Voorzie de lezer van details over wat de leden van de raad stemmen over."
+      },
+      "help": {
+        "title": "Hoe stemvoorstellen werken",
+        "intro": "Als raadslid kunt u voorstellen indienen voor de raad. Uw voorstel wordt vervolgens aan de voorzitter gestuurd voor goedkeuring.",
+        "admin_note": "Als president of administrator worden je stemmen onmiddellijk gereserveerd, zonder dat deze nog hoeven te worden goedgekeurd.",
+        "auto_approval": "Als de president niet reageert binnen 12 uur, wordt uw voorstel automatisch goedgekeurd."
+      },
+      "categories": {
+        "rule_change": "Wijziging van de regels",
+        "alliance_action": "Alliance Action",
+        "server_event": "Server Event",
+        "other": "Overige"
+      },
+      "buttons": {
+        "create_vote": "Vertaal naar Nederlands: 'Create Vote Now"
+      },
+      "labels": {
+        "request_id": "Vraag-ID"
+      },
+      "messages": {
+        "vote_created": "Vote Created.",
+        "no_reason": "Er is geen reden opgegeven.",
+        "awaiting_approval": "Wacht op de goedkeuring van de president.",
+        "empty_state": "Je hebt nog geen enkele verzoek om te stemmen ingediend.",
+        "submit_success": "Het voorstel is met succes ingediend!",
+        "submit_error": "Het is niet gelukt om het voorstel in te dienen.",
+        "load_error": "Fout bij het laden van de verzoeken (‘Failed to load requests’)."
+      }
+    },
+    "president_vote_approvals": {
+      "title": "Bevestigen stemmen",
+      "nav_title": "Vote Approvals",
+      "description": "Beoordel en stemmen de voorstellen af.",
+      "description_full": "Beoordelen en goedkeuren de voorstellen voor stemmingen die zijn ingediend door de leden van het bestuur."
+    },
+    "discord_votes_history": {
+      "title": "Historie van stemmen",
+      "nav_title": "Historie van stemmen",
+      "description": "Alle stemhistorie en -resultaten van de raad kunnen worden bekeken."
+    },
+    "votes_management": {
+      "title": "Beheer van stemmen",
+      "nav_title": "Historie van de stemmen",
+      "description": "Alle stemmingen van de raad kunnen worden bekeken en worden verwerkt."
+    },
+    "season2_manager": {
+      "title": "Kalender met evenementen van Seizoen 2",
+      "nav_title": "Evenementenkalender",
+      "description": "De evenementen van Seizoen 2 beheren en plannen."
+    },
+    "security_audit": {
+      "title": "Securiteit-auditlog",
+      "nav_title": "Audit Loggen",
+      "description": "Beoordel de beveiligingsincidenten in het systeem."
+    },
+    "security_backups": {
+      "title": "Systeembak-ups",
+      "nav_title": "Rekopieën",
+      "description": "Beheer systeemback-ups en herstellingen."
+    }
+  },
+  "common": {
+    "buttons": {
+      "approve": "Goedkeuren",
+      "reject": "Weigeren.",
+      "submit": "Vertalen naar Nederlands: 'Submit",
+      "cancel": "Annuleren",
+      "save": "Save",
+      "delete": "Verwijder.",
+      "close": "Vertalen naar Nederlands: 'Sluiten",
+      "edit": "Vertalen naar Nederlands:  \n‘Edit’",
+      "view": "Vertalen naar Nederlands: 'View",
+      "back": "Terug",
+      "add": "Add",
+      "remove": "Verwijder.",
+      "update": "Update",
+      "create": "Vertalen naar Nederlands: 'Create",
+      "send": "Stuur.",
+      "export": "Vertalen naar Nederlands: 'Export",
+      "import": "Vertalen naar Nederlands: 'Import",
+      "refresh": "Vertalen naar Nederlands: 'Refresh",
+      "search": "Vertaling naar Nederlands: 'Search",
+      "filter": "Filter",
+      "reset": "Herstellen (of opnieuw instellen)."
+    },
+    "labels": {
+      "title": "Titel",
+      "description": "Omschrijving",
+      "category": "Categorie",
+      "status": "Status",
+      "actions": "De acties",
+      "date": "Date",
+      "time": "Tijd",
+      "name": "Naam",
+      "email": "E-mail",
+      "role": "Rol",
+      "roles": "Rolen",
+      "alliance": "alliance",
+      "alliances": "allianties",
+      "power": "De kracht",
+      "rank": "Rank",
+      "tag": "Tag",
+      "created": "Gecreëerd",
+      "updated": "Upgedateerd",
+      "created_by": "Gecreëerd door:",
+      "updated_by": "Upgedat door': de persoon of groep die het document heeft bijgewerkt.",
+      "discord_id": "Discord ID",
+      "in_game_name": "In-game-naam",
+      "yes": "Yes",
+      "no": "No",
+      "active": "Actief",
+      "inactive": "Inactief",
+      "pending": "In afwachting van...",
+      "approved": "Goedkeurd.",
+      "rejected": "Afgekeurd",
+      "visible": "Zichtbaar",
+      "hidden": "Verborgen"
+    },
+    "alliance": {
+      "r5": "R5 (Leider)",
+      "r4": "R4 (Officier)",
+      "ape": "APE (Power Editor)",
+      "member_count": "Lidenaantal",
+      "power_value": "De Power Value",
+      "alliance_name": "Naam van de alliantie",
+      "alliance_tag": "Alliance Tag",
+      "r5_name": "R5 Naam",
+      "r5_discord_id": "R5 Discord-ID",
+      "add_r4": "Voeg R4 toe.",
+      "remove_r4": "Verwijder R4.",
+      "rules_signed": "De regels zijn ondertekend.",
+      "can_vote": "Kan stemmen.",
+      "role_title": "Rol/Titel"
+    },
+    "discord": {
+      "channel": "Channel",
+      "channels": "Channels",
+      "template": "Template",
+      "templates": "Templates",
+      "message": "Bericht",
+      "announcement": "Announcement",
+      "scheduled": "Gereserveerd",
+      "channel_id": "Channel ID",
+      "channel_name": "Channel Naam",
+      "channel_type": "Type van kanaal",
+      "message_content": "Inhoud bericht",
+      "send_time": "Send Time",
+      "recurring": "Herhaalend",
+      "one_time": "Eenmalig"
+    },
+    "votes": {
+      "vote": "Stemmen.",
+      "votes": "‘Votes’",
+      "proposal": "Forstel",
+      "proposals": "Forums",
+      "vote_title": "Vote Title",
+      "vote_description": "Omschrijving van het stemmen",
+      "submitted_by": "Ingestuurd door': de persoon of organisatie die het document heeft ingediend.",
+      "submitted_at": "Submitted At': De tijd waarop de inhoud is ingediend.",
+      "deadline": "Uitsluitingsdatum",
+      "time_remaining": "Tijd Over': de tijd die nog over is.",
+      "vote_yes": "Yes",
+      "vote_no": "No",
+      "vote_abstain": "Houd je af.",
+      "results": "Uitslagen",
+      "passed": "Geaccepteerd.",
+      "failed": "Mislukt.",
+      "in_progress": "Translatie is in progress."
+    },
+    "messages": {
+      "success": "Succes!",
+      "error": "Er is een fout opgetreden.",
+      "loading": "Laden...",
+      "no_data": "Er zijn geen beschikbare gegevens.",
+      "confirm_action": "Weet je zeker dat dit de juiste keuze is?",
+      "saved": "De veranderingen zijn met succes gespeeld (gezet)."
+    },
+    "navigation": {
+      "home": "Deze pagina is bedoeld om gebruikers te begeleiden bij het instellen en gebruiken van hun account.",
+      "dashboard": "Dashboard",
+      "alliances": "allianties",
+      "votes": "‘Votes’",
+      "governance": "Bestuur",
+      "settings": "Instellingen",
+      "logout": "Log uit.",
+      "server_management": "Serverbeheer",
+      "discord": "Discord",
+      "seasons": "Seasons",
+      "users": "Gebruikers",
+      "security": "Beveiliging",
+      "system": "Systeem"
+    },
+    "welcome_back": "Welkom terug, {{name}}!"
+  },
+  "seasons": {
+    "coming_soon": "Skort verkrijgbaar.",
+    "season1": {
+      "title": "Seizoen 1",
+      "nav_title": "Seizoen 1",
+      "description": "Wintersaison – Afgerond",
+      "status": "Voltooid",
+      "date_label": "Datum van de seizoenen",
+      "dates": "December 2024 - Januari 2025"
+    },
+    "season2": {
+      "title": "Kalender met evenementen van Seizoen 2",
+      "nav_title": "Seizoen 2",
+      "description": "Event Management voor de Lente-seizoen"
+    },
+    "season3": {
+      "title": "Seizoen 3",
+      "nav_title": "Seizoen 3",
+      "description": "Summer Season - Komt snel!",
+      "placeholder_message": "De mogelijkheid om evenementen te beheren voor Seizoen 3 zal binnenkort beschikbaar zijn."
+    },
+    "season4": {
+      "title": "Seizoen 4",
+      "nav_title": "Seizoen 4",
+      "description": "Seizoen van de herfst – komt snel!",
+      "placeholder_message": "De mogelijkheid om evenementen te beheren voor Seizoen 4 zal binnenkort beschikbaar zijn."
+    },
+    "season5": {
+      "title": "Seizoen 5",
+      "nav_title": "Seizoen 5",
+      "description": "Wintersaison – komt snel!",
+      "placeholder_message": "De mogelijkheid om evenementen te beheren voor Seizoen 5 zal binnenkort beschikbaar zijn."
+    }
+  },
+  "notifications": {
+    "title": "Notificaties",
+    "aria_label": "Notificaties",
+    "mark_all_read": "Mark all as read",
+    "loading": "Laden van notificaties...",
+    "view_all": "Alle notificaties weergeven"
+  },
+  "roles": {
+    "admin": "Admin",
+    "president": "President",
+    "r5": "R5",
+    "r4": "R4",
+    "ape": "APE"
+  },
+  "users": {
+    "magic_links": {
+      "nav_title": "Magic Links"
+    },
+    "send_login_link": {
+      "nav_title": "Stuur de inloglink."
+    }
+  },
+  "discord": {
+    "rate_limits": {
+      "nav_title": "Rate Limits"
+    },
+    "config": {
+      "nav_title": "Vertaling naar Nederlands: 'Configuratie"
+    }
+  },
+  "security": {
+    "monitor": {
+      "nav_title": "Security Monitor"
+    },
+    "keys": {
+      "nav_title": "JWT Key Rotation"
+    },
+    "mfa": {
+      "nav_title": "MFA Management"
+    },
+    "test_token": {
+      "nav_title": "Vertaal naar Nederlands: 'Genereren van een test-token."
+    }
+  },
+  "system": {
+    "migration": {
+      "nav_title": "Migratie"
+    },
+    "metrics": {
+      "nav_title": "Metrics"
+    },
+    "notifications": {
+      "nav_title": "Notificaties"
+    },
+    "changelog": {
+      "nav_title": "Changelog"
+    }
+  },
+  "forms": {
+    "validation": {
+      "required": "Dit veld is vereist.",
+      "email": "Vul alstublieft een geldig e-mailadres in.",
+      "min_length": "Er moeten ten minste {{length}} karakters zijn.",
+      "max_length": "Er mogen niet meer dan {{length}} karakters zijn.",
+      "numeric": "Het moet een nummer zijn.",
+      "url": "Voorzie de invoer van een geldige URL."
+    }
+  },
+  "login": {
+    "page_title": "Inloggen als admin",
+    "subtitle": "Alliance Admin Portal",
+    "form": {
+      "email_label": "E-mailadres van de alliantie",
+      "email_placeholder": "Je.e-mail@voorbeeld.com",
+      "submit_button": "Stuur de Magic Link."
+    },
+    "errors": {
+      "no_session": "Voor toegang tot deze pagina moet u zich eerst inloggen.",
+      "expired": "Uw sessie is verlopen. Log in alstublieft opnieuw.",
+      "revoked": "Uw sessie is ingetrokken. Log in alstublieft opnieuw.",
+      "invalid": "De sessie is niet geldig. Log in alstublieft opnieuw.",
+      "key_rotated": "De beveiligingscodes zijn veranderd. Log in alsnog om uw eigen veiligheid te kunnen garanderen.",
+      "unknown_email": "De e-mailadressen zijn niet herkend of niet geautoriseerd.",
+      "send_failed": "Het is niet gelukt om de ‘magic link’ te sturen. Probeer het nog eens."
+    },
+    "success": {
+      "sent": "De magische link is verstuurd! Kijk in je e-mail en klik op de link om in te loggen."
+    },
+    "info": {
+      "title": "Hoe het werkt:",
+      "steps": [
+        "Vul het e-mailadres van uw alliantie in.",
+        "Ontvang een veilige inloglink per e-mail.",
+        "Klik op de link om toegang te krijgen tot je dashboard.",
+        "De links vervallen na 10 minuten."
+      ]
+    }
+  },
+  "help_drawer": {
+    "default_title": "Hulp en documentatie",
+    "button_label": "Hulp.",
+    "aria_open": "Open de hulpdocumentatie.",
+    "aria_close": "‘Close Help’",
+    "report": {
+      "button": "Meld een probleem.",
+      "modal_title": "Meld een probleem.",
+      "description": "Beschrijf het probleem dat u ervaart. Hierdoor wordt het administratieteam op de hoogte gebracht van de details met betrekking tot uw sessie.",
+      "label": "Beschrijving van het probleem",
+      "placeholder": "Vertel wat je probeerde te doen en waar het mis ging...",
+      "context_title": "De volgende informatie wordt automatisch meegesteld:",
+      "context_labels": {
+        "page": "Huidige pagina:",
+        "user": "Uw account:",
+        "browser": "Browser:",
+        "timestamp": "Timestamp:"
+      },
+      "validation": {
+        "required": "Voorzie ons alstublieft van een beschrijving van het probleem dat u ervaart."
+      },
+      "submitting": "‘In behandeling…’",
+      "success": "Het probleemrapport is met succes ingediend. Een beheerder wordt hiervan op de hoogte gesteld.",
+      "error": "Het is niet gelukt om het probleemrapport in te dienen. Probeer het nog eens.",
+      "network_error": "Netwerkprobleem:"
+    }
+  },
+  "emails": {
+    "magic_link": {
+      "subject": "Uw inloglink voor {{app_name}}",
+      "badge": "Vraag om inlogging als administrator (ADMIN LOGIN REQUEST)",
+      "greeting": "Hallo {{username}},",
+      "intro": "U hebt om toegang gevraagd tot het dashboard van {{app_name}}. Klik op de onderstaande knop om veilig in te loggen:",
+      "button": "🚀 Toegang tot het administratieve dashboard",
+      "alternative_label": "Alternatief:",
+      "alternative_text": "Kopieer en plak deze link in je browser.",
+      "security_title": "🛡️ Beveiligingsinformatie",
+      "security_items": {
+        "single_use": "Deze link is <strong>enkel voor één gebruik</strong> bedoeld en wordt ongeldig nadat u zich voor het eerst met succes hebt ingelogd.",
+        "expiry": "De link is over <span class=\"expiry-badge\">⏱️ 10 minuten</span> niet meer geldig.",
+        "no_share": "<strong>Deel deze link nooit met iemand anders</strong>, want daardoor krijgt die persoon volledig toegang tot je administratieve account.",
+        "ignore": "Als je deze inloggegevens niet hebt gevraagd, kunt je deze e-mail gerust negeren.",
+        "no_reuse": "Vanwege de veiligheid kan de link niet opnieuw worden gebruikt nadat er op wordt geklikt."
+      },
+      "no_reply_title": "⚠️ Let op:",
+      "no_reply_text": "Dit is een automatisch verzonden bericht van een e-mailadres waarop geen antwoord wordt gegeven. Probeer alstublieft niet te reageren op deze e-mail, aangezien deze postvak niet wordt bewaakt. Voor ondersteuning kunt u contact opnemen met de beheerder van uw server.",
+      "footer_regards": "Met vriendelijke groeten,",
+      "footer_team": "Het team van {{app_name}}",
+      "footer_sent_to": "Deze e-mail is verzonden naar {{email}}."
+    },
+    "role_change": {
+      "subject": "`{{app_name}} – Uw toegang is bijgewerkt.`",
+      "badge": "ACCESS UPDATE",
+      "greeting": "Hallo {{username}},",
+      "intro": "Een beheerder heeft uw toegangsrechten voor het administratieve paneel van {{app_name}} bijgewerkt.",
+      "changes_title": "Wat is veranderd?",
+      "changed_by_label": "Veranderd door:",
+      "date_label": "Datum:",
+      "questions_text": "Deze veranderingen gaan onmiddellijk in werking. Als u vragen hebt of denkt dat deze verandering op een foutieve manier is gemaakt, kunt u contact opnemen met een beheerder.",
+      "access_text": "Om toegang te krijgen tot het administratieve paneel, vraag je op de inlogpagina om een ‘magic link’ of neem je contact op met een administrator om een inloglink te ontvangen.",
+      "footer_notification": "Dit is een automatische notificatie van {{app_name}}.",
+      "footer_unexpected": "Als u niet met deze verandering had gerekend, kunt u zich direct met de administrateur van uw alliantie in contact stellen.",
+      "role_label": "Rol:",
+      "powereditor_label": "Power Editor:",
+      "alliances_label": "Alliance Access:",
+      "yes": "Yes",
+      "no": "No",
+      "none": "(Niets)"
+    },
+    "test": {
+      "subject": "{{app_name}} – SMTP-teste-mail",
+      "title": "✅ Het SMTP-test is succesvol geweest.",
+      "badge": "De configuratie werkt zoals verwacht.",
+      "congratulations": "<strong>Feliciteerden!</strong> Als je deze e-mail hebt ontvangen, werkt je SMTP-configuratie correct.",
+      "config_title": "📧 Configuratie is getest.",
+      "config_smtp_server": "<strong>SMTP-server:</strong> <code>example.com</code>",
+      "config_port": "<strong>Port:</strong> <code>465</code> (SSL)",
+      "config_auth": "<strong>Authentisatie:</strong> ✅ Geslaagd",
+      "config_from": "<strong>Afkomstige adres:</strong> <code>noreply@example.com</code>",
+      "next_steps_title": "Volgende stappen:",
+      "next_steps_text": "Je kunt nu verdergaan met het implementeren van het JWT-administratiesysteem. De authenticatie via de ‘magic link’ werkt correct.",
+      "no_reply_title": "**Notitie:**",
+      "no_reply_text": "Dit is een automatische bericht. Probeer alstublieft niet te reageren op deze e-mail, omdat deze postvak niet wordt bewaakt.",
+      "footer_regards": "Met vriendelijke groeten,",
+      "footer_team": "Het team van {{app_name}}",
+      "footer_sent_to": "Proef-e-mail is verzonden naar {{email}}."
+    },
+    "council_rotation": {
+      "subject": "`{{app_name}} – Het roteringschema van de raden is bijgewerkt.`",
+      "title": "🗳️ De rotering van de leden van het bestuur is bijgewerkt.",
+      "badge": "Tijdens de regeneratieproces is een nieuwe planning gemaakt.",
+      "greeting": "Hallo.",
+      "intro": "Het roteringschema van het bestuur is opnieuw vastgesteld voor de komende {{weken}}. Alle toekomstige posities in het bestuur (rang 6-15) zijn opnieuw berekend om een eerlijke verdeling te garanderen.",
+      "next_rotation_title": "📅 Volgende rotatie",
+      "week_label": "Weeknummer:",
+      "date_label": "Rotatiedatum:",
+      "regenerated_by_label": "Geregenereerd door:",
+      "distribution_title": "📊 Toekomstige distributie van de rotatiepatronen",
+      "table_alliance": "alliance",
+      "table_rotations": "Rotaties (de komende {{weken}})",
+      "notice_title": "ℹ️ belangrijk:",
+      "notice_text": "De regeneratie heeft alleen effect op de komende weken. Alle rotaties van de afgelopen en huidige week blijven onveranderd.",
+      "button_text": "Kijk je het volledige rooster eens aan.",
+      "footer_notification": "Dit is een automatische notificatie van {{app_name}}.",
+      "footer_no_reply": "Alsjeblieft, reageer niet op deze e-mail."
+    },
+    "vote_notification": {
+      "subject": "Nieuwe stemming in de Raad",
+      "title": "Nieuwe stemming in de Raad",
+      "subtitle": "Uw stem is nodig.",
+      "greeting": "Hallo {{name}},",
+      "voting_as": "‘Voting as’ betekent dat je op een bepaalde manier stemt of dat je je stem op een specifieke manier uitdraagt.",
+      "deadline": "Uitslagdag van de stemming",
+      "vote_button": "Deel je stem.",
+      "alternative_method": "Of kopieer deze link.",
+      "voting_options": "‘Voting Options’",
+      "option_yes": "Yes",
+      "option_no": "No",
+      "option_abstain": "Houd je af.",
+      "discord_alternative": "Je kunt ook stemmen via Discord door te reageren op de privébericht (DM) van de bot met: ‘vote: ja’, ‘vote: nee’ of ‘vote: onthoud’.",
+      "security_title": "**Beveiligingsmededeling**",
+      "security_notice": "Dit is een enkele keer geldige stemlink die slechts 48 uur lang bruikbaar is. Deel deze link niet met anderen. Als je niet had verwacht dat je zou mogen stemmen, neem dan contact op met een beheerder.",
+      "vote_id": "Vote ID"
+    },
+    "vote_result": {
+      "subject": "Uitslagen van de stemming",
+      "title": "Uitslagen van de stemming",
+      "greeting": "Hallo {{name}},",
+      "you_voted": "Je hebt voor {{choice}} gestemd.",
+      "did_not_vote": "⚠️ Je hebt niet gestemd.",
+      "results_breakdown": "Uitwerking van de resultaten",
+      "yes": "Yes",
+      "no": "No",
+      "abstain": "Houd je af.",
+      "absent": "Afwezig",
+      "total": "Het totale aantal kiesgerechtigde stemmers",
+      "vote_id": "Vote ID"
+    },
+    "no_reply_notice": "Dit is een automatische bericht van een e-mailadres waarop geen antwoord wordt gegeven. Probeer alstublieft niet te reageren op deze e-mail.",
+    "footer_copyright": "Server 1586 Council – Alle rechten voorbehouden."
+  }
+}

@@ -3,9 +3,10 @@
  * i18n (Internationalization) System for Admin Panel
  *
  * Provides translation functions and language management for the admin site.
- * Supports 5 languages: English, Spanish, Portuguese, German, Korean
+ * Supports 15 languages: English, Spanish, Portuguese, German, Korean, French,
+ * Italian, Japanese, Chinese, Russian, Arabic, Dutch, Polish, Turkish, Swedish, Danish
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @author Server 1586 Team
  */
 
@@ -58,6 +59,83 @@ $i18n_supported_languages = [
         'name' => 'Korean',
         'native_name' => '한국어',
         'flag' => '🇰🇷',
+        'direction' => 'ltr'
+    ],
+    'fr' => [
+        'code' => 'fr',
+        'name' => 'French',
+        'native_name' => 'Français',
+        'flag' => '🇫🇷',
+        'direction' => 'ltr'
+    ],
+    'it' => [
+        'code' => 'it',
+        'name' => 'Italian',
+        'native_name' => 'Italiano',
+        'flag' => '🇮🇹',
+        'direction' => 'ltr'
+    ],
+    'ja' => [
+        'code' => 'ja',
+        'name' => 'Japanese',
+        'native_name' => '日本語',
+        'flag' => '🇯🇵',
+        'direction' => 'ltr'
+    ],
+    'zh' => [
+        'code' => 'zh',
+        'name' => 'Chinese (Simplified)',
+        'native_name' => '简体中文',
+        'flag' => '🇨🇳',
+        'direction' => 'ltr'
+    ],
+    'ru' => [
+        'code' => 'ru',
+        'name' => 'Russian',
+        'native_name' => 'Русский',
+        'flag' => '🇷🇺',
+        'direction' => 'ltr'
+    ],
+    'ar' => [
+        'code' => 'ar',
+        'name' => 'Arabic',
+        'native_name' => 'العربية',
+        'flag' => '🇸🇦',
+        'direction' => 'rtl'
+    ],
+    'nl' => [
+        'code' => 'nl',
+        'name' => 'Dutch',
+        'native_name' => 'Nederlands',
+        'flag' => '🇳🇱',
+        'direction' => 'ltr'
+    ],
+    'pl' => [
+        'code' => 'pl',
+        'name' => 'Polish',
+        'native_name' => 'Polski',
+        'flag' => '🇵🇱',
+        'direction' => 'ltr'
+    ],
+    'tr' => [
+        'code' => 'tr',
+        'name' => 'Turkish',
+        'native_name' => 'Türkçe',
+        'flag' => '🇹🇷',
+        'direction' => 'ltr'
+    ],
+    'sv' => [
+        'code' => 'sv',
+        'name' => 'Swedish',
+        'native_name' => 'Svenska',
+        'flag' => '🇸🇪',
+        'direction' => 'ltr'
+    ],
+    'da' => [
+        'code' => 'da',
+        'name' => 'Danish',
+        'native_name' => 'Dansk',
+        'flag' => '🇩🇰',
         'direction' => 'ltr'
     ]
 ];

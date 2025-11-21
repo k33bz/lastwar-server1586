@@ -1,65 +1,65 @@
 {
   "help": {
     "president_approvals": {
-      "title": "Hilfe bei der Genehmigung des Präsidentschaftswahlausgangs",
+      "title": "„Hilfe bei der Genehmigung des Präsidentschaftswahlvorgangs“",
       "sections": {
         "overview": {
-          "title": "Überblick:",
-          "intro": "Als <strong>Präsident</strong> des Servers sind Sie verantwortlich für die Überprüfung und Genehmigung der von den Ratmitgliedern eingereichten Abstimmungsvorschläge. Dies ist eine entscheidende Rolle im Governance-System des Servers.",
+          "title": "Überblick",
+          "intro": "Als <strong>Präsident</strong> des Servers sind Sie dafür verantwortlich, die von den Ratmitgliedern eingereichten Abstimmungsvorschläge zu prüfen und zu genehmigen. Dies ist eine entscheidende Rolle im Governance-System des Servers.",
           "responsibilities": {
-            "title": "Ihre Verantwortlichkeiten:",
+            "title": "„Ihre Verantwortlichkeiten:“",
             "items": [
-              "Überprüfen Sie alle eingehenden Vorschläge für Abstimmungen.",
-              "Genehmigen gut formulierte, legitime Vorschläge.",
-              "Lehnen Sie Vorschläge ab, die unklar sind, inakzeptabel sind oder für eine Abstimmung nicht erforderlich sind.",
-              "Bitte geben Sie klare Rückmeldungen bei der Ablehnung von Vorschlägen.",
-              "Handeln Sie rechtzeitig – wenn möglich innerhalb von 12 Stunden."
+              "„Überprüfen Sie alle eingehenden Vorschläge für Abstimmungen.“",
+              "„Gut formulierte, legitime Vorschläge genehmigen.“",
+              "Lehnen Sie Vorschläge ab, die unklar sind, inakzeptabel sind oder für die keine Abstimmung erforderlich ist.",
+              "Geben Sie bei der Ablehnung von Vorschlägen klare Rückmeldungen ab.",
+              "Handeln Sie rechtzeitig – möglichst innerhalb von 12 Stunden."
             ]
           },
-          "auto_approval_note": "Sicherheitsnetz für automatische Genehmigungen: Wenn Sie einen Vorschlag nicht innerhalb von 12 Stunden überprüfen, wird er automatisch genehmigt und eine Abstimmung wird durchgeführt. Dies verhindert Engpässe – allerdings sollten Sie diese Seite regelmäßig besuchen.\n\nUnveränderte Elemente:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+          "auto_approval_note": "**Sicherheitsnetz für die automatische Genehmigung:** Wenn Sie einen Vorschlag nicht innerhalb von 12 Stunden überprüfen, wird er automatisch genehmigt und eine Abstimmung wird durchgeführt. Dies verhindert Engpässe – allerdings bedeutet es, dass Sie diese Seite regelmäßig überprüfen sollten."
         },
         "proposal_table": {
-          "title": "Verständnis der Vorschlagsliste",
-          "intro": "Die Tabelle zeigt alle noch ausstehenden Abstimmungsvorschläge, die Ihre Überprüfung erfordern:",
+          "title": "„Die Bedeutung der Vorschlagsliste verstehen“",
+          "intro": "Die Tabelle zeigt alle noch ausstehenden Abstimmungsvorschläge an, die Ihre Überprüfung erfordern.",
           "columns": {
-            "submitted_by": "Von: Dem Ratsmitglied, das den Vorschlag erstellt hat (angegeben als E-Mail-Adresse)",
-            "title": "Titel der Abstimmung: Der Titel der Abstimmung sollte klar und prägnant sein.",
-            "description": "Beschreibung: Detaillierte Erklärung dessen, worüber abgestimmt wird – klicken Sie zum Ausklappen des Inhalts, falls dieser gekürzt dargestellt wird.",
-            "category": "Kategorie: Art der Abstimmung (Änderung der Regeln, Streitigkeiten innerhalb einer Allianz, Entscheidungen über Territorien, Planung von Veranstaltungen, Sonstiges)",
-            "submitted_at": "Eingereicht am: Zum Zeitpunkt der Erstellung des Vorschlags",
-            "time_remaining": "Verbleibende Zeit: Countdown bis zur automatischen Genehmigung (12 Stunden nach Einreichung)",
-            "actions": "Aktionen: Schaltflächen „Genehmigen“ oder „ Ablehnen“"
+            "submitted_by": "<strong>Von wem eingereicht:</strong> Der Gemeinderatmitglied, der den Vorschlag erstellt hat (angegeben als E-Mail-Adresse).",
+            "title": "<strong>Titel:</strong> Der Titel der Abstimmung sollte klar und prägnant sein.",
+            "description": "**Beschreibung:** Detaillierte Erklärung dazu, worüber abgestimmt wird – klicken Sie, um den Text zu erweitern, falls er gekürzt wurde.",
+            "category": "<strong>Kategorie:</strong> Die Art der Abstimmung (Änderung der Regeln, Streitigkeiten innerhalb einer Allianz, Entscheidungen über Territorien, Planung von Veranstaltungen, Sonstiges)",
+            "submitted_at": "<strong>Eingereicht am:</strong> Zu dem Zeitpunkt, als der Vorschlag erstellt wurde.",
+            "time_remaining": "<strong>Verbleibende Zeit:</strong> Abzählung bis zur automatischen Genehmigung (12 Stunden nach Einreichung)",
+            "actions": "„<strong>Aktionen:</strong> Schaltflächen zur Genehmigung oder Ablehnung“"
           },
-          "priority_warning": "Prioritätsbewertung: Vorschläge, bei denen noch weniger Zeit bleibt, sollten zuerst bewertet werden. Achten Sie auf die roten „URGENT“-Indikatoren, die darauf hinweisen, dass weniger als 2 Stunden verbleiben."
+          "priority_warning": "**Prioritätsbeurteilung:** Vorschläge, bei denen noch weniger Zeit verbleibt, sollten zuerst geprüft werden. Achten Sie auf die roten „URGENT“-Indikatoren, die darauf hinweisen, dass weniger als 2 Stunden übrig sind."
         },
         "how_to_approve": {
-          "title": "So wird ein Vorschlag genehmigt:",
-          "steps_title": "Schritt-für-Schritt-Genehmigungsprozess:",
+          "title": "„Wie man einen Vorschlag genehmigt“",
+          "steps_title": "„Schritt-für-Schritt-Genehmigungsverfahren:“",
           "steps": [
-            "Lesen Sie bitte sorgfältig: Überprüfen Sie den Titel, die Beschreibung sowie die Kategorie.",
-            "Legitimität bewerten: Handelt es sich um eine Entscheidung auf Ratsebene? Ist klar, worüber abgestimmt wird?",
-            "Berücksichtigen Sie den Zeitpunkt: Ist jetzt der richtige Zeitpunkt für diese Abstimmung – zum Beispiel nicht während wichtiger Ereignisse?",
-            "Klicken Sie auf „Genehmigen“: Wenn der Vorschlag den vorgeschriebenen Standards entspricht.",
-            "Bestätigung: Sie erhalten eine Erfolgsmeldung.",
-            "Automatische Aktionen:  \nDie Abstimmung wird sofort erstellt und die entsprechenden Nachrichten (DMs) an alle Ratsmitglieder gesendet.  \n\nUnverändert bleiben:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+            "„<strong>Lesen Sie bitte sorgfältig:</strong> Überprüfen Sie den Titel, die Beschreibung sowie die Kategorie.“",
+            "„<strong>Bewerten der Legitimität:</strong> Handelt es sich um eine Entscheidung auf Ratsebene? Ist klar, worüber abgestimmt wird?“",
+            "„<strong>Betrachten Sie die Zeitpunktwahl:</strong> Ist jetzt der richtige Zeitpunkt für diese Abstimmung – zum Beispiel nicht während wichtiger Ereignisse?“",
+            "„Klicken Sie auf ‚Genehmigen‘: Wenn der Vorschlag den Anforderungen entspricht…“",
+            "<strong>Bestätigung:</strong> Sie werden eine Meldung mit der Bestätigung des Erfolgs erhalten.",
+            "<strong>Automatische Aktionen:</strong> Die Abstimmung wird sofort erstellt und die Direktnachrichten (DMs) an alle Ratsmitglieder gesendet."
           ],
           "after_approval": {
-            "title": "Was passiert nach der Genehmigung:",
+            "title": "„Was passiert nach der Genehmigung?“",
             "items": [
-              "Die Abstimmung wird im Discord-Bot-System erstellt.",
-              "Alle 7 Ratsmitglieder erhalten eine private Nachricht (DM) über Discord mit den detaillierten Abstimmungsergebnissen.",
+              "Die Abstimmung wird im System der Discord-Bots erstellt.",
+              "Alle 7 Mitglieder des Rates erhalten eine private Nachricht („Direct Message“) über Discord mit den detaillierten Informationen zu ihren Stimmen.",
               "Die 24-stündige Abstimmungsperiode beginnt.",
               "Der Vorschlag wurde von Ihrer Warteliste entfernt.",
               "Dem Absender wird die Genehmigung mitgeteilt."
             ]
           },
-          "criteria_title": "Genehmigungskriterien:",
+          "criteria_title": "„Genehmigungskriterien:“",
           "criteria": [
-            "✅ Klare, spezifische Überschrift und Beschreibung",
-            "✅ Legitimes Entscheidung auf Ratsebene",
+            "✅ Klarer, spezifischer Titel und Beschreibung",
+            "✅ Legitime Entscheidung auf Ratsebene",
             "✅ Nicht bereits durch bestehende Regeln oder Abstimmungen geregelt.",
             "✅ Die entsprechende Kategorie wurde ausgewählt.",
-            "✅ Angemessene Zeitwahl (nicht während großer Ereignisse oder Konflikte)"
+            "✅ Angemessene Zeitwahl – nicht während großer Ereignisse oder Konflikte."
           ]
         }
       }
@@ -67,350 +67,394 @@
   },
   "pages": {
     "dashboard": {
-      "title": "Bordüre (Dashboard)",
-      "description": "Alliance-Admin-Portal",
+      "title": "„ Dashboard“",
+      "description": "„Alliance Admin Portal“",
       "sections": {
-        "quick_actions": "Schnelle Aktionen (Quick Actions):  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-        "alliance_management": "Allianzmanagement",
-        "governance": "Governance",
-        "discord_integration": "Discord-Integration",
-        "system_admin": "Systemadministration"
+        "quick_actions": "„Schnelle Aktionen“",
+        "alliance_management": "**Allianzmanagement**",
+        "governance": "„Governance“",
+        "discord_integration": "„Discord-Integration“",
+        "system_admin": "„Systemadministration“"
       }
     },
     "alliance_edit": {
-      "title": "Bearbeiten der Allianz:",
-      "nav_title": "Redakteur:",
-      "description": "Verwaltung von Allianzinformationen und Offizieren"
+      "title": "„Bündnis bearbeiten“",
+      "nav_title": "„Editor“",
+      "description": "Verwalten Sie die Informationen zur Allianz sowie die Mitglieder der Allianz (die „Offiziere“)."
     },
     "alliances_power": {
-      "title": "Power-Updates:",
-      "nav_title": "Power Editor",
-      "description": "Aktualisierung der Werte für die Macht der Allianzen:"
+      "title": "„Power Updates“",
+      "nav_title": "„Power Editor“",
+      "description": "„Aktualisierung der Werte für die Macht der Allianzen“"
     },
     "alliance_tags_manager": {
-      "title": "Alliance Tags Manager",
-      "nav_title": "Tag Manager",
-      "description": "Verwaltung der Sichtbarkeit von Allianzen sowie der Anzeigereihenfolge:"
+      "title": "„Alliance Tags Manager“",
+      "nav_title": "„Tag Manager“",
+      "description": "Verwalten Sie die Sichtbarkeit der Allianzen sowie die Anzeigereihenfolge dieser Allianzen."
     },
     "user_management": {
-      "title": "Benutzerverwaltung",
-      "nav_title": "Benutzerverwaltung",
-      "description": "Verwaltung von Admin-Benutzern und Berechtigungen"
+      "title": "„Benutzerverwaltung“",
+      "nav_title": "„Benutzer verwalten“",
+      "description": "Verwalten Sie Admin-Benutzer und -Rechte."
     },
     "user_profile": {
-      "title": "Mein Profil",
-      "description": "Verwalten Sie Ihre Account-Einstellungen sowie die in-game-Informationen."
+      "title": "„Mein Profil“",
+      "description": "Verwalten Sie Ihre Account-Einstellungen sowie die in-Game-Daten."
     },
     "council_rotation": {
-      "title": "Ratsrotation",
-      "nav_title": "Ratsrotation",
-      "description": "Verwalten Sie den wöchentlichen Rotationsplan des Rates."
+      "title": "„Ratsrotation“",
+      "nav_title": "„Ratsrotation“",
+      "description": "„Verwalten Sie den wöchentlichen Rotationsplan des Rates.“"
     },
     "discord_announcements": {
-      "title": "Discord-Benachrichtigungen",
-      "nav_title": "Ankündigungen",
-      "description": "Senden Sie Benachrichtigungen in die Discord-Channels:"
+      "title": "„Discord-Ankündigungen“",
+      "nav_title": "„Ankündigungen“",
+      "description": "„Benachrichtigungen in Discord-Channels senden.“"
     },
     "discord_channels": {
-      "title": "Discord-Channels:",
-      "nav_title": "Kanäle:",
-      "description": "Konfigurieren Sie die Zuordnungen der Discord-Kanäle:"
+      "title": "„Discord-Channels“",
+      "nav_title": "„ Channels“",
+      "description": "Konfigurieren Sie die Zuordnungen der Discord-Kanäle."
     },
     "discord_templates": {
-      "title": "Discord-Vorlagen",
-      "nav_title": "Nachrichtenvorlagen (Message Templates):",
-      "description": "Verwaltung von Nachrichtenvorlagen"
+      "title": "„Discord-Vorlagen“",
+      "nav_title": "„Botschaftsvorlagen“ („Message Templates“)",
+      "description": "„Nachrichtenvorlagen verwalten“"
     },
     "discord_scheduled": {
-      "title": "Geplante Nachrichten:",
-      "nav_title": "Geplante Nachrichten:",
-      "description": "Verwaltung von geplanten Discord-Beiträgen"
+      "title": "„Geplante Nachrichten“",
+      "nav_title": "„Geplante Nachrichten“",
+      "description": "„Gestaltete geplante Beiträge auf Discord verwalten“"
     },
     "discord_recurring": {
-      "title": "Wiederkehrende Nachrichten:",
-      "nav_title": "Wiederkehrende Nachrichten:",
-      "description": "Verwaltung wiederkehrender Discord-Posts:"
+      "title": "„Wiederkehrende Nachrichten“",
+      "nav_title": "„Wiederholte Nachrichten“",
+      "description": "„Wiederkehrende Discord-Beiträge verwalten“"
     },
     "discord_vote_proposals": {
-      "title": "Ratsvorschläge",
-      "nav_title": "Ratsvorschläge",
-      "description": "Einreichen und verwalten von Vorschlägen für Abstimmungen des Rates"
+      "title": "„Ratsvorschläge“",
+      "nav_title": "„Ratsvorschläge“",
+      "description": "„Vorschläge für Abstimmungen im Rat einreichen und verwalten“",
+      "description_admin": "Als Präsident/Administrator können Sie Anfragen nach Abstimmungen einreichen oder Abstimmungen direkt erstellen.",
+      "description_member": "„Stellen Vorschläge für Abstimmungen dem Präsidenten zur Genehmigung vor.“",
+      "tabs": {
+        "submit": "„Vorschlag einreichen“",
+        "my_requests": "„Meine Anfragen“"
+      },
+      "form": {
+        "heading": "„Stellen Sie einen Vorschlag für die Abstimmung ein.“",
+        "title_hint": "Bleiben Sie kurz – maximal 100 Zeichen.",
+        "description_hint": "Geben Sie detaillierte Informationen darüber, worüber die Mitglieder des Rates abstimmen."
+      },
+      "help": {
+        "title": "„Wie Abstimmungsvorschläge funktionieren“",
+        "intro": "Als Mitglied des Rates können Sie Vorschläge für Abstimmungen einreichen. Ihr Vorschlag wird an den Präsidenten zur Genehmigung weitergeleitet.",
+        "admin_note": "Als Präsident/Verantwortlicher werden Ihre Stimmen sofort erstellt – ohne jegliche Genehmigung.",
+        "auto_approval": "Falls der Präsident innerhalb von 12 Stunden nicht reagiert, wird Ihr Vorschlag automatisch genehmigt."
+      },
+      "categories": {
+        "rule_change": "„Änderung der Regeln“",
+        "alliance_action": "„Alliance Action“",
+        "server_event": "„Server-Event“",
+        "other": "„Andere“"
+      },
+      "buttons": {
+        "create_vote": "„Create Vote Now“"
+      },
+      "labels": {
+        "request_id": "„Anfrage-ID“"
+      },
+      "messages": {
+        "vote_created": "„Wahlabstimmung erstellt.“",
+        "no_reason": "„Kein Grund angegeben.“",
+        "awaiting_approval": "„Wartet auf die Genehmigung des Präsidenten.“",
+        "empty_state": "Sie haben bisher noch keine Anfragen nach Abstimmungen eingereicht.",
+        "submit_success": "Vorschlag erfolgreich eingereicht!",
+        "submit_error": "„Es ist nicht gelungen, den Vorschlag einzureichen.“",
+        "load_error": "„Fehler beim Laden der Anfragen.“"
+      }
     },
     "president_vote_approvals": {
-      "title": "Genehmigung der Stimmen:",
-      "nav_title": "Stimmenabstimmungen zur Genehmigung:",
-      "description": "Überprüfen und Genehmigen von Abstimmungsvorschlägen"
+      "title": "„Stimmen genehmigen“",
+      "nav_title": "„Stimmenabstimmungen zur Genehmigung“",
+      "description": "Überprüfen und genehmigen Abstimmungsvorschläge.",
+      "description_full": "Überprüfen und genehmigen die von den Ratmitgliedern eingereichten Abstimmungsvorschläge."
+    },
+    "discord_votes_history": {
+      "title": "„Wahlergebnisverlauf“",
+      "nav_title": "„Wahlergebnisverlauf“",
+      "description": "„Alle Abstimmungsverläufe und Ergebnisse des Rates ansehen.“"
     },
     "votes_management": {
-      "title": "Wahlenmanagement",
-      "nav_title": "Wahlstättenhistorie",
+      "title": "„Wahlenmanagement“",
+      "nav_title": "„Wahlgeschichte“",
       "description": "Alle Abstimmungen des Rates anzeigen und verwalten."
     },
     "season2_manager": {
-      "title": "Kalender der Ereignisse der zweiten Saison",
-      "nav_title": "Veranstaltungskalender",
-      "description": "Verwalten Sie die Ereignisse und Termine der zweiten Saison."
+      "title": "„Kalender der Ereignisse der zweiten Saison“",
+      "nav_title": "„Veranstaltungskalender“",
+      "description": "Verwalten Sie die Veranstaltungen der zweiten Saison sowie deren Zeitplanung."
     },
     "security_audit": {
-      "title": "Sicherheitsauditorielog",
-      "nav_title": "Audit-Protokolle",
-      "description": "Überprüfen Sie Sicherheitsereignisse des Systems."
+      "title": "„Sicherheitsauditorielog“",
+      "nav_title": "„Auditorische Protokolle“",
+      "description": "„Überprüfen Sie Sicherheitsereignisse im System.“"
     },
     "security_backups": {
-      "title": "Systembackups",
-      "nav_title": "Backups:",
-      "description": "Verwaltung von Systembackups und -wiederherstellungen"
+      "title": "„Systembackups“",
+      "nav_title": "„Backups“",
+      "description": "„Systembackups verwalten und wiederherstellen“"
     }
   },
   "common": {
     "buttons": {
-      "approve": "Genehmigen.",
-      "reject": "„Reject“",
-      "submit": "Behalten Sie unverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "cancel": "Stellen Sie bitte sicher, dass alle zu übersetzenden Texte klar und ohne Rechtschreibfehler sind. Wenn Sie einen bestimmten Abschnitt des Textes hervorheben möchten, geben Sie dazu Anweisungen (z. B.: „Hervorheben: ‚R5‘“).",
-      "save": "Bleiben unverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "delete": "Löschen.  \nUnverändert belassen: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "close": "Bleiben unverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "edit": "Unverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "view": "Bleiben unverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "back": "Unverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+      "approve": "„Genehmigen“",
+      "reject": "„Abweisen“",
+      "submit": "„Submit“",
+      "cancel": "„Stornieren“",
+      "save": "„Speichern“",
+      "delete": "Löschen.",
+      "close": "„Schließen“",
+      "edit": "„Bearbeiten“",
+      "view": "„View“",
+      "back": "„Zurück“",
       "add": "Add",
-      "remove": "R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "update": "Aktualisierung:",
-      "create": "Bitte geben Sie den Text ein, den Sie übersetzt haben möchten.",
-      "send": "Bleiben unverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "export": "Unverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "import": "Import:",
-      "refresh": "Aktualisieren…",
-      "search": "Belassen Sie alles unverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "filter": "Filter:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "reset": "Beibehalten: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "remove": "Entfernen.",
+      "update": "Aktualisierung",
+      "create": "„Erstellen“",
+      "send": "„Senden“",
+      "export": "„Export“",
+      "import": "„Import“",
+      "refresh": "„Aktualisieren“",
+      "search": "„Suchen“",
+      "filter": "„Filter“",
+      "reset": "„Reset“"
     },
     "labels": {
-      "title": "Titel:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "description": "Beschreibung:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "category": "Kategorie:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "status": "Status:",
-      "actions": "Aktionen:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "date": "Datum:",
-      "time": "Zeit",
-      "name": "Name:  \nBleibt unverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "email": "E-Mail:",
-      "role": "Rolle:  \nUnverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "roles": "Rollen:",
-      "alliance": "Alliance",
-      "alliances": "Bündnisse:  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "power": "Power",
-      "rank": "Rang:  \nUnverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+      "title": "„Titel“",
+      "description": "Beschreibung",
+      "category": "Kategorie",
+      "status": "„Status“",
+      "actions": "„Aktionen“",
+      "date": "„Date“",
+      "time": "„Zeit“",
+      "name": "„Name“",
+      "email": "„E-Mail“",
+      "role": "„Role“",
+      "roles": "„Rollen“",
+      "alliance": "„Allianz“",
+      "alliances": "„Bündnisse“",
+      "power": "„Power“",
+      "rank": "„Rank“",
       "tag": "Tag",
-      "created": "Erstellt.",
-      "updated": "Aktualisiert:",
-      "created_by": "Erstellt von:",
-      "updated_by": "Aktualisiert von:  \nBehalten Sie unverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "discord_id": "Discord-ID:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "in_game_name": "In-Game-Namen:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+      "created": "„Created“",
+      "updated": "„Aktualisiert“",
+      "created_by": "„Erstellt von“",
+      "updated_by": "„Von … aktualisiert“",
+      "discord_id": "„Discord-ID“",
+      "in_game_name": "„In-Game-Name“",
       "yes": "Yes",
       "no": "No",
-      "active": "Aktiv:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "inactive": "Inaktiv.",
-      "pending": "„Pending“  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "approved": "Genehmigt.",
-      "rejected": "Abgelehnt.",
-      "visible": "Sichtbar:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "hidden": "Versteckt:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "active": "„Aktiv“",
+      "inactive": "Inaktiv",
+      "pending": "„In Bearbeitung“",
+      "approved": "„Genehmigt“",
+      "rejected": "„Abgelehnt“",
+      "visible": "„Sichtbar“",
+      "hidden": "„Versteckt“"
     },
     "alliance": {
-      "r5": "R5 (Leiter)  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "r4": "R4 (Offizier)  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "ape": "APE (Power Editor)",
-      "member_count": "Anzahl der Mitglieder:",
-      "power_value": "Power Value",
-      "alliance_name": "Allianzname:  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "alliance_tag": "Alliance-Tag",
-      "r5_name": "R5-Name:  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "r5_discord_id": "R5-Discord-ID:  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "add_r4": "Fügen Sie R4 hinzu.",
-      "remove_r4": "R4 wurde entfernt. Alle anderen Elemente bleiben unverändert: R5, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "rules_signed": "Die Regeln wurden unterzeichnet.",
-      "can_vote": "Stimmberechtigt:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "role_title": "Rolle/Bezeichnung:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, Admin, Präsident, Rat, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "r5": "„R5 (Leiter)“",
+      "r4": "R4 (Offizier)",
+      "ape": "„APE (Power Editor)“",
+      "member_count": "„Mitgliederzahl“",
+      "power_value": "„Power Value“",
+      "alliance_name": "**Bündnisname**",
+      "alliance_tag": "„Alliance Tag“",
+      "r5_name": "„R5 Name“",
+      "r5_discord_id": "„R5-Discord-ID“",
+      "add_r4": "„Fügen Sie R4 hinzu.“",
+      "remove_r4": "„R4 entfernen.“",
+      "rules_signed": "„Die Regeln wurden unterschrieben.“",
+      "can_vote": "„Kann abstimmen“",
+      "role_title": "„Rolle/Bezeichnung“"
     },
     "discord": {
-      "channel": "Channel:  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "channels": "Kanäle:",
-      "template": "Template:\n\nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "templates": "Templates",
-      "message": "Bleiben unverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "announcement": "Bekanntmachung",
-      "scheduled": "Geplant:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "channel_id": "Channel ID:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "channel_name": "Channel-Name:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "channel_type": "Channel-Typen:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "message_content": "Inhalt der Nachricht:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "send_time": "Send Time",
-      "recurring": "Wiederkehrend:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "one_time": "One-Time"
+      "channel": "„Channel“",
+      "channels": "„ Channels“",
+      "template": "„Template“",
+      "templates": "„Templates“",
+      "message": "Nachricht",
+      "announcement": "„Bekanntmachung“",
+      "scheduled": "„Geplant“",
+      "channel_id": "„Channel ID“",
+      "channel_name": "„Channel Name“",
+      "channel_type": "„Channel Type“",
+      "message_content": "Inhalt der Nachricht",
+      "send_time": "„Send Time“",
+      "recurring": "„Recurring“",
+      "one_time": "„Einmalig“"
     },
     "votes": {
-      "vote": "Abstimmung!",
-      "votes": "Stimmen:",
-      "proposal": "Vorschlag:",
-      "proposals": "Vorschläge:",
-      "vote_title": "Wahlbezeichnung:  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "vote_description": "Wahlausweis:",
-      "submitted_by": "Von:",
-      "submitted_at": "Gestellt am:",
-      "deadline": "Frist:  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "time_remaining": "Verbleibende Zeit:",
+      "vote": "„Stimmen Sie ab.“",
+      "votes": "„Stimmen“",
+      "proposal": "Vorschlag",
+      "proposals": "Vorschläge",
+      "vote_title": "„Wahltitel“",
+      "vote_description": "„Beschreibung der Abstimmung“",
+      "submitted_by": "Von… eingereicht („Submitted by“)",
+      "submitted_at": "„Angestellt am“",
+      "deadline": "Frist",
+      "time_remaining": "„Verbleibende Zeit“",
       "vote_yes": "Yes",
       "vote_no": "No",
-      "vote_abstain": "Abstain.",
-      "results": "Ergebnisse:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "passed": "„Passed“",
-      "failed": "Fehlerhaft.  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "in_progress": "In Progress…"
+      "vote_abstain": "„Abstain“ bedeutet, sich bei einer Abstimmung oder Entscheidungsfindung nicht zu beteiligen – also weder für noch gegen eine bestimmte Option zu stimmen.",
+      "results": "„Ergebnisse“",
+      "passed": "„Bestanden“",
+      "failed": "„Fehler aufgetreten“",
+      "in_progress": "„In Progress“"
     },
     "messages": {
-      "success": "Erfolg!",
-      "error": "Ein Fehler ist aufgetreten.",
-      "loading": "Belassen Sie alles unverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "no_data": "Keine Daten verfügbar.",
-      "confirm_action": "Sind Sie sich sicher?",
-      "saved": "Änderungen wurden erfolgreich gespeichert."
+      "success": "„Erfolg!“",
+      "error": "„Es ist ein Fehler aufgetreten.“",
+      "loading": "„Laden…“",
+      "no_data": "„Keine Daten verfügbar.“",
+      "confirm_action": "„Sind Sie sich sicher?“",
+      "saved": "„Änderungen wurden erfolgreich gespeichert.“"
     },
     "navigation": {
-      "home": "Startseite",
-      "dashboard": "Bordüre (Dashboard)",
-      "alliances": "Bündnisse:  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "votes": "Stimmen:",
-      "governance": "Governance",
-      "settings": "Einstellungen:",
-      "logout": "Abmelden",
-      "server_management": "Servermanagement",
+      "home": "„Startseite“",
+      "dashboard": "„ Dashboard“",
+      "alliances": "„Bündnisse“",
+      "votes": "„Stimmen“",
+      "governance": "„Governance“",
+      "settings": "Einstellungen",
+      "logout": "„Ausloggen“",
+      "server_management": "„Servermanagement“",
       "discord": "Discord",
-      "seasons": "Saisons",
-      "users": "Benutzer:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "security": "Sicherheit",
-      "system": "System"
+      "seasons": "„Seasons“",
+      "users": "„Benutzer“",
+      "security": "„Sicherheit“",
+      "system": "„System“"
     },
-    "welcome_back": "Willkommen zurück, {{name}}!"
+    "welcome_back": "„Willkommen zurück, {{Name}}!“"
   },
   "seasons": {
-    "coming_soon": "Demnächst verfügbar.",
+    "coming_soon": "„Bald verfügbar.“",
     "season1": {
-      "title": "Staffel 1",
-      "nav_title": "Staffel 1",
-      "description": "Winter-Saison – Abgeschlossen",
-      "status": "Fertiggestellt.",
-      "date_label": "Saisontermine",
+      "title": "„Staffel 1“",
+      "nav_title": "„Staffel 1“",
+      "description": "Wintersaison – abgeschlossen",
+      "status": "„Abgeschlossen“",
+      "date_label": "„Saisontermine“",
       "dates": "Dezember 2024 – Januar 2025"
     },
     "season2": {
-      "title": "Kalender der Ereignisse der zweiten Saison",
-      "nav_title": "Staffel 2",
-      "description": "Frühjahrszeit-Eventmanagement"
+      "title": "„Kalender der Ereignisse der zweiten Saison“",
+      "nav_title": "„Staffel 2“",
+      "description": "„Spring Season Event Management“"
     },
     "season3": {
-      "title": "Staffel 3",
-      "nav_title": "Staffel 3",
-      "description": "Sommer-Saison – kommt bald!",
-      "placeholder_message": "Die Funktionen zur Verwaltung von Veranstaltungen in Staffel 3 werden bald verfügbar sein."
+      "title": "„Staffel 3“",
+      "nav_title": "„Staffel 3“",
+      "description": "„Sommer-Saison – kommt bald!“",
+      "placeholder_message": "Die Funktion zur Verwaltung von Events in Staffel 3 wird bald verfügbar sein."
     },
     "season4": {
-      "title": "Staffel 4",
-      "nav_title": "Staffel 4",
-      "description": "Herbstsaison – kommt bald!",
-      "placeholder_message": "Die Funktionen zur Verwaltung von Veranstaltungen in Staffel 4 werden bald verfügbar sein."
+      "title": "„Staffel 4“",
+      "nav_title": "„Staffel 4“",
+      "description": "„Herbstsaison – kommt bald“",
+      "placeholder_message": "Die Verwaltung von Events in der vierten Staffel wird bald verfügbar sein."
     },
     "season5": {
-      "title": "Staffel 5",
-      "nav_title": "Staffel 5",
-      "description": "Wintersaison – kommt bald!",
-      "placeholder_message": "Die Funktionen zur Verwaltung von Veranstaltungen in Staffel 5 werden bald verfügbar sein."
+      "title": "„Staffel 5“",
+      "nav_title": "„Staffel 5“",
+      "description": "„Wintersaison – kommt bald!“",
+      "placeholder_message": "Die Verwaltung von Veranstaltungen in der fünften Staffel wird bald verfügbar sein."
     }
   },
   "notifications": {
     "title": "Benachrichtigungen",
     "aria_label": "Benachrichtigungen",
-    "mark_all_read": "Markieren Sie alles als „gelesen“.",
-    "loading": "Ladebenachrichtigungen…",
-    "view_all": "Alle Benachrichtigungen ansehen."
+    "mark_all_read": "„Alle als gelesen markieren“",
+    "loading": "„Ladungsinformationen werden angezeigt…“",
+    "view_all": "„Alle Benachrichtigungen ansehen“"
   },
   "roles": {
-    "admin": "Admin:",
-    "president": "PRÄSIDENT",
+    "admin": "„Admin“",
+    "president": "„Präsident“",
     "r5": "R5",
     "r4": "R4",
     "ape": "APE"
   },
   "users": {
     "magic_links": {
-      "nav_title": "Magic Links"
+      "nav_title": "„Magic Links“"
     },
     "send_login_link": {
-      "nav_title": "Senden Sie den Login-Link."
+      "nav_title": "„Senden Sie den Anmeldelink.“"
     }
   },
   "discord": {
     "rate_limits": {
-      "nav_title": "Ratenbegrenzungen (Rate Limits):  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "nav_title": "„Rate Limits“"
     },
     "config": {
-      "nav_title": "Konfiguration:"
+      "nav_title": "Konfiguration"
     }
   },
   "security": {
     "monitor": {
-      "nav_title": "Security Monitor"
+      "nav_title": "„Security Monitor“"
     },
     "keys": {
-      "nav_title": "JWT-Schlüsselrotation"
+      "nav_title": "„JWT-Schlüsselrotation“"
     },
     "mfa": {
-      "nav_title": "MFA Management"
+      "nav_title": "„MFA-Management“"
     },
     "test_token": {
-      "nav_title": "Bitte geben Sie einen Testtext zur Übersetzung ein."
+      "nav_title": "„Test-Token generieren“"
     }
   },
   "system": {
     "migration": {
-      "nav_title": "Migration"
+      "nav_title": "„Migration“"
     },
     "metrics": {
-      "nav_title": "Metriken:"
+      "nav_title": "„Metriken“"
     },
     "notifications": {
       "nav_title": "Benachrichtigungen"
     },
     "changelog": {
-      "nav_title": "Changelog:"
+      "nav_title": "„Changelog“"
     }
   },
   "forms": {
     "validation": {
-      "required": "Dieses Feld ist erforderlich.",
+      "required": "„Dieses Feld ist erforderlich.“",
       "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-      "min_length": "Der Text enthält viele spezifische Begriffe und Symbole, die möglicherweise keine direkte Übersetzung in eine andere Sprache haben. Daher ist es wichtig zu beachten, dass einige Elemente im Originaltext beibehalten werden müssen, um ihre Bedeutung im Zieltext zu bewahren.\n\nHier ist eine mögliche Übersetzung des Textes:\n\n„Muss mindestens {{length}} Zeichen lang sein.“\n\nBitte beachten Sie, dass die Anzahl der Zeichen nicht im Originaltext angegeben ist und daher nicht in die Übersetzung einbezogen werden kann. Wenn die genaue Zeichenzahl bekannt ist, sollte sie entsprechend eingefügt werden.\n\nDie anderen Elemente wie „R5“, „APE“, „NAP15“, „Discord“, „SMTP“, „JWT“, „API“, „UvvU“, „ORCE“, „MTOP“, „FNXS“, „MZKU“, „admin“, „president“, „council“, „🚀“, „📋“, „🛡️“, „⚠️“, „✅“, „🗳️“, „📅“, „📊“, „ℹ️“ usw. werden im Zieltext ebenfalls so übernommen, da sie keine direkte Übersetzung benötigen und ihre Bedeutung im Kontext des Textes erhalten bleiben sollen.",
-      "max_length": "Die Anzahl der Zeichen darf nicht mehr als {{length}} betragen.",
-      "numeric": "Es muss eine Zahl sein.",
+      "min_length": "Es müssen mindestens {{length}} Zeichen sein.",
+      "max_length": "Es dürfen nicht mehr als {{length}} Zeichen sein.",
+      "numeric": "„Das muss eine Zahl sein.“",
       "url": "Bitte geben Sie eine gültige URL ein."
     }
   },
   "login": {
-    "page_title": "Administrativer Login",
-    "subtitle": "Alliance-Admin-Portal",
+    "page_title": "„Administratoren-Login“",
+    "subtitle": "„Alliance Admin Portal“",
     "form": {
-      "email_label": "Allianz-E-Mail-Adresse:",
-      "email_placeholder": "your.email@example.com",
-      "submit_button": "Senden Sie den Magic Link."
+      "email_label": "„Alliance-E-Mail-Adresse“",
+      "email_placeholder": "„your.email@example.com“",
+      "submit_button": "„Senden Sie den Magic Link.“"
     },
     "errors": {
       "no_session": "Bitte melden Sie sich an, um auf diese Seite zuzugreifen.",
       "expired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
       "revoked": "Ihre Sitzung wurde widerrufen. Bitte melden Sie sich erneut an.",
       "invalid": "Ungültige Sitzung. Bitte melden Sie sich erneut an.",
-      "key_rotated": "Die Sicherheitskeys wurden aktualisiert. Bitte melden Sie sich erneut an, um Ihre Sicherheit zu gewährleisten.",
+      "key_rotated": "Die Sicherungsschlüssel wurden aktualisiert. Bitte melden Sie sich erneut an – das dient Ihrer eigenen Sicherheit.",
       "unknown_email": "Die E-Mail-Adresse wurde nicht erkannt oder ist nicht autorisiert.",
       "send_failed": "Es ist nicht gelungen, den „Magic Link“ zu senden. Bitte versuchen Sie es noch einmal."
     },
@@ -418,154 +462,154 @@
       "sent": "Der „magische“ Link wurde versendet! Überprüfen Sie Ihre E-Mail und klicken Sie auf den Link, um sich anzumelden."
     },
     "info": {
-      "title": "So funktioniert es:",
+      "title": "„So funktioniert es:“",
       "steps": [
         "Geben Sie die E-Mail-Adresse Ihrer Allianz ein.",
         "Erhalten Sie einen sicheren Anmeldelink per E-Mail.",
         "Klicken Sie auf den Link, um zu Ihrem Dashboard zuzugreifen.",
-        "Die Links sind nach 10 Minuten abgelaufen."
+        "Die Links verfallen nach 10 Minuten."
       ]
     }
   },
   "help_drawer": {
-    "default_title": "Hilfe & Dokumentation:",
-    "button_label": "Hilfe:",
-    "aria_open": "Öffnen Sie die Hilfedokumentation.",
-    "aria_close": "Bitte beachten Sie, dass einige der Begriffe in diesem Text keine direkten Übersetzungen haben und daher im Originaltext belassen wurden. Hier ist die übersetzte Version des restlichen Textes:",
+    "default_title": "„Hilfe & Dokumentation“",
+    "button_label": "„Hilfe“",
+    "aria_open": "„Offene Hilfedokumentation“",
+    "aria_close": "„Nähere Hilfe“",
     "report": {
-      "button": "Problem melden",
-      "modal_title": "Problem melden",
-      "description": "Beschreiben Sie das Problem, das Sie erleben. Dadurch wird das Administratorenteam mit detaillierten Informationen zu Ihrer Sitzung informiert.",
-      "label": "Problembeschreibung:",
-      "placeholder": "Beschreiben Sie, was Sie versuchen wollten – und was schiefgelaufen ist…",
-      "context_title": "R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+      "button": "„Ein Problem melden“",
+      "modal_title": "„Ein Problem melden“",
+      "description": "Beschreiben Sie das Problem, das Sie haben. Dadurch wird das Administratorenteam mit detaillierten Informationen zu Ihrer Sitzung benachrichtigt.",
+      "label": "„Problembeschreibung“",
+      "placeholder": "Beschreiben Sie, was Sie versuchen wollten, und was schiefgelaufen ist…",
+      "context_title": "Die folgenden Informationen werden automatisch mitgeführt:",
       "context_labels": {
-        "page": "Bleiben unverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-        "user": "Ihr Konto:  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-        "browser": "Unverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-        "timestamp": "Zeitstempel:"
+        "page": "Aktuelle Seite:",
+        "user": "„Ihr Konto:“",
+        "browser": "„Browser:“",
+        "timestamp": "„Zeitstempel:“"
       },
       "validation": {
-        "required": "Bitte beschreiben Sie das Problem, das Sie erleben."
+        "required": "Bitte beschreiben Sie das Problem, das Sie haben."
       },
-      "submitting": "Senden…",
-      "success": "Bericht über das Problem wurde erfolgreich eingereicht! Ein Administrator wird benachrichtigt.",
-      "error": "Es ist nicht gelungen, den Fehlerbericht abzusenden. Bitte versuchen Sie es noch einmal.",
-      "network_error": "Netzwerkfehler:"
+      "submitting": "„Abgeschickt…”",
+      "success": "Bericht über das Problem wurde erfolgreich eingereicht! Ein Admin wird benachrichtigt.",
+      "error": "Es ist nicht gelungen, den Fehlerbericht abzusenden. Versuchen Sie es bitte noch einmal.",
+      "network_error": "„Netzwerkfehler:“"
     }
   },
   "emails": {
     "magic_link": {
-      "subject": "Ihr Anmeldelink für {{app_name}}:",
-      "badge": "ANFRAGE ZUM ADMINISTRATIVEN LOGGIN",
-      "greeting": "Hallo {{username}},",
+      "subject": "Ihr Anmelde-Link für {{app_name}}",
+      "badge": "„Anfrage zur Anmeldung als Administrator“",
+      "greeting": "„Hallo {{username}},“",
       "intro": "Sie haben um Zugriff auf das Dashboard von {{app_name}} gebeten. Klicken Sie auf die untenstehende Schaltfläche, um sich sicher anzumelden:",
-      "button": "🚀 Zugang zum Admin- Dashboard",
-      "alternative_label": "Belassen Sie alles unverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "alternative_text": "Kopieren und diesen Link in Ihren Browser einfügen:",
+      "button": "🚀 Zugriff auf das Administratordashboard",
+      "alternative_label": "„Alternativ:“",
+      "alternative_text": "Kopieren Sie diesen Link und fügen Sie ihn in Ihren Browser ein.",
       "security_title": "🛡️ Sicherheitsinformationen",
       "security_items": {
         "single_use": "Dieser Link ist <strong>nur für einmaligige Nutzung</strong> vorgesehen und wird nach Ihrem ersten erfolgreichen Anmelden ungültig.",
         "expiry": "Der Link läuft in <span class=\"expiry-badge\">⏱️ 10 MINUTEN</span> ab.",
-        "no_share": "Teilen Sie diesen Link niemals mit jemandem – er gewährt vollständigen Zugriff auf Ihr Administratorkonto.",
-        "ignore": "Falls Sie diese Anmeldung nicht selbst angefordert haben, können Sie diesen E-Mail-Bericht ruhig ignorieren.",
-        "no_reuse": "Aus Sicherheitsgründen kann der Link nach einem Klick nicht erneut verwendet werden."
+        "no_share": "„Teilen Sie diesen Link niemals mit jemandem – er gewährt vollständigen Zugriff auf Ihr Administratorkonto.“",
+        "ignore": "Falls Sie diese Anmeldung nicht selbst angefordert haben, können Sie diesen E-Mail-Brief ruhig ignorieren.",
+        "no_reuse": "Aus Sicherheitsgründen kann der Link nach dem Klicken nicht mehr verwendet werden."
       },
       "no_reply_title": "⚠️ Hinweis:",
-      "no_reply_text": "Dies ist eine automatisierte Nachricht von einer E-Mail-Adresse, auf die keine Antworten gesendet werden können. Bitte antworten Sie nicht auf diese E-Mail – dieser Postfach wird nicht überwacht. Für Unterstützung wenden Sie sich an Ihren Serveradministrator.",
-      "footer_regards": "Mit freundlichen Grüßen,",
-      "footer_team": "Das Team von {{app_name}}",
-      "footer_sent_to": "Dieser E-Mail wurde an {{email}} gesendet."
+      "no_reply_text": "Dies ist eine automatisierte Nachricht von einer E-Mail-Adresse, auf die keine Antworten gesendet werden können. Bitte antworten Sie nicht auf diese E-Mail – dieser Postfach wird schließlich nicht überwacht. Für Unterstützung wenden Sie sich bitte an Ihren Serveradministrator.",
+      "footer_regards": "„Mit freundlichen Grüßen,“",
+      "footer_team": "Das „{{app_name}}-Team“",
+      "footer_sent_to": "Diese E-Mail wurde an {{email}} gesendet."
     },
     "role_change": {
-      "subject": "{{app_name}} – Ihr Zugang wurde aktualisiert.",
-      "badge": "Zusatzinformationen zur Aktualisierung des Zugriffsrechts (Access Update):",
-      "greeting": "Hallo {{username}},",
-      "intro": "Ein Administrator hat Ihre Zugriffsrechte für das Admin-Panel von {{app_name}} aktualisiert.",
-      "changes_title": "Was sich geändert hat:",
-      "changed_by_label": "Geändert wurden:  \nR5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
+      "subject": "„{{app_name}} – Ihr Zugriff wurde aktualisiert.“",
+      "badge": "„Zugriffsaktualisierung“",
+      "greeting": "„Hallo {{username}},“",
+      "intro": "Ein Administrator hat Ihre Zugriffsrechte für das Administrationspanel von {{app_name}} aktualisiert.",
+      "changes_title": "Was hat sich geändert?",
+      "changed_by_label": "„Verändert von:“",
       "date_label": "Datum:",
       "questions_text": "Diese Änderungen treten sofort in Kraft. Falls Sie Fragen haben oder denken, dass diese Änderung versehentlich vorgenommen wurde, wenden Sie sich bitte an einen Administrator.",
-      "access_text": "Um auf das Administrationspanel zuzugreifen, fordern Sie einen speziellen Link auf der Anmeldeseite an oder wenden Sie sich an einen Administrator, der Ihnen den AnmeldeLink sendet.",
-      "footer_notification": "Dies ist eine automatische Benachrichtigung von {{app_name}}.",
+      "access_text": "Um auf das Admin-Panel zuzugreifen, bitten Sie auf der Anmeldeseite um einen „Magic Link“ oder wenden Sie sich an einen Admin, damit er Ihnen einen Anmeldelink sendet.",
+      "footer_notification": "„Dies ist eine automatische Benachrichtigung von {{app_name}}.“",
       "footer_unexpected": "Falls Sie mit dieser Änderung nicht gerechnet haben, wenden Sie sich bitte umgehend an den Administrator Ihrer Allianz.",
-      "role_label": "Rolle:  \nUnverändert: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "powereditor_label": "Power Editor:",
-      "alliances_label": "Alliance Access:",
+      "role_label": "„Rolle:“",
+      "powereditor_label": "„Power Editor:“",
+      "alliances_label": "„Alliance Access:“",
       "yes": "Yes",
       "no": "No",
-      "none": "R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "none": "„(Keine Angabe)“"
     },
     "test": {
-      "subject": "{{app_name}} – SMTP-Test-E-Mail",
+      "subject": "„{{app_name}} – SMTP-Test-E-Mail“",
       "title": "✅ SMTP-Test erfolgreich",
-      "badge": "Konfiguration funktioniert einwandfrei.",
-      "congratulations": "Herzlichen Glückwunsch! Wenn Sie diese E-Mail erhalten haben, funktioniert Ihre SMTP-Konfiguration korrekt.",
-      "config_title": "📧 Konfiguration getestet.",
-      "config_smtp_server": "SMTP-Server: `example.com`",
-      "config_port": "Port: <code>465</code> (SSL)",
-      "config_auth": "Authentifizierung: ✅ Erfolgreich",
-      "config_from": "Von-Adresse: <code>noreply@example.com</code>",
-      "next_steps_title": "Nächste Schritte:",
-      "next_steps_text": "Sie können nun mit der Bereitstellung des JWT-Administrationsystems fortfahren. Die Authentifizierung über den sogenannten „Magic Link“ funktioniert einwandfrei.",
-      "no_reply_title": "Bitte beachten Sie, dass einige der Begriffe in diesem Text keine direkten Übersetzungen haben und daher beibehalten wurden (z. B. „R5“, „APE“, „SMTP“, „JWT“, „API“ usw.). Falls Sie eine genaue Übersetzung für bestimmte Begriffe wünschen, geben Sie diese bitte an.",
+      "badge": "„Konfiguration funktioniert.“",
+      "congratulations": "„<strong>Herzlichen Glückwunsch!</strong> Wenn Sie diese E-Mail erhalten haben, funktioniert Ihre SMTP-Konfiguration korrekt.“",
+      "config_title": "📧 Konfiguration wurde getestet.",
+      "config_smtp_server": "<strong>SMTP-Server:</strong> <code>example.com</code>",
+      "config_port": "<strong>Port:</strong> <code>465</code> (SSL)",
+      "config_auth": "„<strong>Authentifizierung:</strong> ✅ Erfolgreich“",
+      "config_from": "<strong>Sendeadresse:</strong> <code>noreply@example.com</code>",
+      "next_steps_title": "„Nächste Schritte:“",
+      "next_steps_text": "Sie können nun mit der Bereitstellung des JWT-Administrationsystems fortfahren. Die Authentifizierung über den „Magic Link“ funktioniert einwandfrei.",
+      "no_reply_title": "Hinweis:",
       "no_reply_text": "Dies ist eine automatisierte Nachricht. Bitte antworten Sie nicht auf diese E-Mail – dieser Postfach wird nicht überwacht.",
-      "footer_regards": "Mit freundlichen Grüßen,",
-      "footer_team": "Das Team von {{app_name}}",
-      "footer_sent_to": "Test-E-Mail an {{email}} gesendet."
+      "footer_regards": "„Mit freundlichen Grüßen,“",
+      "footer_team": "Das „{{app_name}}-Team“",
+      "footer_sent_to": "Eine Test-E-Mail wurde an {{email}} gesendet."
     },
     "council_rotation": {
-      "subject": "{{app_name}} – Aktualisiertes Rotationsplan für den Rat",
-      "title": "🗳️ Aktualisierte Rotation des Rates",
-      "badge": "Zeitplan aktualisiert:",
-      "greeting": "Hallo,",
-      "intro": "Der Rhythmus der Ratsrotation wurde für die nächsten {{Wochen}} aktualisiert. Alle zukünftigen zu rotierenden Ratssitze (Ränge 6–15) wurden neu berechnet, um eine faire Verteilung zu gewährleisten.",
-      "next_rotation_title": "📅 Nächster Rotationsschritt",
-      "week_label": "Wochennummer:",
-      "date_label": "Rotationsdatum:",
-      "regenerated_by_label": "Regeneriert von:  \n(Keine Angaben vorhanden.)",
+      "subject": "„{{app_name}} – Der Zeitplan für die Rotations der Ratsmitglieder wurde aktualisiert.“",
+      "title": "🗳️ Die Rotationsregeln des Rates wurden aktualisiert.",
+      "badge": "„Zeitplan wurde aktualisiert/erneuert.“",
+      "greeting": "„Hallo.“",
+      "intro": "Der **Rhythmus der Wechsel der Ratsmitglieder** wurde für die nächsten {{Wochen}} aktualisiert. Alle zukünftigen wechselbaren Ratsposten (Rängen 6–15) wurden neu berechnet, um eine faire Verteilung zu gewährleisten.",
+      "next_rotation_title": "📅 Nächste Rotation",
+      "week_label": "„Wochennummer:“",
+      "date_label": "„Rotationsdatum:“",
+      "regenerated_by_label": "„Regeneriert von:“",
       "distribution_title": "📊 Zukünftige Verteilung der Rotationen",
-      "table_alliance": "Alliance",
-      "table_rotations": "Rotationspläne (nächste {{Wochen}})",
+      "table_alliance": "„Allianz“",
+      "table_rotations": "„Rotationen (nächste {{Wochen}})“",
       "notice_title": "ℹ️ Wichtig:",
-      "notice_text": "Die Änderungen betreffen nur die kommenden Wochen. Alle Rotationen der vergangenen und aktuellen Woche bleiben unverändert.",
-      "button_text": "Siehe vollständiges Zeitplan.",
-      "footer_notification": "Dies ist eine automatische Benachrichtigung von {{app_name}}.",
+      "notice_text": "Die Regeneration betrifft nur die kommenden Wochen. Alle Rotationen der vergangenen und aktuellen Woche bleiben unverändert.",
+      "button_text": "„Vollständiges Zeitplan anzeigen“",
+      "footer_notification": "„Dies ist eine automatische Benachrichtigung von {{app_name}}.“",
       "footer_no_reply": "Bitte antworten Sie nicht auf diese E-Mail."
     },
     "vote_notification": {
-      "subject": "Neue Abstimmung im Rat",
-      "title": "Neue Abstimmung im Rat",
-      "subtitle": "Ihre Stimme ist erforderlich.",
-      "greeting": "Hallo {{name}},",
-      "voting_as": "Abstimmung als:",
-      "deadline": "Stichtag für die Abstimmung:",
-      "vote_button": "„Geben Sie Ihre Stimme ab!“",
-      "alternative_method": "R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️",
-      "voting_options": "Wahlmöglichkeiten:",
+      "subject": "„Neue Abstimmung im Rat“",
+      "title": "„Neue Abstimmung im Rat“",
+      "subtitle": "„Ihre Stimme ist erforderlich.“",
+      "greeting": "„Hallo {{name}},“",
+      "voting_as": "„Als ‚Voting as‘ abstimmen“",
+      "deadline": "„Stimmabgabefrist“",
+      "vote_button": "„Geben Sie Ihre Stimme ab.“",
+      "alternative_method": "Oder kopieren Sie diesen Link.",
+      "voting_options": "„Wahlmöglichkeiten“",
       "option_yes": "Yes",
       "option_no": "No",
-      "option_abstain": "Abstain.",
-      "discord_alternative": "Sie können auch über Discord abstimmen, indem Sie auf die Direktnachricht (DM) des Bots mit den folgenden Antworten reagieren: „vote: yes“, „vote: no“ oder „vote: abstain“.",
-      "security_title": "Sicherheitsmitteilung",
-      "security_notice": "Dies ist ein einmaliger Abstimmungslink, der 48 Stunden lang gültig ist. Teilen Sie diesen Link nicht mit anderen Personen. Falls Sie mit dieser Abstimmung nicht gerechnet haben, wenden Sie sich bitte an einen Administrator.",
-      "vote_id": "Wahl-ID:  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "option_abstain": "„Abstain“ bedeutet, sich bei einer Abstimmung oder Entscheidungsfindung nicht zu beteiligen – also weder für noch gegen eine bestimmte Option zu stimmen.",
+      "discord_alternative": "Sie können auch über Discord abstimmen, indem Sie auf die private Nachricht (DM) des Bots mit den folgenden Antworten reagieren: „vote: ja“, „vote: nein“ oder „vote: Enthaltung“.",
+      "security_title": "„Sicherheitsmitteilung“",
+      "security_notice": "Dies ist ein einmaliger Abstimmungslink, der 48 Stunden lang gültig ist. Teilen Sie diesen Link mit niemandem. Falls Sie mit dieser Abstimmung nicht gerechnet haben, wenden Sie sich bitte an einen Administrator.",
+      "vote_id": "„Vote-ID“"
     },
     "vote_result": {
-      "subject": "Wahlergebnisse",
-      "title": "Wahlergebnisse",
-      "greeting": "Hallo {{name}},",
-      "you_voted": "Sie haben für die folgende Option gestimmt: {{choice}}",
+      "subject": "„Wahlergebnisse“",
+      "title": "„Wahlergebnisse“",
+      "greeting": "„Hallo {{name}},“",
+      "you_voted": "Sie haben für die Option „{{choice}}“ gestimmt.",
       "did_not_vote": "⚠️ Sie haben nicht gestimmt.",
-      "results_breakdown": "Erlösverteilung:",
+      "results_breakdown": "„Auswertung der Ergebnisse“",
       "yes": "Yes",
       "no": "No",
-      "abstain": "Abstain.",
-      "absent": "Abwesend.",
-      "total": "Gesamtzahl der berechtigten Wähler:",
-      "vote_id": "Wahl-ID:  \nUnverändert bleiben: R5, R4, APE, NAP15, Discord, SMTP, JWT, API, UvvU, ORCE, MTOP, FNXS, MZKU, admin, president, council, 🚀, 📋, 🛡️, ⚠️, ✅, 🗳️, 📅, 📊, ℹ️"
+      "abstain": "„Abstain“ bedeutet, sich bei einer Abstimmung oder Entscheidungsfindung nicht zu beteiligen – also weder für noch gegen eine bestimmte Option zu stimmen.",
+      "absent": "„Abwesend“",
+      "total": "„Gesamte wahlberechtigte Wähler“",
+      "vote_id": "„Vote-ID“"
     },
     "no_reply_notice": "Dies ist eine automatisierte Nachricht von einer E-Mail-Adresse, auf die keine Antworten gesendet werden können. Bitte antworten Sie nicht auf diese E-Mail.",
-    "footer_copyright": "Server 1586 – Rat der Verwalter: Alle Rechte vorbehalten."
+    "footer_copyright": "„Server 1586 – Rat der Verwalter; Alle Rechte vorbehalten.“"
   }
 }

@@ -1,0 +1,615 @@
+{
+  "help": {
+    "president_approvals": {
+      "title": "“Aide pour l’approbation du vote présidentiel”",
+      "sections": {
+        "overview": {
+          "title": "Aperçu",
+          "intro": "En tant que <strong>Président</strong> du serveur, vous êtes responsable de l’examen et de l’approbation des propositions de vote soumises par les membres du conseil. C’est un rôle essentiel dans le système de gouvernance du serveur.",
+          "responsibilities": {
+            "title": "**Vos responsabilités :**",
+            "items": [
+              "Examinez toutes les propositions de vote reçues.",
+              "Approuver les propositions bien formulées et légitimes.",
+              "Rejetez les propositions qui ne sont pas claires, inappropriées, ou pour lesquelles un vote n’est pas nécessaire.",
+              "Donnez des retours clairs lorsque vous refusez des propositions.",
+              "Agissez en temps opportun (dans les 12 heures si possible)."
+            ]
+          },
+          "auto_approval_note": "**Filet de sécurité pour l’approbation automatique :** Si vous ne révisez pas une proposition dans les 12 heures, elle sera automatiquement approuvée et un vote sera créé. Cela permet d’éviter les goulets d’étranglement, mais cela signifie que vous devez consulter cette page régulièrement."
+        },
+        "proposal_table": {
+          "title": "Comprendre le tableau des propositions",
+          "intro": "La table affiche toutes les propositions de vote en attente qui nécessitent votre examen.",
+          "columns": {
+            "submitted_by": "<strong>Auteur de la proposition :</strong> Le membre du conseil qui a rédigé la proposition (indiqué par son adresse e-mail).",
+            "title": "<strong>Titre :</strong> Le titre du vote doit être clair et concis.",
+            "description": "<strong>Description :</strong> Explication détaillée de ce sur quoi il est voté ; cliquez pour l’afficher en entier si le texte a été tronqué.",
+            "category": "**Catégorie :** Type de vote (Changement de règle, Litige d’alliance, Décision concernant un territoire, Organisation d’événement, Autre)",
+            "submitted_at": "<strong>Daté de soumission :</strong> Lors de la création de la proposition.",
+            "time_remaining": "<strong>Temps restant :</strong> Décompte jusqu’à l’approbation automatique (12 heures après la soumission).",
+            "actions": "<strong>Actions :</strong> Boutons « Approuver » ou « Rejeter »."
+          },
+          "priority_warning": "**Examen prioritaire : Les propositions pour lesquelles il reste moins de temps doivent être examinées en premier. Recherchez les indicateurs rouges « URGENT » qui indiquent qu’il reste moins de 2 heures.**"
+        },
+        "how_to_approve": {
+          "title": "Comment approuver une proposition",
+          "steps_title": "Processus d’approbation étape par étape :",
+          "steps": [
+            "<strong>Lisez attentivement :</strong> Consultez le titre, la description et la catégorie de l’élément que vous souhaitez acheter.",
+            "<strong>Évaluer la légitimité :</strong> S’agit-il d’une décision au niveau du conseil ? Est-il clair sur quoi il est voté ?",
+            "<strong>Pensez à la bonne momentologie :</strong> Est-ce le bon moment pour ce vote ? (Par exemple, pas pendant des événements majeurs.)",
+            "<strong>Cliquez sur « Approver » :</strong> Si la proposition répond aux critères requis.",
+            "<strong>Confimation :</strong> Vous verrez un message indiquant que l’opération a été réussie.",
+            "<strong>Actions automatiques :</strong> Le vote est créé immédiatement et des messages privés (DM) sont envoyés à tous les membres du conseil."
+          ],
+          "after_approval": {
+            "title": "Qu’arrive-t-il après l’approbation ?",
+            "items": [
+              "Le vote est généré au sein du système de bots de Discord.",
+              "Tous les 7 membres du conseil reçoivent un message privé (DM) sur Discord contenant les détails du vote.",
+              "La période de vote de 24 heures débute.",
+              "La proposition a été retirée de votre liste d’attente.",
+              "Le soumetteur est informé de l’approbation de sa demande."
+            ]
+          },
+          "criteria_title": "**Critères d’approbation :**",
+          "criteria": [
+            "✅ Titre et description clairs et précis.",
+            "✅ Décision légitime au niveau du conseil.",
+            "✅ Ne fait pas déjà l’objet de règles ou de votes existants.",
+            "✅ La catégorie appropriée a été sélectionnée.",
+            "✅ Un calendrier raisonnable (pas pendant des événements/mesures conflictuelles majeurs)."
+          ]
+        }
+      }
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "title": "**Tableau de bord (Dashboard)**",
+      "description": "**Portail d’administration de l’alliance (Alliance Admin Portal)**",
+      "sections": {
+        "quick_actions": "« Actions rapides »",
+        "alliance_management": "**Gestion des Alliances**",
+        "governance": "**Gouvernance**",
+        "discord_integration": "**Intégration avec Discord**",
+        "system_admin": "**Administration de systèmes**"
+      }
+    },
+    "alliance_edit": {
+      "title": "« Modifier l’alliance »",
+      "nav_title": "« Éditeur »",
+      "description": "Gérer les informations relatives à l’alliance ainsi que les officiers qui la composent."
+    },
+    "alliances_power": {
+      "title": "Mises à jour concernant les performances (« Power Updates »)",
+      "nav_title": "« Power Editor »",
+      "description": "Mettre à jour les valeurs représentant le pouvoir de l’alliance."
+    },
+    "alliance_tags_manager": {
+      "title": "Gestionnaire des étiquettes d’alliances (Alliance Tags Manager)",
+      "nav_title": "**Gestionnaire de balises (Tag Manager)**",
+      "description": "Gérer la visibilité des alliances et l’ordre de leur affichage."
+    },
+    "user_management": {
+      "title": "**Gestion des utilisateurs**",
+      "nav_title": "Gérer les utilisateurs",
+      "description": "Gérer les utilisateurs administrateurs et leurs droits d’accès."
+    },
+    "user_profile": {
+      "title": "« Mon profil »",
+      "description": "Gérez les paramètres de votre compte ainsi que les informations relatives au jeu."
+    },
+    "council_rotation": {
+      "title": "**Rotation des membres du conseil**",
+      "nav_title": "**Rotation des membres du conseil**",
+      "description": "Gérer le calendrier de rotation des membres du conseil hebdomadaire."
+    },
+    "discord_announcements": {
+      "title": "**Annonces de Discord**",
+      "nav_title": "**Annonces**",
+      "description": "Envoyer des annonces dans les canaux de Discord."
+    },
+    "discord_channels": {
+      "title": "**Canaux de Discord**",
+      "nav_title": "**Canaux**",
+      "description": "« Configurer les correspondances entre les canaux de Discord »"
+    },
+    "discord_templates": {
+      "title": "**Modèles pour Discord**",
+      "nav_title": "**Modèles de messages (Message Templates)**",
+      "description": "Gérer les modèles de messages"
+    },
+    "discord_scheduled": {
+      "title": "« Messages programmés »",
+      "nav_title": "« Messages programmés »",
+      "description": "Gérer les publications programmées sur Discord."
+    },
+    "discord_recurring": {
+      "title": "« Messages récurrents »",
+      "nav_title": "« Messages récurrents »",
+      "description": "Gérer les publications récurrentes sur Discord"
+    },
+    "discord_vote_proposals": {
+      "title": "**Propositions du Conseil**",
+      "nav_title": "**Propositions du Conseil**",
+      "description": "Soumettre et gérer les propositions de votes du conseil.",
+      "description_admin": "Soumettre des demandes de vote ou créer des votes directement en tant que président/administrateur.",
+      "description_member": "Soumettre les propositions de votes au président pour approbation.",
+      "tabs": {
+        "submit": "Soumettre la proposition.",
+        "my_requests": "« Mes demandes »"
+      },
+      "form": {
+        "heading": "Soumettre une proposition de vote.",
+        "title_hint": "Restez concis : au maximum 100 caractères.",
+        "description_hint": "Donnez des détails sur le sujet sur lequel les membres du conseil votent."
+      },
+      "help": {
+        "title": "Comment fonctionnent les propositions de vote ?",
+        "intro": "En tant que membre du conseil, vous pouvez proposer des résolutions à voter au sein du conseil. Votre proposition sera transmise au président pour approbation.",
+        "admin_note": "En tant que président/administrateur, vos votes seront créés immédiatement, sans aucune nécessité d’approbation préalable.",
+        "auto_approval": "Si le président ne répond pas dans les 12 heures, votre proposition sera automatiquement approuvée."
+      },
+      "categories": {
+        "rule_change": "Changement de règle",
+        "alliance_action": "**Alliance Action**",
+        "server_event": "Événement sur le serveur",
+        "other": "« Autres »"
+      },
+      "buttons": {
+        "create_vote": "« Créez un vote maintenant. »"
+      },
+      "labels": {
+        "request_id": "« Identifiant de la demande »"
+      },
+      "messages": {
+        "vote_created": "Le vote a été créé.",
+        "no_reason": "Aucune raison n’a été fournie.",
+        "awaiting_approval": "En attente de l'approbation du président.",
+        "empty_state": "Vous n’avez pas encore soumis aucune demande de vote.",
+        "submit_success": "La proposition a été soumise avec succès !",
+        "submit_error": "Échec à la soumission de la proposition.",
+        "load_error": "« Échec à l’affichage des demandes (requests) »."
+      }
+    },
+    "president_vote_approvals": {
+      "title": "« Approver les votes »",
+      "nav_title": "« Votes d’approbation »",
+      "description": "Examiner et approuver les propositions de votes.",
+      "description_full": "Examiner et approuver les propositions de vote soumises par les membres du conseil."
+    },
+    "discord_votes_history": {
+      "title": "Historique des votes",
+      "nav_title": "Historique des votes",
+      "description": "Voir l'ensemble de l'historique des votes et des résultats du conseil."
+    },
+    "votes_management": {
+      "title": "Gestion des votes",
+      "nav_title": "Historique des votes",
+      "description": "Voir et gérer tous les votes du conseil."
+    },
+    "season2_manager": {
+      "title": "Calendrier des événements de la saison 2",
+      "nav_title": "Calendrier des événements",
+      "description": "Gérer les événements de la saison 2 et programmer leur déroulement."
+    },
+    "security_audit": {
+      "title": "**Journal des audits de sécurité (Security Audit Log)**",
+      "nav_title": "**Journal d’audit (Audit Logs)**",
+      "description": "Examiner les événements de sécurité du système."
+    },
+    "security_backups": {
+      "title": "**Copies de sauvegarde du système (System Backups)**",
+      "nav_title": "« Sauvegardes »",
+      "description": "Gérer les sauvegardes et la restauration des systèmes."
+    }
+  },
+  "common": {
+    "buttons": {
+      "approve": "Approuver",
+      "reject": "Refuser.",
+      "submit": "Soumettre.",
+      "cancel": "Annuler.",
+      "save": "« Enregistrer »",
+      "delete": "Supprimer.",
+      "close": "“Fermer”",
+      "edit": "Modifier (ou « Editer »).",
+      "view": "« Voir »",
+      "back": "« Retourner en arrière »",
+      "add": "Add",
+      "remove": "Supprimer.",
+      "update": "Mise à jour",
+      "create": "Créer.",
+      "send": "Envoyer.",
+      "export": "**Exporter**",
+      "import": "**Traduire en français :**  \n**“Import”**",
+      "refresh": "« Rafraîchir »",
+      "search": "“Rechercher”",
+      "filter": "« Filtre »",
+      "reset": "« Réinitialiser »"
+    },
+    "labels": {
+      "title": "**Titre**",
+      "description": "**Description**",
+      "category": "**Catégorie**",
+      "status": "**Statut**",
+      "actions": "« Actions »",
+      "date": "« Date »",
+      "time": "« Time »",
+      "name": "**Nom**",
+      "email": "Courriel",
+      "role": "Rôle",
+      "roles": "Rôles",
+      "alliance": "**Alliance**",
+      "alliances": "**Alliances**",
+      "power": "**Puissance**",
+      "rank": "**Classement (ou rang)",
+      "tag": "Tag",
+      "created": "Créé.",
+      "updated": "Mis à jour",
+      "created_by": "Créé par :",
+      "updated_by": "“Auteur de la mise à jour”",
+      "discord_id": "ID de Discord",
+      "in_game_name": "**Nom dans le jeu (In-Game Name)**",
+      "yes": "Yes",
+      "no": "No",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "pending": "En attente.",
+      "approved": "Approuvé.",
+      "rejected": "Rejeté.",
+      "visible": "« Visible »",
+      "hidden": "Caché."
+    },
+    "alliance": {
+      "r5": "R5 (Lidere)",
+      "r4": "R4 (Officier)",
+      "ape": "**APE (Power Editor)**",
+      "member_count": "**Nombre de Membres**",
+      "power_value": "**Valeur de Puissance (Power Value)**",
+      "alliance_name": "**Nom de l’alliance**",
+      "alliance_tag": "**Tag d’alliance**",
+      "r5_name": "**Nom de l’élément R5**",
+      "r5_discord_id": "ID de Discord pour l’utilisateur R5",
+      "add_r4": "Ajoutez R4.",
+      "remove_r4": "“Supprimer R4.”",
+      "rules_signed": "Les règles ont été signées.",
+      "can_vote": "Peut voter.",
+      "role_title": "Rôle/Titre"
+    },
+    "discord": {
+      "channel": "Canal",
+      "channels": "**Canaux**",
+      "template": "« Template »",
+      "templates": "**Modèles (templates)**",
+      "message": "« Message »",
+      "announcement": "**Annonce**",
+      "scheduled": "Programmé.",
+      "channel_id": "ID du canal",
+      "channel_name": "**Nom du canal**",
+      "channel_type": "Type de canal",
+      "message_content": "Contenu du message",
+      "send_time": "**Heure d’envoi (Send Time)**",
+      "recurring": "« Récurrent »",
+      "one_time": "« One-Time »"
+    },
+    "votes": {
+      "vote": "“Votez.”",
+      "votes": "« Votes »",
+      "proposal": "**Proposition**",
+      "proposals": "**Propositions**",
+      "vote_title": "« Titre du vote »",
+      "vote_description": "**Description du vote**",
+      "submitted_by": "“Auteur de la soumission”",
+      "submitted_at": "Date de soumission :",
+      "deadline": "Date limite",
+      "time_remaining": "**Temps restant**",
+      "vote_yes": "Yes",
+      "vote_no": "No",
+      "vote_abstain": "S’abstenir.",
+      "results": "**Résultats**",
+      "passed": "« Accepté »",
+      "failed": "Échec.",
+      "in_progress": "En cours."
+    },
+    "messages": {
+      "success": "« Succès ! »",
+      "error": "Une erreur s’est produite.",
+      "loading": "« Chargement en cours… »",
+      "no_data": "Aucun données disponibles.",
+      "confirm_action": "« Êtes-vous sûr ? »",
+      "saved": "Les modifications ont été enregistrées avec succès."
+    },
+    "navigation": {
+      "home": "« Home »",
+      "dashboard": "**Tableau de bord (Dashboard)**",
+      "alliances": "**Alliances**",
+      "votes": "« Votes »",
+      "governance": "**Gouvernance**",
+      "settings": "**Paramètres (Settings)**",
+      "logout": "« Se déconnecter »",
+      "server_management": "**Gestion des serveurs**",
+      "discord": "Discord",
+      "seasons": "**Saisons**",
+      "users": "Utilisateurs",
+      "security": "**Sécurité**",
+      "system": "**Système**"
+    },
+    "welcome_back": "Bienvenue de retour, {{nom}}."
+  },
+  "seasons": {
+    "coming_soon": "Bientôt disponible.",
+    "season1": {
+      "title": "**Saison 1**",
+      "nav_title": "**Saison 1**",
+      "description": "Saison hivernale – Terminée.",
+      "status": "Terminé.",
+      "date_label": "**Dates des saisons**",
+      "dates": "Décembre 2024 – Janvier 2025"
+    },
+    "season2": {
+      "title": "Calendrier des événements de la saison 2",
+      "nav_title": "**Saison 2**",
+      "description": "Gestion des événements de la saison printanière"
+    },
+    "season3": {
+      "title": "**Saison 3**",
+      "nav_title": "**Saison 3**",
+      "description": "Saison d'été – Bientôt disponible",
+      "placeholder_message": "La gestion des événements de la saison 3 sera bientôt disponible."
+    },
+    "season4": {
+      "title": "**Saison 4**",
+      "nav_title": "**Saison 4**",
+      "description": "Saison d’automne – Bientôt disponible",
+      "placeholder_message": "La gestion des événements de la saison 4 sera bientôt disponible."
+    },
+    "season5": {
+      "title": "**Saison 5**",
+      "nav_title": "**Saison 5**",
+      "description": "Saison hivernale – Bientôt disponible",
+      "placeholder_message": "La gestion des événements de la saison 5 sera bientôt disponible."
+    }
+  },
+  "notifications": {
+    "title": "**Notifications**",
+    "aria_label": "**Notifications**",
+    "mark_all_read": "« Marquer toutes les messages comme lus ».",
+    "loading": "« Chargement des notifications… »",
+    "view_all": "« Afficher toutes les notifications »"
+  },
+  "roles": {
+    "admin": "**Admin**",
+    "president": "**PRÉSIDENT**",
+    "r5": "R5",
+    "r4": "R4",
+    "ape": "APE"
+  },
+  "users": {
+    "magic_links": {
+      "nav_title": "**Magic Links**"
+    },
+    "send_login_link": {
+      "nav_title": "Envoyer le lien d’identification (de connexion)."
+    }
+  },
+  "discord": {
+    "rate_limits": {
+      "nav_title": "**Limites de fréquentation (Rate Limits)**"
+    },
+    "config": {
+      "nav_title": "**Configuration**"
+    }
+  },
+  "security": {
+    "monitor": {
+      "nav_title": "**Security Monitor**"
+    },
+    "keys": {
+      "nav_title": "**Rotation des clés JWT (JSON Web Tokens)**"
+    },
+    "mfa": {
+      "nav_title": "**Gestion de l’authentification multifactorielle (MFA – Multi-Factor Authentication)**"
+    },
+    "test_token": {
+      "nav_title": "« Generer un jeton de test (Test Token) »"
+    }
+  },
+  "system": {
+    "migration": {
+      "nav_title": "**Migration**"
+    },
+    "metrics": {
+      "nav_title": "**Métriques**"
+    },
+    "notifications": {
+      "nav_title": "**Notifications**"
+    },
+    "changelog": {
+      "nav_title": "**Changelog**"
+    }
+  },
+  "forms": {
+    "validation": {
+      "required": "Cette case est obligatoire.",
+      "email": "Veuillez saisir une adresse e-mail valide.",
+      "min_length": "Le texte doit contenir au moins {{length}} caractères.",
+      "max_length": "Le nombre de caractères ne doit pas dépasser {{length}}.",
+      "numeric": "Il doit s’agir d’un nombre.",
+      "url": "Veuillez saisir une adresse URL valide."
+    }
+  },
+  "login": {
+    "page_title": "**Accès en tant qu’administrateur (Admin Login)**",
+    "subtitle": "**Portail d’administration de l’alliance (Alliance Admin Portal)**",
+    "form": {
+      "email_label": "Adresse e-mail de l'alliance",
+      "email_placeholder": "Votre_email@example.com",
+      "submit_button": "Envoyez le « Magic Link »."
+    },
+    "errors": {
+      "no_session": "Veuillez vous connecter pour accéder à cette page.",
+      "expired": "Votre session a expiré. Veuillez vous reconnecter.",
+      "revoked": "Votre session a été annulée. Veuillez vous reconnecter.",
+      "invalid": "Session invalide. Veuillez vous reconnecter.",
+      "key_rotated": "Les clés de sécurité ont été mises à jour. Veuillez vous reconnecter pour votre propre sécurité.",
+      "unknown_email": "L’adresse e-mail n’a pas été reconnue ou n’est pas autorisée.",
+      "send_failed": "Une erreur s’est produite lors de l’envoi du lien magique. Veuillez essayer à nouveau."
+    },
+    "success": {
+      "sent": "Le lien magique a été envoyé ! Vérifiez votre e-mail et cliquez sur le lien pour vous connecter."
+    },
+    "info": {
+      "title": "**Comment cela fonctionne :**",
+      "steps": [
+        "Saisissez l’adresse e-mail de votre alliance.",
+        "Recevez un lien de connexion sécurisé par e-mail.",
+        "Cliquez sur le lien pour accéder à votre tableau de bord.",
+        "Les liens expirent après 10 minutes."
+      ]
+    }
+  },
+  "help_drawer": {
+    "default_title": "“Aide et documentation”",
+    "button_label": "“Aidez-moi.”",
+    "aria_open": "Ouvrez la documentation d'aide.",
+    "aria_close": "« Aide fermée »",
+    "report": {
+      "button": "« Signaler un problème »",
+      "modal_title": "Rapportez un problème.",
+      "description": "Décrivez le problème que vous rencontrez. Cela informera l’équipe d’administration des détails de votre session.",
+      "label": "**Description du problème**",
+      "placeholder": "Décrivez ce que vous essayiez de faire et ce qui a mal tourné…",
+      "context_title": "Les informations suivantes seront incluses automatiquement :",
+      "context_labels": {
+        "page": "Page actuelle :",
+        "user": "Votre compte :",
+        "browser": "**Navigateur :**",
+        "timestamp": "« Timestamp : »"
+      },
+      "validation": {
+        "required": "Veuillez décrire le problème que vous rencontrez."
+      },
+      "submitting": "Envoi en cours…",
+      "success": "Le rapport de problème a été soumis avec succès ! Un administrateur sera informé.",
+      "error": "Échec de la soumission du rapport de problème. Veuillez essayer à nouveau.",
+      "network_error": "**Erreur de réseau :**"
+    }
+  },
+  "emails": {
+    "magic_link": {
+      "subject": "Votre lien d’identification pour « {{app_name}} ».",
+      "badge": "« Demande d’identification en tant qu’administrateur (ADMIN LOGIN Request) »",
+      "greeting": "Bonjour {{username}},",
+      "intro": "Vous avez demandé l’accès au tableau de bord de l’application {{app_name}}. Cliquez sur le bouton ci-dessous pour vous connecter en toute sécurité :",
+      "button": "🚀 Accès au tableau de bord d’administration.",
+      "alternative_label": "**Alternatif :**",
+      "alternative_text": "Copiez et collez ce lien dans votre navigateur.",
+      "security_title": "🛡️ Informations de sécurité",
+      "security_items": {
+        "single_use": "Ce lien est <strong>destiné à un usage unique</strong> et deviendra invalide après votre premier connexion réussie.",
+        "expiry": "Le lien expire dans <span class=\"expiry-badge\">⏱️ 10 MINUTES</span>.",
+        "no_share": "<strong>N’partagez jamais ce lien avec personne</strong> : il accorde un accès complet à votre compte d’administrateur.",
+        "ignore": "Si vous n’avez pas demandé cet accès (cet identifiant d’utilisateur), vous pouvez ignorer ce courriel sans aucun risque.",
+        "no_reuse": "Pour des raisons de sécurité, le lien ne peut pas être réutilisé après avoir été cliqué une fois."
+      },
+      "no_reply_title": "⚠️ Remarque :",
+      "no_reply_text": "Ceci est un message automatique provenant d’une adresse e-mail ne permettant pas de recevoir de réponses. Veuillez ne pas répondre à cet e-mail, car ce compte n’est pas surveillé. Pour obtenir de l’aide, contactez l’administrateur de votre serveur.",
+      "footer_regards": "« Avec mes meilleurs regards, »",
+      "footer_team": "L’équipe de {{app_name}}",
+      "footer_sent_to": "Ce courriel a été envoyé à {{email}}."
+    },
+    "role_change": {
+      "subject": "„{{app_name}} – Votre accès a été mis à jour.“",
+      "badge": "Mise à jour de l’accès (Access Update)",
+      "greeting": "Bonjour {{username}},",
+      "intro": "Un administrateur a mis à jour vos droits d’accès au panneau d’administration de l’application {{app_name}}.",
+      "changes_title": "**Ce qui a changé :**",
+      "changed_by_label": "Modifié par :",
+      "date_label": "**Date :**",
+      "questions_text": "Ces modifications entrent en vigueur immédiatement. Si vous avez des questions ou pensez que cette modification a été effectuée par erreur, veuillez contacter un administrateur.",
+      "access_text": "Pour accéder au panneau d’administration, demandez un lien spécial (un « lien magique ») sur la page de connexion, ou contactez un administrateur pour qu’il vous envoie ce lien.",
+      "footer_notification": "Ceci est une notification automatisée provenant de {{app_name}}.",
+      "footer_unexpected": "Si vous n’attendiez pas ce changement, veuillez contacter immédiatement l’administrateur de votre alliance.",
+      "role_label": "**Rôle :**",
+      "powereditor_label": "**Power Editor :**",
+      "alliances_label": "**Alliance Access :**",
+      "yes": "Yes",
+      "no": "No",
+      "none": "“(Aucun)”"
+    },
+    "test": {
+      "subject": "```{{app_name}} – E-mail de test pour le protocole SMTP```",
+      "title": "✅ Le test SMTP a été réussi.",
+      "badge": "La configuration fonctionne correctement.",
+      "congratulations": "<strong>Bonne nouvelle !</strong> Si vous avez reçu ce e-mail, cela signifie que votre configuration SMTP fonctionne correctement.",
+      "config_title": "📧 La configuration a été testée avec succès.",
+      "config_smtp_server": "<strong>Serveur SMTP :</strong> <code>example.com</code>",
+      "config_port": "<strong>Port :</strong> <code>465</code> (SSL)",
+      "config_auth": "<strong>Authentification :</strong> ✅ Réussie",
+      "config_from": "<strong>Adresse d'envoi :</strong> <code>noreply@example.com</code>",
+      "next_steps_title": "**Prochaines étapes :**",
+      "next_steps_text": "Vous pouvez maintenant procéder au déploiement du système d’administration basé sur les tokens JWT (JSON Web Tokens). L’authentification via des liens spéciaux fonctionnera correctement.",
+      "no_reply_title": "**Remarque :**",
+      "no_reply_text": "Ceci est un message automatique. Veuillez ne pas répondre à cet e-mail, car cette boîte mail n’est pas surveillée.",
+      "footer_regards": "« Avec mes meilleurs respects, »",
+      "footer_team": "L’équipe de {{app_name}}",
+      "footer_sent_to": "Un e-mail de test a été envoyé à {{email}}."
+    },
+    "council_rotation": {
+      "subject": "```{{app_name}} – Le calendrier de rotation des membres du conseil a été mis à jour.```",
+      "title": "🗳️ Mise à jour de la rotation des membres du conseil",
+      "badge": "Horaire régénéré.",
+      "greeting": "Bonjour.",
+      "intro": "Le **calendrier de rotation des membres du conseil** a été mis à jour pour les prochaines {{semaines}}. Tous les postes de membre du conseil soumis à rotation (rangés de 6 à 15) ont été recalculés afin d’assurer une répartition équitable.",
+      "next_rotation_title": "📅 Prochaine rotation",
+      "week_label": "**Numéro de la semaine :**",
+      "date_label": "Date de rotation :",
+      "regenerated_by_label": "Régénéré par :",
+      "distribution_title": "📊 Répartition future de la rotation des équipes",
+      "table_alliance": "**Alliance**",
+      "table_rotations": "Rotations (dans les prochaines {{semaines}})",
+      "notice_title": "ℹ️ Attention : Cela est important.",
+      "notice_text": "La régénération n’affecte que les semaines à venir. Toutes les rotations des semaines passées et de la semaine en cours restent inchangées.",
+      "button_text": "« Afficher le programme complet »",
+      "footer_notification": "C’est une notification automatisée provenant de {{app_name}}.",
+      "footer_no_reply": "Veuillez ne pas répondre à cet e-mail."
+    },
+    "vote_notification": {
+      "subject": "Nouveau vote au Conseil",
+      "title": "« Nouveau vote au Conseil »",
+      "subtitle": "Votre vote est obligatoire.",
+      "greeting": "Bonjour {{name}},",
+      "voting_as": "« voter en tant que… »",
+      "deadline": "Date limite pour le vote",
+      "vote_button": "“Votez.”",
+      "alternative_method": "Ou copiez ce lien.",
+      "voting_options": "**Options de vote**",
+      "option_yes": "Yes",
+      "option_no": "No",
+      "option_abstain": "S’abstenir.",
+      "discord_alternative": "Vous pouvez également voter via Discord en répondant au message privé (MP) du bot avec : « vote : oui », « vote : non » ou « vote : abstention ».",
+      "security_title": "**Avis de sécurité**",
+      "security_notice": "Il s’agit d’un lien de vote unique, valable pendant 48 heures. Ne partagez pas ce lien avec quiconque. Si vous n’étiez pas prévu à participer à ce vote, veuillez contacter un administrateur.",
+      "vote_id": "« Identifiant du vote »"
+    },
+    "vote_result": {
+      "subject": "Résultats des votes",
+      "title": "Résultats des votes",
+      "greeting": "Bonjour {{name}},",
+      "you_voted": "Vous avez voté pour : {{choice}}",
+      "did_not_vote": "⚠️ Vous n’avez pas voté.",
+      "results_breakdown": "**Décomposition des résultats**",
+      "yes": "Yes",
+      "no": "No",
+      "abstain": "S’abstenir.",
+      "absent": "Absent.",
+      "total": "**Nombre total de votants éligibles**",
+      "vote_id": "« Identifiant du vote »"
+    },
+    "no_reply_notice": "Ceci est un message automatique provenant d’une adresse e-mail ne permettant pas de recevoir de réponses. Veuillez ne pas répondre à cet e-mail.",
+    "footer_copyright": "Serveur 1586 – Conseil d’Administration : Tous les droits réservés."
+  }
+}

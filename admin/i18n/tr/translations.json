@@ -1,0 +1,615 @@
+{
+  "help": {
+    "president_approvals": {
+      "title": "“Başkan Seçimi Onay Sürecine Yardım”",
+      "sections": {
+        "overview": {
+          "title": "“Genel Bakış”",
+          "intro": "Sunucunun <strong>Başkanı</strong> olarak, konsey üyeleri tarafından sunulan oylama tekliflerini incelemek ve onaylamaktan sorumlusunuz. Bu, sunucunun yönetim sisteminde çok önemli bir roldir.",
+          "responsibilities": {
+            "title": "**Sorumluluklarınız:**",
+            "items": [
+              "Gelen tüm oylama tekliflerini inceleyin.",
+              "İyi yapılandırılmış ve meşru olan teklifleri onaylayın.",
+              "Açık olmayan, uygunsuz olan veya oylamaya gerek duymayan teklifleri reddedin.",
+              "Teklifleri reddederken açık ve net geri bildirimlerde bulunun.",
+              "Zamanında hareket edin (mümkünse 12 saat içinde)."
+            ]
+          },
+          "auto_approval_note": "**Otomatik Onay Güvenlik Ağı:** Bir teklifi 12 saat içinde incelemezseniz, otomatik olarak onaylanır ve bir oylama oluşturulur. Bu durum tıkanıklıkları önler; ancak bu sayfayı düzenli olarak kontrol etmeniz gerektiği anlamına gelir."
+        },
+        "proposal_table": {
+          "title": "“Teklif Tablosunu Anlamak”",
+          "intro": "Tablo, incelemenizi gerektiren tüm bekleyen oylama tekliflerini göstermektedir.",
+          "columns": {
+            "submitted_by": "**Gönderen:** Teklifi oluşturan konsey üyesi (e-posta adresi ile gösterilmiştir)",
+            "title": "**Başlık:** Oylama başlığı; açık ve öz olmalıdır.",
+            "description": "**Açıklama:** Oylanan konunun ayrıntılı bir açıklamasıdır; metin kısaltılmışsa genişletmek için tıklayın.",
+            "category": "**Kategori:** Oy türü (Kuralların Değiştirilmesi, İttifak Anlaşmazlıkları, Toprak Kararları, Etkinlik Planlaması, Diğer)",
+            "submitted_at": "**Gönderildiği Tarih:** Teklif oluşturulduğunda.",
+            "time_remaining": "**Kalan Süre:** Otomatik onay için geri sayım başladı; başvurudan itibaren 12 saat var.",
+            "actions": "<strong>Eylemler:</strong> Onayla veya Reddet butonları"
+          },
+          "priority_warning": "**Öncelikli İnceleme:** Kalan süresi daha az olan teklifler önce incelenmelidir. Kalan sürenin 2 saatten az olduğunu gösteren kırmızı “ACİL” (URGENT) işaretlerine dikkat edin."
+        },
+        "how_to_approve": {
+          "title": "Bir Teklifi Nasıl Onaylarım?",
+          "steps_title": "Adım adım onay süreci:",
+          "steps": [
+            "**Dikkatlice okuyun:** Başlığı, açıklamayı ve kategoriyi gözden geçirin.",
+            "**Meşruiyeti değerlendirin:** Bu, konsey düzeyinde bir karar mıdır? Oylanacak konu açıkça belirtilmiş midir?",
+            "“<strong>Zamanlamayı göz önünde bulundurun:</strong> Şu an bu oylama için uygun bir zaman mı? (Örneğin, büyük etkinlikler sırasında değil.)”",
+            "“<strong>‘Onayla’ya tıklayın:</strong> Eğer teklif standartlara uygunsa…”",
+            "**Onay:** Bir başarı mesajı göreceksiniz.",
+            "**<strong>Otomatik eylemler:</strong> Oylama hemen oluşturulur ve tüm konsey üyelerine özel mesajlar (DM’ler) gönderilir.**"
+          ],
+          "after_approval": {
+            "title": "Onaylandıktan sonra ne olur?",
+            "items": [
+              "Oylama, Discord bot sistemi içinde oluşturulur.",
+              "Tüm 7 konsey üyesi, oylama detaylarını içeren bir Discord özel mesajı alır.",
+              "“24 saatlik oylama dönemi başladı.”",
+              "Öneri, beklemede olanlar listenizden kaldırıldı.",
+              "Başvuru sahibine onayın bildirildi."
+            ]
+          },
+          "criteria_title": "Onay Kriterleri:",
+          "criteria": [
+            "✅ Net ve spesifik bir başlık ile açıklama.",
+            "✅ Meşru bir konsey düzeyinde alınan karar",
+            "✅ Mevcut kurallar veya oylar tarafından zaten ele alınmamıştır.",
+            "✅ Uygun kategori seçildi.",
+            "✅ Makul zamanlama (önemli etkinlikler/konflikler sırasında değil)"
+          ]
+        }
+      }
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "title": "“Gösterge Paneli”",
+      "description": "“İttifak Yönetim Portalı”",
+      "sections": {
+        "quick_actions": "“Hızlı Eylemler”",
+        "alliance_management": "“İttifak Yönetimi”",
+        "governance": "“Yönetişim”",
+        "discord_integration": "“Discord Entegrasyonu”",
+        "system_admin": "“Sistem Yönetimi”"
+      }
+    },
+    "alliance_edit": {
+      "title": "Müttefikliği Düzenle (Edit Alliance)",
+      "nav_title": "“Editör”",
+      "description": "İttifak bilgilerini ve görevlileri yönetin."
+    },
+    "alliances_power": {
+      "title": "“Güç Güncellemeleri”",
+      "nav_title": "“Power Editor”",
+      "description": "İttifak güç değerlerini güncelle."
+    },
+    "alliance_tags_manager": {
+      "title": "“İttifak Etiketleri Yöneticisi” (Alliance Tags Manager)",
+      "nav_title": "“Etiket Yöneticisi” (Tag Manager)",
+      "description": "İttifakın görünürlüğünü ve gösterim sırasını yönetin."
+    },
+    "user_management": {
+      "title": "“Kullanıcı Yönetimi”",
+      "nav_title": "“Kullanıcıları Yönet”",
+      "description": "Yönetici kullanıcılarını ve izinlerini yönetin."
+    },
+    "user_profile": {
+      "title": "“Profilim”",
+      "description": "Hesap ayarlarınızı ve oyun içi bilgilerinizi yönetin."
+    },
+    "council_rotation": {
+      "title": "**Konsey Rotasyonu (Council Rotation)**",
+      "nav_title": "**Konsey Rotasyonu (Council Rotation)**",
+      "description": "“Haftalık konsey rotasyon programını yönetin.”"
+    },
+    "discord_announcements": {
+      "title": "“Discord Duyuruları”",
+      "nav_title": "Duyurular",
+      "description": "“Duyuruları Discord kanallarına gönderin.”"
+    },
+    "discord_channels": {
+      "title": "“Discord Kanalları”",
+      "nav_title": "“Kanallar”",
+      "description": "“Discord kanal eşleştirmelerini yapılandırın.”"
+    },
+    "discord_templates": {
+      "title": "“Discord Şablonları”",
+      "nav_title": "“Mesaj Şablonları”",
+      "description": "“Mesaj şablonlarını yönetin.”"
+    },
+    "discord_scheduled": {
+      "title": "“Zamanlanmış Mesajlar”",
+      "nav_title": "“Zamanlanmış Mesajlar”",
+      "description": "Zamanlanmış Discord gönderilerini yönetin."
+    },
+    "discord_recurring": {
+      "title": "“Tekrarlayan Mesajlar”",
+      "nav_title": "“Tekrarlayan Mesajlar”",
+      "description": "“Tekrarlayan Discord gönderilerini yönetin.”"
+    },
+    "discord_vote_proposals": {
+      "title": "“Konsey Önerileri”",
+      "nav_title": "“Konsey Önerileri”",
+      "description": "“Konsey oylama tekliflerini gönderin ve yönetin.”",
+      "description_admin": "Başkan veya yönetici olarak oylama taleplerini gönderin veya doğrudan oylamalar oluşturun.",
+      "description_member": "Oylama tekliflerini onay için başkana sunun.",
+      "tabs": {
+        "submit": "“Teklifi Sunun”",
+        "my_requests": "“İsteklerim”"
+      },
+      "form": {
+        "heading": "“Oylama Teklifini Sunun.”",
+        "title_hint": "Özet tutun; en fazla 100 karakter kullanın.",
+        "description_hint": "“Konsey üyelerinin hangi konular üzerinde oy kullandıklarına dair ayrıntılar sağlayın.”"
+      },
+      "help": {
+        "title": "“Oylama Tekliflerinin Nasıl İşlediği”",
+        "intro": "Bir konsey üyesi olarak, konseye oylama tekliflerinde bulunabilirsiniz. Teklifiniz onay için başkana gönderilecektir.",
+        "admin_note": "Başkan veya yönetici olarak, oylarınız onay alınmadan hemen oluşturulacaktır.",
+        "auto_approval": "Eğer başkan 12 saat içinde yanıt vermezse, teklifiniz otomatik olarak onaylanacaktır."
+      },
+      "categories": {
+        "rule_change": "“Kurallarda Değişiklik”",
+        "alliance_action": "“İttifak Hareketi”",
+        "server_event": "“Sunucu Etkinliği”",
+        "other": "“Diğer”"
+      },
+      "buttons": {
+        "create_vote": "“Hemen Oy Kullanın”"
+      },
+      "labels": {
+        "request_id": "“İstek Kimliği” (Request ID)"
+      },
+      "messages": {
+        "vote_created": "“Oylama oluşturuldu.”",
+        "no_reason": "“Hiçbir neden belirtilmedi.”",
+        "awaiting_approval": "“Başkanın onayını bekliyoruz.”",
+        "empty_state": "Henüz herhangi bir oy talebinde bulunmadınız.",
+        "submit_success": "“Teklif başarıyla sunuldu!”",
+        "submit_error": "Teklifi göndermeyi başaramadım.",
+        "load_error": "“İstekler yüklenemedi.”"
+      }
+    },
+    "president_vote_approvals": {
+      "title": "“Oyları Onayla”",
+      "nav_title": "“Oylama Onayları”",
+      "description": "Oylama tekliflerini inceleyin ve onaylayın.",
+      "description_full": "Konsey üyeleri tarafından sunulan oylama tekliflerini inceleyin ve onaylayın."
+    },
+    "discord_votes_history": {
+      "title": "“Oylama Geçmişi”",
+      "nav_title": "“Oylama Geçmişi”",
+      "description": "“Tüm konsey oylama geçmişini ve sonuçlarını görüntüleyin.”"
+    },
+    "votes_management": {
+      "title": "“Oyların Yönetimi”",
+      "nav_title": "“Oylama Geçmişi”",
+      "description": "Tüm belediye oylarını görüntüleyin ve yönetin."
+    },
+    "season2_manager": {
+      "title": "“2. Sezon Etkinlik Takvimi”",
+      "nav_title": "“Etkinlik Takvimi”",
+      "description": "2. Sezon etkinliklerini yönetin ve programlayın."
+    },
+    "security_audit": {
+      "title": "**Güvenlik Denetim Günlüğü (Security Audit Log)**",
+      "nav_title": "“Denetim Kayıtları”",
+      "description": "“Sistem güvenlik olaylarını inceleyin.”"
+    },
+    "security_backups": {
+      "title": "“Sistem Yedeklemeleri”",
+      "nav_title": "Yedekler",
+      "description": "Sistem yedeklerini yönetin ve geri yükleyin."
+    }
+  },
+  "common": {
+    "buttons": {
+      "approve": "Onayla.",
+      "reject": "Reddet.",
+      "submit": "“Gönder”",
+      "cancel": "İptal Et",
+      "save": "“Kaydet”",
+      "delete": "“Sil”",
+      "close": "“Kapat.”",
+      "edit": "Düzenle (Edit)",
+      "view": "Görüntüle (View)",
+      "back": "“Geri”",
+      "add": "Add",
+      "remove": "Kaldırın.",
+      "update": "Güncelleme",
+      "create": "“Oluştur”",
+      "send": "Gönder.",
+      "export": "“İhracat”",
+      "import": "“İthal et”",
+      "refresh": "“Yenile”",
+      "search": "“Arama”",
+      "filter": "“Filtre”",
+      "reset": "“Sıfırla”"
+    },
+    "labels": {
+      "title": "Başlık",
+      "description": "“Açıklama”",
+      "category": "Kategori",
+      "status": "Durum (Status)",
+      "actions": "Eylemler",
+      "date": "“Tarih”",
+      "time": "“Zaman”",
+      "name": "“İsim”",
+      "email": "E-posta",
+      "role": "“Rol”",
+      "roles": "“Roller” (Roller)",
+      "alliance": "İttifak",
+      "alliances": "İttifaklar",
+      "power": "“Güç”",
+      "rank": "“Rank”",
+      "tag": "Tag",
+      "created": "“Yaratıldı.”",
+      "updated": "Güncellendi.",
+      "created_by": "“Yaratıldı Tarafından”",
+      "updated_by": "“Güncelleyen”: “Who updated it?”",
+      "discord_id": "“Discord ID”",
+      "in_game_name": "Oyun İçi Ad",
+      "yes": "Yes",
+      "no": "No",
+      "active": "Aktif",
+      "inactive": "“Etkisiz”",
+      "pending": "“Beklemede”",
+      "approved": "Onaylandı.",
+      "rejected": "Reddedildi.",
+      "visible": "Görünür",
+      "hidden": "Gizli"
+    },
+    "alliance": {
+      "r5": "“R5 (Lider)”",
+      "r4": "**R4 (Subay)**",
+      "ape": "**APE (Power Editor)**",
+      "member_count": "Üye Sayısı",
+      "power_value": "“Güç Değeri” (Power Value)",
+      "alliance_name": "İttifak Adı",
+      "alliance_tag": "“İttifak Etiketi”",
+      "r5_name": "“R5 Adı”",
+      "r5_discord_id": "“R5 Discord ID”",
+      "add_r4": "“R4’ü ekleyin.”",
+      "remove_r4": "“R4’ü kaldırın.”",
+      "rules_signed": "“Kurallar İmzalandı.”",
+      "can_vote": "“Oy Kullanabilir”",
+      "role_title": "“Rol/Başlık”"
+    },
+    "discord": {
+      "channel": "“Kanal”",
+      "channels": "“Kanallar”",
+      "template": "“Şablon”",
+      "templates": "“Şablonlar”",
+      "message": "“Mesaj”",
+      "announcement": "Duyuru",
+      "scheduled": "“Zamanlanmış”",
+      "channel_id": "“Kanal ID”",
+      "channel_name": "“Kanal Adı”",
+      "channel_type": "“Kanal Türü”",
+      "message_content": "“Mesaj İçeriği”",
+      "send_time": "Gönderim Zamanı",
+      "recurring": "“Tekrarlayan”",
+      "one_time": "“Tek Seferlik”"
+    },
+    "votes": {
+      "vote": "“Oy verin.”",
+      "votes": "“Oylar”",
+      "proposal": "“Teklif”",
+      "proposals": "“Teklifler”",
+      "vote_title": "“Oylama Başlığı”",
+      "vote_description": "“Oylama Açıklaması”",
+      "submitted_by": "“Gönderen” (Submitted By)",
+      "submitted_at": "“Sunulduğu Tarih”",
+      "deadline": "“Son tarih”",
+      "time_remaining": "“Kalan Süre”",
+      "vote_yes": "Yes",
+      "vote_no": "No",
+      "vote_abstain": "“Çekimser kalın.”",
+      "results": "“Sonuçlar”",
+      "passed": "“Geçti.”",
+      "failed": "Başarısız oldu.",
+      "in_progress": "“Devam Ediyor”"
+    },
+    "messages": {
+      "success": "“Başarı!”",
+      "error": "“Bir hata meydana geldi.”",
+      "loading": "“Yüklüyor…”",
+      "no_data": "“Mevcut veri yok.”",
+      "confirm_action": "“Emin misin?”",
+      "saved": "Değişiklikler başarıyla kaydedildi."
+    },
+    "navigation": {
+      "home": "“Ev”",
+      "dashboard": "“Gösterge Paneli”",
+      "alliances": "İttifaklar",
+      "votes": "“Oylar”",
+      "governance": "“Yönetişim”",
+      "settings": "“Ayarlar”",
+      "logout": "Çıkış (Logout)",
+      "server_management": "“Sunucu Yönetimi”",
+      "discord": "Discord",
+      "seasons": "“Mevsimler”",
+      "users": "“Kullanıcılar”",
+      "security": "Güvenlik",
+      "system": "“Sistem”"
+    },
+    "welcome_back": "Tekrar hoş geldin, {{name}}."
+  },
+  "seasons": {
+    "coming_soon": "Yakında…",
+    "season1": {
+      "title": "“Sezon 1”",
+      "nav_title": "“Sezon 1”",
+      "description": "Kış Sezonu – Tamamlandı",
+      "status": "“Tamamlandı.”",
+      "date_label": "“Sezon Tarihleri”",
+      "dates": "“Aralık 2024 – Ocak 2025”"
+    },
+    "season2": {
+      "title": "“2. Sezon Etkinlik Takvimi”",
+      "nav_title": "“Sezon 2”",
+      "description": "“İlkbahar Mevsimi Etkinlik Yönetimi”"
+    },
+    "season3": {
+      "title": "“Sezon 3”",
+      "nav_title": "“Sezon 3”",
+      "description": "Yaz Sezonu – Yakında Başlıyor",
+      "placeholder_message": "“3. Sezon etkinlik yönetimi yakında kullanıma sunulacak.”"
+    },
+    "season4": {
+      "title": "“Sezon 4”",
+      "nav_title": "“Sezon 4”",
+      "description": "Sonbahar Sezonu – Yakında Geliyor",
+      "placeholder_message": "“4. Sezon etkinlik yönetimi yakında kullanıma sunulacak.”"
+    },
+    "season5": {
+      "title": "“Sezon 5”",
+      "nav_title": "“Sezon 5”",
+      "description": "Kış Sezonu – Yakında Geliyor",
+      "placeholder_message": "“5. Sezon etkinlik yönetimi yakında kullanıma sunulacak.”"
+    }
+  },
+  "notifications": {
+    "title": "“Bildirimler”",
+    "aria_label": "“Bildirimler”",
+    "mark_all_read": "“Tümünü okundu olarak işaretle.”",
+    "loading": "“Yükleme bildirimleri…”",
+    "view_all": "Tüm Bildirimleri Görüntüle"
+  },
+  "roles": {
+    "admin": "“Admin”",
+    "president": "“BAŞKAN”",
+    "r5": "R5",
+    "r4": "R4",
+    "ape": "APE"
+  },
+  "users": {
+    "magic_links": {
+      "nav_title": "“Magic Links”"
+    },
+    "send_login_link": {
+      "nav_title": "“Giriş Bağlantısını Gönder”"
+    }
+  },
+  "discord": {
+    "rate_limits": {
+      "nav_title": "“Oran Sınırlamaları” (Rate Limits)"
+    },
+    "config": {
+      "nav_title": "“Yapılandırma”"
+    }
+  },
+  "security": {
+    "monitor": {
+      "nav_title": "Güvenlik Monitörü"
+    },
+    "keys": {
+      "nav_title": "“JWT Anahtar Döngüsü” (JWT Key Rotation)"
+    },
+    "mfa": {
+      "nav_title": "“MFA Yönetimi”"
+    },
+    "test_token": {
+      "nav_title": "“Test Tokenu Oluştur”"
+    }
+  },
+  "system": {
+    "migration": {
+      "nav_title": "“Migreasyon”"
+    },
+    "metrics": {
+      "nav_title": "“Metrikler”"
+    },
+    "notifications": {
+      "nav_title": "“Bildirimler”"
+    },
+    "changelog": {
+      "nav_title": "“Değişiklik Geçmişi” (Change Log)"
+    }
+  },
+  "forms": {
+    "validation": {
+      "required": "“Bu alan zorunludur.”",
+      "email": "Lütfen geçerli bir e-posta adresi girin.",
+      "min_length": "En az {{length}} karakter olmalıdır.",
+      "max_length": "En fazla {{length}} karakter olmalıdır.",
+      "numeric": "“Bir sayı olmalı.”",
+      "url": "Lütfen geçerli bir URL girin."
+    }
+  },
+  "login": {
+    "page_title": "“Yönetici Girişi”",
+    "subtitle": "“İttifak Yönetim Portalı”",
+    "form": {
+      "email_label": "“İttifak E-posta Adresi”",
+      "email_placeholder": "“your.email@example.com”",
+      "submit_button": "“Magic Link’i gönderin.”"
+    },
+    "errors": {
+      "no_session": "Lütfen bu sayfaya erişmek için giriş yapın.",
+      "expired": "Sizin oturumunuz süresi doldu. Lütfen tekrar giriş yapın.",
+      "revoked": "Sizin oturumunuz iptal edilmiştir. Lütfen tekrar giriş yapın.",
+      "invalid": "Geçersiz oturum. Lütfen tekrar giriş yapın.",
+      "key_rotated": "Güvenlik anahtarları değiştirildi. Lütfen güvenliğiniz için tekrar giriş yapın.",
+      "unknown_email": "E-posta adresi tanınmıyor veya yetkilendirilmemiştir.",
+      "send_failed": "“Sihirli bağlantıyı göndermeyi başaramadık. Lütfen tekrar deneyin.”"
+    },
+    "success": {
+      "sent": "“Sihirli bağlantı gönderildi! E-postanızı kontrol edin ve giriş yapmak için bağlantıya tıklayın.”"
+    },
+    "info": {
+      "title": "“Nasıl çalışır?”",
+      "steps": [
+        "İttifakınızın e-posta adresini girin.",
+        "E-posta yoluyla güvenli bir giriş bağlantısı alın.",
+        "Panelinize erişmek için bağlantıya tıklayın.",
+        "Bağlantılar 10 dakika sonra sona erer."
+      ]
+    }
+  },
+  "help_drawer": {
+    "default_title": "“Yardım ve Dokümantasyon”",
+    "button_label": "Yardım edin.",
+    "aria_open": "“Yardım dokümantasyonunu açın.”",
+    "aria_close": "“Yardımı kapat”",
+    "report": {
+      "button": "“Bir Sorunu Bildirin.”",
+      "modal_title": "“Bir Sorunu Bildirin.”",
+      "description": "Karşılaştığınız sorunu açıklayın. Bu, yönetim ekibini oturumunuzla ilgili ayrıntılı bilgilendirir.",
+      "label": "“Sorun Tanımı”",
+      "placeholder": "“Neyi yapmaya çalıştığınızı ve nelerin ters gittiğini açıklayın…”",
+      "context_title": "“Aşağıdaki bilgiler otomatik olarak eklenecektir:”",
+      "context_labels": {
+        "page": "“Mevcut sayfa:”",
+        "user": "Hesabınız:",
+        "browser": "Tarayıcı:",
+        "timestamp": "“Zaman İşareti (Timestamp):”"
+      },
+      "validation": {
+        "required": "Lütfen karşılaştığınız sorunu açıklayın."
+      },
+      "submitting": "“Gönderiliyor…”",
+      "success": "Sorun raporu başarıyla gönderildi! Bir yönetici bilgilendirilecek.",
+      "error": "Sorun raporunu göndermekte başarısız olduk. Lütfen tekrar deneyin.",
+      "network_error": "“Ağ hatası:”"
+    }
+  },
+  "emails": {
+    "magic_link": {
+      "subject": "“{{app_name}}” için giriş bağlantınız…",
+      "badge": "“YÖNETİCİ GİRİŞ İSTEĞİ”",
+      "greeting": "Merhaba {{username}},",
+      "intro": "{{app_name}} Panosuna erişim talebinde bulundunuz. Güvenli bir şekilde giriş yapmak için aşağıdaki butona tıklayın:",
+      "button": "🚀 Yönetici Panosuna Erişim",
+      "alternative_label": "“Alternatif:”",
+      "alternative_text": "Bu bağlantıyı tarayıcınıza kopyalayıp yapıştırın:",
+      "security_title": "🛡️ Güvenlik Bilgileri",
+      "security_items": {
+        "single_use": "Bu bağlantı yalnızca tek seferlik kullanım içindir ve ilk başarılı girişinizden sonra geçersiz hale gelecektir.",
+        "expiry": "Bağlantı, <span class=\"expiry-badge\">⏱️ 10 DAKİKA</span> içinde sona erecek.",
+        "no_share": "<strong>Bu bağlantıyı asla kimseyle paylaşmayın</strong>; çünkü bu bağlantı, yönetici hesabınıza tam erişim sağlar.",
+        "ignore": "Eğer bu girişi siz istemediyseniz, bu e-postayı güvenle görmezden gelebilirsiniz.",
+        "no_reuse": "Güvenlik nedeniyle, bağlantı bir kez tıklandıktan sonra tekrar kullanılamaz."
+      },
+      "no_reply_title": "⚠️ Not:",
+      "no_reply_text": "Bu, yanıt verilmeyen bir e-posta adresinden gönderilen otomatik bir mesajdır. Lütfen bu e-postaya cevap vermeyin; çünkü bu posta kutusu izlenmemektedir. Destek için sunucu yöneticinizle iletişime geçin.",
+      "footer_regards": "Saygılarımızla,",
+      "footer_team": "“{{app_name}} Ekibi”",
+      "footer_sent_to": "Bu e-posta, {{email}} adresine gönderilmiştir."
+    },
+    "role_change": {
+      "subject": "“{{app_name}} – Erişiminiz Güncellendi.”",
+      "badge": "“Erişim Güncellemesi”",
+      "greeting": "Merhaba {{username}},",
+      "intro": "Bir yönetici, {{app_name}} yönetim paneli için erişim izinlerinizi güncelledi.",
+      "changes_title": "“Neler Değişti?”",
+      "changed_by_label": "Değiştiren:",
+      "date_label": "Tarih:",
+      "questions_text": "Bu değişiklikler derhal yürürlüğe girer. Herhangi bir sorunuz varsa veya bu değişikliğin yanlışlıkla yapıldığını düşünüyorsanız, lütfen bir yöneticiyle iletişime geçin.",
+      "access_text": "Yönetim paneline erişmek için giriş sayfasından bir “sihirli bağlantı” (magic link) isteyin veya size giriş bağlantısı gönderecek bir yöneticiyle iletişime geçin.",
+      "footer_notification": "Bu, {{app_name}}’dan gelen otomatik bir bildirimdir.",
+      "footer_unexpected": "Eğer bu değişikliği beklemiyorsanız, lütfen derhal ittifak yöneticinizle iletişime geçin.",
+      "role_label": "**Rol:**",
+      "powereditor_label": "“Power Editor:”",
+      "alliances_label": "“Alliance Access:”",
+      "yes": "Yes",
+      "no": "No",
+      "none": "“(Hiçbiri)”"
+    },
+    "test": {
+      "subject": "“{{app_name}} – SMTP Test E-postası”",
+      "title": "✅ SMTP Testi Başarılıydı",
+      "badge": "“Yapılandırma çalışıyor.”",
+      "congratulations": "<strong>Tebrikler!</strong> Eğer bu e-postayı aldıysanız, SMTP yapılandırmanız doğru bir şekilde çalışıyor demektir.",
+      "config_title": "📧 Yapılandırma test edildi.",
+      "config_smtp_server": "<strong>SMTP Sunucusu:</strong> <code>example.com</code>",
+      "config_port": "<strong>Port:</strong> <code>465</code> (SSL)",
+      "config_auth": "<strong>Kimlik Doğrulama:</strong> ✅ Başarılı",
+      "config_from": "<strong>Gönderen Adresi:</strong> <code>noreply@example.com</code>",
+      "next_steps_title": "“Bir Sonraki Adımlar:”",
+      "next_steps_text": "Artık JWT yönetim sistemini dağıtmaya devam edebilirsiniz. “Sihirli bağlantı” (magic link) kimlik doğrulama mekanizması düzgün bir şekilde çalışacaktır.",
+      "no_reply_title": "Not:",
+      "no_reply_text": "Bu otomatik bir mesajdır. Lütfen bu e-postaya cevap vermeyin; çünkü bu posta kutusu izlenmemektedir.",
+      "footer_regards": "Saygılarımızla,",
+      "footer_team": "“{{app_name}} Ekibi”",
+      "footer_sent_to": "“Test e-postası, {{email}} adresine gönderildi.”"
+    },
+    "council_rotation": {
+      "subject": "“{{app_name}} – Konsey Rotasyon Çizelgesi Güncellendi”",
+      "title": "🗳️ Konsey Rotasyonu Güncellendi",
+      "badge": "“Zamanlama yenilendi.”",
+      "greeting": "Merhaba.",
+      "intro": "**<strong>Konsey dönüşüm takvimi**, önümüzdeki {{haftalar}} için yeniden oluşturulmuştur. Adil bir dağılım sağlamak amacıyla, tüm gelecekteki konsey üyelikleri (rank 6-15) yeniden hesaplanmıştır.**",
+      "next_rotation_title": "📅 Bir Sonraki Rotasyon",
+      "week_label": "“Hafta Numarası:”",
+      "date_label": "“Dönüşüm Tarihi:”",
+      "regenerated_by_label": "“Yeniden Oluşturulmuş Tarafından:”",
+      "distribution_title": "📊 Gelecekteki Rotasyon Dağılımı",
+      "table_alliance": "İttifak",
+      "table_rotations": "“Döngüler (Gelecek {{haftalar}} içinde)”",
+      "notice_title": "ℹ️ Önemli:",
+      "notice_text": "Bu yenilenme yalnızca gelecek haftaları etkiler; tüm geçmiş ve mevcut hafta düzenlemeleri değişmeden kalır.",
+      "button_text": "“Tam Programı Görüntüle”",
+      "footer_notification": "Bu, {{app_name}} tarafından gönderilen otomatik bir bildirimdir.",
+      "footer_no_reply": "Lütfen bu e-postaya cevap vermeyin."
+    },
+    "vote_notification": {
+      "subject": "“Yeni Konsey Oylaması”",
+      "title": "“Yeni Konsey Oylaması”",
+      "subtitle": "“Oyunuz gerekiyor.”",
+      "greeting": "Merhaba {{name}},",
+      "voting_as": "“‘Voting as’ ifadesi, bir kişinin belirli bir gruba veya kategoriye aitmiş gibi oy kullanması anlamına gelir.”",
+      "deadline": "“Oylama Son Tarihi”",
+      "vote_button": "“Oyunuzu Kullanın.”",
+      "alternative_method": "Veya bu bağlantıyı kopyalayın.",
+      "voting_options": "“Oylama Seçenekleri”",
+      "option_yes": "Yes",
+      "option_no": "No",
+      "option_abstain": "“Çekilin.”",
+      "discord_alternative": "Discord aracılığıyla da oy kullanabilirsiniz; bunun için botun özel mesajına “vote: yes”, “vote: no” veya “vote: abstain” şeklinde cevap vermeniz yeterlidir.",
+      "security_title": "**Güvenlik Uyarısı**",
+      "security_notice": "Bu, 48 saat boyunca geçerli olan tek seferlik bir oylama bağlantısıdır. Lütfen bu bağlantıyı kimseyle paylaşmayın. Eğer bu oylamayı beklemiyorsanız, lütfen bir yöneticiyle iletişime geçin.",
+      "vote_id": "“Oylama Kimliği”"
+    },
+    "vote_result": {
+      "subject": "“Oylama Sonuçları”",
+      "title": "“Oylama Sonuçları”",
+      "greeting": "Merhaba {{name}},",
+      "you_voted": "Oyladınız: {{choice}}",
+      "did_not_vote": "⚠️ Oy kullanmadınız.",
+      "results_breakdown": "“Sonuçların Ayrıntılı Analizi”",
+      "yes": "Yes",
+      "no": "No",
+      "abstain": "“Çekimser kalın.”",
+      "absent": "“Absent”",
+      "total": "**Toplam Uygun Seçmen Sayısı (Total Eligible Voters)**",
+      "vote_id": "“Oylama Kimliği”"
+    },
+    "no_reply_notice": "Bu, yanıt alınamayan bir e-posta adresinden gönderilen otomatik bir mesajdır. Lütfen bu e-postaya cevap vermeyin.",
+    "footer_copyright": "“Server 1586 Konseyi – Tüm Hakları Saklıdır.”"
+  }
+}

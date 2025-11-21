@@ -1,0 +1,615 @@
+{
+  "help": {
+    "president_approvals": {
+      "title": "Hjälp med godkännande av presidentval",
+      "sections": {
+        "overview": {
+          "title": "Översikt",
+          "intro": "Som <strong>president</strong> för servern är du ansvarig för att granska och godkänna röstrådförslag som lämnas in av rådsmedlemmarna. Detta är en avgörande roll i servers styrningssystem.",
+          "responsibilities": {
+            "title": "Dina ansvar:",
+            "items": [
+              "Gå igenom alla inkommande förslag på röströstning.",
+              "Godkänn välformulerade och legitima förslag.",
+              "Avvisa förslag som är ótydliga, olämpliga eller som inte kräver en omröstning.",
+              "Ge tydlig återkoppling när du avvisar förslag.",
+              "Agera i tid (inom 12 timmar, om möjligt)."
+            ]
+          },
+          "auto_approval_note": "**Autokräftningssäkerhetsnätverk:** Om du inte granskar ett förslag inom 12 timmar kommer det automatiskt att godkännas och en omröstning kommer att skapas. Detta förhindrar flaskhalsar, men innebär att du bör kontrollera denna sida regelbundet."
+        },
+        "proposal_table": {
+          "title": "Fatta tabellen med förslag",
+          "intro": "Tabellen visar alla förväntande röstrådförslag som kräver din granskning.",
+          "columns": {
+            "submitted_by": "<strong>Inlämnat av:</strong> Den rådsmann som skapade förslaget (visas som e-postadress)",
+            "title": "<strong>Titel:</strong> Rösträtten – titeln bör vara tydlig och kortfattad.",
+            "description": "**Beskrivning:** Detaljerad förklaring om vad som rösts om – klicka för att utvidga informationen om texten är kortad.",
+            "category": "<strong>Kategori:</strong> Typen av omröstning (Regeländring, alliansefejder, beslut angående territorier, evenemangsplanering, annat)",
+            "submitted_at": "<strong>Inlämnat vid:</strong> När förslaget skapades",
+            "time_remaining": "<strong>Kvarstående tid:</strong> Räkning ned till automatisk godkännande (12 timmar från inlämningen)",
+            "actions": "<strong>Aktioner:</strong> Knappar för att godkänna eller avvisa"
+          },
+          "priority_warning": "**Prioriterad granskning:** Förslag som har mindre tid kvar bör granskas först. Leta efter röda “URGENT”-indikatorer som visar att det är mindre än 2 timmar kvar."
+        },
+        "how_to_approve": {
+          "title": "Hur man godkänner en förslag",
+          "steps_title": "Steg-för-steg godkänningsprocess:",
+          "steps": [
+            "<strong>Läs noggrant:</strong> Gå igenom titeln, beskrivningen och kategorin.",
+            "<strong>Utvärdera legitimiteten:</strong> Är detta ett beslut på rådsnivå? Er det tydligt vad som rösts om?",
+            "<strong>Tänk på tidenpunkt:</strong> Är nu en god tid för denna omröstning? (Till exempel inte under stora händelser.)",
+            "Klicka på “Godkänn”: Om förslaget uppfyller kraven.",
+            "<strong>Bekräftelse:</strong> Du kommer att se ett meddelande om framgång.",
+            "<strong>Automatiska åtgärder:</strong> Omröstningen skapas omedelbart och privata meddelanden (DM:er) sendes till alla rådsmedlemmar."
+          ],
+          "after_approval": {
+            "title": "Vad händer efter godkännande?",
+            "items": [
+              "Röstaten skapas i Discords bot-system.",
+              "Alla 7 rådmedlemmarna får ett privat meddelande (DM) via Discord med detaljer om deras röster.",
+              "“24-timmarsomröstningstiden har börjat.”",
+              "Förslaget har tagits bort från din väntelista.",
+              "Den som har lämnat in ansökan blir informerad om att ansökan har godkänts."
+            ]
+          },
+          "criteria_title": "Godkänningskrav:**",
+          "criteria": [
+            "✅ Tydlig, specifik titel och beskrivning",
+            "✅ Legitim beslut på rådsnivå",
+            "✅ Inte redan täckt av befintliga regler eller röster.",
+            "✅ Den lämpliga kategorin har valts.",
+            "✅ Rimlig tidpunkt (inte under stora händelser/konflikter)"
+          ]
+        }
+      }
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "title": "“Dashboard”",
+      "description": "“Alliance Admin Portal”",
+      "sections": {
+        "quick_actions": "“Snabba åtgärder”",
+        "alliance_management": "**Allianshantering**",
+        "governance": "Styrelse (eller förvaltning)",
+        "discord_integration": "**“Integrering med Discord”**",
+        "system_admin": "**Systemadministration**"
+      }
+    },
+    "alliance_edit": {
+      "title": "Redigera alliansen",
+      "nav_title": "Redaktör",
+      "description": "Hantera alliansinformation och officerare"
+    },
+    "alliances_power": {
+      "title": "“Power Updates”",
+      "nav_title": "“Power Editor”",
+      "description": "Uppdatera värdet på alliansens styrka."
+    },
+    "alliance_tags_manager": {
+      "title": "“Alliance Tags Manager”",
+      "nav_title": "“Tag Manager”",
+      "description": "Hantera synligheten av allianser och visningsordningen."
+    },
+    "user_management": {
+      "title": "Användarhantering",
+      "nav_title": "“Hantera användare”",
+      "description": "Hantera administratörer och deras behörigheter"
+    },
+    "user_profile": {
+      "title": "“Min profil”",
+      "description": "Hantera inställningarna för din konto och informationen inom spelet."
+    },
+    "council_rotation": {
+      "title": "**Rådsrotation**",
+      "nav_title": "**Rådsrotation**",
+      "description": "Hantera veckovis schemat för roteringen av medlemmar i rådet."
+    },
+    "discord_announcements": {
+      "title": "“Discord-annonseringar”",
+      "nav_title": "“Tillkännagivningar”",
+      "description": "Skicka meddelanden till Discord-kanaler."
+    },
+    "discord_channels": {
+      "title": "“Discord-kanaler”",
+      "nav_title": "“Kanaler”",
+      "description": "Konfigurera mappningar mellan Discord-kanaler"
+    },
+    "discord_templates": {
+      "title": "“Discord Templates”",
+      "nav_title": "“Meddelandemallar”",
+      "description": "Hantera meddelandemallar"
+    },
+    "discord_scheduled": {
+      "title": "“Planerade meddelanden”",
+      "nav_title": "“Planerade meddelanden”",
+      "description": "Hantera planerade inlägg på Discord"
+    },
+    "discord_recurring": {
+      "title": "“Upprepa meddelanden”",
+      "nav_title": "“Upprepa meddelanden”",
+      "description": "Hantera upprepada inlägg på Discord"
+    },
+    "discord_vote_proposals": {
+      "title": "Rådets förslag",
+      "nav_title": "Rådets förslag",
+      "description": "Lämna in och hantera förslag till rådets omröstningar",
+      "description_admin": "Skicka in förfrågningar om rösträtt eller skapa röstningar direkt som president/administratör.",
+      "description_member": "Lämna in förslag på röströstning till presidenten för godkännande.",
+      "tabs": {
+        "submit": "“Lämna in förslaget”",
+        "my_requests": "“Mina förfrågningar”"
+      },
+      "form": {
+        "heading": "“Lämna in förslaget på röstning.”",
+        "title_hint": "Håll det kortfattat – högst 100 tecken.",
+        "description_hint": "Förse med detaljer om vad rådmedlemmarna röstar om."
+      },
+      "help": {
+        "title": "Hur röstrådförslag fungerar",
+        "intro": "Som rådmedlem kan du föreslå omröstningar till rådet. Ditt förslag kommer att skickas till ordföranden för godkännande.",
+        "admin_note": "Som president/administratör kommer dina röster att skapas omedelbart – utan behov av godkännande.",
+        "auto_approval": "Om presidenten inte svarar inom 12 timmar kommer ditt förslag att godkännas automatiskt."
+      },
+      "categories": {
+        "rule_change": "**Regelförändring**",
+        "alliance_action": "“Alliance Action”",
+        "server_event": "**Serverevenemang**",
+        "other": "“Övrigt”"
+      },
+      "buttons": {
+        "create_vote": "“Skapa en omröstning nu.”"
+      },
+      "labels": {
+        "request_id": "“Request ID”"
+      },
+      "messages": {
+        "vote_created": "“Röstning har skapats.”",
+        "no_reason": "Ingen anledning angiven.",
+        "awaiting_approval": "Väntar på presidentens godkännande.",
+        "empty_state": "Du har ännu inte lämnat in några förfrågningar om rösträtt.",
+        "submit_success": "Förslaget har lämnats in med framgång!",
+        "submit_error": "Försöket att lämna in förslaget misslyckades.",
+        "load_error": "Försöket att ladda in förfrågningarna misslyckades."
+      }
+    },
+    "president_vote_approvals": {
+      "title": "Godkänna röster",
+      "nav_title": "“Vote Approvals”",
+      "description": "Gå igenom och godkänn förslag på rösträffningar.",
+      "description_full": "Gå igenom och godkänn de rösträckande förslag som har lämnats in av rådets medlemmar."
+    },
+    "discord_votes_history": {
+      "title": "“Röstringshistorik”",
+      "nav_title": "“Röstringshistorik”",
+      "description": "Se hela historien och resultaten från rådets omröstningar."
+    },
+    "votes_management": {
+      "title": "“Styring av röster”",
+      "nav_title": "“Röstringshistorik”",
+      "description": "Se och hantera alla rådsomröstningar"
+    },
+    "season2_manager": {
+      "title": "“Säsong 2 – Händelserkalender”",
+      "nav_title": "Händelserkalender",
+      "description": "Hantera händelserna under säsong 2 och planera tiderna för dem."
+    },
+    "security_audit": {
+      "title": "**Säkerhetsauditlog**",
+      "nav_title": "**Revisionsloggar**",
+      "description": "Granska säkerhetshändelser i systemet"
+    },
+    "security_backups": {
+      "title": "**Systembackupper**",
+      "nav_title": "“Backupper”",
+      "description": "Hantera systembackupper och återställningar"
+    }
+  },
+  "common": {
+    "buttons": {
+      "approve": "Godkänna",
+      "reject": "Avvisa",
+      "submit": "“Submit”",
+      "cancel": "“Annullera”",
+      "save": "“Spara”",
+      "delete": "“Ta bort”",
+      "close": "“Stäng.”",
+      "edit": "Redigera",
+      "view": "“View”",
+      "back": "“Tilbaka”",
+      "add": "Add",
+      "remove": "Fjarlægga.",
+      "update": "Uppdatering",
+      "create": "Skapa",
+      "send": "“Send”",
+      "export": "“Export”",
+      "import": "“Import”",
+      "refresh": "“Uppfriska”",
+      "search": "“Sök”",
+      "filter": "“Filter”",
+      "reset": "“Reset”"
+    },
+    "labels": {
+      "title": "Titel",
+      "description": "Beskrivning",
+      "category": "Kategori",
+      "status": "**Status**",
+      "actions": "“Aktioner”",
+      "date": "“Date”",
+      "time": "“Tid”",
+      "name": "**Namn**",
+      "email": "“E-post”",
+      "role": "**Roll**",
+      "roles": "“Roller”",
+      "alliance": "**Allians**",
+      "alliances": "**Allianser**",
+      "power": "“Kraft”",
+      "rank": "“Rank”",
+      "tag": "Tag",
+      "created": "Skapad",
+      "updated": "Uppdaterat",
+      "created_by": "Skapad av:",
+      "updated_by": "Uppdaterat av:",
+      "discord_id": "“Discord ID”",
+      "in_game_name": "“In-Game Name”",
+      "yes": "Yes",
+      "no": "No",
+      "active": "Aktiv",
+      "inactive": "“Inaktiv”",
+      "pending": "“In att väntas”",
+      "approved": "Godkänt",
+      "rejected": "Avvisat",
+      "visible": "“Synlig”",
+      "hidden": "Dold"
+    },
+    "alliance": {
+      "r5": "R5 (Ledare)",
+      "r4": "R4 (Officer)",
+      "ape": "APE (Power Editor)",
+      "member_count": "Antal medlemmar",
+      "power_value": "“Power Value”",
+      "alliance_name": "**Alliansens namn**",
+      "alliance_tag": "**Alliance Tag**",
+      "r5_name": "**R5-namn**",
+      "r5_discord_id": "“R5 Discord-ID”",
+      "add_r4": "Lägg till R4.",
+      "remove_r4": "Fjarlæg R4.",
+      "rules_signed": "“Reglerna har skrivits under.”",
+      "can_vote": "“Kan rösta”",
+      "role_title": "Roll/Titel"
+    },
+    "discord": {
+      "channel": "Kanal",
+      "channels": "“Kanaler”",
+      "template": "“Template”",
+      "templates": "“Templates”",
+      "message": "Budskap",
+      "announcement": "Tillkännagivande",
+      "scheduled": "“Planerat”",
+      "channel_id": "“Channel ID”",
+      "channel_name": "Kanalnamn",
+      "channel_type": "Kanaltyp",
+      "message_content": "Meddelandets innehåll",
+      "send_time": "**Send Time**",
+      "recurring": "“Recurring”",
+      "one_time": "“En gång”"
+    },
+    "votes": {
+      "vote": "Rösta.",
+      "votes": "“Röster”",
+      "proposal": "Förslag",
+      "proposals": "Förslag",
+      "vote_title": "“Vote Title”",
+      "vote_description": "**Beskrivning av rösträtten:**",
+      "submitted_by": "“Inlämnat av”",
+      "submitted_at": "“Inlämnat på”:",
+      "deadline": "Utgivningsdatum",
+      "time_remaining": "“Tid kvar”",
+      "vote_yes": "Yes",
+      "vote_no": "No",
+      "vote_abstain": "Avstå.",
+      "results": "“Resultat”",
+      "passed": "“Passade.”",
+      "failed": "“Misslyckat.”",
+      "in_progress": "I gang"
+    },
+    "messages": {
+      "success": "“Lyckat!”",
+      "error": "En fel uppstod.",
+      "loading": "“Laddar…”",
+      "no_data": "“Inga data tillgängliga.”",
+      "confirm_action": "Är du säker?",
+      "saved": "Förändringarna har sparats framgångsrikt."
+    },
+    "navigation": {
+      "home": "“Home”",
+      "dashboard": "“Dashboard”",
+      "alliances": "**Allianser**",
+      "votes": "“Röster”",
+      "governance": "Styrelse (eller förvaltning)",
+      "settings": "Inställningar",
+      "logout": "“Logga ut”",
+      "server_management": "**Serverhantering**",
+      "discord": "Discord",
+      "seasons": "“Seasons”",
+      "users": "Användare",
+      "security": "Säkerhet",
+      "system": "“System”"
+    },
+    "welcome_back": "Välkommen tillbaka, {{name}}!"
+  },
+  "seasons": {
+    "coming_soon": "Kommer snart.",
+    "season1": {
+      "title": "“Säsong 1”",
+      "nav_title": "“Säsong 1”",
+      "description": "Vintersezonen – färdig",
+      "status": "Färdigställt",
+      "date_label": "“Säsongsdater”",
+      "dates": "Desember 2024 – Januari 2025"
+    },
+    "season2": {
+      "title": "“Säsong 2 – Händelserkalender”",
+      "nav_title": "“Säsong 2”",
+      "description": "**“Spring Season Event Management”**"
+    },
+    "season3": {
+      "title": "“Säsong 3”",
+      "nav_title": "“Säsong 3”",
+      "description": "Sommarsezonen – kommer snart!",
+      "placeholder_message": "Hanteringen av evenemang under säsong 3 kommer snart att bli tillgänglig."
+    },
+    "season4": {
+      "title": "“Säsong 4”",
+      "nav_title": "“Säsong 4”",
+      "description": "Höstsäsongen – Kommer snart!",
+      "placeholder_message": "Hanteringen av evenemang under säsong 4 kommer snart att bli tillgänglig."
+    },
+    "season5": {
+      "title": "“Säsong 5”",
+      "nav_title": "“Säsong 5”",
+      "description": "Vintersezonen – kommer snart!",
+      "placeholder_message": "Hanteringen av evenemang under säsong 5 kommer snart att bli tillgänglig."
+    }
+  },
+  "notifications": {
+    "title": "**Notifikationer**",
+    "aria_label": "**Notifikationer**",
+    "mark_all_read": "Märk alla som lästa.",
+    "loading": "“Laddar in notifikationer…”",
+    "view_all": "“Se alla notifikationer”"
+  },
+  "roles": {
+    "admin": "**Admin**",
+    "president": "**President**",
+    "r5": "R5",
+    "r4": "R4",
+    "ape": "APE"
+  },
+  "users": {
+    "magic_links": {
+      "nav_title": "“Magic Links”"
+    },
+    "send_login_link": {
+      "nav_title": "“Skicka inloggningslänk”"
+    }
+  },
+  "discord": {
+    "rate_limits": {
+      "nav_title": "“Rate Limits”"
+    },
+    "config": {
+      "nav_title": "Konfiguration"
+    }
+  },
+  "security": {
+    "monitor": {
+      "nav_title": "**Säkerhetsövervakare (Security Monitor)**"
+    },
+    "keys": {
+      "nav_title": "“JWT-nyckelrotation”"
+    },
+    "mfa": {
+      "nav_title": "**MFA Management**"
+    },
+    "test_token": {
+      "nav_title": "Generera testtoken."
+    }
+  },
+  "system": {
+    "migration": {
+      "nav_title": "**Migration**"
+    },
+    "metrics": {
+      "nav_title": "“Metriker”"
+    },
+    "notifications": {
+      "nav_title": "**Notifikationer**"
+    },
+    "changelog": {
+      "nav_title": "**Changelog**"
+    }
+  },
+  "forms": {
+    "validation": {
+      "required": "Detta fält är obligatoriskt att fylla i.",
+      "email": "Vänligen ange en giltig e-postadress.",
+      "min_length": "Måste innehålla minst {{length}} tecken.",
+      "max_length": "Måste ha högst {{length}} tecken.",
+      "numeric": "Måste vara ett tal.",
+      "url": "Vänligen ange en giltig URL."
+    }
+  },
+  "login": {
+    "page_title": "“Admin Log-in”",
+    "subtitle": "“Alliance Admin Portal”",
+    "form": {
+      "email_label": "“Alliansens e-postadress”",
+      "email_placeholder": "“your.email@example.com”",
+      "submit_button": "“Skicka Magic Link.”"
+    },
+    "errors": {
+      "no_session": "Vänligen logga in för att få tillgång till denna sida.",
+      "expired": "Din session har löpt ut. Vänligen logga in igen.",
+      "revoked": "Din session har återkallats. Vänligen logga in igen.",
+      "invalid": "Ogiltig session. Vänligen logga in igen.",
+      "key_rotated": "Säkerhetsnycklarna har bytts ut. Vänligen logga in igen för din egen säkerhet.",
+      "unknown_email": "E-postadressen är inte känd eller inte auktoriserad.",
+      "send_failed": "Det har misslyckats att skicka den magiska länken. Prova gärna igen."
+    },
+    "success": {
+      "sent": "Magisk länk har skickats! Kolla din e-post och klicka på länken för att logga in."
+    },
+    "info": {
+      "title": "“Hur det fungerar:”",
+      "steps": [
+        "Ange din e-postadress för alliansen.",
+        "Få en säker inloggningslänk via e-post.",
+        "Klicka på länken för att få tillgång till din instrumentpanel.",
+        "Länkarna löper ut efter 10 minuter."
+      ]
+    }
+  },
+  "help_drawer": {
+    "default_title": "Hjälp och dokumentation",
+    "button_label": "Hjälp",
+    "aria_open": "Öppna hjälpdokumentationen.",
+    "aria_close": "“Stäng hjälpfunktionen”",
+    "report": {
+      "button": "Melda ett problem",
+      "modal_title": "Meld en problematik.",
+      "description": "Beskriv det problem du upplever. Detta kommer att informera administratörerna med detaljer om din session.",
+      "label": "**Problembeskrivning**",
+      "placeholder": "Beskriv vad du försökte göra och vad som gick fel…",
+      "context_title": "Följande information kommer att inkluderas automatiskt:",
+      "context_labels": {
+        "page": "Aktuell sida:",
+        "user": "Din konto:",
+        "browser": "**Webbläsare:**",
+        "timestamp": "“Timestamp:”"
+      },
+      "validation": {
+        "required": "Vänligen beskriv det problem du upplever."
+      },
+      "submitting": "“Skickar in…”",
+      "success": "Problemlapporten har skickats in framgångsrikt! En administratör kommer att bli informerad.",
+      "error": "Försöket att lämna in en rapport om problemet har misslyckats. Prova gärna igen.",
+      "network_error": "Nätverksfel:"
+    }
+  },
+  "emails": {
+    "magic_link": {
+      "subject": "Din inloggningslänk för {{app_name}}",
+      "badge": "**Administratörloginsökn**",
+      "greeting": "Hej {{username}},",
+      "intro": "Du har begärt åtkomst till kontrollpanelen för {{app_name}}. Klicka på knappen nedan för att logga in säkert:",
+      "button": "🚀 Åtkomst till administratördashbordet",
+      "alternative_label": "“Alternativ:”",
+      "alternative_text": "Kopiera och klistra in den här länken i din webbläsare:",
+      "security_title": "🛡️ Säkerhetsinformation",
+      "security_items": {
+        "single_use": "Denna länk är <strong>endast för enstaka användningar</strong> och blir ogiltig efter ditt första lyckade inloggningsförsök.",
+        "expiry": "Länken löper ut om <span class=\"expiry-badge\">⏱️ 10 MINUTER</span>.",
+        "no_share": "<strong>Del aldrig denna länk med någon – den ger full tillgång till din administratöra-konto.</strong>",
+        "ignore": "Om du inte har begärt inloggningsuppgifterna, kan du säkert ignorera det här e-postmeddelandet.",
+        "no_reuse": "Av säkerhets skull kan länken inte användas igen efter att den har klickats på."
+      },
+      "no_reply_title": "⚠️ Obs!",
+      "no_reply_text": "Detta är ett automatiserat meddelande från en e-postadress som inte tar emot svar. Vänligen svara inte på denna e-post, eftersom denna postlåda inte övervakas. För stöd, kontakta din serversadministratör.",
+      "footer_regards": "Vänliga hälsningar,",
+      "footer_team": "“{{app_name}}-teamet”",
+      "footer_sent_to": "Denna e-post har skickats till {{email}}."
+    },
+    "role_change": {
+      "subject": "“{{app_name}} – Din åtkomst har uppdaterats.”",
+      "badge": "**AKTUALISERING AV ÅTKOMST**",
+      "greeting": "Hej {{username}},",
+      "intro": "En administratör har uppdaterat dina åtkomsträttigheter för {{app_name}}-administrationspanelen.",
+      "changes_title": "Vad har förändrats?",
+      "changed_by_label": "Ändrad av:",
+      "date_label": "Datum:",
+      "questions_text": "Dessa ändringar træder i kraft omedelbart. Om du har några frågor eller anser att ändringen gjordes fel, vänligen kontakta en administratör.",
+      "access_text": "För att komma åt administratörfönstret, be om en “magic-link” på inloggningssidan eller kontakta en administratör för att få en inloggningslink skickad till dig.",
+      "footer_notification": "Detta är en automatiserad meddelande från {{app_name}}.",
+      "footer_unexpected": "Om du inte förväntade dig denna förändring, vänligen kontakta din alliansadministratör omedelbart.",
+      "role_label": "**Roll:**",
+      "powereditor_label": "**Power Editor:**",
+      "alliances_label": "“Alliance Access:”",
+      "yes": "Yes",
+      "no": "No",
+      "none": "“(inget)”"
+    },
+    "test": {
+      "subject": "“{{app_name}} – SMTP-teste-post”",
+      "title": "✅ SMTP-testet har lyckats.",
+      "badge": "Konfigurationen fungerar.",
+      "congratulations": "<strong>Tillfredsställning!</strong> Om du har mottagit denna e-post, fungerar din SMTP-konfiguration korrekt.",
+      "config_title": "📧 Konfigurationen har testats.",
+      "config_smtp_server": "<strong>SMTP-server:</strong> <code>example.com</code>",
+      "config_port": "<strong>Port:</strong> <code>465</code> (SSL)",
+      "config_auth": "<strong>Autentisering:</strong> ✅ Lyckat",
+      "config_from": "<strong>Frånadress:</strong> <code>noreply@example.com</code>",
+      "next_steps_title": "Nästa steg:",
+      "next_steps_text": "Du kan nu fortsätta med att distribuera JWT-administrationsystemet. Autentiseringen via den speciella länken (magic link) kommer att fungera korrekt.",
+      "no_reply_title": "**Obs:**",
+      "no_reply_text": "Detta är ett automatiserat meddelande. Vänligen svara inte på denna e-post, eftersom denna postlåda inte övervakas.",
+      "footer_regards": "Vänliga hälsningar,",
+      "footer_team": "“{{app_name}}-teamet”",
+      "footer_sent_to": "Teste-post har skickats till {{email}}."
+    },
+    "council_rotation": {
+      "subject": "“{{app_name}} – Uppdaterad schemat för rådets rotation”",
+      "title": "🗳️ Roteringen av råden har uppdaterats.",
+      "badge": "“Planering återupprättad”",
+      "greeting": "Hej.",
+      "intro": "<strong>Rådsrotationsschemat</strong> har blivit uppdaterat för de kommande {{veckor}}. Alla framtida rådsplatser som ska rotera (rang 6–15) har beräknats om för att säkerställa en rättvis fördelning.",
+      "next_rotation_title": "📅 Nästa rotation",
+      "week_label": "Veckonummer:",
+      "date_label": "Rotationsdatum:",
+      "regenerated_by_label": "“Regenererat av:”",
+      "distribution_title": "📊 Framtida fördelning av rotationer",
+      "table_alliance": "**Allians**",
+      "table_rotations": "Roteringar (nästa {{veckor}} veckor)",
+      "notice_title": "ℹ️ Viktigt:",
+      "notice_text": "Regenereringen påverkar endast de kommande veckorna. Alla rotationer från tidigare veckor samt den nuvarande veckan förblir oförändrade.",
+      "button_text": "Se hela tidplanen",
+      "footer_notification": "Detta är en automatiserad meddelande från {{app_name}}.",
+      "footer_no_reply": "Vänligen svara inte på denna e-post."
+    },
+    "vote_notification": {
+      "subject": "Ny rådsomröstning",
+      "title": "Ny rådsomröstning",
+      "subtitle": "Din röst är obligatorisk.",
+      "greeting": "Hej {{name}},",
+      "voting_as": "“Rösta som…”",
+      "deadline": "“Utmärkningstid för rösträkning”",
+      "vote_button": "Rösta på dig!",
+      "alternative_method": "Eller kopiera den här länken.",
+      "voting_options": "“Valalternativ”",
+      "option_yes": "Yes",
+      "option_no": "No",
+      "option_abstain": "Avstå.",
+      "discord_alternative": "Du kan också rösta via Discord genom att svara på bots privata meddelande (DM) med: “vote: ja”, “vote: nej” eller “vote: avstår”.",
+      "security_title": "**Säkerhetsmeddelande**",
+      "security_notice": "Detta är en enkelt användbar röstningslänk som gäller i 48 timmar. Dela inte denna länk med någon. Om du inte förväntade dig att få rösta, vänligen kontakta en administratör.",
+      "vote_id": "“Röstrings-ID”"
+    },
+    "vote_result": {
+      "subject": "“Valresultat”",
+      "title": "“Valresultat”",
+      "greeting": "Hej {{name}},",
+      "you_voted": "Du röstade för: {{choice}}",
+      "did_not_vote": "⚠️ Du röstade inte.",
+      "results_breakdown": "**Resultatupplösning**",
+      "yes": "Yes",
+      "no": "No",
+      "abstain": "Avstå.",
+      "absent": "Föresentlig.",
+      "total": "**Totalt antal berättigade väljare**",
+      "vote_id": "“Röstrings-ID”"
+    },
+    "no_reply_notice": "Detta är ett automatiserat meddelande från en e-postadress som inte tar emot svar. Vänligen svara inte på denna e-post.",
+    "footer_copyright": "Server 1586 Council – Alla rättigheter förbehållna"
+  }
+}

@@ -1,0 +1,615 @@
+{
+  "help": {
+    "president_approvals": {
+      "title": "“总统选举投票批准流程协助”",
+      "sections": {
+        "overview": {
+          "title": "“概述”",
+          "intro": "作为服务器的<strong>主席</strong>，您负责审核并批准理事会成员提交的投票提案。这是服务器治理系统中一个至关重要的角色。",
+          "responsibilities": {
+            "title": "“您的职责包括：”",
+            "items": [
+              "“审查所有收到的投票提案。”",
+              "“批准那些格式正确、内容合法的提案。”",
+              "“拒绝那些表述不清、不合适，或者根本不需要进行投票的提案。”",
+              "在拒绝提案时，应提供明确的反馈意见。",
+              "“请及时采取行动（如果可能的话，请在 12 小时内完成）。”"
+            ]
+          },
+          "auto_approval_note": "“自动审批安全机制”：如果您在 12 小时内未对提案进行审核，该提案将会被自动批准，并会触发投票流程。这一机制有助于避免系统拥堵或延误，但同时也要求您需要定期查看相关页面（以确保所有提案都得到及时处理）。"
+        },
+        "proposal_table": {
+          "title": "“理解提案表格”",
+          "intro": "该表格列出了所有需要您审核的待投票提案。",
+          "columns": {
+            "submitted_by": "<strong>提交者：</strong>提出该提案的委员会成员（其信息以电子邮件地址的形式显示）。",
+            "title": "<strong>标题：</strong>投票的标题应该简洁明了。",
+            "description": "<strong>描述：</strong> 对本次投票内容的详细说明；如果文本被截断了，可以点击链接来查看完整内容。",
+            "category": "<strong>类别：</strong>投票的类型（规则修改、联盟纠纷、领土争端、活动策划、其他）",
+            "submitted_at": "<strong>提交时间：</strong> 即提案创建的时候。",
+            "time_remaining": "<strong>剩余时间：</strong>从提交申请起，还有 12 小时才会进入自动审批阶段。",
+            "actions": "<strong>操作：</strong> “批准”或“拒绝”按钮"
+          },
+          "priority_warning": "**优先审核：剩余时间较短的提案应优先被审核。请注意那些标有红色“紧急”（URGENT）标志的提案——这些提案的截止时间通常少于 2 小时。**"
+        },
+        "how_to_approve": {
+          "title": "“如何批准一项提案”",
+          "steps_title": "“逐步审批流程：”",
+          "steps": [
+            "<strong>请仔细阅读：</strong> 请查看商品的标题、描述以及所属的类别。",
+            "<strong>评估决策的合法性：</strong> 这是一项由理事会层面做出的决定吗？投票的内容是否明确无误？",
+            "<strong>请考虑投票的时机：</strong>现在进行这次投票是否合适？（例如，应避免在重大活动期间进行投票。）",
+            "<strong>点击“批准”：</strong>如果该提案符合相关标准，即可进行批准。",
+            "<strong>确认：</strong>您会看到一条表示操作成功的消息。",
+            "<strong>自动操作：</strong>投票会立即生成，同时系统会向所有理事会成员发送私信（DM）。"
+          ],
+          "after_approval": {
+            "title": "“获得批准后会发生什么？”",
+            "items": [
+              "“投票功能是通过 Discord 的机器人系统实现的。”",
+              "所有 7 名理事会成员都收到了来自 Discord 的私信（DM），其中包含了投票的详细信息。",
+              "“24小时投票期现已开始。”",
+              "“该提案已从您的待处理列表中移除。”",
+              "“提交者会收到批准的通知。”"
+            ]
+          },
+          "criteria_title": "“审批标准：”",
+          "criteria": [
+            "✅ 标题和描述必须清晰、具体。",
+            "✅ 这是一项合法的、属于议会层面的决策。",
+            "✅ 该内容尚未被现有的规则或投票结果所涵盖。",
+            "✅ 已选择正确的类别。",
+            "✅ 选择的时间非常合理（不会在重大事件或冲突发生的期间）。"
+          ]
+        }
+      }
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "title": "“仪表板”",
+      "description": "“联盟管理员门户”",
+      "sections": {
+        "quick_actions": "“快速操作”",
+        "alliance_management": "“联盟管理”",
+        "governance": "“治理”（Governance）",
+        "discord_integration": "“Discord集成”",
+        "system_admin": "“系统管理”"
+      }
+    },
+    "alliance_edit": {
+      "title": "“编辑联盟”",
+      "nav_title": "“编辑器”",
+      "description": "“管理联盟信息及联盟官员。”"
+    },
+    "alliances_power": {
+      "title": "“电源更新”",
+      "nav_title": "“Power Editor”",
+      "description": "“更新联盟的权力值（即各成员在联盟中的影响力或地位）”"
+    },
+    "alliance_tags_manager": {
+      "title": "“联盟标签管理器”",
+      "nav_title": "“标签管理器”（Tag Manager）",
+      "description": "“管理联盟的可见性（即是否让其他玩家看到该联盟）以及显示顺序。”"
+    },
+    "user_management": {
+      "title": "“用户管理”",
+      "nav_title": "“管理用户”",
+      "description": "“管理管理员用户及其权限”"
+    },
+    "user_profile": {
+      "title": "“我的个人资料”",
+      "description": "“管理您的账户设置和游戏内信息。”"
+    },
+    "council_rotation": {
+      "title": "“理事会轮换制度”",
+      "nav_title": "“理事会轮换制度”",
+      "description": "“管理每周理事会轮值安排”"
+    },
+    "discord_announcements": {
+      "title": "“Discord 公告”",
+      "nav_title": "“公告”",
+      "description": "“将公告发送到 Discord 频道中。”"
+    },
+    "discord_channels": {
+      "title": "“Discord频道”",
+      "nav_title": "“Channels”",
+      "description": "“配置 Discord 频道的映射关系”"
+    },
+    "discord_templates": {
+      "title": "“Discord模板”",
+      "nav_title": "“消息模板”（Message Templates）",
+      "description": "“管理消息模板”"
+    },
+    "discord_scheduled": {
+      "title": "“预定发送的消息”（Scheduled Messages）",
+      "nav_title": "“预定发送的消息”（Scheduled Messages）",
+      "description": "“管理预定的 Discord 发布内容”"
+    },
+    "discord_recurring": {
+      "title": "“重复出现的消息”",
+      "nav_title": "“重复发送的消息”",
+      "description": "“管理重复出现的 Discord 帖子”"
+    },
+    "discord_vote_proposals": {
+      "title": "“理事会提案”",
+      "nav_title": "“理事会提案”",
+      "description": "“提交并管理理事会的投票提案”",
+      "description_admin": "作为总统或管理员，您可以提交投票请求，或者直接创建新的投票选项。",
+      "description_member": "“将投票提案提交给总统审批。”",
+      "tabs": {
+        "submit": "“提交提案”",
+        "my_requests": "“我的请求”"
+      },
+      "form": {
+        "heading": "“提交投票提案”",
+        "title_hint": "“请保持简洁，字数不超过 100 个。”",
+        "description_hint": "“提供关于理事会成员正在投票讨论的具体内容的详细信息。”"
+      },
+      "help": {
+        "title": "“投票提案的运作方式”",
+        "intro": "作为理事会成员，您可以向理事会提出投票建议。您的提案将会被提交给主席审批。",
+        "admin_note": "作为管理员/负责人，您的投票请求会立即被创建（即系统会自动处理您的投票请求），而无需经过任何审批流程。",
+        "auto_approval": "“如果总统在 12 小时内没有作出回应，您的提案将会被自动批准。”"
+      },
+      "categories": {
+        "rule_change": "“规则变更”",
+        "alliance_action": "“联盟行动”",
+        "server_event": "“服务器事件”",
+        "other": "“其他”"
+      },
+      "buttons": {
+        "create_vote": "“立即创建投票”"
+      },
+      "labels": {
+        "request_id": "“请求ID”"
+      },
+      "messages": {
+        "vote_created": "“投票已创建。”",
+        "no_reason": "“没有提供任何原因。”",
+        "awaiting_approval": "“等待总统的批准。”",
+        "empty_state": "“你还没有提交任何投票请求。”",
+        "submit_success": "“提案已成功提交！”",
+        "submit_error": "“提案提交失败。”",
+        "load_error": "“加载请求失败。”"
+      }
+    },
+    "president_vote_approvals": {
+      "title": "“批准投票结果”",
+      "nav_title": "“投票批准”",
+      "description": "“审查并批准投票提案”",
+      "description_full": "“审查并批准由理事会成员提交的投票提案。”"
+    },
+    "discord_votes_history": {
+      "title": "“投票记录”",
+      "nav_title": "“投票记录”",
+      "description": "“查看所有委员会投票的历史记录和结果。”"
+    },
+    "votes_management": {
+      "title": "“投票管理”",
+      "nav_title": "“投票记录”",
+      "description": "“查看并管理所有委员会的投票记录。”"
+    },
+    "season2_manager": {
+      "title": "“第二季活动日程表”",
+      "nav_title": "“活动日历”",
+      "description": "“负责管理第二季的活动并安排相关日程。”"
+    },
+    "security_audit": {
+      "title": "“安全审计日志”",
+      "nav_title": "“审计日志”",
+      "description": "“审查系统安全事件”"
+    },
+    "security_backups": {
+      "title": "“系统备份”",
+      "nav_title": "“备份”",
+      "description": "“管理系统备份与恢复”"
+    }
+  },
+  "common": {
+    "buttons": {
+      "approve": "“批准”",
+      "reject": "“拒绝”",
+      "submit": "“提交”",
+      "cancel": "“取消”",
+      "save": "“保存”",
+      "delete": "“删除”",
+      "close": "“关闭”",
+      "edit": "“编辑”",
+      "view": "“View”",
+      "back": "“Back”",
+      "add": "Add",
+      "remove": "“Remove”（翻译成中文为：“删除”或“移除”）。",
+      "update": "“更新”",
+      "create": "“Create”",
+      "send": "“发送”",
+      "export": "“Export”",
+      "import": "“Import”",
+      "refresh": "“刷新”",
+      "search": "“搜索”",
+      "filter": "“Filter”",
+      "reset": "“Reset”（重置）"
+    },
+    "labels": {
+      "title": "“标题”",
+      "description": "“描述”",
+      "category": "“Category”（类别）",
+      "status": "“状态”（Status）",
+      "actions": "“Actions”",
+      "date": "“Date”",
+      "time": "“时间”",
+      "name": "“名称”",
+      "email": "“Email”",
+      "role": "“Role”（角色）",
+      "roles": "“Roles”（角色/职责）",
+      "alliance": "“联盟”",
+      "alliances": "“联盟”",
+      "power": "“Power”",
+      "rank": "“Rank”（等级；排名）",
+      "tag": "Tag",
+      "created": "“Created”",
+      "updated": "“已更新”",
+      "created_by": "“创建者”",
+      "updated_by": "“更新者”（Updated By）",
+      "discord_id": "“Discord ID”",
+      "in_game_name": "“游戏内名称”",
+      "yes": "Yes",
+      "no": "No",
+      "active": "“Active”",
+      "inactive": "“inactive”（非活跃的；不活动的）",
+      "pending": "“待处理”（或“尚未完成”）。",
+      "approved": "“已批准”",
+      "rejected": "“被拒绝了。”",
+      "visible": "“可见的”",
+      "hidden": "“Hidden”"
+    },
+    "alliance": {
+      "r5": "“R5（领导者）”",
+      "r4": "“R4（军官）”",
+      "ape": "“APE（Power Editor）”",
+      "member_count": "“会员数量”",
+      "power_value": "“Power Value”",
+      "alliance_name": "“联盟名称”",
+      "alliance_tag": "“联盟标签”",
+      "r5_name": "“R5名称”",
+      "r5_discord_id": "“R5 的 Discord 账号ID”",
+      "add_r4": "“添加 R4”",
+      "remove_r4": "“移除 R4。”",
+      "rules_signed": "“规则已签署。”",
+      "can_vote": "“可以投票”。",
+      "role_title": "“角色/头衔”"
+    },
+    "discord": {
+      "channel": "“Channel”",
+      "channels": "“Channels”",
+      "template": "“Template”（模板）",
+      "templates": "“Templates”（模板）",
+      "message": "“Message”",
+      "announcement": "“公告”",
+      "scheduled": "“已安排”",
+      "channel_id": "“频道ID”",
+      "channel_name": "“频道名称”",
+      "channel_type": "“频道类型”",
+      "message_content": "“消息内容”",
+      "send_time": "“发送时间”",
+      "recurring": "“Recurring”",
+      "one_time": "“一次性”"
+    },
+    "votes": {
+      "vote": "“投票”",
+      "votes": "“Votes”（投票）",
+      "proposal": "“提案”",
+      "proposals": "“提案”",
+      "vote_title": "“投票标题”",
+      "vote_description": "“投票说明”",
+      "submitted_by": "“提交者”（Submitted By）",
+      "submitted_at": "“提交时间（Submitted At）”",
+      "deadline": "“截止日期”",
+      "time_remaining": "“剩余时间”",
+      "vote_yes": "Yes",
+      "vote_no": "No",
+      "vote_abstain": "“弃权”",
+      "results": "“结果”",
+      "passed": "“通过了。”",
+      "failed": "“失败了。”",
+      "in_progress": "“正在进行中”"
+    },
+    "messages": {
+      "success": "“成功了！”",
+      "error": "“发生了一个错误。”",
+      "loading": "“正在加载中…”",
+      "no_data": "“没有可用数据。”",
+      "confirm_action": "“你确定吗？”",
+      "saved": "“更改已成功保存。”"
+    },
+    "navigation": {
+      "home": "“Home”",
+      "dashboard": "“仪表板”",
+      "alliances": "“联盟”",
+      "votes": "“Votes”（投票）",
+      "governance": "“治理”",
+      "settings": "“设置”",
+      "logout": "“Logout”（退出登录）。",
+      "server_management": "“服务器管理”",
+      "discord": "Discord",
+      "seasons": "“Seasons”",
+      "users": "“用户”",
+      "security": "“Security”",
+      "system": "“System”"
+    },
+    "welcome_back": "欢迎回来，{{name}}！"
+  },
+  "seasons": {
+    "coming_soon": "“即将推出”",
+    "season1": {
+      "title": "“第一季”",
+      "nav_title": "“第一季”",
+      "description": "“冬季赛季” – 已完成",
+      "status": "“已完成”",
+      "date_label": "“赛季日期”",
+      "dates": "“2024年12月 – 2025年1月”"
+    },
+    "season2": {
+      "title": "“第二季活动日历”",
+      "nav_title": "“第二季”",
+      "description": "“春季活动管理”"
+    },
+    "season3": {
+      "title": "“第三季”",
+      "nav_title": "“第三季”",
+      "description": "“夏季赛季——即将上线！”",
+      "placeholder_message": "“第三季的活动管理系统即将上线。”"
+    },
+    "season4": {
+      "title": "“第四季”",
+      "nav_title": "“第四季”",
+      "description": "“秋季赛季——即将上线！”",
+      "placeholder_message": "“第四季的活动管理系统即将上线。”"
+    },
+    "season5": {
+      "title": "“第五季”",
+      "nav_title": "“第五季”",
+      "description": "“冬季赛季——即将上线！”",
+      "placeholder_message": "“第五季的活动管理系统即将上线。”"
+    }
+  },
+  "notifications": {
+    "title": "“通知”",
+    "aria_label": "“通知”",
+    "mark_all_read": "“将所有内容标记为已阅读”。",
+    "loading": "“正在加载通知内容……”",
+    "view_all": "“查看所有通知”"
+  },
+  "roles": {
+    "admin": "“管理员”",
+    "president": "“总统”",
+    "r5": "R5",
+    "r4": "R4",
+    "ape": "APE"
+  },
+  "users": {
+    "magic_links": {
+      "nav_title": "“魔法链接”（Magic Links）"
+    },
+    "send_login_link": {
+      "nav_title": "“发送登录链接”"
+    }
+  },
+  "discord": {
+    "rate_limits": {
+      "nav_title": "“速率限制”（Rate Limits）"
+    },
+    "config": {
+      "nav_title": "“Configuration”（配置）"
+    }
+  },
+  "security": {
+    "monitor": {
+      "nav_title": "“安全监控器”"
+    },
+    "keys": {
+      "nav_title": "“JWT密钥轮换”（JWT Key Rotation）"
+    },
+    "mfa": {
+      "nav_title": "“多因素认证（MFA）管理”"
+    },
+    "test_token": {
+      "nav_title": "“生成测试令牌”"
+    }
+  },
+  "system": {
+    "migration": {
+      "nav_title": "“迁移”"
+    },
+    "metrics": {
+      "nav_title": "“Metrics”（指标/度量标准）"
+    },
+    "notifications": {
+      "nav_title": "“通知”"
+    },
+    "changelog": {
+      "nav_title": "“更新日志”"
+    }
+  },
+  "forms": {
+    "validation": {
+      "required": "“此字段是必填的。”",
+      "email": "“请输入一个有效的电子邮件地址。”",
+      "min_length": "“长度必须至少为 {{length}} 个字符。”",
+      "max_length": "“字符数不得超过 {{length}} 个。”",
+      "numeric": "“必须是一个数字。”",
+      "url": "“请输入一个有效的网址。”"
+    }
+  },
+  "login": {
+    "page_title": "“管理员登录”",
+    "subtitle": "“联盟管理员门户”",
+    "form": {
+      "email_label": "“联盟邮箱地址”",
+      "email_placeholder": "“your.email@example.com”",
+      "submit_button": "“发送魔法链接”"
+    },
+    "errors": {
+      "no_session": "“请登录才能访问此页面。”",
+      "expired": "“您的会话已过期，请重新登录。”",
+      "revoked": "“您的会话已被取消；请重新登录。”",
+      "invalid": "“会话无效。请重新登录。”",
+      "key_rotated": "“安全密钥已经更新/更换了。为了您的账户安全，请重新登录。”",
+      "unknown_email": "“电子邮件地址未被识别或未获得授权。”",
+      "send_failed": "“发送魔法链接失败，请重试。”"
+    },
+    "success": {
+      "sent": "“魔法链接已发送！请查看您的电子邮件，并点击该链接进行登录。”"
+    },
+    "info": {
+      "title": "“工作原理如下：”",
+      "steps": [
+        "“请输入您的联盟邮箱地址。”",
+        "“通过电子邮件接收一个安全的登录链接。”",
+        "“点击链接以访问您的仪表板。”",
+        "链接在 10 分钟后失效。"
+      ]
+    }
+  },
+  "help_drawer": {
+    "default_title": "“帮助与文档”",
+    "button_label": "“帮助”",
+    "aria_open": "“打开帮助文档”",
+    "aria_close": "“关闭帮助功能”",
+    "report": {
+      "button": "“报告问题”",
+      "modal_title": "“报告问题”",
+      "description": "请描述您遇到的问题。这样，管理员团队就能根据您的会话记录（session details）来了解具体情况并采取相应的措施。",
+      "label": "“问题描述”",
+      "placeholder": "“描述一下你原本想要做什么，以及出了什么问题……”",
+      "context_title": "“以下信息将会被自动包含在内：”",
+      "context_labels": {
+        "page": "“当前页面：”",
+        "user": "“您的账户：”",
+        "browser": "“浏览器：”",
+        "timestamp": "“时间戳：”"
+      },
+      "validation": {
+        "required": "“请描述一下您遇到的问题。”"
+      },
+      "submitting": "“正在提交中…”",
+      "success": "问题报告已成功提交！系统会通知管理员进行处理。",
+      "error": "“提交问题报告失败。请重试。”",
+      "network_error": "“网络错误：”"
+    }
+  },
+  "emails": {
+    "magic_link": {
+      "subject": "“这是您用于登录 {{app_name}} 的链接。”",
+      "badge": "“管理员登录请求”",
+      "greeting": "“你好，{{username}}。”",
+      "intro": "您已申请访问 {{app_name}} 仪表板的权限。请点击下方的按钮进行安全登录：",
+      "button": "🚀 访问管理员控制面板",
+      "alternative_label": "“替代方案：”",
+      "alternative_text": "“将此链接复制并粘贴到您的浏览器中。”",
+      "security_title": "🛡️ 安全信息",
+      "security_items": {
+        "single_use": "此链接仅限**一次性使用**，在您首次成功登录后便会失效。",
+        "expiry": "链接的有效期将在 <span class=\"expiry-badge\">⏱️ 10 分钟后</span> 结束。",
+        "no_share": "<strong>切勿将此链接分享给任何人</strong>，因为该链接会让他们获得对你管理员账户的完全访问权限。",
+        "ignore": "“如果你并没有请求进行这次登录操作，那么你可以安全地忽略这封邮件。”",
+        "no_reuse": "出于安全考虑，该链接一旦被点击后就无法再次使用。"
+      },
+      "no_reply_title": "⚠️ 注意：",
+      "no_reply_text": "这是一条来自“无回复邮箱地址”的自动发送的消息。请不要回复此邮件，因为该邮箱并未被监控（即没有管理员会查看或处理这些邮件）。如需支持，请联系您的服务器管理员。",
+      "footer_regards": "“此致，  \n敬礼。”",
+      "footer_team": "“{{app_name}} 团队”",
+      "footer_sent_to": "这封邮件是发送给 {{email}} 的。"
+    },
+    "role_change": {
+      "subject": "“{{app_name}}” – 您的访问权限已更新。",
+      "badge": "“访问权限更新”",
+      "greeting": "“你好，{{username}}。”",
+      "intro": "管理员已经更新了您在 {{app_name}} 管理面板中的访问权限。",
+      "changes_title": "“发生了哪些变化？”",
+      "changed_by_label": "“修改者：”",
+      "date_label": "“日期：”",
+      "questions_text": "这些更改立即生效。如果您有任何疑问，或者认为这次更改是错误的，请联系管理员。",
+      "access_text": "要访问管理员面板，请在登录页面上请求一个“魔法链接”（magic link），或者联系管理员让其为您发送登录链接。",
+      "footer_notification": "“这是一条来自 {{app_name}} 的自动通知。”",
+      "footer_unexpected": "“如果您没有预料到这一变化，请立即联系您的联盟管理员。”",
+      "role_label": "“角色：”",
+      "powereditor_label": "“Power Editor：”",
+      "alliances_label": "“联盟访问权限（Alliance Access）：”",
+      "yes": "Yes",
+      "no": "No",
+      "none": "“（无）”"
+    },
+    "test": {
+      "subject": "“{{app_name}} – SMTP测试邮件”",
+      "title": "✅ SMTP测试成功",
+      "badge": "“配置已生效（即：系统配置已完成，并且可以正常运行了）。”",
+      "congratulations": "<strong>恭喜您！</strong> 如果您收到了这封邮件，说明您的 SMTP 配置设置是正确的。",
+      "config_title": "📧 配置已通过测试。",
+      "config_smtp_server": "<strong>SMTP服务器：</strong> `<code>example.com</code>`",
+      "config_port": "<strong>端口：</strong> `465`（使用 SSL 协议）",
+      "config_auth": "<strong>身份验证：</strong> ✅ 已成功通过。",
+      "config_from": "<strong>发件人地址：</strong> <code>noreply@example.com</code>",
+      "next_steps_title": "“下一步行动：”",
+      "next_steps_text": "“你现在可以继续部署 JWT 管理系统了。魔法链接（magic link）认证功能将会正常工作。”",
+      "no_reply_title": "“注意：”",
+      "no_reply_text": "这是一条自动发送的消息。请不要回复这封邮件，因为这个邮箱并未被监控（即没有工作人员会查看或处理这些邮件）。",
+      "footer_regards": "“此致，  \n敬礼。”",
+      "footer_team": "“{{app_name}} 团队”",
+      "footer_sent_to": "测试邮件已发送至 {{email}}。"
+    },
+    "council_rotation": {
+      "subject": "“{{app_name}} – 理事会轮换时间表已更新”",
+      "title": "🗳️ 理事会成员轮换安排已更新",
+      "badge": "“计划已重新生成。”",
+      "greeting": "“你好。”",
+      "intro": "<strong>理事会轮换计划</strong>已经为接下来的 {{weeks}} 周重新制定了。所有未来需要轮换的理事职位（级别 6-15）都经过了重新计算，以确保席位分配的公平性。",
+      "next_rotation_title": "📅 下一次轮换（即下一个阶段的开始或更新）",
+      "week_label": "“周编号：”",
+      "date_label": "“轮换日期：”",
+      "regenerated_by_label": "“由以下内容再生（或：‘由……重新生成’）：”",
+      "distribution_title": "📊 未来的角色轮换安排",
+      "table_alliance": "“联盟”",
+      "table_rotations": "“轮换安排（在接下来的 {{几周}} 内）”",
+      "notice_title": "ℹ️ 重要提示：",
+      "notice_text": "“这种‘再生’（即数据或系统的更新）仅影响未来的几周；所有过去以及当前这周的轮换安排都保持不变。”",
+      "button_text": "“查看完整日程安排”",
+      "footer_notification": "“这是一条来自 {{app_name}} 的自动通知。”",
+      "footer_no_reply": "“请不要回复这封邮件。”"
+    },
+    "vote_notification": {
+      "subject": "“新的理事会投票”",
+      "title": "“新的理事会投票”",
+      "subtitle": "“您的投票是必需的。”",
+      "greeting": "“你好，{{name}}。”",
+      "voting_as": "“以‘Voting as’的方式投票”",
+      "deadline": "“投票截止日期”",
+      "vote_button": "“请投出你的选票。”",
+      "alternative_method": "“或者复制这个链接。”",
+      "voting_options": "“投票选项”",
+      "option_yes": "Yes",
+      "option_no": "No",
+      "option_abstain": "“弃权”",
+      "discord_alternative": "您也可以通过 Discord 进行投票：只需回复机器人的私信（DM），并输入 “vote: yes”（投票赞成）、“vote: no”（投票反对）或 “vote: abstain”（弃权）即可。",
+      "security_title": "“安全通知”",
+      "security_notice": "这是一个仅使用一次的投票链接，有效期为 48 小时。请勿将此链接分享给任何人。如果您没有收到这次投票的邀请，请联系管理员。",
+      "vote_id": "“投票ID”"
+    },
+    "vote_result": {
+      "subject": "“投票结果”",
+      "title": "“投票结果”",
+      "greeting": "“你好，{{name}}。”",
+      "you_voted": "你的投票结果是：{{choice}}",
+      "did_not_vote": "⚠️ 你没有投票。",
+      "results_breakdown": "“结果明细”",
+      "yes": "Yes",
+      "no": "No",
+      "abstain": "“弃权”",
+      "absent": "“缺席”",
+      "total": "“总合格选民人数”",
+      "vote_id": "“投票ID”"
+    },
+    "no_reply_notice": "这是一条来自“无法回复的电子邮件地址”的自动发送的消息。请不要回复这封邮件。",
+    "footer_copyright": "“服务器1586的理事会——所有权利均被保留。”"
+  }
+}

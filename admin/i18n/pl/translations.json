@@ -1,0 +1,615 @@
+{
+  "help": {
+    "president_approvals": {
+      "title": "Pomoc przy procedurze głosowania i uzyskaniu aprobaty dla wyboru prezydenta",
+      "sections": {
+        "overview": {
+          "title": "„Przegląd”",
+          "intro": "Jako <strong>prezydent</strong> serwera odpowiadasz za przegląd i przyjęcie propozycji głosowania zgłoszonych przez członków rady. To kluczowa rola w systemie zarządzania serwerem.",
+          "responsibilities": {
+            "title": "„Twoje obowiązki:”",
+            "items": [
+              "Przeglądaj wszystkie proponowane zmiany w regulacjach dotyczących procedur głosowania.",
+              "„Zatwierdź dobrze sformułowane, legalne propozycje”.",
+              "Odrzucaj propozycje, które nie są jasne, nieodpowiednie lub dla których nie konieczna jest głosowanie.",
+              "Podawaj jasne informacje zwrotne przy odrzucaniu propozycji.",
+              "Działaj w terminie (w ciągu 12 godzin, jeśli to możliwe)."
+            ]
+          },
+          "auto_approval_note": "„Sieć bezpieczeństwa automatycznego przyznawania”: Jeśli nie sprawdzisz proponowanego rozwiązania w ciągu 12 godzin, zostanie ono automatycznie zatwierdzone i zostanie uruchomione głosowanie. To zapobiega powstaniu problemów z przepływem informacji, ale oznacza, że musisz regularnie sprawdzać tę stronę."
+        },
+        "proposal_table": {
+          "title": "Zrozumienie tabeli z propozycjami",
+          "intro": "W tabeli przedstawione są wszystkie proponowane zmiany w regulacjach, które wymagają twojej opinii (tj. są w fazie rozpatrzenia).",
+          "columns": {
+            "submitted_by": "<strong>Podane przez:</strong> Członek rady, który przygotował propozycję (wskazany poprzez adres e-mail).",
+            "title": "<strong>Nazwa głosowania:</strong> Nazwa głosowania musi być jasna i zwięzła.",
+            "description": "<strong>Opis:</strong> Detaljne wyjaśnienie tematu, nad którym odbywa się głosowanie; kliknij, aby rozwinąć tekst (w przypadku jego skrócenia).",
+            "category": "<strong>Kategoria:</strong> Typ głosowania (zmiana zasady, spór o sojusz, decyzja dotycząca terytorium, planowanie wydarzenia, inny).",
+            "submitted_at": "<strong>Data złożenia propozycji:</strong> w momencie jej stworzenia.",
+            "time_remaining": "<strong>Czas pozostały:</strong> Odliczanie do automatycznego przyjęcia wniosku (12 godzin od jego złożenia).",
+            "actions": "<strong>Działania:» Knopki „Zatwierdzić” lub „Odrzucić”"
+          },
+          "priority_warning": "Pierwszeństwo w rozpatrzeniu: Proponice, na które pozostało mniej czasu, powinny zostać sprawdzone najpierw. Szukaj żółtych znaków „NIECZĄSNY”, które wskazują, że do wykonania zadań pozostały mniej niż 2 godziny."
+        },
+        "how_to_approve": {
+          "title": "Jak przyjąć propozycję?",
+          "steps_title": "Proces przyjęcia wniosków krok po kroku:",
+          "steps": [
+            "<strong>Czytaj uważnie:</strong> Przeczytaj nagłówek, opis oraz kategorię produktu.",
+            "<strong> Ocena legitymności: </strong>Czy jest to decyzja przyjęta na poziomie rady? Czy jasno jest, nad czym odbywa się głosowanie?",
+            "<strong>Zastanów się nad czasem:</strong> Czy teraz jest dobry moment na przeprowadzenie tego głosowania? (Na przykład, nie w trakcie dużych wydarzeń).",
+            "<strong>Kliknij „Zatwierdź”:</strong> Jeśli propozycja spełnia wymogi.",
+            "<strong>Potwierdzenie:</strong> Ujrzysz wiadomość o powodzeniu.",
+            "<strong>Działania automatyczne:</strong> Głosowanie jest tworzone natychmiast, a wiadomości typu „DM” (direct message) są wysyłane do wszystkich członków rady."
+          ],
+          "after_approval": {
+            "title": "Co się dzieje po przyjęciu wniosku?",
+            "items": [
+              "Głosowanie jest generowane w ramach systemu botów na platformie Discord.",
+              "Wszyscy siedmiu członków rady otrzymują wiadomość prywatną na platformie Discord zawierającą szczegóły wyników głosowania.",
+              "Zaczyna się okres głosowania trwający 24 godziny.",
+              "Proponowana zmiana została usunięta z twojej listy czekających na realizację.",
+              "Osoba, która złożyła wniosek, jest powiadomiona o jego przyjęciu."
+            ]
+          },
+          "criteria_title": "Kryteria przyznania zgody:",
+          "criteria": [
+            "✅ Jasny, konkretny tytuł i opis.",
+            "✅ Decyzja przyjęta na poziomie rady.",
+            "✅ Nie jest to już uwzględnione w obowiązujących zasadach ani wynikach głosowania.",
+            "✅ Została wybrana odpowiednia kategoria.",
+            "✅ Rozsądny czas wydarzenia (nie w trakcie dużych imprez lub konfliktów)."
+          ]
+        }
+      }
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "title": "„Panel kontrolny” (ang. „Dashboard”)",
+      "description": "„Alliance Admin Portal”",
+      "sections": {
+        "quick_actions": "„ szybkie działania”",
+        "alliance_management": "„Alliance Management”",
+        "governance": "„Governance” (zarządzanie)",
+        "discord_integration": "„Integracja z Discordem”",
+        "system_admin": "„System Administration”"
+      }
+    },
+    "alliance_edit": {
+      "title": "„Edytowanie sojuszu”",
+      "nav_title": "„Editor”",
+      "description": "Udzielanie się w zarządzaniu informacjami o sojuszu oraz oficerach."
+    },
+    "alliances_power": {
+      "title": "„Power Updates”",
+      "nav_title": "„Power Editor”",
+      "description": "„Aktualizacja wartości siły sojuszu”"
+    },
+    "alliance_tags_manager": {
+      "title": "„Manager Tagów Sojuszu”",
+      "nav_title": "„Tag Manager”",
+      "description": "Uprawiać widzialność sojuszu oraz kolejność wyświetlania informacji o nim."
+    },
+    "user_management": {
+      "title": "„Użytkownicy i ich zarządzanie”",
+      "nav_title": "„Używownicy”",
+      "description": "„Udzielanie uprawnień użytkownikom administracyjnym oraz zarządzanie nimi”"
+    },
+    "user_profile": {
+      "title": "„Moje Profil”",
+      "description": "Uprawiaj ustawienia swojego konta oraz informacje zawarte w grze."
+    },
+    "council_rotation": {
+      "title": "„Rotacja w Radzie”",
+      "nav_title": "„Rotacja w Radzie”",
+      "description": "„Gdyś zajmowałem się planowaniem rotacji członków zarządu na posiedzeniach tygodniowych.”"
+    },
+    "discord_announcements": {
+      "title": "„Ogłoszenia na Discordzie”",
+      "nav_title": "„Ogłoszenia”",
+      "description": "„Wyślij ogłoszenia do kanali na Discordzie”."
+    },
+    "discord_channels": {
+      "title": "Kanale na Discordzie",
+      "nav_title": "Kanale",
+      "description": "Konfiguruj mapowania kanałów w Discordzie."
+    },
+    "discord_templates": {
+      "title": "„Discord Templates”",
+      "nav_title": "„Szablony wiadomości”",
+      "description": "„Uprawiaj szablony wiadomości”"
+    },
+    "discord_scheduled": {
+      "title": "„Zaplanowane wiadomości”",
+      "nav_title": "„Wiadomości zaplanowane”",
+      "description": "„Udzielanie się w zarządzaniu zaplanowanymi postami na Discordzie”."
+    },
+    "discord_recurring": {
+      "title": "„Powtarzające się wiadomości”",
+      "nav_title": "„Powtarzające się wiadomości”",
+      "description": "„Udzielanie się w zarządzaniu powtarzającymi się postami na Discordzie”."
+    },
+    "discord_vote_proposals": {
+      "title": "„Propozycje Rady”",
+      "nav_title": "„Propozycje Rady”",
+      "description": "Złożyć i zarządzać propozycjami głosowań rady.",
+      "description_admin": "Można złożyć prośby o głosowanie lub tworzyć wnioski dotyczące głosowania bezpośrednio w roli prezidenta/a lub administratora.",
+      "description_member": "Złoży propozycje dotyczące głosowania do prezydenta w celu uzyskania ich przyjęcia.",
+      "tabs": {
+        "submit": "„Złożyć propozycję”",
+        "my_requests": "„Moje prośby”"
+      },
+      "form": {
+        "heading": "„Złoży propozycję głosowania”.",
+        "title_hint": "Bądź zwięzły – maksymalnie 100 znaków.",
+        "description_hint": "Udostępnij szczegóły na temat tego, nad czym głosują członkowie rady."
+      },
+      "help": {
+        "title": "Jak działają propozycje dotyczące głosowania?",
+        "intro": "Jako członek rady możesz zgłosić do niej propozycje dotyczące przeprowadzenia głosowań. Twoja propozycja zostanie wysłana do prezidenta w celu uzyskania jego przyzwolenia.",
+        "admin_note": "Jako prezes/administrator Twoje głosy zostaną uwzględnione natychmiast, bez konieczności żadnego potwierdzenia.",
+        "auto_approval": "Jeśli prezydent nie odpowie w ciągu 12 godzin, wasz propozycji zostanie automatycznie zatwierdzony."
+      },
+      "categories": {
+        "rule_change": "„Zmiana zasady”",
+        "alliance_action": "„Alliance Action”",
+        "server_event": "„Server Event”",
+        "other": "„Inne”."
+      },
+      "buttons": {
+        "create_vote": "„Create Vote Now”"
+      },
+      "labels": {
+        "request_id": "„ID żądu”"
+      },
+      "messages": {
+        "vote_created": "„Wytworzony głos.”",
+        "no_reason": "Nie podano żadnego powodu.",
+        "awaiting_approval": "W oczekiwaniu na przyzwolenie prezydenta.",
+        "empty_state": "Nie zgłosiłeś jeszcze żadnych żądań dotyczących głosowania.",
+        "submit_success": "Proponowana zmiana została zatwierdzona!",
+        "submit_error": "Nie udało się złożyć propozycji.",
+        "load_error": "Nie udało się załadować żadnych żądań („Requests failed to be loaded”)."
+      }
+    },
+    "president_vote_approvals": {
+      "title": "„Zatwierdzić głosowania”",
+      "nav_title": "„Vote Approvals”",
+      "description": "Przeglądaj i przyjmaj propozycje dotyczące głosowania.",
+      "description_full": "Przeglądanie i przyjęcie propozycji głosowań złożonych przez członków rady."
+    },
+    "discord_votes_history": {
+      "title": "„Historia głosowań”",
+      "nav_title": "„Historia głosowań”",
+      "description": "„Przeglądaj historię i wyniki wszystkich głosowań rady.”"
+    },
+    "votes_management": {
+      "title": "„Management Votes” (Używanie głosów)",
+      "nav_title": "„Historia głosowań”",
+      "description": "„Przeglądaj i zarządzaj wszystkimi głosowaniami rady.”"
+    },
+    "season2_manager": {
+      "title": "„Kalendarz wydarzeń drugiej sezony”",
+      "nav_title": "„Kalendarz wydarzeń”",
+      "description": "Prowadzenie organizacji wydarzeń związanych z drugą sezoną oraz ustalanie ich harmonogramu."
+    },
+    "security_audit": {
+      "title": "„Log audytu bezpieczeństwa”",
+      "nav_title": "„Logi audytów”",
+      "description": "„Przegląd zdarzeń dotyczących bezpieczeństwa systemu”"
+    },
+    "security_backups": {
+      "title": "„System Backups”",
+      "nav_title": "„Backupy”",
+      "description": "„Udzielanie się w zarządzaniu kopiami bezpieczeństwa systemu oraz ich przywracaniu”"
+    }
+  },
+  "common": {
+    "buttons": {
+      "approve": "„Zatwierdzić”.",
+      "reject": "Odrzucać.",
+      "submit": "„Submit” – to opcja umożliwiająca wysłanie danych lub zakończenie procesu edycji.",
+      "cancel": "Anuluj.",
+      "save": "„Save”",
+      "delete": "„Delete”",
+      "close": "„Zamknij”.",
+      "edit": "„Edytuj”.",
+      "view": "„View”",
+      "back": "„Back”.",
+      "add": "Add",
+      "remove": "„Usuną”.",
+      "update": "„Update”",
+      "create": "„Create”",
+      "send": "„Wyślij”.",
+      "export": "„Export”",
+      "import": "„Import”",
+      "refresh": "„Refresh”",
+      "search": "„Search”",
+      "filter": "„Filter”",
+      "reset": "„Reset”"
+    },
+    "labels": {
+      "title": "„Title”",
+      "description": "„Opis”",
+      "category": "Kategoria",
+      "status": "„Stan”",
+      "actions": "„Działania”",
+      "date": "„Date”",
+      "time": "„Czas”",
+      "name": "„Nazwa”",
+      "email": "„Email”",
+      "role": "„Role”",
+      "roles": "„Rolи”",
+      "alliance": "„Alliance”",
+      "alliances": "„Sojusze”",
+      "power": "„Power”",
+      "rank": "„Rank”",
+      "tag": "Tag",
+      "created": "„Stworzony”.",
+      "updated": "„Aktualizowany”",
+      "created_by": "„Stworzony przez…”",
+      "updated_by": "„Uaktualniono przez”:",
+      "discord_id": "„ID na Discordzie”",
+      "in_game_name": "„Imię w grze” (ang. „In-Game Name”)",
+      "yes": "Yes",
+      "no": "No",
+      "active": "„Aktywny”.",
+      "inactive": "„Inaktywny”.",
+      "pending": "W trakcie realizacji.",
+      "approved": "„Zatwierdzone”.",
+      "rejected": "Odrzucono.",
+      "visible": "„Widzialny”.",
+      "hidden": "„Zakryte”"
+    },
+    "alliance": {
+      "r5": "R5 (Lider)",
+      "r4": "R4 (Oficer)",
+      "ape": "APE (Power Editor)",
+      "member_count": "„Liczba członków”",
+      "power_value": "„Power Value”",
+      "alliance_name": "„Nazwa sojuszu”",
+      "alliance_tag": "„Alliance Tag”",
+      "r5_name": "„R5 Name”",
+      "r5_discord_id": "„R5 – ID na platformie Discord”",
+      "add_r4": "Dodaj R4.",
+      "remove_r4": "„Usun R4”.",
+      "rules_signed": "„Zasady podpisane”",
+      "can_vote": "Można głosować.",
+      "role_title": "„Rolka/tytuł”"
+    },
+    "discord": {
+      "channel": "Kanał (ang. „channel”) – to platforma lub narzędzie umożliwiające komunikację pomiędzy użytkownikami albo publikację treści, np. filmów, zdjęć czy tekstów. Może być częścią większego systemu lub serwisu.",
+      "channels": "Kanale",
+      "template": "„Łącznik” (ang. „template”)",
+      "templates": "„Szablony”",
+      "message": "„Message”",
+      "announcement": "„Ogłoszenie”",
+      "scheduled": "„Zaplanowano”.",
+      "channel_id": "„ID kanału”",
+      "channel_name": "„Nazwa kanału”",
+      "channel_type": "„Type of Channel”",
+      "message_content": "„Content of Message”",
+      "send_time": "„Send Time”",
+      "recurring": "„Recurring”",
+      "one_time": "„One-Time”"
+    },
+    "votes": {
+      "vote": "„Vote”.",
+      "votes": "„Głosy”",
+      "proposal": "„Propozycja”",
+      "proposals": "„Proponycje”",
+      "vote_title": "„Vote Title”",
+      "vote_description": "„Opis głosowania”",
+      "submitted_by": "„Podane przez”: osoba, która złożyła daną informację lub dokument.",
+      "submitted_at": "„Date of submission”",
+      "deadline": "„Ustalenie terminu wykonania” (ang. „Deadline”)",
+      "time_remaining": "„Czas pozostały”",
+      "vote_yes": "Yes",
+      "vote_no": "No",
+      "vote_abstain": "„Wstrzymaj się od wyrażania opinii”.",
+      "results": "„Rezultaty”",
+      "passed": "„Przeszedł”",
+      "failed": "„Nie udało się”.",
+      "in_progress": "„W trakcie realizacji”."
+    },
+    "messages": {
+      "success": "„Uspех!”",
+      "error": "Doszło do błędu.",
+      "loading": "„Ladują…”",
+      "no_data": "„Nie są dostępne żadne dane.”",
+      "confirm_action": "„Jesteś pewny?”",
+      "saved": "Zmiany zostały zapisane z powodzeniem."
+    },
+    "navigation": {
+      "home": "„Home”",
+      "dashboard": "„Panel kontrolny” (ang. „Dashboard”)",
+      "alliances": "„Sojusze”",
+      "votes": "„Głosy”",
+      "governance": "„Governance” (zarządzanie) – procesy i mechanizmy stosowane do podejmowania decyzji oraz zarządzania organizacją.",
+      "settings": "Ustawienia",
+      "logout": "„Wylogowanie”.",
+      "server_management": "„Użytkowanie serwera”",
+      "discord": "Discord",
+      "seasons": "„Sezony”",
+      "users": "„Użytkownicy”",
+      "security": "„Bezpieczeństwo”",
+      "system": "„System”."
+    },
+    "welcome_back": "„Witaj z powrotem, {{imię}}!”"
+  },
+  "seasons": {
+    "coming_soon": "„W przybliżeniu…”",
+    "season1": {
+      "title": "„Sezon 1”",
+      "nav_title": "„Sezon 1”",
+      "description": "Sezon zimowy – zakończony.",
+      "status": "„Zakończone”.",
+      "date_label": "„Data rozpoczęcia sezonu”",
+      "dates": "„Grudzień 2024 – styczeń 2025”"
+    },
+    "season2": {
+      "title": "„Kalendarz wydarzeń drugiej sezony”",
+      "nav_title": "„Sezon 2”",
+      "description": "„Management Eventów Sezonu Wiosennego”"
+    },
+    "season3": {
+      "title": "„Sezon 3”",
+      "nav_title": "„Sezon 3”",
+      "description": "Sezon letni – w przybliżeniu!",
+      "placeholder_message": "Usługi zarządzania wydarzeniami związanymi z trzecią sezoną będą dostępne w najbliższym czasie."
+    },
+    "season4": {
+      "title": "„Sezon 4”",
+      "nav_title": "„Sezon 4”",
+      "description": "„Sezon jesienni – w przybliżeniu”",
+      "placeholder_message": "Usługi zarządzania wydarzeniami związanymi z czwartym sezonem będą dostępne w najbliższym czasie."
+    },
+    "season5": {
+      "title": "„Sezon 5”",
+      "nav_title": "„Sezon 5”",
+      "description": "Sezon zimowy – w przybliżeniu!",
+      "placeholder_message": "Usługi zarządzania wydarzeniami związanymi z piątym sezonem będą dostępne w najbliższym czasie."
+    }
+  },
+  "notifications": {
+    "title": "„Uwagi” (ang. „Notifications”)",
+    "aria_label": "„Uwagi”",
+    "mark_all_read": "„Zaznaczyć wszystkie jako przeczytane”.",
+    "loading": "„Wczywają się powiadomienia…”",
+    "view_all": "„Przegląd wszystkich powiadomień”"
+  },
+  "roles": {
+    "admin": "„Admin”.",
+    "president": "PREZYDENT",
+    "r5": "R5",
+    "r4": "R4",
+    "ape": "APE"
+  },
+  "users": {
+    "magic_links": {
+      "nav_title": "„Magic Links”"
+    },
+    "send_login_link": {
+      "nav_title": "„Wyślij link do logowania”."
+    }
+  },
+  "discord": {
+    "rate_limits": {
+      "nav_title": "„Limity szybkości transmisji danych” (ang. „Rate Limits”)"
+    },
+    "config": {
+      "nav_title": "Konfiguracja"
+    }
+  },
+  "security": {
+    "monitor": {
+      "nav_title": "„Security Monitor”"
+    },
+    "keys": {
+      "nav_title": "„Rotacja kluczy JWT” („JWT Key Rotation”)"
+    },
+    "mfa": {
+      "nav_title": "„MFA Management”"
+    },
+    "test_token": {
+      "nav_title": "„Generate Test Token”."
+    }
+  },
+  "system": {
+    "migration": {
+      "nav_title": "„Migracja”"
+    },
+    "metrics": {
+      "nav_title": "„Metryki”"
+    },
+    "notifications": {
+      "nav_title": "„Uwagi”"
+    },
+    "changelog": {
+      "nav_title": "„Changelog”"
+    }
+  },
+  "forms": {
+    "validation": {
+      "required": "To pole jest obowiązkowe.",
+      "email": "Proszę wpiszć ważny adres e-mail.",
+      "min_length": "Musi mieć co najmniej {{length}} znaków.",
+      "max_length": "Musi mieć nie więcej niż {{length}} znaków.",
+      "numeric": "Musi to być liczba.",
+      "url": "Proszę wpiszć ważny adres URL."
+    }
+  },
+  "login": {
+    "page_title": "„Admin Login”",
+    "subtitle": "„Alliance Admin Portal”",
+    "form": {
+      "email_label": "Adres e-mail sojuszu",
+      "email_placeholder": "twoja.email@example.com",
+      "submit_button": "„Wyślij link Magic Link”."
+    },
+    "errors": {
+      "no_session": "Proszę zalogować się, aby uzyskać dostęp do tej strony.",
+      "expired": "Twój sesji czasowe upłynęło. Proszę o ponowną autentifikację (wejście do systemu).",
+      "revoked": "Twoja sesja została anulowana. Proszę o ponowny login.",
+      "invalid": "Sesja nie jest ważna (nie jest autentyczna). Proszę zalogować się ponownie.",
+      "key_rotated": "Kluczyki bezpieczeństwa zostały wymienione. Proszę o ponowną autentifikację w celu zapewnienia bezpieczeństwa.",
+      "unknown_email": "Adres e-mail nie został rozpoznany lub nie posiada upoważnienia do korzystania z tej usługi.",
+      "send_failed": "Nie udało się wysłać „magicznego linku”. Proszę spróbować ponownie."
+    },
+    "success": {
+      "sent": "Link magiczny został wysłany! Sprawdź swoją skrzynkę e-mail i kliknij na link, aby się zalogować."
+    },
+    "info": {
+      "title": "„Jak to funkcjonuje:”",
+      "steps": [
+        "Wpisz adres e-mail sojuszu.",
+        "Otrzymaj bezpieczny link do logowania poprzez e-mail.",
+        "Kliknij na link, aby uzyskać dostęp do swojego panelu kontrolnego.",
+        "Linki utracają ważność po upływie 10 minut."
+      ]
+    }
+  },
+  "help_drawer": {
+    "default_title": "„Pomoc i dokumentacja”",
+    "button_label": "„Pomoc”.",
+    "aria_open": "Otworzyć dokumentację pomocniczą.",
+    "aria_close": "„Zakończyć pomoc”",
+    "report": {
+      "button": "„Zgłoś problem”.",
+      "modal_title": "„Zgłoś problem”.",
+      "description": "Opisz problem, który występuje. Dzięki temu zespół administracyjny otrzyma szczegóły dotyczące Twojej sesji.",
+      "label": "„Opis problemu”",
+      "placeholder": "Opisz, co chciałeś zrobić, oraz co poszło nie tak…",
+      "context_title": "Następujące informacje zostaną automatycznie uwzględnione:",
+      "context_labels": {
+        "page": "„Aktualna strona”:",
+        "user": "„Twój konto:”",
+        "browser": "„Przeglądarka:“",
+        "timestamp": "„Timestamp:”"
+      },
+      "validation": {
+        "required": "Proszę opisz problem, z którym masz do czynienia."
+      },
+      "submitting": "„Przysyłam…”",
+      "success": "Zawiadomienie o problemie zostało wysłane z powodzeniem! Będzie powiadomiony administrator.",
+      "error": "Nie udało się złożyć raportu o problemie. Proszę spróbować ponownie.",
+      "network_error": "Błąd sieci:"
+    }
+  },
+  "emails": {
+    "magic_link": {
+      "subject": "Poniżej znajduje się link do witryny logowania dla aplikacji {{app_name}}:",
+      "badge": "„PROSZBA O UŁOGOWANIE ADMINISTRATORA”",
+      "greeting": "„Witaj, {{username}}!”",
+      "intro": "Proszono o dostęp do panelu kontrolnego aplikacji {{app_name}}. Kliknij na przycisk poniżej, aby bezpiecznie zalogować się.",
+      "button": "🚀 Dostęp do panelu administracyjnego",
+      "alternative_label": "„Alternatywa:”",
+      "alternative_text": "Kopij i wklej ten link do swojego przeglądarza.",
+      "security_title": "🛡️ Informacje o bezpieczeństwie",
+      "security_items": {
+        "single_use": "Ten link jest przeznaczony wyłącznie do jednorazowego użycia i utraci ważność po pierwszym udanym logowaniu.",
+        "expiry": "Łink nie będzie dostępny po upływie <span class=\"expiry-badge\">⏱️ 10 minut</span>.",
+        "no_share": "Nie udostępniaj tego linka nikomu – daje on pełny dostęp do twojego konta administracyjnego.",
+        "ignore": "Jeśli nie żądałeś tej autentyzacji, możesz bezpiecznie ignorować ten e-mail.",
+        "no_reuse": "Ze względu na bezpieczeństwo po kliknięciu na link nie można go ponownie użyć."
+      },
+      "no_reply_title": "⚠️ Uwaga:",
+      "no_reply_text": "To automatyczne wiadomość wysłane z adresu e-mail, na który nie można odpisać, ponieważ ten adres nie jest monitorowany. Aby uzyskać pomoc, skontaktuj się z administratorem swojego serwera.",
+      "footer_regards": "Z najlepšymi pozdrowieniami.",
+      "footer_team": "Zespół z aplikacji {{app_name}}",
+      "footer_sent_to": "Ten e-mail został wysłany do adresata: {{email}}."
+    },
+    "role_change": {
+      "subject": "„{{app_name}} – Twoje uprawnienia do dostępu zostały aktualizowane.”",
+      "badge": "„UPDATE DO DOSTĘPU”",
+      "greeting": "„Witaj, {{username}}!”",
+      "intro": "Administrator aktualizował twoje uprawnienia dostępu do panelu administracyjnego aplikacji {{app_name}}.",
+      "changes_title": "Co się zmieniło?",
+      "changed_by_label": "Zmieniono przez:",
+      "date_label": "„Data:“",
+      "questions_text": "Te zmiany wchodzą w życie natychmiast. Jeśli masz jakiekolwiek pytania lub uważasz, że zmiana została dokonana błędnie, prosimy skontaktować administratora.",
+      "access_text": "Aby uzyskać dostęp do panelu administracyjnego, poprosź o specjalny link na stronie logowania lub skontaktuj się z administratorem, aby ten wysłał ci ten link.",
+      "footer_notification": "To automatyczne powiadomienie od aplikacji {{app_name}}.",
+      "footer_unexpected": "Jeśli nie spodziewaliście się takiej zmiany, prosimy o natychmiastowe kontaktowanie administratora swojego sojuszu.",
+      "role_label": "„Rolę:”",
+      "powereditor_label": "„Power Editor”:",
+      "alliances_label": "„Alliance Access:”",
+      "yes": "Yes",
+      "no": "No",
+      "none": "“(none)”"
+    },
+    "test": {
+      "subject": "„{{app_name}} – Testowe e-maile wysyłane za pomocą protokołu SMTP”",
+      "title": "✅ Test SMTP został zakończony pomyślnie.",
+      "badge": "Konfiguracja funkcjonuje poprawnie.",
+      "congratulations": "<strong>Gratulujemy! </strong>Jest tak, ponieważ jeśli otrzymałeś to e-mail, to oznacza, że konfiguracja Twojego serwera SMTP funkcjonuje poprawnie.",
+      "config_title": "📧 Konfiguracja została sprawdzona.",
+      "config_smtp_server": "<strong>Serwer SMTP:</strong> <code>example.com</code>",
+      "config_port": "<strong>Port:</strong> <code>465</code> (SSL)",
+      "config_auth": "<strong>Autentyfikacja:</strong> ✅ Proces zakończył się pomyślnie.",
+      "config_from": "<strong>Adres wysyłający:</strong> <code>noreply@example.com</code>",
+      "next_steps_title": "Kolejne kroki:",
+      "next_steps_text": "Teraz możesz przystąpić do wdrożenia systemu administracyjnego typu JWT. Metoda autentifikacji bazująca na „magicznych” linkach będzie funkcjonować poprawnie.",
+      "no_reply_title": "Uwaga:",
+      "no_reply_text": "To automatyczne wiadomość. Proszę nie odpowiadać na ten e-mail, ponieważ ta skrzynka pocztowa nie jest monitorowana.",
+      "footer_regards": "Z najlepszymi pozdrowieniami.",
+      "footer_team": "Zespół z aplikacji {{app_name}}",
+      "footer_sent_to": "Powysłano testowe wiadomość e-mail do adresu: {{email}}."
+    },
+    "council_rotation": {
+      "subject": "„{{app_name}} – Obновiony rozkład rotacji członków rady”",
+      "title": "🗳️ Aktualizacja informacji o rotacji członków rady.",
+      "badge": "„Plan odtworzenia” („Regenerated Schedule”)",
+      "greeting": "„Witaj.”",
+      "intro": "<strong>Program rotacji w radzie</strong> został aktualizowany na najbliższe {{tygodnie}}. Wszystkie miejsca w radzie, które będą zmieniać się w ramach tego programu (rangi 6–15), zostały ponownie obliczone, aby zapewnić sprawiedliwe rozdzielenie posad pomiędzy uczestnikami.",
+      "next_rotation_title": "📅 Następna rotacja",
+      "week_label": "„Numer tygodnia:”",
+      "date_label": "Data rotacji:",
+      "regenerated_by_label": "„Utworzone przez:”",
+      "distribution_title": "📊 Rozpodela rotacji w przyszłości",
+      "table_alliance": "„Alliance”",
+      "table_rotations": "„Rotacje (w najbliższych kilku tygodniach)”",
+      "notice_title": "ℹ️ Ważne:",
+      "notice_text": "Regeneracja dotyczy tylko kolejnych tygodni; wszystkie rotacje z wcześniejszych tygodni oraz aktualny tydzień pozostają bez zmian.",
+      "button_text": "„Zobacz pełny rozkład”.",
+      "footer_notification": "To automatyczne powiadomienie od aplikacji {{app_name}}.",
+      "footer_no_reply": "Proszę, nie odpowiadaj na ten e-mail."
+    },
+    "vote_notification": {
+      "subject": "„Nowy głosowanie w Radzie”",
+      "title": "„Nowy głosowanie w Radzie”",
+      "subtitle": "Twój głos jest konieczny.",
+      "greeting": "„Witaj, {{name}}.”",
+      "voting_as": "„Głosowanie według…”",
+      "deadline": "„Ustalenie terminu głosowania”",
+      "vote_button": "„Wyraź swój głos”.",
+      "alternative_method": "Albo zkopiuj ten link.",
+      "voting_options": "„Opcje głosowania”",
+      "option_yes": "Yes",
+      "option_no": "No",
+      "option_abstain": "„Wstrzymaj się od wyrażania opinii”.",
+      "discord_alternative": "Można też głosować przez Discord, odpowiadając na wiadomość prywatną od bota z tekstem: „vote: yes” („głosuj: tak”), „vote: no” („głosuj: nie”) lub „vote: abstain” („głosuj: wstrzymaj się”).",
+      "security_title": "**Uwaga o bezpieczeństwie**",
+      "security_notice": "To jest link do głosowania, który jest dostępny tylko jednorazowo i ważny przez 48 godzin. Nie udostępniaj tego linka nikomu innemu. Jeśli nie oczekiwaliście takiego głosowania, prosimy skontaktować administratora.",
+      "vote_id": "„Vote ID”"
+    },
+    "vote_result": {
+      "subject": "„Rezultaty głosowania”",
+      "title": "„Rezultaty głosowania”",
+      "greeting": "„Witaj, {{name}}.”",
+      "you_voted": "Wybraliście: {{choice}}",
+      "did_not_vote": "⚠️ Nie oddałeś głosu.",
+      "results_breakdown": "„Rozpis wyników”",
+      "yes": "Yes",
+      "no": "No",
+      "abstain": "„Wstrzymaj się” (ang. „Abstain”).",
+      "absent": "„Absent” – nieobecny.",
+      "total": "Łączna liczba uprawnionych do głosowania wyborców",
+      "vote_id": "„Vote ID”"
+    },
+    "no_reply_notice": "To automatyczne wiadomość wysłane z adresu e-mail, na który nie można odpisać. Proszę nie odpowiadać na to wiadomości.",
+    "footer_copyright": "„Server 1586 Council – Wszelkie prawa zastrzeżone”"
+  }
+}

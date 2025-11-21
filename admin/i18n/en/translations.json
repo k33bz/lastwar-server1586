@@ -136,7 +136,43 @@
       "nav_title": "Council Proposals",
       "description": "Submit and manage council vote proposals",
       "description_admin": "Submit vote requests or create votes directly as president/admin",
-      "description_member": "Submit vote proposals to the president for approval"
+      "description_member": "Submit vote proposals to the president for approval",
+      "tabs": {
+        "submit": "Submit Proposal",
+        "my_requests": "My Requests"
+      },
+      "form": {
+        "heading": "Submit Vote Proposal",
+        "title_hint": "Keep it concise - maximum 100 characters",
+        "description_hint": "Provide details about what council members are voting on"
+      },
+      "help": {
+        "title": "How Vote Proposals Work",
+        "intro": "As a council member, you can propose votes to the council. Your proposal will be sent to the president for approval.",
+        "admin_note": "As president/admin, your votes will be created immediately without approval.",
+        "auto_approval": "If the president doesn't respond within 12 hours, your proposal will be automatically approved."
+      },
+      "categories": {
+        "rule_change": "Rule Change",
+        "alliance_action": "Alliance Action",
+        "server_event": "Server Event",
+        "other": "Other"
+      },
+      "buttons": {
+        "create_vote": "Create Vote Now"
+      },
+      "labels": {
+        "request_id": "Request ID"
+      },
+      "messages": {
+        "vote_created": "Vote Created",
+        "no_reason": "No reason provided",
+        "awaiting_approval": "Awaiting president approval",
+        "empty_state": "You haven't submitted any vote requests yet",
+        "submit_success": "Proposal submitted successfully!",
+        "submit_error": "Failed to submit proposal",
+        "load_error": "Failed to load requests"
+      }
     },
     "president_vote_approvals": {
       "title": "Approve Votes",

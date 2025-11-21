@@ -1,7 +1,7 @@
 <?php
 /**
  * Council Proposals
- * Version: 1.0.1
+ * Version: 1.0.2
  *
  * Allows R5s and designated R4s (with canVote permission) to propose votes to the council
  * Requests are sent to the president for approval
@@ -104,23 +104,23 @@ include 'includes/header.php';
 
     <!-- Tabs -->
     <div class="tabs">
-        <button class="tab active" onclick="switchTab('submit', this)">Submit Proposal</button>
-        <button class="tab" onclick="switchTab('my-requests', this)">My Requests</button>
+        <button class="tab active" onclick="switchTab('submit', this)"><?php echo __('pages.discord_vote_proposals.tabs.submit'); ?></button>
+        <button class="tab" onclick="switchTab('my-requests', this)"><?php echo __('pages.discord_vote_proposals.tabs.my_requests'); ?></button>
     </div>
 
     <!-- Submit Proposal Tab -->
     <div id="submitTab" class="tab-content">
         <div class="card">
-            <h3>📝 Submit Vote Proposal</h3>
+            <h3>📝 <?php echo __('pages.discord_vote_proposals.form.heading'); ?></h3>
 
             <div class="help-box">
-                <h4>How Vote Proposals Work</h4>
+                <h4><?php echo __('pages.discord_vote_proposals.help.title'); ?></h4>
                 <p>
-                    As a council member, you can propose votes to the council. Your proposal will be sent to the president for approval.
+                    <?php echo __('pages.discord_vote_proposals.help.intro'); ?>
                     <?php if (has_role($user, ['admin', 'president'])): ?>
-                    <strong>As president/admin, your votes will be created immediately without approval.</strong>
+                    <strong><?php echo __('pages.discord_vote_proposals.help.admin_note'); ?></strong>
                     <?php else: ?>
-                    If the president doesn't respond within 12 hours, your proposal will be automatically approved.
+                    <?php echo __('pages.discord_vote_proposals.help.auto_approval'); ?>
                     <?php endif; ?>
                 </p>
             </div>
@@ -129,32 +129,32 @@ include 'includes/header.php';
                 <input type="hidden" name="csrf_token" value="<?= getCsrfToken() ?>">
 
                 <div class="form-group">
-                    <label for="title">Vote Title *</label>
+                    <label for="title"><?php echo __('common.votes.vote_title'); ?> *</label>
                     <input type="text" id="title" name="title" maxlength="100" required>
-                    <small>Keep it concise - maximum 100 characters</small>
+                    <small><?php echo __('pages.discord_vote_proposals.form.title_hint'); ?></small>
                 </div>
 
                 <div class="form-group">
-                    <label for="description">Description *</label>
+                    <label for="description"><?php echo __('common.labels.description'); ?> *</label>
                     <textarea id="description" name="description" required></textarea>
-                    <small>Provide details about what council members are voting on</small>
+                    <small><?php echo __('pages.discord_vote_proposals.form.description_hint'); ?></small>
                 </div>
 
                 <div class="form-group">
-                    <label for="category">Category *</label>
+                    <label for="category"><?php echo __('common.labels.category'); ?> *</label>
                     <select id="category" name="category" required>
-                        <option value="rule_change">Rule Change</option>
-                        <option value="alliance_action">Alliance Action</option>
-                        <option value="server_event">Server Event</option>
-                        <option value="other">Other</option>
+                        <option value="rule_change"><?php echo __('pages.discord_vote_proposals.categories.rule_change'); ?></option>
+                        <option value="alliance_action"><?php echo __('pages.discord_vote_proposals.categories.alliance_action'); ?></option>
+                        <option value="server_event"><?php echo __('pages.discord_vote_proposals.categories.server_event'); ?></option>
+                        <option value="other"><?php echo __('pages.discord_vote_proposals.categories.other'); ?></option>
                     </select>
                 </div>
 
                 <button type="submit" class="btn btn-primary">
                     <?php if (has_role($user, ['admin', 'president'])): ?>
-                        Create Vote Now
+                        <?php echo __('pages.discord_vote_proposals.buttons.create_vote'); ?>
                     <?php else: ?>
-                        Submit Proposal
+                        <?php echo __('common.buttons.submit'); ?>
                     <?php endif; ?>
                 </button>
             </form>
@@ -164,15 +164,31 @@ include 'includes/header.php';
     <!-- My Requests Tab -->
     <div id="myRequestsTab" class="tab-content" style="display: none;">
         <div class="card">
-            <h3>📋 My Vote Requests</h3>
+            <h3>📋 <?php echo __('pages.discord_vote_proposals.tabs.my_requests'); ?></h3>
             <div id="requestsList" class="requests-list">
-                <div class="loading">Loading your requests...</div>
+                <div class="loading"><?php echo __('common.messages.loading'); ?></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+// Translation strings for JavaScript
+const i18n = {
+    loading: <?php echo json_encode(__('common.messages.loading')); ?>,
+    submitted: <?php echo json_encode(__('common.votes.submitted_at')); ?>,
+    requestId: <?php echo json_encode(__('pages.discord_vote_proposals.labels.request_id')); ?>,
+    voteCreated: <?php echo json_encode(__('pages.discord_vote_proposals.messages.vote_created')); ?>,
+    rejected: <?php echo json_encode(__('common.labels.rejected')); ?>,
+    noReason: <?php echo json_encode(__('pages.discord_vote_proposals.messages.no_reason')); ?>,
+    awaitingApproval: <?php echo json_encode(__('pages.discord_vote_proposals.messages.awaiting_approval')); ?>,
+    emptyState: <?php echo json_encode(__('pages.discord_vote_proposals.messages.empty_state')); ?>,
+    submitSuccess: <?php echo json_encode(__('pages.discord_vote_proposals.messages.submit_success')); ?>,
+    submitError: <?php echo json_encode(__('pages.discord_vote_proposals.messages.submit_error')); ?>,
+    loadError: <?php echo json_encode(__('pages.discord_vote_proposals.messages.load_error')); ?>,
+    error: <?php echo json_encode(__('common.messages.error')); ?>
+};
+
 // Tab switching
 function switchTab(tab, element) {
     // Update tab buttons
@@ -209,7 +225,7 @@ document.getElementById('proposalForm').addEventListener('submit', async (e) => 
         <?php endif; ?>
 
         if (response.success) {
-            showSuccess(response.message || 'Proposal submitted successfully!');
+            showSuccess(response.message || i18n.submitSuccess);
             e.target.reset();
 
             // Switch to my requests tab
@@ -217,29 +233,29 @@ document.getElementById('proposalForm').addEventListener('submit', async (e) => 
                 document.querySelectorAll('.tab')[1].click();
             }, 1500);
         } else {
-            showError(response.error || 'Failed to submit proposal');
+            showError(response.error || i18n.submitError);
         }
     } catch (error) {
-        showError(error.message || 'An error occurred');
+        showError(error.message || i18n.error);
     }
 });
 
 // Load my requests
 async function loadMyRequests() {
     const container = document.getElementById('requestsList');
-    container.innerHTML = '<div class="loading">Loading your requests...</div>';
+    container.innerHTML = '<div class="loading">' + i18n.loading + '</div>';
 
     try {
         const response = await apiRequest('GET', 'discord_votes_api.php?action=get_requests');
 
         if (!response.success) {
-            throw new Error(response.error || 'Failed to load requests');
+            throw new Error(response.error || i18n.loadError);
         }
 
         const requests = response.requests || [];
 
         if (requests.length === 0) {
-            container.innerHTML = '<div class="empty-state">You haven\'t submitted any vote requests yet</div>';
+            container.innerHTML = '<div class="empty-state">' + i18n.emptyState + '</div>';
             return;
         }
 
@@ -249,7 +265,7 @@ async function loadMyRequests() {
                     <div>
                         <h4 class="request-title">${escapeHtml(req.vote_details.title)}</h4>
                         <div class="request-meta">
-                            Submitted: ${formatDate(req.created_at)}
+                            ${i18n.submitted}: ${formatDate(req.created_at)}
                             <span class="category-badge">${formatCategory(req.vote_details.category)}</span>
                         </div>
                     </div>
@@ -260,14 +276,14 @@ async function loadMyRequests() {
 
                 <div class="request-footer">
                     <div>
-                        <strong>Request ID:</strong> ${req.request_id}
+                        <strong>${i18n.requestId}:</strong> ${req.request_id}
                     </div>
                     <div>
                         ${req.status === 'approved' && req.created_vote_id ?
-                            `<span style="color: #28a745;">✓ Vote Created: ${req.created_vote_id}</span>` :
+                            `<span style="color: #28a745;">✓ ${i18n.voteCreated}: ${req.created_vote_id}</span>` :
                             req.status === 'rejected' ?
-                                `<span style="color: #dc3545;">✗ Rejected: ${req.president_response?.reason || 'No reason provided'}</span>` :
-                                `<span style="color: #856404;">⏳ Awaiting president approval</span>`
+                                `<span style="color: #dc3545;">✗ ${i18n.rejected}: ${req.president_response?.reason || i18n.noReason}</span>` :
+                                `<span style="color: #856404;">⏳ ${i18n.awaitingApproval}</span>`
                         }
                     </div>
                 </div>
